@@ -103,7 +103,6 @@ public class MyActivity extends Activity {
 
     }
 
-
     //Este método se ejecutará cuando se presione el botón btn1
     public void siguiente(View view) {
 
