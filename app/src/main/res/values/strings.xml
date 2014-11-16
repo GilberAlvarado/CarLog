@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CarLog</string>
+    <string name="adios">Adios</string>
+    <string name="action_settings">Settings</string>
+    <string name="btn1">Siguiente</string>
+
+</resources>

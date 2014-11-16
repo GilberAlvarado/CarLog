@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <TextView
+    android:text="@string/adios"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/marca2" />
+
+    <TextView
+        android:text="@string/adios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/modelo2" />
+
+    <TextView
+        android:text="@string/adios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/year2" />
+
+    <TextView
+        android:text="@string/adios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/kms2" />
+
+    <TextView
+        android:text="@string/adios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/itv2" />
+
+</LinearLayout>
