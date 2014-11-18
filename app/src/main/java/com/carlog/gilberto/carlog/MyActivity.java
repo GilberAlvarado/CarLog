@@ -37,7 +37,7 @@ public class MyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MyActivity.this,
-                        siguiente.class);
+                        DatosIniciales.class);
 
                 marcaT = (EditText) findViewById (R.id.marca);
                 marca = marcaT.getText().toString();

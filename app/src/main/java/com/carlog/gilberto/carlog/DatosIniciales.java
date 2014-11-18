@@ -7,7 +7,7 @@ import android.widget.TextView;
 /**
  * Created by Gilberto on 29/10/2014.
  */
-public class siguiente extends Activity {
+public class DatosIniciales extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
