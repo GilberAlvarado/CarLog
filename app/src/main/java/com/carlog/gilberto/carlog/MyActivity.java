@@ -1,6 +1,7 @@
 package com.carlog.gilberto.carlog;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -23,7 +25,25 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
+        // Obtenemos la instancia de las preferencias de la Activity
+        SharedPreferences settings = getPreferences(MODE_PRIVATE);
+        // Leemos el dato guardado
+        marca = settings.getString("marca", "Introduzca Marca");
+        modelo = settings.getString("modelo", "Introduzca Modelo");
+        year = settings.getString("year", "Introduzca Año");
+        kms = settings.getString("kms", "Introduzca Nº Kms");
+        itv = settings.getString("itv", "Introduzca Fecha ITV");
 
+        TextView text=(TextView)findViewById(R.id.marca);
+        text.setText(marca);
+        text=(TextView)findViewById(R.id.modelo);
+        text.setText(modelo);
+        text=(TextView)findViewById(R.id.year);
+        text.setText(year);
+        text=(TextView)findViewById(R.id.kms);
+        text.setText(kms);
+        text=(TextView)findViewById(R.id.itv);
+        text.setText(itv);
 
 
         //Instanciamos el Boton
@@ -68,6 +88,20 @@ public class MyActivity extends Activity {
                 if (TextUtils.isEmpty(kms)) {
                     Toast.makeText(MyActivity.this, "Ha de introducir el nº de kilómetros.", Toast.LENGTH_LONG).show();
                 } else {
+
+
+                    // Necesitamos un editor para poder modificar los valores de la instancia settings
+                    SharedPreferences settings = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = settings.edit();
+                    // Modificamos el valor deseado
+                    editor.putString("marca", marca);
+                    editor.putString("modelo", modelo);
+                    editor.putString("year", year);
+                    editor.putString("kms", kms);
+                    editor.putString("itv", itv);
+                    // Una vez finalizado, llámando a commit se guardan las preferencias en memoria no volatil
+                    editor.commit();
+
 
                     intent.putExtra("marca", marca);
                     intent.putExtra("modelo", modelo);
