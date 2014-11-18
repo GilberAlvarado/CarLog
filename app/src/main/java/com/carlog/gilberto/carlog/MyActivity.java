@@ -56,8 +56,7 @@ public class MyActivity extends Activity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyActivity.this,
-                        DatosIniciales.class);
+                Intent intent = new Intent(MyActivity.this, DatosIniciales.class);
 
                 marcaT = (EditText) findViewById (R.id.marca);
                 marca = marcaT.getText().toString();
@@ -103,11 +102,14 @@ public class MyActivity extends Activity {
                     editor.commit();
 
 
-                    intent.putExtra("marca", marca);
+                 /*   intent.putExtra("marca", marca); //Ya no guardamos las variables sueltas sino en un objeto Coche
                     intent.putExtra("modelo", modelo);
                     intent.putExtra("year", year);
                     intent.putExtra("kms", kms);
-                    intent.putExtra("itv", itv);
+                    intent.putExtra("itv", itv); */
+
+                    Coche miCoche = new Coche(marca, modelo, year, kms, itv);
+                    intent.putExtra("miCoche", miCoche);
 
                     startActivity(intent);
                 }

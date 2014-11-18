@@ -14,11 +14,19 @@ public class DatosIniciales extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.siguiente);
 
-        String marca = getIntent().getStringExtra("marca");
+        Coche miCoche = (Coche)getIntent().getExtras().getSerializable("miCoche");
+
+        String marca = miCoche.getMarca(miCoche);
+        String modelo = miCoche.getModelo(miCoche);
+        String year = miCoche.getYear(miCoche);
+        String kms = miCoche.getKms(miCoche);
+        String itv = miCoche.getItv(miCoche);
+
+       /* String marca = getIntent().getStringExtra("marca");  //Ya no guardamos las variables sueltas sino en un objeto Coche
         String modelo = getIntent().getStringExtra("modelo");
         String year = getIntent().getStringExtra("year");
         String kms = getIntent().getStringExtra("kms");
-        String itv = getIntent().getStringExtra("itv");
+        String itv = getIntent().getStringExtra("itv"); */
 
         TextView text=(TextView)findViewById(R.id.marca2);
         text.setText(marca);
