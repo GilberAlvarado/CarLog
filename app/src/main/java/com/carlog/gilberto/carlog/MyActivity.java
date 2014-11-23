@@ -78,6 +78,7 @@ public class MyActivity extends Activity {
                 itv = itvT.getText().toString();
                 System.out.println(itv);
 
+                // Los campos marca, modelo y nº de kilometros deben de ser obligatorios
                 if (TextUtils.isEmpty(marca)) {
                     Toast.makeText(MyActivity.this, "Ha de introducir la marca.", Toast.LENGTH_LONG).show();
                 } else
@@ -143,6 +144,7 @@ public class MyActivity extends Activity {
     public void siguiente(View view) {
 
     }
+
 
 
 

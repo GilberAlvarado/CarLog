@@ -20,6 +20,10 @@
             android:name=".DatosIniciales"
             android:label="@string/adios" >
         </activity>
+        <activity
+            android:name=".AddLog"
+            android:label="@string/title_activity_add_log" >
+        </activity>
     </application>
 
 </manifest>
