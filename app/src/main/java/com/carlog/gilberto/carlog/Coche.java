@@ -1,6 +1,7 @@
 package com.carlog.gilberto.carlog;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Gilberto on 18/11/2014.

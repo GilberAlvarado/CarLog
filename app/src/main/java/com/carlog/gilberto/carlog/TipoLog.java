@@ -9,11 +9,12 @@ import java.util.Date;
 public class TipoLog implements Serializable {
     private String tipo;
     private Date date;
+    private String datetxt;
 
-
-    public TipoLog(String tipo, Date fecha) {
+    public TipoLog(String tipo, Date fecha, String datetxt) {
         this.tipo = tipo;
         this.date = date;
+        this.datetxt = datetxt;
     }
 
     public String getTipo(TipoLog miTipo) {
@@ -22,6 +23,10 @@ public class TipoLog implements Serializable {
 
     public Date getFecha(TipoLog miTipo) {
         return(miTipo.date);
+    }
+
+    public String getFechatxt(TipoLog miTipo) {
+        return(miTipo.datetxt);
     }
 
 }

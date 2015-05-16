@@ -6,6 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="btn1">Siguiente</string>
     <string name="title_activity_add_log">AddLog</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="txt_itv">Introduzca Fecha ITV</string>
 
 </resources>

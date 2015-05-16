@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Agregar tipo"
-        android:layout_above="@+id/txt_fecha"
+        android:layout_marginTop="131dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -46,8 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_fecha"
-        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="200dp"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -58,7 +58,7 @@
         android:layout_below="@+id/txt_fecha"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="101dp" />
+        android:layout_marginTop="181dp" />
 
     <TextView
         android:text="Añadir nuevo tipo:"
@@ -68,6 +68,15 @@
         android:layout_below="@+id/cmb_tipos"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/date_newlog"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="210dp"
+        android:calendarViewShown="false"/>
 
 
 </RelativeLayout>
