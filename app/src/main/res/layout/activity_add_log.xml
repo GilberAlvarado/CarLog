@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:visibility="invisible"
         android:layout_below="@+id/nuevoTipo"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
@@ -37,7 +38,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Agregar tipo"
-        android:layout_marginTop="131dp"
+        android:layout_marginLeft="201dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/btm_elimTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eliminar tipo"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="201dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -67,6 +78,7 @@
         android:id="@+id/nuevoTipo"
         android:layout_below="@+id/cmb_tipos"
         android:layout_alignParentLeft="true"
+        android:visibility="invisible"
         android:layout_alignParentStart="true" />
 
     <DatePicker

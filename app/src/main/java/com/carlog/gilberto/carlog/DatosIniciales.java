@@ -1,24 +1,22 @@
 package com.carlog.gilberto.carlog;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import com.carlog.gilberto.carlog.data.DataBaseManager;
+import com.carlog.gilberto.carlog.data.DBLogs;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -28,46 +26,69 @@ public class DatosIniciales extends Activity {
 
     private ArrayList<String> datos_lista_log = new ArrayList<String>();
 
-    private void rellenarListaLog() {
-        //String[] datos_lista_log = new String[]{"Elemento inicial prueba"};
 
-        Context contextNew = getApplicationContext();
-        DataBaseManager manager = new DataBaseManager(contextNew);
-        Cursor c = manager.buscarTipo("Cambio de aceite");
+    private void borrarLogpulsado(ListView lv, final Cursor cursor, final DBLogs manager) {
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(DatosIniciales.this);
+                builder.setMessage("¿Está seguro de querer eliminar?")
+                        .setTitle("Borrar de la lista")
+                        .setCancelable(false)
+                        .setNegativeButton("Cancelar",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id_dialog) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .setPositiveButton("Continuar",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id_dialog) {
+                                        // metodo que se debe implementar Sí
+                                        //Recorremos el cursor
+                                        ArrayList<String> tipos = new ArrayList<String>();
+                                        int j = 0;
+                                        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+                                            if (j == i) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                                                int id = cursor.getInt(0);
+                                                manager.eliminar_por_id(id);
+                                                ConsultarLogs();
+
+                                                break;
+                                            }
+                                            j++;
+                                        }
+                                    }
+                                });
+                AlertDialog alert = builder.create();
+                alert.show();
 
 
-        //datos_lista_log.add("Elfemento inicial prueba");
-        //Creación del adaptador, vamos a escoger el layout
-        //simple_list_item_1, que los mostr
-        ListAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_list_item_1, datos_lista_log);
-
-
-        //Asociamos el adaptador a la vista.
-        ListView lv = (ListView) findViewById(R.id.lista_log);
-        lv.setAdapter(adaptador);
 
 
 
+
+
+                return false;
+            }
+        });
     }
 
     private void ConsultarLogs() {
         Context contextNew = getApplicationContext();
-        DataBaseManager manager = new DataBaseManager(contextNew);
+        final DBLogs manager = new DBLogs(contextNew);
         String[] from = new String[]{manager.CN_TIPO, manager.CN_FECHA};
         int[] to = new int[] {android.R.id.text1, android.R.id.text2};
-        Cursor cursor = manager.cargarCursorLogs();
-
-        // Añdimos el nuevo elemento a la lista de logs
-        //datos_lista_log.add(tipo); // con bbdd ya no haría falta
+        final Cursor cursor = manager.cargarCursorLogs();
 
 
-        //Creación del adaptador, vamos a escoger el layout
-        //simple_list_item_1, que los mostr
-        //     ListAdapter adaptador = new ArrayAdapter(this, android.R.layout.simple_list_item_1, datos_lista_log);
-        SimpleCursorAdapter adaptador = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item, cursor, from, to);
+        final SimpleCursorAdapter adaptador = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item, cursor, from, to);
         //Asociamos el adaptador a la vista.
         ListView lv = (ListView) findViewById(R.id.lista_log);
         lv.setAdapter(adaptador);
+
+        borrarLogpulsado(lv, cursor, manager);
 
     }
 
@@ -78,7 +99,7 @@ public class DatosIniciales extends Activity {
         setContentView(R.layout.activity_datos_iniciales);
 
 
-        final Coche miCoche = (Coche)getIntent().getExtras().getSerializable("miCoche");
+        final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
         String marca = miCoche.getMarca(miCoche);
         String modelo = miCoche.getModelo(miCoche);
@@ -101,7 +122,6 @@ public class DatosIniciales extends Activity {
         text=(TextView)findViewById(R.id.itv2);
         text.setText(itv);
 
-        //rellenarListaLog();  // ya con bbdd no haría falta inicializarla
         ConsultarLogs();
 
         //Instanciamos el Boton

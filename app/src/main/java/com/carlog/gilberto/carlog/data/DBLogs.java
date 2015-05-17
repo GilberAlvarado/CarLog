@@ -15,7 +15,7 @@ import java.util.Locale;
 /**
  * Created by Gilberto on 16/05/2015.
  */
-public class DataBaseManager {
+public class DBLogs {
     public static final String TABLE_NAME = "logs";
 
     public static final String CN_ID = "_id";
@@ -30,7 +30,7 @@ public class DataBaseManager {
     private DbHelper helper;
     private SQLiteDatabase db;
 
-    public DataBaseManager(Context context) {
+    public DBLogs(Context context) {
         helper = new DbHelper(context);
         db = helper.getWritableDatabase();
 
@@ -49,9 +49,15 @@ public class DataBaseManager {
         db.insert(TABLE_NAME, null, generarContentValues(milog));
     }
 
-    /*public void eliminar(TipoLog milog) {
-        db.delete(TABLE_NAME, CN_TIPO + "=?", new String[]{milog});
-    }*/
+
+    public void eliminar_por_id(int id) {
+        db.delete(TABLE_NAME, CN_ID + "=?", new String[]{Integer.toString(id)});
+    }
+
+    public void eliminar(TipoLog milog) {
+        db.delete(TABLE_NAME, CN_TIPO + "=?", new String[]{milog.getTipo(milog)});
+    }
+
 
     public Cursor cargarCursorLogs() {
         String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA};

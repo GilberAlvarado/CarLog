@@ -1,14 +1,11 @@
 package com.carlog.gilberto.carlog;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -20,8 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.carlog.gilberto.carlog.data.DataBaseManager;
-import com.carlog.gilberto.carlog.data.DbHelper;
+import com.carlog.gilberto.carlog.data.DBLogs;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -220,7 +216,7 @@ public class MyActivity extends Activity {
         itv = settings.getString("itv", "Introduzca Fecha ITV");
 
 
-        DataBaseManager manager = new DataBaseManager(this);
+        DBLogs manager = new DBLogs(this);
 
         RellenarPantalla();
 
@@ -260,7 +256,7 @@ public class MyActivity extends Activity {
                     intent.putExtra("kms", kms);
                     intent.putExtra("itv", itv); */
 
-                    Coche miCoche = new Coche(marca, modelo, year, kms, itv);
+                    TipoCoche miCoche = new TipoCoche(marca, modelo, year, kms, itv);
                     intent.putExtra("miCoche", miCoche);
 
                     startActivity(intent);
