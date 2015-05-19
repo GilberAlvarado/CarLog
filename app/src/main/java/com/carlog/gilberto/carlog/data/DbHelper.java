@@ -17,7 +17,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "carlog.sqlite";
-    private static final int DB_SCHEME_VERSION = 3;
+    private static final int DB_SCHEME_VERSION = 12;
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_SCHEME_VERSION);
@@ -27,9 +27,10 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         //sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
+        //sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
 
-
+/*
 
         /// Inicializamos la tabla de tipos de revisión
         String[] lista = {"Revisión general", "Cambio de aceite", "Cambio de filtros"};
@@ -46,13 +47,31 @@ public class DbHelper extends SQLiteOpenHelper {
         } finally {
             sqLiteDatabase.endTransaction();
         }
+*/
+        /// Inicializamos la tabla de tipos de aceite
+        String[] lista_aceite = {"10 mil kms - 5w30 – 5w40 – 5w50", "7 mil kms - 10w40", "5 mil kms - 15w40 - 20w50 - 25w60"};
+        int[] lista_kms =  {10000, 7000, 5000};
+
+        sqLiteDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            for (int i = 0; i < lista_aceite.length; i++) {
+                values.put(DBAceite.CN_ID, i+1);
+                values.put(DBAceite.CN_TIPO, lista_aceite[i]);
+                values.put(DBAceite.CN_KMS, lista_kms[i]);
+                sqLiteDatabase.insert(DBAceite.TABLE_NAME, null, values);
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBTiposRevision.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBAceite.TABLE_NAME);
         onCreate(sqLiteDatabase);
-
+        //sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
     }
 }

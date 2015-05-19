@@ -24,6 +24,10 @@
             android:name=".AddLog"
             android:label="@string/title_activity_add_log" >
         </activity>
+        <activity
+            android:name=".Aceite"
+            android:label="@string/title_activity_aceite" >
+        </activity>
     </application>
 
 </manifest>

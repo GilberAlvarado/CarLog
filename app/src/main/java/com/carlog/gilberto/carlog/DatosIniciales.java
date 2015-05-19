@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.data.DBLogs;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -78,9 +80,22 @@ public class DatosIniciales extends Activity {
     private void ConsultarLogs() {
         Context contextNew = getApplicationContext();
         final DBLogs manager = new DBLogs(contextNew);
-        String[] from = new String[]{manager.CN_TIPO, manager.CN_FECHA};
+        String[] from = new String[]{manager.CN_TIPO, "fecha_string"};
         int[] to = new int[] {android.R.id.text1, android.R.id.text2};
-        final Cursor cursor = manager.cargarCursorLogs();
+        final Cursor cursor = manager.LogsOrderByFechaString();
+
+
+
+
+
+  /*      for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            int colum_fecha = cursor.getColumnIndex(manager.CN_FECHA);
+            Date fecha = new Date(cursor.getLong(colum_fecha)*1000);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            String fecha_txt = dateFormat.format(fecha);
+System.out.println("FECHOTE1 "+fecha_txt);
+        }*/
+
 
 
         final SimpleCursorAdapter adaptador = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item, cursor, from, to);

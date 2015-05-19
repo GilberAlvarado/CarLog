@@ -51,6 +51,8 @@ public class DBTiposRevision {
 
     }
 
+
+
     public Cursor buscarTipo(String mytiporevision) {
         String[] columnas = new String[]{CN_ID, CN_TIPO};
         return db.query(TABLE_NAME, columnas, CN_TIPO + "=?", new String[]{mytiporevision}, null, null, null);

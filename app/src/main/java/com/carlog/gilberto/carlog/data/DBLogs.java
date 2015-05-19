@@ -25,7 +25,7 @@ public class DBLogs {
     public static final String CREATE_TABLE = "create table " +TABLE_NAME + " ("
             + CN_ID + " integer primary key autoincrement,"
             + CN_TIPO + " text not null,"
-            + CN_FECHA + " text not null);";
+            + CN_FECHA + " int not null);";
 
     private DbHelper helper;
     private SQLiteDatabase db;
@@ -41,7 +41,7 @@ public class DBLogs {
     public ContentValues generarContentValues(TipoLog milog) {
         ContentValues valores = new ContentValues();
         valores.put(CN_TIPO, milog.getTipo(milog));
-        valores.put(CN_FECHA, milog.getFechatxt(milog));
+        valores.put(CN_FECHA, milog.getFechaint(milog));
         return valores;
     }
 
@@ -64,6 +64,19 @@ public class DBLogs {
         return db.query(TABLE_NAME, columnas, null, null, null, null, null);
 
     }
+
+    public Cursor LogsOrderByFecha() {
+        String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA};
+        return db.query(TABLE_NAME, columnas, null, null, null, null, CN_FECHA + " ASC");
+
+    }
+
+    public Cursor LogsOrderByFechaString() {
+        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string FROM "+TABLE_NAME + " ORDER BY "+CN_FECHA;
+        Cursor c = db.rawQuery(sql, null);
+        return c;
+    }
+
 
     public Cursor buscarTipo(String tipo) {
         String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA};

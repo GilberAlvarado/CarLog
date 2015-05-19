@@ -135,9 +135,9 @@ public class MyActivity extends Activity {
             itv = "0"+datePicker.getDayOfMonth() +"-"+ (datePicker.getMonth()+1)+ "-" + datePicker.getYear();
         } else
         if ((datePicker.getDayOfMonth() >= 10) && ((datePicker.getMonth()+1) < 10)) {
-            itv = ""+datePicker.getDayOfMonth() +"-0"+ (datePicker.getMonth()+1) + "-0" + datePicker.getYear();
+            itv = datePicker.getDayOfMonth() +"-0"+ (datePicker.getMonth()+1) + "-" + datePicker.getYear();
         } else
-            itv = ""+datePicker.getDayOfMonth() +"-"+ (datePicker.getMonth()+1)+ "-" + datePicker.getYear();
+            itv = datePicker.getDayOfMonth() +"-"+ (datePicker.getMonth()+1)+ "-" + datePicker.getYear();
 
 
         try {
