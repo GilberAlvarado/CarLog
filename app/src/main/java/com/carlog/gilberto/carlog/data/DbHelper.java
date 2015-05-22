@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Spinner;
 
+import com.carlog.gilberto.carlog.Aceite;
 import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.TipoLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "carlog.sqlite";
-    private static final int DB_SCHEME_VERSION = 12;
+    private static final int DB_SCHEME_VERSION = 17;
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_SCHEME_VERSION);
@@ -25,15 +27,15 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
-        //sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
-        //sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
+     //   sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
+     //   sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
+     //   sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
 
 /*
 
         /// Inicializamos la tabla de tipos de revisión
-        String[] lista = {"Revisión general", "Cambio de aceite", "Cambio de filtros"};
+        String[] lista = {TipoLog.TIPO_REV_GENERAL, TipoLog.TIPO_ACEITE, TipoLog.TIPO_FILTRO_AIRE, TipoLog.TIPO_FILTRO_ACEITE, TipoLog.TIPO_FILTRO_GASOLINA};
 
         sqLiteDatabase.beginTransaction();
         try {
@@ -47,9 +49,10 @@ public class DbHelper extends SQLiteOpenHelper {
         } finally {
             sqLiteDatabase.endTransaction();
         }
-*/
+        */
+/*
         /// Inicializamos la tabla de tipos de aceite
-        String[] lista_aceite = {"10 mil kms - 5w30 – 5w40 – 5w50", "7 mil kms - 10w40", "5 mil kms - 15w40 - 20w50 - 25w60"};
+        String[] lista_aceite = {Aceite.TIPO_10K_KM, Aceite.TIPO_7M_KM, Aceite.TIPO_5K_KM};
         int[] lista_kms =  {10000, 7000, 5000};
 
         sqLiteDatabase.beginTransaction();
@@ -65,12 +68,14 @@ public class DbHelper extends SQLiteOpenHelper {
         } finally {
             sqLiteDatabase.endTransaction();
         }
+*/
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBAceite.TABLE_NAME);
+        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCar.TABLE_NAME);
         onCreate(sqLiteDatabase);
         //sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
     }

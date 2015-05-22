@@ -1,7 +1,9 @@
 package com.carlog.gilberto.carlog;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -18,19 +20,13 @@ import android.widget.Toast;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBTiposRevision;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
 
 
 public class AddLog extends Activity {
 
+    public final static int NO_KMS = -1;
     private Spinner spinner1;
 
     private void RellenarTipos(DBTiposRevision managerTiposRevision) {
@@ -104,6 +100,35 @@ public class AddLog extends Activity {
     }
 
 
+    private void addlog(TipoLog miTipoLog, DBLogs managerLogs) {
+
+        Intent intent;
+        if (miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ACEITE)) {
+            // Antes de hacer nada miramos si ya existe algun tipo de aceite pues no debemos tener más de uno
+            TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+            Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE);
+            if (c.moveToFirst() == false) {
+                intent = new Intent(AddLog.this, Aceite.class);
+                intent.putExtra("miTipoLog", miTipoLog);
+                intent.putExtra("miCoche", miCoche);
+                startActivity(intent);
+                setResult(Activity.RESULT_OK, intent);
+
+                finish();
+            } else
+                Toast.makeText(getApplicationContext(), "Ya tiene pendiente un " + TipoLog.TIPO_ACEITE, Toast.LENGTH_SHORT).show();
+
+
+        } else {
+            intent = new Intent(AddLog.this, DatosIniciales.class);
+
+            managerLogs.insertar(miTipoLog);
+
+            setResult(Activity.RESULT_OK, intent);
+
+            finish();
+        }
+    }
 
     private void GuardarLog(final DBLogs managerLogs) {
         //Instanciamos el Boton
@@ -116,60 +141,60 @@ public class AddLog extends Activity {
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos);
                 String tipo = spinner.getSelectedItem().toString();
 
-                Intent intent;
-                if(tipo.equals("Cambio de aceite")) {
-                    intent = new Intent(AddLog.this, Aceite.class);
-                    startActivity(intent);
+                DatePicker datePicker = (DatePicker) findViewById(R.id.date_newlog);
+                String txt_date_newlog = "";
+
+
+                if ((datePicker.getDayOfMonth() < 10) && ((datePicker.getMonth() + 1) < 10)) {
+                    txt_date_newlog = "0" + datePicker.getDayOfMonth() + "-0" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
+                } else if ((datePicker.getDayOfMonth() < 10) && ((datePicker.getMonth() + 1) >= 10)) {
+                    txt_date_newlog = "0" + datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
+                } else if ((datePicker.getDayOfMonth() >= 10) && ((datePicker.getMonth() + 1) < 10)) {
+                    txt_date_newlog = datePicker.getDayOfMonth() + "-0" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
+                } else
+                    txt_date_newlog = datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
+
+
+
+
+                System.out.println("FECHA NEW LOG " + datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear());
+
+                int int_fecha = funciones.string_a_int(txt_date_newlog);
+                Date fecha_newlog = funciones.string_a_date(txt_date_newlog);
+
+                TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+
+                final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_KMS, miCoche.getMatricula(miCoche));
+                System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
+
+                if (int_fecha > funciones.date_a_int(new Date())) {
+                    addlog(miTipoLog, managerLogs);
                 }
                 else {
-                    intent = new Intent(AddLog.this, DatosIniciales.class);
-
-                    DatePicker datePicker = (DatePicker) findViewById(R.id.date_newlog);
-                    String txt_date_newlog = "";
-                    Date fecha_newlog = new Date();
-
-                    // configuramos el formato en el que esta guardada la fecha en los strings que nos pasan
-                    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
-
-                    if ((datePicker.getDayOfMonth() < 10) && ((datePicker.getMonth() + 1) < 10)) {
-                        txt_date_newlog = "0" + datePicker.getDayOfMonth() + "-0" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
-                    } else if ((datePicker.getDayOfMonth() < 10) && ((datePicker.getMonth() + 1) >= 10)) {
-                        txt_date_newlog = "0" + datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
-                    } else if ((datePicker.getDayOfMonth() >= 10) && ((datePicker.getMonth() + 1) < 10)) {
-                        txt_date_newlog = datePicker.getDayOfMonth() + "-0" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
-                    } else
-                        txt_date_newlog = datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
-
-
-                    try {
-                        // aca realizamos el parse, para obtener objetos de tipo Date de las Strings
-                        formato.setTimeZone(TimeZone.getTimeZone("UTC")); // hay días mal en gmt+1
-                        fecha_newlog = formato.parse(txt_date_newlog);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AddLog.this);
+                    builder.setMessage("¿Quiere añadir una fecha antigua?")
+                            .setTitle("Historial")
+                            .setCancelable(false)
+                            .setNegativeButton("Cancelar",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id_dialog) {
+                                            dialog.cancel();
+                                        }
+                                    })
+                            .setPositiveButton("Continuar",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id_dialog) {
+                                            // metodo que se debe implementar Sí
+                                            addlog(miTipoLog, managerLogs);
+                                        }
+                                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
 
 
-                    } catch (ParseException e) {
-                        // Log.e(TAG, "Funcion diferenciaFechas: Error Parse " + e);
-                    } catch (Exception e) {
-                        // Log.e(TAG, "Funcion diferenciaFechas: Error " + e);
-                    }
-
-
-                    System.out.println("FECHA NEW LOG " + datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear());
-
-
-                    int int_fecha = (int) ((fecha_newlog).getTime() / 1000);
-                    TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha);
-                    System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
-                    //intent.putExtra("miTipo", miTipo);
-
-
-                    managerLogs.insertar(miTipoLog);
-
-
-                    setResult(Activity.RESULT_OK, intent);
-
-                    finish();
                 }
+
+
             }
         });
     };

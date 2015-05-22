@@ -2,25 +2,42 @@ package com.carlog.gilberto.carlog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.data.DBAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.data.DBTiposRevision;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Gilberto on 19/05/2015.
  */
 public class Aceite extends Activity {
 
+    public final static String TIPO_10K_KM = "10 mil kms - 5w30 – 5w40 – 5w50";
+    public final static String TIPO_7M_KM = "7 mil kms - 10w40";
+    public final static String TIPO_5K_KM = "5 mil kms - 15w40 - 20w50 - 25w60";
+
+
     private Spinner spinner1;
 
     private void RellenarTiposAceite(DBAceite managerAceite) {
+
+        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipoLog");
+
+        String txt_fecha = miTipo.getFechatxt(miTipo);
+
+        TextView text=(TextView)findViewById(R.id.txt_fecha_aceite);
+        text.setText(txt_fecha);
+
         //spinner1 = (Spinner) findViewById(R.id.cmb_tipos_aceite);
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_aceite);
 
@@ -37,6 +54,46 @@ public class Aceite extends Activity {
         spinner1.setAdapter(adaptador);
     }
 
+    private void GuardarLog(final DBLogs managerLogs, final DBAceite managerAceite) {
+        //Instanciamos el Boton
+        Button btn1 = (Button) findViewById(R.id.guardar_aceite);
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_aceite);
+                String tipo_aceite = spinner.getSelectedItem().toString();
+
+                Cursor c = DBAceite.buscarTiposAceite(tipo_aceite);
+
+                int int_aceite = AddLog.NO_KMS; // solo para inicializar
+
+                if (c.moveToFirst() == true) {
+                    int_aceite = c.getInt(c.getColumnIndex(managerAceite.CN_ID));
+                }
+
+                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_aceite);
+                String datetxt = txtTexto.getText().toString();
+
+                Date fecha = funciones.string_a_date(datetxt);
+                int int_fecha = funciones.string_a_int(datetxt);
+
+                TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+
+                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha, datetxt, int_fecha, int_aceite, miCoche.getMatricula(miCoche));
+
+                Intent intent = new Intent(Aceite.this, AddLog.class);
+
+                managerLogs.insertar(miTipoLog);
+
+                setResult(Activity.RESULT_OK, intent);
+
+                finish();
+            }
+        });
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +101,10 @@ public class Aceite extends Activity {
 
         Context contextNew = getApplicationContext();
         DBAceite managerAceite = new DBAceite(contextNew);
+        DBLogs managerLog = new DBLogs(contextNew);
 
         RellenarTiposAceite(managerAceite);
         //SeleccionarTipo(managerTiposRevision);
-        //GuardarLog(managerLogs);
+        GuardarLog(managerLog, managerAceite);
     }
 }

@@ -2,6 +2,7 @@ package com.carlog.gilberto.carlog;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -17,10 +18,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +33,10 @@ public class MyActivity extends Activity {
     private Spinner spinner_years;
     private List<String> lista_marcas;
     private List<String> lista_years;
+
+    public final static int NO_YEARS = -1;
+    public final static int NO_KMS = -1;
+    public final static int NO_ITV = -1;
 
 
     private void RellenarMarcas() {
@@ -81,22 +85,17 @@ public class MyActivity extends Activity {
         RellenarMarcas();
         RellenarYears();
 
-        TextView text = (TextView)findViewById(R.id.modelo);
+        TextView text = (TextView)findViewById(R.id.matricula);
+        text.setText(matricula);
+
+        text = (TextView)findViewById(R.id.modelo);
         text.setText(modelo);
 
         text=(TextView)findViewById(R.id.kms);
         text.setText(kms);
 
-        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            // aca realizamos el parse, para obtener objetos de tipo Date de las Strings
-            fechaITV = formato.parse(itv);
-            System.out.println("FECHA ITV "+fechaITV);
-        } catch (ParseException e) {
-            // Log.e(TAG, "Funcion diferenciaFechas: Error Parse " + e);
-        } catch (Exception e){
-            // Log.e(TAG, "Funcion diferenciaFechas: Error " + e);
-        }
+        fechaITV = funciones.string_a_date(itv);
+
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fechaITV);
@@ -110,6 +109,10 @@ public class MyActivity extends Activity {
         marca = spinner_marca.getSelectedItem().toString();
         System.out.println(marca);
 
+        matriculaT = (EditText) findViewById (R.id.matricula);
+        matricula = matriculaT.getText().toString();
+        System.out.println(matricula);
+
         modeloT = (EditText) findViewById (R.id.modelo);
         modelo = modeloT.getText().toString();
         System.out.println(modelo);
@@ -117,16 +120,19 @@ public class MyActivity extends Activity {
         Spinner spinner_year = (Spinner)findViewById(R.id.cmb_years);
         year = spinner_year.getSelectedItem().toString();
         System.out.println(year);
+        if(year.equals("Introduzca año")) int_year = NO_YEARS;
+        else int_year = Integer.parseInt(year);
 
         kmsT = (EditText) findViewById (R.id.kms);
         kms = kmsT.getText().toString();
+        if(kms.isEmpty() || kms.equals("Introduzca Kms")) int_kms = NO_KMS;
+        else int_kms = Integer.parseInt(kms);
+
         System.out.println(kms);
 
         DatePicker datePicker = (DatePicker) findViewById(R.id.date_itv);
 
 
-        // configuramos el formato en el que esta guardada la fecha en los strings que nos pasan
-        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
 
         if ((datePicker.getDayOfMonth() < 10) && ((datePicker.getMonth()+1) < 10)) {
             itv = "0"+datePicker.getDayOfMonth() +"-0"+ (datePicker.getMonth()+1) + "-" + datePicker.getYear();
@@ -140,14 +146,9 @@ public class MyActivity extends Activity {
             itv = datePicker.getDayOfMonth() +"-"+ (datePicker.getMonth()+1)+ "-" + datePicker.getYear();
 
 
-        try {
-            // aca realizamos el parse, para obtener objetos de tipo Date de las Strings
-            fechaITV = formato.parse(itv);
-        } catch (ParseException e) {
-            // Log.e(TAG, "Funcion diferenciaFechas: Error Parse " + e);
-        } catch (Exception e){
-            // Log.e(TAG, "Funcion diferenciaFechas: Error " + e);
-        }
+        fechaITV = funciones.string_a_date(itv);
+        int_itv = funciones.string_a_int(itv);
+
 
 
         System.out.println(""+datePicker.getDayOfMonth()+ "-" + (datePicker.getMonth()+1) + "-" + datePicker.getYear());
@@ -155,15 +156,20 @@ public class MyActivity extends Activity {
 
 
 
-    EditText modeloT, kmsT;
-    String marca, modelo, year, kms, itv;
-    Date fechaITV = null;
+    EditText matriculaT, modeloT, kmsT;
+    String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
+    Date fechaITV = new Date();
+    int int_year, int_kms, int_kms_anterior = 0, int_itv, int_kms_ini = 0, int_fecha_ini = 0;
 
     //comprobaciones
     private boolean comprobaciones() {
         boolean ok = true;
         try {
             Integer mykms = Integer.parseInt(kms);
+            if(mykms < int_kms_anterior) {
+                Toast.makeText(MyActivity.this, "Ha introducido un número de kms menor que el anterior.", Toast.LENGTH_LONG).show();
+                ok = false;
+            }
         } catch(NumberFormatException nfe) {
             Toast.makeText(MyActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
             ok = false;
@@ -186,7 +192,9 @@ public class MyActivity extends Activity {
 
         if(ok) {
             // Los campos marca, modelo y nº de kilometros deben de ser obligatorios
-            if (TextUtils.isEmpty(marca) || marca.equals("Introduzca marca")) {
+            if (TextUtils.isEmpty(matricula) || matricula.equals("Introduzca matrícula")) {
+                Toast.makeText(MyActivity.this, "Ha de introducir la matrícula.", Toast.LENGTH_LONG).show();
+            } else if (TextUtils.isEmpty(marca) || marca.equals("Introduzca marca")) {
                 Toast.makeText(MyActivity.this, "Ha de introducir la marca.", Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(modelo)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir el modelo.", Toast.LENGTH_LONG).show();
@@ -206,17 +214,39 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
+        /*
         // Obtenemos la instancia de las preferencias de la Activity
         SharedPreferences settings = getPreferences(MODE_PRIVATE);
         // Leemos el dato guardado
+        matricula = settings.getString("matricula", "Introduzca Matrícula");
         marca = settings.getString("marca", "Introduzca Marca");
         modelo = settings.getString("modelo", "Introduzca Modelo");
         year = settings.getString("year", "Introduzca Año");
         kms = settings.getString("kms", "Introduzca Nº Kms");
         itv = settings.getString("itv", "Introduzca Fecha ITV");
+*/
 
+        DBCar dbcar = new DBCar(this);
+        Cursor c = dbcar.buscarCoches();
 
-        DBLogs manager = new DBLogs(this);
+        //DE MOMENTO USAMOS EL PRIMERO pero contamos lo que se crean (Intento no cambiar la matricula para no crear más
+        if (c.moveToFirst() == true) {
+            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+            marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
+            modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+            int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
+            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
+            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
+            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+            year = String.valueOf(int_year);
+            kms = String.valueOf(int_kms);
+            itv = funciones.int_a_string(int_itv);
+            int_kms_anterior = int_kms;
+
+            System.out.println("Fecha de creación del coche: " + funciones.int_a_string(int_fecha_ini));
+            System.out.println("Kms al crear el coche: " + int_kms_ini);
+        }
 
         RellenarPantalla();
 
@@ -237,7 +267,7 @@ public class MyActivity extends Activity {
 
 
                 if (comprobaciones()) {
-                    // Necesitamos un editor para poder modificar los valores de la instancia settings
+         /*           // Necesitamos un editor para poder modificar los valores de la instancia settings
                     SharedPreferences settings = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor editor = settings.edit();
                     // Modificamos el valor deseado
@@ -248,16 +278,28 @@ public class MyActivity extends Activity {
                     editor.putString("itv", itv);
                     // Una vez finalizado, llámando a commit se guardan las preferencias en memoria no volatil
                     editor.commit();
+                    */
 
 
-                 /*   intent.putExtra("marca", marca); //Ya no guardamos las variables sueltas sino en un objeto Coche
-                    intent.putExtra("modelo", modelo);
-                    intent.putExtra("year", year);
-                    intent.putExtra("kms", kms);
-                    intent.putExtra("itv", itv); */
 
-                    TipoCoche miCoche = new TipoCoche(marca, modelo, year, kms, itv);
-                    intent.putExtra("miCoche", miCoche);
+                    if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor)
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, funciones.date_a_int(new Date()), int_kms);
+                        DBCar.insertinsertOrUpdate(miCoche);
+                    }
+                    else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) {
+                       /******************** media para cuando haga los4 casos de añadir log pero ver q media = kms ini / dias coche puede ser así o kms /dias coche sin el ini dependiendo de los 4 casos
+                       int dias_coche = (int) funciones.dias_entre_2_fechas(funciones.int_a_date(int_fecha_ini), new Date());
+                        int int_media = int_kms_ini / dias_coche; */
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, int_fecha_ini, int_kms_ini);
+                        DBCar.insertinsertOrUpdate(miCoche);
+                    }
+
+
+
+
+
+
+                    //intent.putExtra("miCoche", miCoche);
 
                     startActivity(intent);
                 }

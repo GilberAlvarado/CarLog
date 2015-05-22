@@ -14,9 +14,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -33,6 +33,7 @@ public class DatosIniciales extends Activity {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
+
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(DatosIniciales.this);
                 builder.setMessage("¿Está seguro de querer eliminar?")
@@ -82,21 +83,10 @@ public class DatosIniciales extends Activity {
         final DBLogs manager = new DBLogs(contextNew);
         String[] from = new String[]{manager.CN_TIPO, "fecha_string"};
         int[] to = new int[] {android.R.id.text1, android.R.id.text2};
-        final Cursor cursor = manager.LogsOrderByFechaString();
 
+        int int_now = funciones.date_a_int(new Date());
 
-
-
-
-  /*      for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            int colum_fecha = cursor.getColumnIndex(manager.CN_FECHA);
-            Date fecha = new Date(cursor.getLong(colum_fecha)*1000);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            String fecha_txt = dateFormat.format(fecha);
-System.out.println("FECHOTE1 "+fecha_txt);
-        }*/
-
-
+        final Cursor cursor = manager.LogsOrderByFechaString(int_now);
 
         final SimpleCursorAdapter adaptador = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item, cursor, from, to);
         //Asociamos el adaptador a la vista.
@@ -114,15 +104,35 @@ System.out.println("FECHOTE1 "+fecha_txt);
         setContentView(R.layout.activity_datos_iniciales);
 
 
-        final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+       // final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+        DBCar dbcar = new DBCar(this);
+        Cursor c = dbcar.buscarCoches();
 
-        String marca = miCoche.getMarca(miCoche);
-        String modelo = miCoche.getModelo(miCoche);
-        String year = miCoche.getYear(miCoche);
-        String kms = miCoche.getKms(miCoche);
-        String itv = miCoche.getItv(miCoche);
+        String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
+        int int_year = MyActivity.NO_YEARS, int_kms = MyActivity.NO_KMS, int_itv = MyActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
 
-        TextView text=(TextView)findViewById(R.id.marca2);
+        //DE MOMENTO USAMOS EL PRIMERO pero contamos lo que se crean (Intento no cambiar la matricula para no crear más
+        if (c.moveToFirst() == true) {
+            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+            marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
+            modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+            int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
+            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
+            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
+            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+            year = String.valueOf(int_year);
+            kms = String.valueOf(int_kms);
+            itv = funciones.int_a_string(int_itv);
+        }
+
+        final TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, int_fecha_ini, int_kms_ini);
+
+
+        TextView text=(TextView)findViewById(R.id.matricula2);
+        text.setText(matricula);
+
+        text=(TextView)findViewById(R.id.marca2);
         text.setText(marca);
 
         text=(TextView)findViewById(R.id.modelo2);

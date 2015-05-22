@@ -21,9 +21,8 @@ public class DBAceite {
             + CN_KMS + " int not null);";
 
 
-
     private DbHelper helper;
-    private SQLiteDatabase db;
+    private static SQLiteDatabase db;
 
     public DBAceite(Context context) {
         helper = new DbHelper(context);
@@ -53,7 +52,7 @@ public class DBAceite {
 
 
 
-    public Cursor buscarTiposAceite(String mytipoAceite) {
+    public static Cursor buscarTiposAceite(String mytipoAceite) {
         String[] columnas = new String[]{CN_ID, CN_TIPO, CN_KMS};
         return db.query(TABLE_NAME, columnas, CN_TIPO + "=?", new String[]{mytipoAceite}, null, null, null);
 
