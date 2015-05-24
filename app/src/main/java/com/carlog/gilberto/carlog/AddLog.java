@@ -26,7 +26,7 @@ import java.util.Date;
 
 public class AddLog extends Activity {
 
-    public final static int NO_KMS = -1;
+    public final static int NO_ACEITE = -1;
     private Spinner spinner1;
 
     private void RellenarTipos(DBTiposRevision managerTiposRevision) {
@@ -106,8 +106,13 @@ public class AddLog extends Activity {
         if (miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ACEITE)) {
             // Antes de hacer nada miramos si ya existe algun tipo de aceite pues no debemos tener más de uno
             TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+            int int_now = funciones.date_a_int(new Date());
             Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE);
-            if (c.moveToFirst() == false) {
+            if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
+                int ahora = funciones.date_a_int(new Date());
+                if(miTipoLog.getFechaint(miTipoLog) >= ahora) {
+                    Toast.makeText(getApplicationContext(), "Debe agregar primero ", Toast.LENGTH_SHORT).show();
+                }
                 intent = new Intent(AddLog.this, Aceite.class);
                 intent.putExtra("miTipoLog", miTipoLog);
                 intent.putExtra("miCoche", miCoche);
@@ -115,9 +120,7 @@ public class AddLog extends Activity {
                 setResult(Activity.RESULT_OK, intent);
 
                 finish();
-            } else
-                Toast.makeText(getApplicationContext(), "Ya tiene pendiente un " + TipoLog.TIPO_ACEITE, Toast.LENGTH_SHORT).show();
-
+            } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente un " + TipoLog.TIPO_ACEITE, Toast.LENGTH_SHORT).show();
 
         } else {
             intent = new Intent(AddLog.this, DatosIniciales.class);
@@ -164,15 +167,20 @@ public class AddLog extends Activity {
 
                 TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
-                final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_KMS, miCoche.getMatricula(miCoche));
-                System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
+
 
                 if (int_fecha > funciones.date_a_int(new Date())) {
+                    // con NO_REALIZADO
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
+                    System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
                     addlog(miTipoLog, managerLogs);
                 }
                 else {
+                    // con REALIZADO
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
+                    System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
                     AlertDialog.Builder builder = new AlertDialog.Builder(AddLog.this);
-                    builder.setMessage("¿Quiere añadir una fecha antigua?")
+                    builder.setMessage("¿Quiere añadir la última revisión hecha de " + miTipoLog.getTipo(miTipoLog) + "?")
                             .setTitle("Historial")
                             .setCancelable(false)
                             .setNegativeButton("Cancelar",

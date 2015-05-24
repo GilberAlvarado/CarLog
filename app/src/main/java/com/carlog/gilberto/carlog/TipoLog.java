@@ -21,14 +21,18 @@ public class TipoLog implements Serializable {
     private int int_fecha;
     private int aceite;
     private String matricula;
+    private int realizado;
+    private int kms;
 
-    public TipoLog(String tipo, Date fecha, String datetxt, int int_fecha, int aceite,  String matricula) {
+    public TipoLog(String tipo, Date fecha, String datetxt, int int_fecha, int aceite,  String matricula, int realizado, int kms) {
         this.tipo = tipo;
         this.fecha = fecha;
         this.datetxt = datetxt;
         this.int_fecha = int_fecha;
         this.aceite = aceite;
         this.matricula = matricula;
+        this.realizado = realizado;
+        this.kms = kms;
     }
 
     public String getTipo(TipoLog miTipo) {
@@ -53,6 +57,14 @@ public class TipoLog implements Serializable {
 
     public int getAceite(TipoLog miTipo) {
         return(miTipo.aceite);
+    }
+
+    public int getKms(TipoLog miTipo) {
+        return(miTipo.kms);
+    }
+
+    public int getRealizado(TipoLog miTipo) {
+        return(miTipo.realizado);
     }
 
     public void setAceite(TipoLog miTipo, int aceite) {  miTipo.aceite = aceite;    }

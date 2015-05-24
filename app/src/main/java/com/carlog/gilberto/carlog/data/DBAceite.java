@@ -57,4 +57,10 @@ public class DBAceite {
         return db.query(TABLE_NAME, columnas, CN_TIPO + "=?", new String[]{mytipoAceite}, null, null, null);
 
     }
+
+    public static Cursor buscarTiposAceite(int id) {
+        String[] columnas = new String[]{CN_ID, CN_TIPO, CN_KMS};
+        return db.query(TABLE_NAME, columnas, CN_ID + "=?", new String[]{Integer.toString(id)}, null, null, null);
+
+    }
 }

@@ -78,6 +78,8 @@ public class DatosIniciales extends Activity {
         });
     }
 
+
+
     private void ConsultarLogs() {
         Context contextNew = getApplicationContext();
         final DBLogs manager = new DBLogs(contextNew);
@@ -86,7 +88,9 @@ public class DatosIniciales extends Activity {
 
         int int_now = funciones.date_a_int(new Date());
 
-        final Cursor cursor = manager.LogsOrderByFechaString(int_now);
+        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now);
+
+
 
         final SimpleCursorAdapter adaptador = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item, cursor, from, to);
         //Asociamos el adaptador a la vista.
@@ -184,6 +188,7 @@ public class DatosIniciales extends Activity {
                 if (resultCode == Activity.RESULT_OK) {
                     //TipoLog miTipo = (TipoLog) data.getExtras().getSerializable("miTipo");
                     ConsultarLogs();
+
 
                 }
                 break;

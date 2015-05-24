@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -78,6 +79,14 @@ public class funciones {
         System.out.println("DIAS ENTRE " + fecha2 + " y " + fecha1 + " = " + diferencia);
         return diferencia;
 
+    }
+
+    public static Date fecha_mas_dias(int dias) {
+        Calendar hoy = Calendar.getInstance();
+        System.out.println("DIA " + hoy.getTime() + " + "  + dias + " días =  ");
+        hoy.add(Calendar.DATE, dias);
+        System.out.println(hoy.getTime());
+        return(hoy.getTime());
     }
 
 

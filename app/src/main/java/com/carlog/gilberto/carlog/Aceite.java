@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.carlog.gilberto.carlog.data.DBAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -66,7 +67,7 @@ public class Aceite extends Activity {
 
                 Cursor c = DBAceite.buscarTiposAceite(tipo_aceite);
 
-                int int_aceite = AddLog.NO_KMS; // solo para inicializar
+                int int_aceite = AddLog.NO_ACEITE; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_aceite = c.getInt(c.getColumnIndex(managerAceite.CN_ID));
@@ -80,11 +81,17 @@ public class Aceite extends Activity {
 
                 TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
-                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha, datetxt, int_fecha, int_aceite, miCoche.getMatricula(miCoche));
+                System.out.println("SE inserta aceite id : "+int_aceite);
+                TipoLog miTipoParametro = (TipoLog)getIntent().getExtras().getSerializable("miTipoLog"); // Sólo para coger el realizado
+                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha, datetxt, int_fecha, int_aceite, miCoche.getMatricula(miCoche), miTipoParametro.getRealizado(miTipoParametro), miCoche.getKms(miCoche));
 
                 Intent intent = new Intent(Aceite.this, AddLog.class);
 
                 managerLogs.insertar(miTipoLog);
+                if(miTipoLog.getFechaint(miTipoLog) < funciones.date_a_int(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
+                    // Creamos el nuevo futuro log
+                   // MyActivity.procesar_aceite();
+                }
 
                 setResult(Activity.RESULT_OK, intent);
 
