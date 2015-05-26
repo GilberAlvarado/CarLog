@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -29,10 +32,7 @@ public class DatosIniciales extends Activity {
     private ArrayList<String> datos_lista_log = new ArrayList<String>();
 
 
-    private void borrarLogpulsado(ListView lv, final Cursor cursor, final DBLogs manager) {
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
+    private void borrarLogpulsado(ListView lv, final Cursor cursor, final DBLogs manager, final int posicion) {
 
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(DatosIniciales.this);
@@ -50,17 +50,16 @@ public class DatosIniciales extends Activity {
                                     public void onClick(DialogInterface dialog, int id_dialog) {
                                         // metodo que se debe implementar Sí
                                         //Recorremos el cursor
-                                        ArrayList<String> tipos = new ArrayList<String>();
-                                        int j = 0;
+                                        int i = 0;
                                         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-                                            if (j == i) { // la posicion del cursor coincide con la del que pulsamos en la lista
-                                                int id = cursor.getInt(0);
+                                            if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                                                int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
                                                 manager.eliminar_por_id(id);
                                                 ConsultarLogs();
 
                                                 break;
                                             }
-                                            j++;
+                                            i++;
                                         }
                                     }
                                 });
@@ -68,14 +67,52 @@ public class DatosIniciales extends Activity {
                 alert.show();
 
 
+    }
 
 
+    private void modificarLogpulsado(ListView lv, final Cursor cursor, final DBLogs manager, int posicion) {
+        //final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+        Intent intent = new Intent(DatosIniciales.this, modificarAceite.class);
+        //Recorremos el cursor
+        int i = 0;
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
+                String tipo = cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO));
+                String txt_fecha = cursor.getString(cursor.getColumnIndex("fecha_string"));
+                int aceite = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE));
+                String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
+                int kms = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS));
 
 
-
-                return false;
+                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_int(txt_fecha), aceite, matricula, DBLogs.NO_REALIZADO, kms);
+                intent.putExtra("miTipo", miTipo);
+                intent.putExtra("idLog", id);
+                break;
             }
-        });
+            i++;
+        }
+
+
+        startActivity(intent);
+
+    }
+
+    private void realizadoLogpulsado(ListView lv, final Cursor cursor, final DBLogs manager, int posicion) {
+        final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+        //Recorremos el cursor
+        int i = 0;
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                int id = cursor.getInt(0);
+                manager.marcarRealizadoLog(id, funciones.date_a_int(new Date()), miCoche.getKms(miCoche)); //hoy
+                ConsultarLogs();
+
+                break;
+            }
+            i++;
+        }
+
     }
 
 
@@ -97,7 +134,9 @@ public class DatosIniciales extends Activity {
         ListView lv = (ListView) findViewById(R.id.lista_log);
         lv.setAdapter(adaptador);
 
-        borrarLogpulsado(lv, cursor, manager);
+        //Asociamos el menú contextual a los controles
+        registerForContextMenu(lv);
+
 
     }
 
@@ -178,6 +217,48 @@ public class DatosIniciales extends Activity {
 
 
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getMenuInflater();
+
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo)menuInfo;
+
+
+        inflater.inflate(R.menu.modificar_log, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int int_now = funciones.date_a_int(new Date());
+        Context contextNew = getApplicationContext();
+        final DBLogs manager = new DBLogs(contextNew);
+        ListView lv = (ListView) findViewById(R.id.lista_log);
+        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now);
+
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()) {
+            case R.id.menu_modificarLog:
+                modificarLogpulsado(lv, cursor, manager, info.position);
+                return true;
+            case R.id.menu_eliminarLog:
+                borrarLogpulsado(lv, cursor, manager, info.position);
+                return true;
+            case R.id.menu_realizadoLog:
+                realizadoLogpulsado(lv, cursor, manager, info.position);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
 
     private final int PETICION_ACTIVITY_ADD_LOG = 1;
     @Override

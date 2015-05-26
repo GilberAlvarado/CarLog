@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -231,7 +232,7 @@ public class MyActivity extends Activity {
                 else {
                     // Creamos el nuevo log futuro estimado a partir del ultimo log histórico
                     // Se pone por defecto el tipo de aceite del ultimo log historico, si se desea poner otro se deberá editar el log y cambiarlo de forma manual
-                    // Se pone por defecto el kms_supuestos_hasta_fecha_fut_aceite, se deberá actualizar el nº de kms reales all volver a hacer la revisión de aceite futura
+                    // Se pone por defecto el kms_supuestos_hasta_fecha_fut_aceite, se deberá actualizar el nº de kms reales al volver a hacer la revisión de aceite futura
                     int kms_supuestos_hasta_fecha_fut_aceite = (int) funciones.dias_entre_2_fechas(fecha_ultimo_log_hist, fecha_log_futuro_recalculada) * int_media;
                     TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha_log_futuro_recalculada, funciones.int_a_string(int_fecha_log_futuro_recalculada), int_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist,  txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_aceite);
                     dbLogs.insertar(miTipoLog);
@@ -375,10 +376,12 @@ public class MyActivity extends Activity {
 
                     if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, funciones.date_a_int(new Date()), int_kms);
+                        intent.putExtra("miCoche", miCoche);
                         DBCar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, int_fecha_ini, int_kms_ini);
+                        intent.putExtra("miCoche", miCoche);
                         DBCar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
@@ -407,6 +410,7 @@ public class MyActivity extends Activity {
 
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, int_fecha_ini, int_kms_ini);
                         DBCar.insertinsertOrUpdate(miCoche);
+                        intent.putExtra("miCoche", miCoche);
                     }
 
 
@@ -414,7 +418,7 @@ public class MyActivity extends Activity {
 
 
 
-                    //intent.putExtra("miCoche", miCoche);
+
 
                     startActivity(intent);
                 }

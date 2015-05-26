@@ -7,6 +7,11 @@
     <string name="btn1">Siguiente</string>
     <string name="title_activity_add_log">AddLog</string>
     <string name="title_activity_aceite">Aceite</string>
+    <string name="title_activity_modificaraceite">ModificarAceite</string>
     <string name="txt_itv">Introduzca Fecha ITV</string>
+
+    <string name="menu_Opc_modificar_log">Modificar</string>
+    <string name="menu_Opc_eliminar_log">Eliminar</string>
+    <string name="menu_Opc_realizado_log">Realizado hoy</string>
 
 </resources>

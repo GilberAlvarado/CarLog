@@ -127,4 +127,14 @@ public class DBLogs {
         db.execSQL(sql);
     }
 
+    public void marcarRealizadoLog(int id, int fecha, int kms) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_FECHA + " = " + fecha + " AND " + CN_REALIZADO + " AND " + CN_KMS + " = " + kms+ " WHERE " + CN_ID + " = " + id;
+        db.execSQL(sql);
+    }
+
+    public void modificarTipoAceiteLog(int id, int aceite) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_ACEITE + " = " + aceite+ " WHERE " + CN_ID + " = " + id;
+        db.execSQL(sql);
+    }
+
 }

@@ -28,6 +28,10 @@
             android:name=".Aceite"
             android:label="@string/title_activity_aceite" >
         </activity>
+        <activity
+            android:name=".modificarAceite"
+            android:label="@string/title_activity_modificaraceite" >
+        </activity>
     </application>
 
 </manifest>
