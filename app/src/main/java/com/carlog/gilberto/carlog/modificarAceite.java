@@ -82,27 +82,15 @@ public class modificarAceite extends Activity {
                 System.out.println("Modificamos el Log con id " + idLog + " por aceite " + int_aceite);
                 managerLogs.modificarTipoAceiteLog(idLog, int_aceite);
 
+/* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
+                TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
+                procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
+*/
+
                 setResult(Activity.RESULT_OK, intent);
 
                 finish();
             }
         });
     };
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modificar_aceite);
-
-        Context contextNew = getApplicationContext();
-        DBAceite managerAceite = new DBAceite(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
-
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
-        System.out.println("MITIPOLOG MODIFICAR. FECHA "+miTipo.getFechatxt(miTipo));
-
-        RellenarTiposAceite(managerAceite, miTipo);
-        ModificarLog(managerLog, managerAceite);
-    }
 }

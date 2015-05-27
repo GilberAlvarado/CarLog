@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -71,7 +72,7 @@ public class DatosIniciales extends Activity {
 
 
     private void modificarLogpulsado(ListView lv, final Cursor cursor, final DBLogs manager, int posicion) {
-        //final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+        final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
         Intent intent = new Intent(DatosIniciales.this, modificarAceite.class);
         //Recorremos el cursor
         int i = 0;
@@ -87,6 +88,7 @@ public class DatosIniciales extends Activity {
 
                 TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_int(txt_fecha), aceite, matricula, DBLogs.NO_REALIZADO, kms);
                 intent.putExtra("miTipo", miTipo);
+                intent.putExtra("miCoche", miCoche);
                 intent.putExtra("idLog", id);
                 break;
             }
@@ -132,7 +134,12 @@ public class DatosIniciales extends Activity {
         final SimpleCursorAdapter adaptador = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item, cursor, from, to);
         //Asociamos el adaptador a la vista.
         ListView lv = (ListView) findViewById(R.id.lista_log);
+
+
         lv.setAdapter(adaptador);
+
+
+
 
         //Asociamos el menú contextual a los controles
         registerForContextMenu(lv);
@@ -276,6 +283,7 @@ public class DatosIniciales extends Activity {
             }
         }
     }
+
 
 
 }

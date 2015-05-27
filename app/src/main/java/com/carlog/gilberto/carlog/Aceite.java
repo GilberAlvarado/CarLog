@@ -84,14 +84,18 @@ public class Aceite extends Activity {
                 System.out.println("SE inserta aceite id : "+int_aceite);
                 TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha, datetxt, int_fecha, int_aceite, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
 
+
+                if(miTipoLog.getFechaint(miTipoLog) < funciones.date_a_int(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
+                    // Creamos el nuevo futuro log
+                    // Se pone como REALIZADO!
+                    miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha, datetxt, int_fecha, int_aceite, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
+                }
+
                 Intent intent = new Intent(Aceite.this, AddLog.class);
 
                 managerLogs.insertar(miTipoLog);
-                if(miTipoLog.getFechaint(miTipoLog) < funciones.date_a_int(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
-                    // Creamos el nuevo futuro log
-                   // MyActivity.procesar_aceite();
-                    //ponerlo como REALIZADO!
-                }
+                // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
+                procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
 
                 setResult(Activity.RESULT_OK, intent);
 

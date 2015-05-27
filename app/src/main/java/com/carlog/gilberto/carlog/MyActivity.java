@@ -15,12 +15,10 @@ import android.widget.EditText;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.carlog.gilberto.carlog.data.DBAceite;
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 
@@ -171,7 +169,7 @@ public class MyActivity extends Activity {
     Date fechaITV = new Date();
     int int_year, int_kms, int_kms_anterior = 0, int_itv, int_kms_ini = 0, int_fecha_ini = 0;
 
-
+/*
     public void procesar_aceite(DBLogs dbLogs, int int_now, Context context, int int_media) {
         Cursor c_historico_aceite = dbLogs.LogsHistoricoAceiteOrderByFechaString(int_now);
         Cursor c_logs_aceite = dbLogs.LogsAceiteOrderByFechaString(int_now);
@@ -251,6 +249,7 @@ public class MyActivity extends Activity {
         }
 
     }
+    */
 
 
     //comprobaciones
@@ -386,27 +385,6 @@ public class MyActivity extends Activity {
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
 
-                        int dias_coche = (int) funciones.dias_entre_2_fechas(funciones.int_a_date(int_fecha_ini), new Date());
-                        int int_media = 0;
-                        if(dias_coche == 0) { // se creó hoy el coche
-                            int_media = int_kms - int_kms_ini;
-                        }
-                        else int_media = int_kms - int_kms_ini / dias_coche;
-
-
-
-
-                        DBLogs dbLogs= new DBLogs(context);
-                        int int_now = funciones.date_a_int(new Date());
-
-
-
-                        ///////////////////PARA EL ACEITE
-                        procesar_aceite(dbLogs, int_now, context, int_media);
-                        //////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
-
-                        ////////////////////////////////////////////////////////
-
 
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, int_fecha_ini, int_kms_ini);
                         DBCar.insertinsertOrUpdate(miCoche);
@@ -414,8 +392,16 @@ public class MyActivity extends Activity {
                     }
 
 
+                    // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editados y se deben recalcular al mostrar
+                    DBLogs dbLogs= new DBLogs(context);
+                    int int_now = funciones.date_a_int(new Date());
 
 
+                    ///////////////////PARA EL ACEITE
+                    procesarAceite.procesar_aceite(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini);
+                    //////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
+
+                    ////////////////////////////////////////////////////////
 
 
 

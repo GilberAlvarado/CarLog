@@ -95,21 +95,21 @@ public class DBLogs {
 
     public Cursor LogsTodosOrderByFechaString(int int_now) {  // todos los tipos pero solo los logs futuros y no realizados
         String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
-                + CN_FECHA + " > " + int_now + " AND " + CN_REALIZADO + " = " + NO_REALIZADO + " ORDER BY "+ CN_FECHA;
+              /*  + CN_FECHA + " > " + int_now + " AND " */+ CN_REALIZADO + " = " + NO_REALIZADO + " ORDER BY "+ CN_FECHA;
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
 
     public Cursor LogsHistoricoAceiteOrderByFechaString(int int_now) { // Los de tipo aceite del histórico para elegir el más reciente
         String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
-                + CN_FECHA + " < " + int_now + " AND " + CN_TIPO + " = '" + TipoLog.TIPO_ACEITE + "' AND " + CN_REALIZADO + " = " + REALIZADO +  " ORDER BY "+ CN_FECHA + " DESC";
+               /* + CN_FECHA + " < " + int_now + " AND " */+ CN_TIPO + " = '" + TipoLog.TIPO_ACEITE + "' AND " + CN_REALIZADO + " = " + REALIZADO +  " ORDER BY "+ CN_FECHA + " DESC";
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
 
     public Cursor LogsAceiteOrderByFechaString(int int_now) { // Los de tipo aceite del futuro
         String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
-                + CN_FECHA + " > " + int_now + " AND " + CN_TIPO + " = '" + TipoLog.TIPO_ACEITE + "' AND " + CN_REALIZADO + " = " + NO_REALIZADO+ " ORDER BY "+ CN_FECHA + " DESC";
+                /*+ CN_FECHA + " > " + int_now + " AND " */+ CN_TIPO + " = '" + TipoLog.TIPO_ACEITE + "' AND " + CN_REALIZADO + " = " + NO_REALIZADO+ " ORDER BY "+ CN_FECHA + " DESC";
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
