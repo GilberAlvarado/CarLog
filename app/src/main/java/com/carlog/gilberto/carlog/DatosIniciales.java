@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.data.DBCar;
@@ -23,6 +21,7 @@ import com.carlog.gilberto.carlog.data.DBLogs;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -122,21 +121,46 @@ public class DatosIniciales extends Activity {
     private void ConsultarLogs() {
         Context contextNew = getApplicationContext();
         final DBLogs manager = new DBLogs(contextNew);
-        String[] from = new String[]{manager.CN_TIPO, "fecha_string"};
-        int[] to = new int[] {android.R.id.text1, android.R.id.text2};
+       // String[] from = new String[]{manager.CN_TIPO, "fecha_string"};
+       // int[] to = new int[] {android.R.id.text1, android.R.id.text2};
 
         int int_now = funciones.date_a_int(new Date());
 
         final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now);
 
+        cursor.moveToFirst();
+        int i = 0;
+        while (cursor.moveToNext()){
+            //in this string we get the record for each row from the column "name"
+            i++;
+        }
+
+        List<TipoLog> listaLogs = new ArrayList<TipoLog>();
+        //Recorremos el cursor
+        int k = 0;
+        cursor.moveToFirst();
+        while (cursor.moveToNext()) {
+            TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
+                    funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
+                    cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS)));
+            listaLogs.add(miTipoLog);
+
+            k++;
+        }
 
 
-        final SimpleCursorAdapter adaptador = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item, cursor, from, to);
+
+
+       // final SimpleCursorAdapter adaptador = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item, cursor, from, to);
         //Asociamos el adaptador a la vista.
         ListView lv = (ListView) findViewById(R.id.lista_log);
 
 
-        lv.setAdapter(adaptador);
+        miAdaptadorLog adapter = new miAdaptadorLog(this, listaLogs);
+
+
+        lv.setAdapter(adapter);
+       // lv.setAdapter(adaptador);
 
 
 
