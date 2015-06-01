@@ -93,4 +93,19 @@ public class modificarAceite extends Activity {
             }
         });
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_modificar_aceite);
+
+        Context contextNew = getApplicationContext();
+        DBAceite managerAceite = new DBAceite(contextNew);
+        DBLogs managerLog = new DBLogs(contextNew);
+        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+
+        RellenarTiposAceite(managerAceite, miTipo);
+        //SeleccionarTipo(managerTiposRevision);
+        ModificarLog(managerLog, managerAceite);
+    }
 }

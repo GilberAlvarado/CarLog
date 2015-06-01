@@ -1,20 +1,23 @@
 package com.carlog.gilberto.carlog;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-
-import android.view.View;
-import android.widget.Button;
-import android.content.Intent;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +31,32 @@ import java.util.Date;
 import java.util.List;
 
 
-public class MyActivity extends Activity {
+public class MyActivity extends ActionBarActivity {
+
+    //First We Declare Titles And Icons For Our Navigation Drawer List View
+    //This Icons And Titles Are holded in an Array as you can see
+
+    //String TITLES[] = {"Home","Events","Mail","Shop","Travel"};
+    //int ICONS[] = {R.drawable.ic_coche,R.drawable.ic_coche,R.drawable.ic_coche,R.drawable.ic_coche,R.drawable.ic_coche};
+
+    //Similarly we Create a String Resource for the name and email in the header view
+    //And we also create a int resource for profile picture in the header view
+
+    String NAME = "Audi";
+    String EMAIL = "Audi TT Quattro 225cv";
+    int PROFILE = R.drawable.ic_logo_audi;
+
+
+    private Toolbar toolbar;
+
+    RecyclerView mRecyclerView;                           // Declaring RecyclerView
+    RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
+    RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+    DrawerLayout Drawer;                                  // Declaring DrawerLayout
+
+    ActionBarDrawerToggle mDrawerToggle;
+
+
 
     private Spinner spinner_marcas;
     private Spinner spinner_years;
@@ -88,6 +116,7 @@ public class MyActivity extends Activity {
 
         TextView text = (TextView)findViewById(R.id.matricula);
         text.setText(matricula);
+        if(!matricula.equals("Introduzca matrícula")) text.setEnabled(false); //no editable si ya está la matrícula
 
         text = (TextView)findViewById(R.id.modelo);
         text.setText(modelo);
@@ -305,6 +334,52 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
+        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        setSupportActionBar(toolbar);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
+
+        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
+
+
+        final Context context = this;
+        DBCar dbcar = new DBCar(context);
+        Cursor c = dbcar.buscarCoches();
+
+
+        mAdapter = new miAdaptadorCoches(dbcar, c,NAME,EMAIL,PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+        // And passing the titles,icons,header view name, header view email,
+        // and header view profile picture
+
+        mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
+
+        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+
+        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
+
+        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
+        //mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar, R.string.open_drawer, R.string.close_drawer){
+        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar, R.string.open_drawer, R.string.close_drawer){
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
+                // open I am not going to put anything here)
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                // Code here will execute once drawer is closed
+            }
+        }; // Drawer Toggle Object Made
+        Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
+        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+
+
+
         /*
         // Obtenemos la instancia de las preferencias de la Activity
         SharedPreferences settings = getPreferences(MODE_PRIVATE);
@@ -316,9 +391,8 @@ public class MyActivity extends Activity {
         kms = settings.getString("kms", "Introduzca Nº Kms");
         itv = settings.getString("itv", "Introduzca Fecha ITV");
 */
-        final Context context = this;
-        DBCar dbcar = new DBCar(context);
-        Cursor c = dbcar.buscarCoches();
+
+
 
         //DE MOMENTO USAMOS EL PRIMERO pero contamos lo que se crean (Intento no cambiar la matricula para no crear más
         if (c.moveToFirst() == true) {
@@ -392,7 +466,7 @@ public class MyActivity extends Activity {
                     }
 
 
-                    // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editados y se deben recalcular al mostrar
+                    // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
                     DBLogs dbLogs= new DBLogs(context);
                     int int_now = funciones.date_a_int(new Date());
 

@@ -27,7 +27,7 @@ public class procesarAceite {
         Cursor c_logs_aceite = dbLogs.LogsAceiteOrderByFechaString(int_now);
 
 
-        if (c_historico_aceite.moveToFirst() == true) { // Si existen logs históricos de aceite hay que actualizar la fecha del futuro (pq siempre va a existir) log de aceite
+        if (c_historico_aceite.moveToFirst() == true) { // Si existen logs históricos de aceite hay que actualizar la fecha del futuro (pq siempre tiene q existir) log de aceite
             String txt_fecha_h = c_historico_aceite.getString(c_historico_aceite.getColumnIndex("fecha_string")); // recuperamos el último de los logs
             Date fecha_ultimo_log_hist = funciones.string_a_date(txt_fecha_h);
             int kms_ultimo_log_hist = c_historico_aceite.getInt(c_historico_aceite.getColumnIndex(DBLogs.CN_KMS));

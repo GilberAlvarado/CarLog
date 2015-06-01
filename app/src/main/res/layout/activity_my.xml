@@ -1,94 +1,146 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+
     tools:context=".MyActivity">
 
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/DrawerLayout"
+        android:layout_width="match_parent"
+        android:elevation="4dp"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="1dp"
+            android:orientation="vertical">
+
+
+            <include
+                android:id="@+id/tool_bar"
+                layout="@layout/tool_bar">
+            </include>
+
+            <EditText
+                android:id="@+id/matricula"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Introduzca Matrícula"
+                android:elevation="3dp"
+                android:layout_marginTop="70dp"
+                android:text="" />
+
+            <Spinner
+                android:id="@+id/cmb_marcas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:elevation="3dp"
+                android:layout_marginTop="120dp" />
+
+
+
+            <EditText
+                android:id="@+id/modelo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:hint="Introduzca Modelo"
+                android:elevation="3dp"
+                android:text="" />
+
+
+            <Spinner
+                android:id="@+id/cmb_years"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:elevation="3dp"
+                android:layout_marginTop="200dp" />
+
+            <EditText
+                android:id="@+id/kms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="230dp"
+                android:elevation="3dp"
+                android:hint="Introduzca Kms"
+                android:text="" />
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="280dp"
+                android:text="@string/txt_itv" />
+
+            <DatePicker
+                android:id="@+id/date_itv"
+                android:layout_width="200dp"
+                android:layout_height="120dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:elevation="3dp"
+                android:layout_weight="1"
+                android:layout_marginTop="320dp"
+                android:calendarViewShown="false" />
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="530dp"
+                android:layout_weight="1"
+                android:elevation="3dp"
+                android:onClick="siguiente"
+                android:text="@string/btn1" />
 
 
 
 
-    <Spinner
+
+        </RelativeLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/RecyclerView"
+            android:layout_width="320dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:elevation="4dp"
+            android:background="#ffffff"
+            android:scrollbars="vertical">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+
+
+    </android.support.v4.widget.DrawerLayout>
+
+
+    <com.gc.materialdesign.views.ButtonFloat
+        android:id="@+id/buttonFloat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/cmb_marcas"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="30dp"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="24dp"
+        android:elevation="5dp"
+        android:background="#1E88E5"
+        materialdesign:animate="true"
+        materialdesign:iconDrawable="@drawable/ic_action_new" />
 
-    <EditText
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Introduzca Matrícula"
-        android:id="@+id/matricula" />
 
-    <EditText
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:hint="Introduzca Modelo"
-        android:id="@+id/modelo" />
 
-    <!--<EditText
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:hint="Introduzca Año"
-        android:id="@+id/year" />-->
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cmb_years"
-        android:layout_marginTop="120dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
-    <EditText
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
-        android:hint="Introduzca Kms"
-        android:id="@+id/kms" />
-
-    <!--<EditText
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
-        android:hint="Introduzca ITV"
-        android:id="@+id/itv" />-->
-
-    <TextView
-        android:text="@string/txt_itv"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="210dp"
-        android:layout_height="wrap_content" />
-
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/date_itv"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="200dp"
-        android:calendarViewShown="false"/>
-
-    <Button
-        android:text="@string/btn1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
-        android:layout_weight="1"
-        android:id="@+id/btn1"
-        android:onClick="siguiente" />
 
 
 

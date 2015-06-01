@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
+import com.gc.materialdesign.views.ButtonFloat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,13 +73,22 @@ public class DatosIniciales extends Activity {
 
     private void modificarLogpulsado(ListView lv, final Cursor cursor, final DBLogs manager, int posicion) {
         final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
-        Intent intent = new Intent(DatosIniciales.this, modificarAceite.class);
+
         //Recorremos el cursor
         int i = 0;
+        String tipo = "";
+        Intent intent = new Intent();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
-                String tipo = cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO));
+                tipo = cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO));
+                if(tipo.equals(TipoLog.TIPO_ACEITE)) {
+                    intent = new Intent(DatosIniciales.this, modificarAceite.class);
+                }
+                ///////////ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
+                //************************************************************************
+
+
                 String txt_fecha = cursor.getString(cursor.getColumnIndex("fecha_string"));
                 int aceite = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE));
                 String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
@@ -94,19 +104,32 @@ public class DatosIniciales extends Activity {
             i++;
         }
 
+        if(tipo.equals(TipoLog.TIPO_ACEITE)) {
+            startActivity(intent);
+        }
+        ///////////ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
+        //************************************************************************
 
-        startActivity(intent);
 
     }
 
-    private void realizadoLogpulsado(ListView lv, final Cursor cursor, final DBLogs manager, int posicion) {
+    private void realizadoLogpulsado(ListView lv, Cursor cursor, DBLogs manager, int posicion) {
         final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+
         //Recorremos el cursor
         int i = 0;
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+
             if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
-                int id = cursor.getInt(0);
-                manager.marcarRealizadoLog(id, funciones.date_a_int(new Date()), miCoche.getKms(miCoche)); //hoy
+                int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
+
+                Date now = new Date();
+                System.out.println("fecha "+now);
+                System.out.println("id "+id);
+                System.out.println("int fecha "+funciones.date_a_int(now));
+
+                manager.marcarRealizadoLog(id, funciones.date_a_int(now), miCoche.getKms(miCoche)); //hoy
+
                 ConsultarLogs();
 
                 break;
@@ -128,18 +151,19 @@ public class DatosIniciales extends Activity {
 
         final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now);
 
-        cursor.moveToFirst();
-        int i = 0;
-        while (cursor.moveToNext()){
-            //in this string we get the record for each row from the column "name"
-            i++;
-        }
+
 
         List<TipoLog> listaLogs = new ArrayList<TipoLog>();
         //Recorremos el cursor
         int k = 0;
         cursor.moveToFirst();
-        while (cursor.moveToNext()) {
+        //while (cursor.moveToNext()) {
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            if(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)).equals(TipoLog.TIPO_ACEITE)) {
+                System.out.println("en consultarlogs date " + funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))));
+                System.out.println("en consultarlogs string " + cursor.getString(cursor.getColumnIndex("fecha_string")));
+                System.out.println("en consultarlogs int " + funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))));
+            }
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
                     funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
                     cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS)));
@@ -224,7 +248,7 @@ public class DatosIniciales extends Activity {
         ConsultarLogs();
 
         //Instanciamos el Boton
-        Button btn1 = (Button) findViewById(R.id.add_log);
+        ButtonFloat btn1 = (ButtonFloat) findViewById(R.id.add_log);
 
         /*
           Definimos un método OnClickListener para que

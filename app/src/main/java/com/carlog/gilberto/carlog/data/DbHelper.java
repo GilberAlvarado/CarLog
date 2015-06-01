@@ -19,7 +19,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "carlog.sqlite";
-    private static final int DB_SCHEME_VERSION = 25;
+    private static final int DB_SCHEME_VERSION = 26;
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_SCHEME_VERSION);
@@ -27,7 +27,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
+       // sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
         sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
      //   sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
      //   sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
@@ -75,7 +75,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCar.TABLE_NAME);
+       // sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCar.TABLE_NAME);
         onCreate(sqLiteDatabase);
         //sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
     }

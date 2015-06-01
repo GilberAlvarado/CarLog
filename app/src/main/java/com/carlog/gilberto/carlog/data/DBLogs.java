@@ -35,7 +35,7 @@ public class DBLogs {
     public static final String CREATE_TABLE = "create table " +TABLE_NAME + " ("
             + CN_ID + " integer primary key autoincrement,"
             + CN_TIPO + " text not null,"
-            + CN_FECHA + " int not null,"
+            + CN_FECHA + " integer not null,"
             + CN_ACEITE + " int,"
             + CN_CAR + " text not null,"
             + CN_REALIZADO + " integer not null,"
@@ -128,7 +128,8 @@ public class DBLogs {
     }
 
     public void marcarRealizadoLog(int id, int fecha, int kms) {
-        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_FECHA + " = " + fecha + " AND " + CN_REALIZADO + " AND " + CN_KMS + " = " + kms+ " WHERE " + CN_ID + " = " + id;
+        System.out.println("DATOS "+id + " "+fecha + " "+ kms);
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_FECHA + " = " + fecha + ", " + CN_REALIZADO + " = " + REALIZADO + ", " + CN_KMS + " = " + kms+ " WHERE " + CN_ID + " = " + id;
         db.execSQL(sql);
     }
 
