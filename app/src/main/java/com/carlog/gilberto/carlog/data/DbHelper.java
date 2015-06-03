@@ -19,7 +19,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "carlog.sqlite";
-    private static final int DB_SCHEME_VERSION = 26;
+    private static final int DB_SCHEME_VERSION = 36;
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_SCHEME_VERSION);
@@ -27,11 +27,52 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-       // sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
+      //  sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
+      //  sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
+      //  sqLiteDatabase.execSQL(DBMarcas.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBModelos.CREATE_TABLE);
      //   sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
      //   sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
 
+
+        /// Inicializamos la tabla de modelos
+        String[] lista_modelos = {"TT Quattro 225", "Z3"};
+        String[] lista_img_modelos = {"modelo_audi_tt", "modelo_bmw_z4"};
+        int[] lista_marca_modelos = {1, 2};
+
+        sqLiteDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            for (int i = 0; i < lista_modelos.length; i++) {
+                values.put(DBModelos.CN_ID, i+1);
+                values.put(DBModelos.CN_MODELO, lista_modelos[i]);
+                values.put(DBModelos.CN_IMG, lista_img_modelos[i]);
+                values.put(DBModelos.CN_MARCA, lista_marca_modelos[i]);
+                sqLiteDatabase.insert(DBModelos.TABLE_NAME, null, values);
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
+
+
+      /*  /// Inicializamos la tabla de marcas
+        String[] lista_marcas = {"Audi", "BMW"};
+        String[] lista_img_marcas = {"logo_audi", "logo_bmw"};
+
+        sqLiteDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            for (int i = 0; i < lista_marcas.length; i++) {
+                values.put(DBMarcas.CN_ID, i+1);
+                values.put(DBMarcas.CN_MARCA, lista_marcas[i]);
+                values.put(DBMarcas.CN_IMG, lista_img_marcas[i]);
+                sqLiteDatabase.insert(DBMarcas.TABLE_NAME, null, values);
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }*/
 /*
 
         /// Inicializamos la tabla de tipos de revisión
@@ -74,8 +115,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
-       // sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCar.TABLE_NAME);
+        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
+        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCar.TABLE_NAME);
+        //sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBMarcas.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBModelos.TABLE_NAME);
         onCreate(sqLiteDatabase);
         //sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
     }

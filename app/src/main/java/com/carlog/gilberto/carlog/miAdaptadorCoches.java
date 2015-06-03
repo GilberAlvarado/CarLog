@@ -1,15 +1,18 @@
 package com.carlog.gilberto.carlog;
 
+        import android.content.Context;
         import android.database.Cursor;
+        import android.graphics.drawable.Drawable;
         import android.support.v7.widget.RecyclerView;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.ImageView;
         import android.widget.TextView;
-        import android.widget.Toast;
 
         import com.carlog.gilberto.carlog.data.DBCar;
+        import com.carlog.gilberto.carlog.data.DBMarcas;
+        import com.carlog.gilberto.carlog.data.DBModelos;
 
         import java.util.ArrayList;
         import java.util.List;
@@ -18,18 +21,26 @@ package com.carlog.gilberto.carlog;
 /**
  * Created by Gilberto on 31/05/2015.
  */
-public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.ViewHolder> {
+
+
+
+public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.ViewHolder> implements View.OnClickListener {
+
+    private View.OnClickListener listener;
 
     private static final int TYPE_HEADER = 0;  // Declaring Variable to Understand which View is being worked on
     // IF the view under inflation and population is header or Item
     private static final int TYPE_ITEM = 1;
 
-    private String mNavTitles[]; // String Array to store the passed titles Value from MainActivity.java
-    private Integer[] mIcons;       // Int Array to store the passed icons resource value from MainActivity.java
+    private String mNavMatriculas[];
+    private Integer[] mIcons;       // iconos q se muestran en el drawer
 
-    private String name;        //String Resource for header View Name
-    private int profile;        //int Resource for header view profile picture
-    private String email;       //String Resource for header view email
+    private String marca;        //String Resource for header View Name
+    private int img_marca;
+    private int img_modelo;
+    private String modelo;       //String Resource for header view email
+
+
 
 
     // Creating a ViewHolder which extends the RecyclerView View Holder
@@ -40,9 +51,10 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
 
         TextView textView;
         ImageView imageView;
-        ImageView profile;
-        TextView Name;
-        TextView email;
+        ImageView img_marca;
+        ImageView img_modelo;
+        TextView Marca;
+        TextView modelo;
 
 
         public ViewHolder(View itemView,int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
@@ -59,9 +71,10 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
             else{
 
 
-                Name = (TextView) itemView.findViewById(R.id.name);         // Creating Text View object from header.xml for name
-                email = (TextView) itemView.findViewById(R.id.email);       // Creating Text View object from header.xml for email
-                profile = (ImageView) itemView.findViewById(R.id.circleView);// Creating Image view object from header.xml for profile pic
+                Marca = (TextView) itemView.findViewById(R.id.marca);         // Creating Text View object from header.xml for name
+                modelo = (TextView) itemView.findViewById(R.id.modelo);       // Creating Text View object from header.xml for email
+                img_marca = (ImageView) itemView.findViewById(R.id.circleView);// Creating Image view object from header.xml for profile pic
+                img_modelo = (ImageView) itemView.findViewById(R.id.background_modelo);
                 Holderid = 0;                                                // Setting holder id = 0 as the object being populated are of type header view
             }
         }
@@ -71,7 +84,7 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
 
 
 
-    miAdaptadorCoches(DBCar dbcar, Cursor c,String Name,String Email, int Profile){ // MyAdapter Constructor with titles and icons parameter
+    miAdaptadorCoches(DBCar dbcar, Cursor c, Context context){ // MyAdapter Constructor with titles and icons parameter
 
 
 
@@ -82,8 +95,12 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 
             String matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-            /*marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
-            modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+            int profile = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
+            if(profile == TipoCoche.PROFILE_ACTIVO) {
+                marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
+                modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+            }
+            /*
             int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
             int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
             int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
@@ -109,20 +126,34 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
         }
 
 
+        DBMarcas dbmarcas = new DBMarcas(context);
+        Cursor c_marca = dbmarcas.buscarMarcas(marca);
+        if (c_marca.moveToFirst() == true) {
 
+            String mDrawableImg = c_marca.getString(c_marca.getColumnIndex(DBMarcas.CN_IMG));
+            int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
+            img_marca = resID;
+        }
+        DBModelos dbmodelos = new DBModelos(context);
+        Cursor c_modelo = dbmodelos.buscarModelos(modelo);
 
+        if (c_modelo.moveToFirst() == true) {
 
-        // titles, icons, name, email, profile pic are passed from the main activity as we
-        mNavTitles = array_matriculas;                //have seen earlier
+            String mDrawableImg = c_modelo.getString(c_modelo.getColumnIndex(DBModelos.CN_IMG));
+            int resID = context.getResources().getIdentifier(mDrawableImg , "drawable", context.getPackageName());
+            img_modelo = resID;
+        }
+
+        mNavMatriculas = array_matriculas;
         mIcons = array_iconos;
-        name = Name;
-        email = Email;
-        profile = Profile;                     //here we assign those passed values to the values we declared here
+
+
         //in adapter
 
 
 
     }
+
 
 
 
@@ -136,6 +167,8 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
 
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row,parent,false); //Inflating the layout
+
+            v.setOnClickListener(this);
 
             ViewHolder vhItem = new ViewHolder(v,viewType); //Creating ViewHolder and passing the object of type view
 
@@ -157,6 +190,20 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
 
     }
 
+    public void setOnClickListener(View.OnClickListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(listener != null)
+            listener.onClick(view);
+    }
+
+    public String getMatriculaSeleccionada(int posicion) {
+        return mNavMatriculas[posicion];
+    }
+
     //Next we override a method which is called when the item in a row is needed to be displayed, here the int position
     // Tells us item at which position is being constructed to be displayed and the holder id of the holder object tell us
     // which view type is being created 1 for item row
@@ -164,21 +211,22 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
     public void onBindViewHolder(miAdaptadorCoches.ViewHolder holder, int position) {
         if(holder.Holderid ==1) {                              // as the list view is going to be called after the header view so we decrement the
             // position by 1 and pass it to the holder while setting the text and image
-            holder.textView.setText(mNavTitles[position - 1]); // Setting the Text with the array of our Titles
+            holder.textView.setText(mNavMatriculas[position - 1]); // Setting the Text with the array of our Titles
             holder.imageView.setImageResource(mIcons[position -1]);// Settimg the image with array of our icons
+
         }
         else{
-
-            holder.profile.setImageResource(profile);           // Similarly we set the resources for header view
-            holder.Name.setText(name);
-            holder.email.setText(email);
+            holder.img_modelo.setBackgroundResource(img_modelo);
+            holder.img_marca.setImageResource(img_marca);           // Similarly we set the resources for header view
+            holder.Marca.setText(marca);
+            holder.modelo.setText(modelo);
         }
     }
 
     // This method returns the number of items present in the list
     @Override
     public int getItemCount() {
-        return mNavTitles.length+1; // the number of items in the list will be +1 the titles including the header view.
+        return mNavMatriculas.length+1; // the number of items in the list will be +1 the titles including the header view.
     }
 
 

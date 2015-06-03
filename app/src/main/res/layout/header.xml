@@ -2,10 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="178dp"
-    android:background="@drawable/ic_modelo_audi_tt"
     android:orientation="vertical"
+
     android:weightSum="1">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="178dp"
+        android:id="@+id/background_modelo"
+        android:background="@drawable/modelo_audi_tt"/>
 
 
     <LinearLayout
@@ -17,7 +22,7 @@
         android:layout_alignParentStart="true">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/marca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -29,7 +34,7 @@
             />
 
         <TextView
-            android:id="@+id/email"
+            android:id="@+id/modelo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
@@ -45,7 +50,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/ic_logo_audi"
+        android:src="@drawable/logo_audi"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="38dp"
         android:id="@+id/circleView"

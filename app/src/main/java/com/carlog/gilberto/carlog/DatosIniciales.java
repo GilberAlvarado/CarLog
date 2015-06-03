@@ -55,8 +55,9 @@ public class DatosIniciales extends Activity {
                                         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
                                             if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
                                                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
+                                                String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
                                                 manager.eliminar_por_id(id);
-                                                ConsultarLogs();
+                                                ConsultarLogs(matricula);
 
                                                 break;
                                             }
@@ -122,6 +123,7 @@ public class DatosIniciales extends Activity {
 
             if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
+                String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
 
                 Date now = new Date();
                 System.out.println("fecha "+now);
@@ -130,7 +132,7 @@ public class DatosIniciales extends Activity {
 
                 manager.marcarRealizadoLog(id, funciones.date_a_int(now), miCoche.getKms(miCoche)); //hoy
 
-                ConsultarLogs();
+                ConsultarLogs(matricula);
 
                 break;
             }
@@ -141,15 +143,17 @@ public class DatosIniciales extends Activity {
 
 
 
-    private void ConsultarLogs() {
+    private void ConsultarLogs(String matricula) {
+        System.out.println("CONSULTANDO LOGS "+ matricula);
         Context contextNew = getApplicationContext();
         final DBLogs manager = new DBLogs(contextNew);
        // String[] from = new String[]{manager.CN_TIPO, "fecha_string"};
        // int[] to = new int[] {android.R.id.text1, android.R.id.text2};
 
+
         int int_now = funciones.date_a_int(new Date());
 
-        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now);
+        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, matricula);
 
 
 
@@ -159,6 +163,7 @@ public class DatosIniciales extends Activity {
         cursor.moveToFirst();
         //while (cursor.moveToNext()) {
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            System.out.println("KKKK "+k);
             if(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)).equals(TipoLog.TIPO_ACEITE)) {
                 System.out.println("en consultarlogs date " + funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))));
                 System.out.println("en consultarlogs string " + cursor.getString(cursor.getColumnIndex("fecha_string")));
@@ -204,12 +209,12 @@ public class DatosIniciales extends Activity {
 
        // final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
         DBCar dbcar = new DBCar(this);
-        Cursor c = dbcar.buscarCoches();
+        Cursor c = dbcar.buscarCocheActivo();
 
         String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
         int int_year = MyActivity.NO_YEARS, int_kms = MyActivity.NO_KMS, int_itv = MyActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
 
-        //DE MOMENTO USAMOS EL PRIMERO pero contamos lo que se crean (Intento no cambiar la matricula para no crear más
+
         if (c.moveToFirst() == true) {
             matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
             marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
@@ -224,7 +229,7 @@ public class DatosIniciales extends Activity {
             itv = funciones.int_a_string(int_itv);
         }
 
-        final TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, int_fecha_ini, int_kms_ini);
+        final TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
 
 
         TextView text=(TextView)findViewById(R.id.matricula2);
@@ -245,7 +250,7 @@ public class DatosIniciales extends Activity {
         text=(TextView)findViewById(R.id.itv2);
         text.setText(itv);
 
-        ConsultarLogs();
+        ConsultarLogs(matricula);
 
         //Instanciamos el Boton
         ButtonFloat btn1 = (ButtonFloat) findViewById(R.id.add_log);
@@ -294,10 +299,16 @@ public class DatosIniciales extends Activity {
         Context contextNew = getApplicationContext();
         final DBLogs manager = new DBLogs(contextNew);
         ListView lv = (ListView) findViewById(R.id.lista_log);
-        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now);
+
+
 
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        TextView text=(TextView)findViewById(R.id.matricula2);
+
+
+        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, text.getText().toString());
 
         switch (item.getItemId()) {
             case R.id.menu_modificarLog:
@@ -323,7 +334,9 @@ public class DatosIniciales extends Activity {
             case (PETICION_ACTIVITY_ADD_LOG) : {
                 if (resultCode == Activity.RESULT_OK) {
                     //TipoLog miTipo = (TipoLog) data.getExtras().getSerializable("miTipo");
-                    ConsultarLogs();
+                    final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+                    System.out.println("RESULTADO ACTIVITY "+miCoche.getMatricula(miCoche));
+                    ConsultarLogs(miCoche.getMatricula(miCoche));
 
 
                 }

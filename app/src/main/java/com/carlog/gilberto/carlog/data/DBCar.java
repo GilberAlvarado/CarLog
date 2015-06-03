@@ -22,6 +22,7 @@ public class DBCar {
     public static final String CN_YEAR = "year";
     public static final String CN_KMS = "kms";
     public static final String CN_ITV = "itv";
+    public static final String CN_PROFILE = "profile";
     public static final String CN_FECHA_INI = "fecha_ini";
     public static final String CN_KMS_INI = "kms_ini";
 
@@ -32,6 +33,7 @@ public class DBCar {
             + CN_YEAR + " integer,"
             + CN_KMS + " integer,"
             + CN_ITV + " text,"
+            + CN_PROFILE + " integer not null,"
             + CN_FECHA_INI + " text not null,"
             + CN_KMS_INI + " integer not null);";
 
@@ -57,6 +59,7 @@ public class DBCar {
         if (miCoche.getKms(miCoche) != MyActivity.NO_KMS)
             valores.put(CN_KMS, miCoche.getKms(miCoche));
             valores.put(CN_ITV, miCoche.getItv(miCoche));
+        valores.put(CN_PROFILE, miCoche.getProfile(miCoche));
         valores.put(CN_FECHA_INI, miCoche.getFechaIni(miCoche));
         valores.put(CN_KMS_INI, miCoche.getKmsIni(miCoche));
         return valores;
@@ -68,31 +71,46 @@ public class DBCar {
 
 
     public static void insertinsertOrUpdate(TipoCoche coche) {
-        String sql = "INSERT OR REPLACE INTO "+ TABLE_NAME +" (" +CN_MATRICULA+ ", " +CN_MARCA+ ", " +CN_MODELO+ ", " +CN_YEAR+ ", " +CN_KMS+ ", " +CN_ITV+ ", " +CN_FECHA_INI+ ", " +CN_KMS_INI + ") "
+        String sql = "INSERT OR REPLACE INTO "+ TABLE_NAME +" (" +CN_MATRICULA+ ", " +CN_MARCA+ ", " +CN_MODELO+ ", " +CN_YEAR+ ", " +CN_KMS+ ", " +CN_ITV+ ", " +CN_PROFILE+ ", " +CN_FECHA_INI+ ", " +CN_KMS_INI + ") "
         +" VALUES ('" +coche.getMatricula(coche)+ "', '" +coche.getMarca(coche)+ "', '" + coche.getModelo(coche)+ "', '"
-        + coche.getYear(coche)+ "', '" + coche.getKms(coche)+ "', '" + coche.getItv(coche)+ "', '" +coche.getFechaIni(coche)+ "', '" + coche.getKmsIni(coche)+ "');";
+        + coche.getYear(coche)+ "', '" + coche.getKms(coche)+ "', '" + coche.getItv(coche)+ "', '" + coche.getProfile(coche)+ "', '" +coche.getFechaIni(coche)+ "', '" + coche.getKmsIni(coche)+ "');";
         db.execSQL(sql);
     }
 
 
 
     public Cursor buscarCoches() {
-        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_FECHA_INI, CN_KMS_INI};
+        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
         return db.query(TABLE_NAME, columnas, null, null, null, null, null);
+
+    }
+
+    public Cursor buscarCocheActivo() {
+        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
+        return db.query(TABLE_NAME, columnas, CN_PROFILE + "=?", new String[]{Integer.toString(TipoCoche.PROFILE_ACTIVO)}, null, null, null);
+
+    }
+    public Cursor buscarCochesNoActivos() {
+        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
+        return db.query(TABLE_NAME, columnas, CN_PROFILE + "=?", new String[]{Integer.toString(TipoCoche.PROFILE_INACTIVO)}, null, null, null);
 
     }
 
 
 
-  /*  public static Cursor buscarCoches() {
-        String sql = "SELECT _id, matricula, marca, modelo, year, kms, itv FROM "+TABLE_NAME;
-        Cursor c = db.rawQuery(sql, null);
-        return c;
-    }*/
+    public void ActualizarCocheActivo(String matricula) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + TipoCoche.PROFILE_ACTIVO + "' WHERE " + CN_MATRICULA + " = '" + matricula + "'";
+        db.execSQL(sql);
+    }
+
+    public void ActualizarCocheNOActivo(String matricula) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + TipoCoche.PROFILE_INACTIVO + "' WHERE " + CN_MATRICULA + " = '" + matricula + "'";
+        db.execSQL(sql);
+    }
 
 
     public Cursor buscarCoche(String matricula) {
-        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_FECHA_INI, CN_KMS_INI};
+        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
         return db.query(TABLE_NAME, columnas, CN_MATRICULA + "=?", new String[]{matricula}, null, null, null);
 
     }

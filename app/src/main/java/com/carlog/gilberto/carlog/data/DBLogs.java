@@ -93,31 +93,36 @@ public class DBLogs {
 
     }
 
-    public Cursor LogsTodosOrderByFechaString(int int_now) {  // todos los tipos pero solo los logs futuros y no realizados
+    public Cursor LogsTodosOrderByFechaString(int int_now, String matricula) {  // todos los tipos pero solo los logs futuros y no realizados
         String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
-              /*  + CN_FECHA + " > " + int_now + " AND " */+ CN_REALIZADO + " = " + NO_REALIZADO + " ORDER BY "+ CN_FECHA;
+              /*  + CN_FECHA + " > " + int_now + " AND " */+ CN_REALIZADO + " = " + NO_REALIZADO + " AND " + CN_CAR + " = '" + matricula + "' ORDER BY "+ CN_FECHA;
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
 
-    public Cursor LogsHistoricoAceiteOrderByFechaString(int int_now) { // Los de tipo aceite del histórico para elegir el más reciente
+    public Cursor LogsHistoricoAceiteOrderByFechaString(int int_now, String matricula) { // Los de tipo aceite del histórico para elegir el más reciente
         String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
-               /* + CN_FECHA + " < " + int_now + " AND " */+ CN_TIPO + " = '" + TipoLog.TIPO_ACEITE + "' AND " + CN_REALIZADO + " = " + REALIZADO +  " ORDER BY "+ CN_FECHA + " DESC";
+               /* + CN_FECHA + " < " + int_now + " AND " */+ CN_TIPO + " = '" + TipoLog.TIPO_ACEITE + "' AND " + CN_REALIZADO + " = " + REALIZADO+ " AND " + CN_CAR + " = '" + matricula  +  "' ORDER BY "+ CN_FECHA + " DESC";
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
 
-    public Cursor LogsAceiteOrderByFechaString(int int_now) { // Los de tipo aceite del futuro
+    public Cursor LogsAceiteOrderByFechaString(int int_now, String matricula) { // Los de tipo aceite del futuro
         String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
-                /*+ CN_FECHA + " > " + int_now + " AND " */+ CN_TIPO + " = '" + TipoLog.TIPO_ACEITE + "' AND " + CN_REALIZADO + " = " + NO_REALIZADO+ " ORDER BY "+ CN_FECHA + " DESC";
+                /*+ CN_FECHA + " > " + int_now + " AND " */+ CN_TIPO + " = '" + TipoLog.TIPO_ACEITE + "' AND " + CN_REALIZADO + " = " + NO_REALIZADO+ " AND " + CN_CAR + " = '" + matricula + "' ORDER BY "+ CN_FECHA + " DESC";
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
 
 
-    public Cursor buscarTipo(String tipo) {
+    public Cursor buscarTipo(String tipo, String matricula) {
+        String sql = "SELECT _id, tipo, fecha, aceite, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
+                /*+ CN_FECHA + " > " + int_now + " AND " */+ CN_TIPO + " = '" + tipo + "' AND " + CN_CAR + " = '" + matricula + "'";
+        Cursor c = db.rawQuery(sql, null);
+        return c;
+        /*
         String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA, CN_ACEITE, CN_CAR, CN_REALIZADO, CN_KMS};
-        return db.query(TABLE_NAME, columnas, CN_TIPO + "=?", new String[]{tipo}, null, null, null);
+        return db.query(TABLE_NAME, columnas, CN_TIPO + "=?", new String[]{tipo}, null, null, null);*/
 
     }
 

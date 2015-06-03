@@ -7,23 +7,29 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class TipoCoche implements Serializable {
+
+    public final static int PROFILE_ACTIVO = 1;
+    public final static int PROFILE_INACTIVO = 0;
+
     private String marca;
     private String modelo;
     private int year;
     private int kms;
     private int itv;
+    private int profile;
     private String matricula;
     private int fecha_ini;
     private int kms_ini;
 
 
-    public TipoCoche(String matricula, String marca, String modelo, int year, int kms, int itv, int fecha_ini, int kms_ini) {
+    public TipoCoche(String matricula, String marca, String modelo, int year, int kms, int itv, int profile, int fecha_ini, int kms_ini) {
         this.matricula = matricula;
         this.marca = marca;
         this.modelo = modelo;
         this.year = year;
         this.kms = kms;
         this.itv = itv;
+        this.profile = profile;
         this.fecha_ini = fecha_ini;
         this.kms_ini = kms_ini;
     }
@@ -50,6 +56,10 @@ public class TipoCoche implements Serializable {
 
     public int getItv(TipoCoche miCoche) {
         return(miCoche.itv);
+    }
+
+    public int getProfile(TipoCoche miCoche) {
+        return(miCoche.profile);
     }
 
     public int getFechaIni(TipoCoche miCoche) {

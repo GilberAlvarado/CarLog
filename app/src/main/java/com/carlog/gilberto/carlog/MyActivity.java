@@ -11,19 +11,25 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
+import com.gc.materialdesign.views.ButtonFlat;
+import com.gc.materialdesign.views.ButtonFloat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,26 +37,23 @@ import java.util.Date;
 import java.util.List;
 
 
+
 public class MyActivity extends ActionBarActivity {
 
-    //First We Declare Titles And Icons For Our Navigation Drawer List View
-    //This Icons And Titles Are holded in an Array as you can see
+    public final static String INICIAL_MARCA = "Introduzca marca";
+    public final static String INICIAL_YEAR = "Introduzca año";
+    public final static String INICIAL_KMS = "Introduzca Kms";
+    public final static String INICIAL_MATRICULA = "Introduzca matrícula";
+    public final static String INICIAL_MODELO = "Introduzca Modelo";
 
-    //String TITLES[] = {"Home","Events","Mail","Shop","Travel"};
-    //int ICONS[] = {R.drawable.ic_coche,R.drawable.ic_coche,R.drawable.ic_coche,R.drawable.ic_coche,R.drawable.ic_coche};
 
-    //Similarly we Create a String Resource for the name and email in the header view
-    //And we also create a int resource for profile picture in the header view
-
-    String NAME = "Audi";
-    String EMAIL = "Audi TT Quattro 225cv";
-    int PROFILE = R.drawable.ic_logo_audi;
 
 
     private Toolbar toolbar;
 
     RecyclerView mRecyclerView;                           // Declaring RecyclerView
-    RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
+    //RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
+    miAdaptadorCoches mAdapter;
     RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
     DrawerLayout Drawer;                                  // Declaring DrawerLayout
 
@@ -72,14 +75,14 @@ public class MyActivity extends ActionBarActivity {
         //spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
         lista_marcas = new ArrayList<String>();
         spinner_marcas = (Spinner) this.findViewById(R.id.cmb_marcas);
-        lista_marcas.add("Introduzca marca");
+        lista_marcas.add(INICIAL_MARCA);
         lista_marcas.add("Audi");
         lista_marcas.add("BMW");
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_marcas);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_marcas.setAdapter(adaptador);
 
-        if (!marca.equals("Introduzca Marca")) {
+        if (!marca.equals(INICIAL_MARCA)) {
             int spinnerPostion = adaptador.getPosition(marca);
             spinner_marcas.setSelection(spinnerPostion);
             spinnerPostion = 0;
@@ -91,7 +94,7 @@ public class MyActivity extends ActionBarActivity {
         //spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
         lista_years = new ArrayList<String>();
         spinner_years = (Spinner) this.findViewById(R.id.cmb_years);
-        lista_years.add("Introduzca año");
+        lista_years.add(INICIAL_YEAR);
         Calendar calen = Calendar.getInstance();
         Integer hoy = calen.get(Calendar.YEAR);
         for(int i = hoy; i >= 1900; i--) {
@@ -102,11 +105,209 @@ public class MyActivity extends ActionBarActivity {
         spinner_years.setAdapter(adaptador);
 
 
-        if (!year.equals("Introduzca Año")) {
+        if (!year.equals(INICIAL_YEAR)) {
             int spinnerPostion = adaptador.getPosition(year);
             spinner_years.setSelection(spinnerPostion);
             spinnerPostion = 0;
         }
+
+    }
+
+    private void Siguiente(final Context context) {
+        //Instanciamos el Boton siguiente
+        Button btn1 = (Button) findViewById(R.id.btn1);
+
+        /*
+          Definimos un método OnClickListener para que
+          al pulsar el botón se nos muestre la segunda actividad
+        */
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyActivity.this, DatosIniciales.class);
+
+                LeerDatosPantalla();
+
+
+                if (comprobaciones()) {
+
+
+                    if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_int(new Date()), int_kms);
+                        intent.putExtra("miCoche", miCoche);
+                        DBCar.insertinsertOrUpdate(miCoche);
+                    }
+                    else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        intent.putExtra("miCoche", miCoche);
+                        DBCar.insertinsertOrUpdate(miCoche);
+                    }
+                    else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
+
+
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        DBCar.insertinsertOrUpdate(miCoche);
+                        intent.putExtra("miCoche", miCoche);
+                    }
+
+                    DBCar dbcar = new DBCar(context);
+                    Cursor c = dbcar.buscarCoches();
+                    coches_en_NavigationDrawer(dbcar, c);  //actualizamos los coches en el navigation bar por si se crea uno nuevo
+
+
+                    // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
+                    DBLogs dbLogs= new DBLogs(context);
+                    int int_now = funciones.date_a_int(new Date());
+
+
+                    ///////////////////PARA EL ACEITE
+                    procesarAceite.procesar_aceite(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula);
+                    //////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
+
+                    ////////////////////////////////////////////////////////
+
+
+
+
+                    startActivity(intent);
+                }
+
+            }
+        });
+    }
+
+
+
+    private void AddCar(final Context context) {
+        //Instanciamos el Boton añadir
+        ButtonFloat btn_addCar = (ButtonFloat) findViewById(R.id.buttonFloat);
+
+
+        btn_addCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                System.out.println("antessss "+CocheEsNuevo.getInstance().coche_es_nuevo);
+                CocheEsNuevo.getInstance().coche_es_nuevo = 1;
+                System.out.println("despuesss "+CocheEsNuevo.getInstance().coche_es_nuevo);
+
+                TextView text = (TextView)findViewById(R.id.matricula);
+                text.setText("");
+
+                text = (TextView)findViewById(R.id.modelo);
+                text.setText("");
+
+                text=(TextView)findViewById(R.id.kms);
+                text.setText("");
+
+                spinner_years.setSelection(0);
+                spinner_marcas.setSelection(0);
+
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+
+                DatePicker datePicker2 = (DatePicker) findViewById(R.id.date_itv);
+                datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
+
+            }
+        });
+    }
+
+    private void coches_en_NavigationDrawer(final DBCar dbcar, Cursor c) {
+        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
+
+        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
+
+
+        mAdapter = new miAdaptadorCoches(dbcar, c, getApplicationContext());       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+
+
+        mAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String matricula_seleccionada = mAdapter.getMatriculaSeleccionada(mRecyclerView.getChildPosition(v) - 1);
+                String matricula_NoSeleccionada = "";
+
+                        Cursor c = dbcar.buscarCocheActivo();
+
+                if (c.moveToFirst() == true) {
+                    matricula_NoSeleccionada = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+
+                }
+
+
+                dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
+                dbcar.ActualizarCocheActivo(matricula_seleccionada);
+
+                // Volvemos a actualizar los coches para mostrar el activo en la barra de navegacion
+                Cursor cursor = dbcar.buscarCoches();
+                coches_en_NavigationDrawer(dbcar, cursor);
+
+                // Actualizamos la pantalla main activity con el coche activo
+                Cursor c_coche_activo = dbcar.buscarCocheActivo();
+                for(c_coche_activo.moveToFirst(); !c_coche_activo.isAfterLast(); c_coche_activo.moveToNext()) {
+                    matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
+                    marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
+                    year = String.valueOf(c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR)));
+                    modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
+                    kms = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
+                    itv = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
+
+                }
+                RellenarPantalla();
+
+                // pero también hay que actualizar las variables globales al coche activo
+
+                if (c_coche_activo.moveToFirst() == true) {
+                    matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
+                    marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
+                    modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
+                    int_year = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR));
+                    int_kms = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
+                    int_itv = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
+                    int_kms_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS_INI));
+                    int_fecha_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_FECHA_INI));
+                    year = String.valueOf(int_year);
+                    kms = String.valueOf(int_kms);
+                    itv = funciones.int_a_string(int_itv);
+                    int_kms_anterior = int_kms;
+
+                    System.out.println("Fecha de creación del coche: " + funciones.int_a_string(int_fecha_ini));
+                    System.out.println("Kms al crear el coche: " + int_kms_ini);
+                }
+            }
+        });
+
+        mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
+
+        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+
+        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
+
+
+
+        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
+
+        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar, R.string.open_drawer, R.string.close_drawer){
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
+                // open I am not going to put anything here)
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                // Code here will execute once drawer is closed
+            }
+        }; // Drawer Toggle Object Made
+        Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
+        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+
 
     }
 
@@ -116,7 +317,7 @@ public class MyActivity extends ActionBarActivity {
 
         TextView text = (TextView)findViewById(R.id.matricula);
         text.setText(matricula);
-        if(!matricula.equals("Introduzca matrícula")) text.setEnabled(false); //no editable si ya está la matrícula
+        //if(!matricula.equals("Introduzca Matrícula")) text.setEnabled(false); //no editable si ya está la matrícula
 
         text = (TextView)findViewById(R.id.modelo);
         text.setText(modelo);
@@ -150,12 +351,12 @@ public class MyActivity extends ActionBarActivity {
         Spinner spinner_year = (Spinner)findViewById(R.id.cmb_years);
         year = spinner_year.getSelectedItem().toString();
         System.out.println(year);
-        if(year.equals("Introduzca año")) int_year = NO_YEARS;
+        if(year.equals(INICIAL_YEAR)) int_year = NO_YEARS;
         else int_year = Integer.parseInt(year);
 
         kmsT = (EditText) findViewById (R.id.kms);
         kms = kmsT.getText().toString();
-        if(kms.isEmpty() || kms.equals("Introduzca Kms")) int_kms = NO_KMS;
+        if(kms.isEmpty() || kms.equals(INICIAL_KMS)) int_kms = NO_KMS;
         else {
             try {
                 int_kms = Integer.parseInt(kms);
@@ -193,108 +394,35 @@ public class MyActivity extends ActionBarActivity {
 
 
 
+
+
+
+
     EditText matriculaT, modeloT, kmsT;
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
     Date fechaITV = new Date();
     int int_year, int_kms, int_kms_anterior = 0, int_itv, int_kms_ini = 0, int_fecha_ini = 0;
 
-/*
-    public void procesar_aceite(DBLogs dbLogs, int int_now, Context context, int int_media) {
-        Cursor c_historico_aceite = dbLogs.LogsHistoricoAceiteOrderByFechaString(int_now);
-        Cursor c_logs_aceite = dbLogs.LogsAceiteOrderByFechaString(int_now);
 
 
-        if (c_historico_aceite.moveToFirst() == true) { // Si existen logs históricos de aceite hay que actualizar la fecha del futuro (pq siempre va a existir) log de aceite
-            String txt_fecha_h = c_historico_aceite.getString(c_historico_aceite.getColumnIndex("fecha_string")); // recuperamos el último de los logs
-            Date fecha_ultimo_log_hist = funciones.string_a_date(txt_fecha_h);
-            int kms_ultimo_log_hist = c_historico_aceite.getInt(c_historico_aceite.getColumnIndex(DBLogs.CN_KMS));
-            int id_aceite_ultimo_log_hist = c_historico_aceite.getInt(c_historico_aceite.getColumnIndex(DBLogs.CN_ACEITE));
-            String txt_matricula_ultimo_log_hist = c_historico_aceite.getString(c_historico_aceite.getColumnIndex(DBLogs.CN_CAR));
-
-            DBAceite dbaceite = new DBAceite(context);
-            Cursor c_aceite = dbaceite.buscarTiposAceite(id_aceite_ultimo_log_hist);
-
-            int kms_aceite_ultimo_log_hist = 0;
-            if (c_aceite.moveToFirst() == true) {
-                kms_aceite_ultimo_log_hist = c_aceite.getInt(c_aceite.getColumnIndex(DBAceite.CN_KMS));
-                System.out.println("KMS Aceite ultimo log hist: " + kms_aceite_ultimo_log_hist);
-            }
-
-
-
-            System.out.println("Aceite ultimo log hist id: " +id_aceite_ultimo_log_hist);
-            System.out.println("int_media: " + int_media + " kms_ultimo_log_hist "+kms_ultimo_log_hist);
-
-
-
-            int kms_que_faltan_x_hacer = kms_aceite_ultimo_log_hist - (int_kms - int_kms_anterior);
-            System.out.println("int_kms calidad = " + int_kms);
-            System.out.println("kms_que_faltan_x_hacer = " + kms_que_faltan_x_hacer);
-            if((int_kms - kms_ultimo_log_hist) < kms_aceite_ultimo_log_hist) { // Actualizamos la fecha de la futura revisión de aceite
-                int dias_en_hacer_kms_x_hacer = kms_que_faltan_x_hacer / int_media; // regla de 3 si en 1 día hago 5000kms, en cuantos haré X?
-                System.out.println("dias_en_hacer_kms_x_hacer: " + dias_en_hacer_kms_x_hacer);
-
-                Date fecha_log_futuro_recalculada = new Date();
-                if(dias_en_hacer_kms_x_hacer == 0) { // La media es mucho más grande que los kms que quedan o se llega al día que toca
-                    fecha_log_futuro_recalculada = funciones.fecha_mas_dias(dias_en_hacer_kms_x_hacer + 1); //Mañana y aviso
-                    Toast.makeText(MyActivity.this, "Debería cambiar el aceite cuanto antes.", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    fecha_log_futuro_recalculada = funciones.fecha_mas_dias(dias_en_hacer_kms_x_hacer);
-                }
-                int int_fecha_log_futuro_recalculada = funciones.date_a_int(fecha_log_futuro_recalculada);
-
-                if (c_logs_aceite.moveToFirst() == true) {
-                    String txt_fecha_l = c_logs_aceite.getString(c_logs_aceite.getColumnIndex("fecha_string")); // recuperamos el último de los logs
-                    int int_id_log = c_logs_aceite.getInt(c_logs_aceite.getColumnIndex(dbLogs.CN_ID));
-                    Date fecha_log_futuro_puesta = funciones.string_a_date(txt_fecha_l);
-
-                    int kms_supuestos_hasta_fecha_fut_aceite = (int) funciones.dias_entre_2_fechas(fecha_ultimo_log_hist, fecha_log_futuro_puesta) * int_media;
-
-                    System.out.println("kms_supuestos_hasta_fecha_fut_aceite: " + kms_supuestos_hasta_fecha_fut_aceite);
-                    System.out.println("ID LOG FUTURO: " +int_id_log);
-
-                    dbLogs.ActualizarFechaLogFuturo(int_id_log, int_fecha_log_futuro_recalculada);
-                }
-                else {
-                    // Creamos el nuevo log futuro estimado a partir del ultimo log histórico
-                    // Se pone por defecto el tipo de aceite del ultimo log historico, si se desea poner otro se deberá editar el log y cambiarlo de forma manual
-                    // Se pone por defecto el kms_supuestos_hasta_fecha_fut_aceite, se deberá actualizar el nº de kms reales al volver a hacer la revisión de aceite futura
-                    int kms_supuestos_hasta_fecha_fut_aceite = (int) funciones.dias_entre_2_fechas(fecha_ultimo_log_hist, fecha_log_futuro_recalculada) * int_media;
-                    TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha_log_futuro_recalculada, funciones.int_a_string(int_fecha_log_futuro_recalculada), int_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist,  txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_aceite);
-                    dbLogs.insertar(miTipoLog);
-                }
-
-            }
-            else {
-                Toast.makeText(MyActivity.this, "Debería haber cambiado el aceite hace " + kms_que_faltan_x_hacer + " kms.", Toast.LENGTH_LONG).show();
-            }
-
-
-        }
-        else {
-            // No se hace nada
-
-        }
-
-    }
-    */
 
 
     //comprobaciones
     private boolean comprobaciones() {
         boolean ok = true;
-        try {
-            Integer mykms = Integer.parseInt(kms);
-            if(mykms < int_kms_anterior) {
-                Toast.makeText(MyActivity.this, "Ha introducido un número de kms menor que el anterior.", Toast.LENGTH_LONG).show();
+        if(CocheEsNuevo.getInstance().coche_es_nuevo == 0) {
+            try {
+                Integer mykms = Integer.parseInt(kms);
+                if (mykms < int_kms_anterior) {
+                    Toast.makeText(MyActivity.this, "Ha introducido un número de kms menor que el anterior.", Toast.LENGTH_LONG).show();
+                    ok = false;
+                }
+            } catch (NumberFormatException nfe) {
+                Toast.makeText(MyActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
                 ok = false;
             }
-        } catch(NumberFormatException nfe) {
-            Toast.makeText(MyActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
-            ok = false;
         }
-        if (!TextUtils.isEmpty(year) && !year.equals("Introduzca año")) { // el año no es obligatorio
+        if (!TextUtils.isEmpty(year) && !year.equals(INICIAL_YEAR)) { // el año no es obligatorio
             try {
                 Integer myyear = Integer.parseInt(year);
                 Calendar calen = Calendar.getInstance();
@@ -312,9 +440,9 @@ public class MyActivity extends ActionBarActivity {
 
         if(ok) {
             // Los campos marca, modelo y nº de kilometros deben de ser obligatorios
-            if (TextUtils.isEmpty(matricula) || matricula.equals("Introduzca matrícula")) {
+            if (TextUtils.isEmpty(matricula) || matricula.equals(INICIAL_MATRICULA)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir la matrícula.", Toast.LENGTH_LONG).show();
-            } else if (TextUtils.isEmpty(marca) || marca.equals("Introduzca marca")) {
+            } else if (TextUtils.isEmpty(marca) || marca.equals(INICIAL_MARCA)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir la marca.", Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(modelo)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir el modelo.", Toast.LENGTH_LONG).show();
@@ -337,73 +465,26 @@ public class MyActivity extends ActionBarActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
-
-        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
-
 
         final Context context = this;
         DBCar dbcar = new DBCar(context);
         Cursor c = dbcar.buscarCoches();
 
 
-        mAdapter = new miAdaptadorCoches(dbcar, c,NAME,EMAIL,PROFILE);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
-        // And passing the titles,icons,header view name, header view email,
-        // and header view profile picture
-
-        mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
-
-        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-
-        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
 
 
-        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
-        //mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar, R.string.open_drawer, R.string.close_drawer){
-        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar, R.string.open_drawer, R.string.close_drawer){
+        coches_en_NavigationDrawer(dbcar, c);
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
-                // open I am not going to put anything here)
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                // Code here will execute once drawer is closed
-            }
-        }; // Drawer Toggle Object Made
-        Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
-        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
-
-
-
-        /*
-        // Obtenemos la instancia de las preferencias de la Activity
-        SharedPreferences settings = getPreferences(MODE_PRIVATE);
-        // Leemos el dato guardado
-        matricula = settings.getString("matricula", "Introduzca Matrícula");
-        marca = settings.getString("marca", "Introduzca Marca");
-        modelo = settings.getString("modelo", "Introduzca Modelo");
-        year = settings.getString("year", "Introduzca Año");
-        kms = settings.getString("kms", "Introduzca Nº Kms");
-        itv = settings.getString("itv", "Introduzca Fecha ITV");
-*/
-
-
-
-        //DE MOMENTO USAMOS EL PRIMERO pero contamos lo que se crean (Intento no cambiar la matricula para no crear más
-        if (c.moveToFirst() == true) {
-            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-            marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
-            modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
-            int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
-            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
-            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
-            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+        Cursor c_coche_activo = dbcar.buscarCocheActivo();
+        if (c_coche_activo.moveToFirst() == true) {
+            matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
+            marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
+            modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
+            int_year = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR));
+            int_kms = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
+            int_itv = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
+            int_kms_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS_INI));
+            int_fecha_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_FECHA_INI));
             year = String.valueOf(int_year);
             kms = String.valueOf(int_kms);
             itv = funciones.int_a_string(int_itv);
@@ -413,78 +494,12 @@ public class MyActivity extends ActionBarActivity {
             System.out.println("Kms al crear el coche: " + int_kms_ini);
         }
 
+
         RellenarPantalla();
+        Siguiente(context);
+        AddCar(context);
 
 
-        //Instanciamos el Boton
-        Button btn1 = (Button) findViewById(R.id.btn1);
-
-        /*
-          Definimos un método OnClickListener para que
-          al pulsar el botón se nos muestre la segunda actividad
-        */
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyActivity.this, DatosIniciales.class);
-
-                LeerDatosPantalla();
-
-
-                if (comprobaciones()) {
-         /*           // Necesitamos un editor para poder modificar los valores de la instancia settings
-                    SharedPreferences settings = getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor editor = settings.edit();
-                    // Modificamos el valor deseado
-                    editor.putString("marca", marca);
-                    editor.putString("modelo", modelo);
-                    editor.putString("year", year);
-                    editor.putString("kms", kms);
-                    editor.putString("itv", itv);
-                    // Una vez finalizado, llámando a commit se guardan las preferencias en memoria no volatil
-                    editor.commit();
-                    */
-
-
-
-                    if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, funciones.date_a_int(new Date()), int_kms);
-                        intent.putExtra("miCoche", miCoche);
-                        DBCar.insertinsertOrUpdate(miCoche);
-                    }
-                    else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, int_fecha_ini, int_kms_ini);
-                        intent.putExtra("miCoche", miCoche);
-                        DBCar.insertinsertOrUpdate(miCoche);
-                    }
-                    else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
-
-
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, int_fecha_ini, int_kms_ini);
-                        DBCar.insertinsertOrUpdate(miCoche);
-                        intent.putExtra("miCoche", miCoche);
-                    }
-
-
-                    // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
-                    DBLogs dbLogs= new DBLogs(context);
-                    int int_now = funciones.date_a_int(new Date());
-
-
-                    ///////////////////PARA EL ACEITE
-                    procesarAceite.procesar_aceite(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini);
-                    //////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
-
-                    ////////////////////////////////////////////////////////
-
-
-
-
-                    startActivity(intent);
-                }
-
-            }
-        });
 
     }
 
@@ -509,10 +524,12 @@ public class MyActivity extends ActionBarActivity {
 
     }
 
-    //Este método se ejecutará cuando se presione el botón btn1
-    public void siguiente(View view) {
 
-    }
+
+
+
+
+
 
 
 

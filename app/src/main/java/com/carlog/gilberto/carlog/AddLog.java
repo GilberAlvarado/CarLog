@@ -107,7 +107,7 @@ public class AddLog extends Activity {
             // Antes de hacer nada miramos si ya existe algun tipo de aceite pues no debemos tener más de uno
             TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
             int int_now = funciones.date_a_int(new Date());
-            Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE);
+            Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE, miCoche.getMatricula(miCoche));
             if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
                 int ahora = funciones.date_a_int(new Date());
                 if(miTipoLog.getFechaint(miTipoLog) >= ahora) {

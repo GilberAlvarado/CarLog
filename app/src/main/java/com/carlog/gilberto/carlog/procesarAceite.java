@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class procesarAceite {
 
-    public static void procesar_aceite(DBLogs dbLogs, int int_now, Context context, int int_kms, int int_fecha_ini, int int_kms_ini) {
+    public static void procesar_aceite(DBLogs dbLogs, int int_now, Context context, int int_kms, int int_fecha_ini, int int_kms_ini, String matricula) {
 
         int dias_coche = (int) funciones.dias_entre_2_fechas(funciones.int_a_date(int_fecha_ini), new Date());
         int int_media = 0;
@@ -23,8 +23,8 @@ public class procesarAceite {
         }
         else int_media = int_kms - int_kms_ini / dias_coche;
 
-        Cursor c_historico_aceite = dbLogs.LogsHistoricoAceiteOrderByFechaString(int_now);
-        Cursor c_logs_aceite = dbLogs.LogsAceiteOrderByFechaString(int_now);
+        Cursor c_historico_aceite = dbLogs.LogsHistoricoAceiteOrderByFechaString(int_now, matricula);
+        Cursor c_logs_aceite = dbLogs.LogsAceiteOrderByFechaString(int_now, matricula);
 
 
         if (c_historico_aceite.moveToFirst() == true) { // Si existen logs históricos de aceite hay que actualizar la fecha del futuro (pq siempre tiene q existir) log de aceite
@@ -55,7 +55,9 @@ public class procesarAceite {
             System.out.println("int_kms calidad = " + int_kms);
             System.out.println("kms_que_faltan_x_hacer = " + kms_que_faltan_x_hacer);
             if((int_kms - kms_ultimo_log_hist) < kms_aceite_ultimo_log_hist) { // Actualizamos la fecha de la futura revisión de aceite
-                int dias_en_hacer_kms_x_hacer = kms_que_faltan_x_hacer / int_media; // regla de 3 si en 1 día hago 5000kms, en cuantos haré X?
+                int dias_en_hacer_kms_x_hacer = 0;
+                if (int_media != 0) dias_en_hacer_kms_x_hacer = kms_que_faltan_x_hacer / int_media; // regla de 3 si en 1 día hago 5000kms, en cuantos haré X?
+                else dias_en_hacer_kms_x_hacer = kms_que_faltan_x_hacer;
                 System.out.println("dias_en_hacer_kms_x_hacer: " + dias_en_hacer_kms_x_hacer);
 
                 Date fecha_log_futuro_recalculada = new Date();
