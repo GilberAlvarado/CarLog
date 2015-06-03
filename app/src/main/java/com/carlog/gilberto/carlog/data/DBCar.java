@@ -108,6 +108,11 @@ public class DBCar {
         db.execSQL(sql);
     }
 
+    public void ActualizarTodosCocheNOActivo() {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + TipoCoche.PROFILE_INACTIVO + "'";
+        db.execSQL(sql);
+    }
+
 
     public Cursor buscarCoche(String matricula) {
         String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
