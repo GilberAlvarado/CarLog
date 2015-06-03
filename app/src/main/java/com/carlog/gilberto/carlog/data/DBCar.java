@@ -120,5 +120,19 @@ public class DBCar {
 
     }
 
+    public void eliminarCoche(String matricula) {
+       /* try {
+            db.beginTransaction();
+            db.execSQL("PRAGMA foreign_keys=ON;");
+            db.delete(TABLE_NAME, CN_MATRICULA + "=?", new String[]{matricula});
+            db.execSQL("PRAGMA foreign_keys=OFF;");
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+            db.endTransaction();
+        }*/
+        db.delete(TABLE_NAME, CN_MATRICULA + "=?", new String[]{matricula});
+    }
+
 
 }

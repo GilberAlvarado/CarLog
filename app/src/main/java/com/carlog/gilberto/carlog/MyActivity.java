@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.gc.materialdesign.views.ButtonFlat;
 import com.gc.materialdesign.views.ButtonFloat;
+import com.gc.materialdesign.widgets.Dialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -178,7 +180,28 @@ public class MyActivity extends ActionBarActivity {
         });
     }
 
+    private void VaciarPantalla() {
+        CocheEsNuevo.getInstance().coche_es_nuevo = 1;
 
+        TextView text = (TextView)findViewById(R.id.matricula);
+        text.setText("");
+
+        text = (TextView)findViewById(R.id.modelo);
+        text.setText("");
+
+        text=(TextView)findViewById(R.id.kms);
+        text.setText("");
+
+        spinner_years.setSelection(0);
+        spinner_marcas.setSelection(0);
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        DatePicker datePicker2 = (DatePicker) findViewById(R.id.date_itv);
+        datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
+    }
 
     private void AddCar(final Context context) {
         //Instanciamos el Boton añadir
@@ -189,31 +212,60 @@ public class MyActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                System.out.println("antessss "+CocheEsNuevo.getInstance().coche_es_nuevo);
-                CocheEsNuevo.getInstance().coche_es_nuevo = 1;
-                System.out.println("despuesss "+CocheEsNuevo.getInstance().coche_es_nuevo);
-
-                TextView text = (TextView)findViewById(R.id.matricula);
-                text.setText("");
-
-                text = (TextView)findViewById(R.id.modelo);
-                text.setText("");
-
-                text=(TextView)findViewById(R.id.kms);
-                text.setText("");
-
-                spinner_years.setSelection(0);
-                spinner_marcas.setSelection(0);
-
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(new Date());
-
-                DatePicker datePicker2 = (DatePicker) findViewById(R.id.date_itv);
-                datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
+                VaciarPantalla();
 
             }
         });
+    }
+
+    private void ActualizarCochesDrawer(DBCar dbcar) {
+        // Volvemos a actualizar los coches para mostrar el activo en la barra de navegacion
+        Cursor cursor = dbcar.buscarCoches();
+
+            coches_en_NavigationDrawer(dbcar, cursor);
+        if (cursor.moveToFirst() == true) {
+            // Actualizamos la pantalla main activity con el coche activo
+            Cursor c_coche_activo = dbcar.buscarCocheActivo();
+            for (c_coche_activo.moveToFirst(); !c_coche_activo.isAfterLast(); c_coche_activo.moveToNext()) {
+                matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
+                marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
+                year = String.valueOf(c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR)));
+                modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
+                kms = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
+                itv = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
+
+            }
+
+            RellenarPantalla();
+
+            // pero también hay que actualizar las variables globales al coche activo
+
+            if (c_coche_activo.moveToFirst() == true) {
+                matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
+                marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
+                modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
+                int_year = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR));
+                int_kms = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
+                int_itv = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
+                int_kms_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS_INI));
+                int_fecha_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_FECHA_INI));
+                year = String.valueOf(int_year);
+                kms = String.valueOf(int_kms);
+                itv = funciones.int_a_string(int_itv);
+                int_kms_anterior = int_kms;
+
+                System.out.println("Fecha de creación del coche: " + funciones.int_a_string(int_fecha_ini));
+                System.out.println("Kms al crear el coche: " + int_kms_ini);
+            } else {// no se da el caso pq si entra en el primer if ya existe minimo un coche y ya hemos forzado a q sea el activo
+            }
+        }
+        else {// Solo puede ser el caso de que borramos un coche y no tengamos más (no se pudo poner activo ningun otro
+            //Ya se vació la pantalla y se pusieron las imagenes a las de por defecto
+            // O al abrir el programa sin coches
+            RellenarPantalla(); // para rellenar los combobox
+            VaciarPantalla(); // Para quitar el coche anterior
+
+        }
     }
 
     private void coches_en_NavigationDrawer(final DBCar dbcar, Cursor c) {
@@ -224,14 +276,20 @@ public class MyActivity extends ActionBarActivity {
 
         mAdapter = new miAdaptadorCoches(dbcar, c, getApplicationContext());       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
 
-
         mAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String matricula_seleccionada = mAdapter.getMatriculaSeleccionada(mRecyclerView.getChildPosition(v) - 1);
                 String matricula_NoSeleccionada = "";
 
-                        Cursor c = dbcar.buscarCocheActivo();
+                DBLogs dblogs = new DBLogs(getApplicationContext());
+                Cursor cc = dblogs.cargarCursorLogs();
+                for(cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+                    String mm = cc.getString(cc.getColumnIndex(DBLogs.CN_CAR));
+                    System.out.println("MATRICULA "+mm);
+                }
+
+                Cursor c = dbcar.buscarCocheActivo();
 
                 if (c.moveToFirst() == true) {
                     matricula_NoSeleccionada = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
@@ -242,44 +300,57 @@ public class MyActivity extends ActionBarActivity {
                 dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
                 dbcar.ActualizarCocheActivo(matricula_seleccionada);
 
-                // Volvemos a actualizar los coches para mostrar el activo en la barra de navegacion
-                Cursor cursor = dbcar.buscarCoches();
-                coches_en_NavigationDrawer(dbcar, cursor);
-
-                // Actualizamos la pantalla main activity con el coche activo
-                Cursor c_coche_activo = dbcar.buscarCocheActivo();
-                for(c_coche_activo.moveToFirst(); !c_coche_activo.isAfterLast(); c_coche_activo.moveToNext()) {
-                    matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
-                    marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
-                    year = String.valueOf(c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR)));
-                    modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
-                    kms = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
-                    itv = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
-
-                }
-                RellenarPantalla();
-
-                // pero también hay que actualizar las variables globales al coche activo
-
-                if (c_coche_activo.moveToFirst() == true) {
-                    matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
-                    marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
-                    modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
-                    int_year = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR));
-                    int_kms = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
-                    int_itv = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
-                    int_kms_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS_INI));
-                    int_fecha_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_FECHA_INI));
-                    year = String.valueOf(int_year);
-                    kms = String.valueOf(int_kms);
-                    itv = funciones.int_a_string(int_itv);
-                    int_kms_anterior = int_kms;
-
-                    System.out.println("Fecha de creación del coche: " + funciones.int_a_string(int_fecha_ini));
-                    System.out.println("Kms al crear el coche: " + int_kms_ini);
-                }
+                ActualizarCochesDrawer(dbcar);
             }
         });
+
+        mAdapter.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String matricula_seleccionada = mAdapter.getMatriculaSeleccionada(mRecyclerView.getChildPosition(v) - 1);
+
+                Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
+
+                int activo = 0;
+
+                if (c.moveToFirst() == true) {
+                    activo = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
+                }
+
+                dbcar.eliminarCoche(matricula_seleccionada); // Todo borrado en cascada de logs del coche
+
+                // Si el borrado era el activo debemos poner activo otro (si hay más coches)
+                if(activo == 1) {
+                    Cursor c_todos = dbcar.buscarCoches();
+                    if (c_todos.moveToFirst() == true) { // desde que haya un coche lo ponemos activo
+                        matricula_seleccionada = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_MATRICULA));
+                        dbcar.ActualizarCocheActivo(matricula_seleccionada);
+                    }
+                    else {
+                        // Si no hay más coches no se puede poner ninguno a activo, debemos poner las etiquetas vacío y las imagenes por defecto en el drawer
+                        VaciarPantalla();
+                        ImageView img_marca = (ImageView) mRecyclerView.findViewById(R.id.circleView);
+                        ImageView img_modelo = (ImageView) mRecyclerView.findViewById(R.id.background_modelo);
+                        img_modelo.setBackgroundResource(R.drawable.modelo_inicio);
+                        img_marca.setImageResource(R.drawable.logo_inicio);
+
+                    }
+                }
+                else {
+                    // Si no era el activo da igual pq seguirá activo el que estaba o pq no hay mas coches
+                }
+
+
+                ActualizarCochesDrawer(dbcar);
+
+                return true;
+
+
+
+            }
+        });
+
 
         mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
 
@@ -473,30 +544,36 @@ public class MyActivity extends ActionBarActivity {
         Cursor c = dbcar.buscarCoches();
 
 
+        if (c.moveToFirst() == true) { // Si no hay coches no se tiene que rellenar el drawer ni la pantalla
+
+            coches_en_NavigationDrawer(dbcar, c);
+
+            Cursor c_coche_activo = dbcar.buscarCocheActivo();
+            if (c_coche_activo.moveToFirst() == true) {
+                matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
+                marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
+                modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
+                int_year = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR));
+                int_kms = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
+                int_itv = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
+                int_kms_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS_INI));
+                int_fecha_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_FECHA_INI));
+                year = String.valueOf(int_year);
+                kms = String.valueOf(int_kms);
+                itv = funciones.int_a_string(int_itv);
+                int_kms_anterior = int_kms;
+
+                System.out.println("Fecha de creación del coche: " + funciones.int_a_string(int_fecha_ini));
+                System.out.println("Kms al crear el coche: " + int_kms_ini);
+            }
 
 
-        coches_en_NavigationDrawer(dbcar, c);
 
-        Cursor c_coche_activo = dbcar.buscarCocheActivo();
-        if (c_coche_activo.moveToFirst() == true) {
-            matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
-            marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
-            modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
-            int_year = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR));
-            int_kms = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
-            int_itv = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
-            int_kms_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS_INI));
-            int_fecha_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_FECHA_INI));
-            year = String.valueOf(int_year);
-            kms = String.valueOf(int_kms);
-            itv = funciones.int_a_string(int_itv);
-            int_kms_anterior = int_kms;
-
-            System.out.println("Fecha de creación del coche: " + funciones.int_a_string(int_fecha_ini));
-            System.out.println("Kms al crear el coche: " + int_kms_ini);
         }
+        else {
+            coches_en_NavigationDrawer(dbcar, c);
 
-
+        }
         RellenarPantalla();
         Siguiente(context);
         AddCar(context);

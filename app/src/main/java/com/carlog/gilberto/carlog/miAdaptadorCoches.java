@@ -24,9 +24,10 @@ package com.carlog.gilberto.carlog;
 
 
 
-public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.ViewHolder> implements View.OnClickListener {
+public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
 
     private View.OnClickListener listener;
+    private View.OnLongClickListener longlistener;
 
     private static final int TYPE_HEADER = 0;  // Declaring Variable to Understand which View is being worked on
     // IF the view under inflation and population is header or Item
@@ -93,7 +94,6 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
         //Recorremos el cursor
         int i = 0;
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-
             String matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
             int profile = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
             if(profile == TipoCoche.PROFILE_ACTIVO) {
@@ -116,37 +116,44 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
 
         }
 
+
         String[] array_matriculas = new String[lista_matriculas.size()];
-        for(int j = 0; j < lista_matriculas.size(); j++) {
+        for (int j = 0; j < lista_matriculas.size(); j++) {
             array_matriculas[j] = lista_matriculas.get(j);
         }
         Integer[] array_iconos = new Integer[lista_iconos.size()];
-        for(int j = 0; j < lista_iconos.size(); j++) {
+        for (int j = 0; j < lista_iconos.size(); j++) {
             array_iconos[j] = lista_iconos.get(j);
         }
 
+        if (c.moveToFirst() == true) {
+            DBMarcas dbmarcas = new DBMarcas(context);
+            Cursor c_marca = dbmarcas.buscarMarcas(marca);
+            if (c_marca.moveToFirst() == true) {
 
-        DBMarcas dbmarcas = new DBMarcas(context);
-        Cursor c_marca = dbmarcas.buscarMarcas(marca);
-        if (c_marca.moveToFirst() == true) {
+                String mDrawableImg = c_marca.getString(c_marca.getColumnIndex(DBMarcas.CN_IMG));
+                int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
+                img_marca = resID;
+            }
+            DBModelos dbmodelos = new DBModelos(context);
+            Cursor c_modelo = dbmodelos.buscarModelos(modelo);
 
-            String mDrawableImg = c_marca.getString(c_marca.getColumnIndex(DBMarcas.CN_IMG));
-            int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
-            img_marca = resID;
+            if (c_modelo.moveToFirst() == true) {
+
+                String mDrawableImg = c_modelo.getString(c_modelo.getColumnIndex(DBModelos.CN_IMG));
+                int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
+                img_modelo = resID;
+            }
+
+
         }
-        DBModelos dbmodelos = new DBModelos(context);
-        Cursor c_modelo = dbmodelos.buscarModelos(modelo);
-
-        if (c_modelo.moveToFirst() == true) {
-
-            String mDrawableImg = c_modelo.getString(c_modelo.getColumnIndex(DBModelos.CN_IMG));
-            int resID = context.getResources().getIdentifier(mDrawableImg , "drawable", context.getPackageName());
-            img_modelo = resID;
+        else {
+            img_modelo = R.drawable.modelo_inicio;
+            img_marca = R.drawable.logo_inicio;
         }
 
         mNavMatriculas = array_matriculas;
         mIcons = array_iconos;
-
 
         //in adapter
 
@@ -169,6 +176,7 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row,parent,false); //Inflating the layout
 
             v.setOnClickListener(this);
+            v.setOnLongClickListener(this);
 
             ViewHolder vhItem = new ViewHolder(v,viewType); //Creating ViewHolder and passing the object of type view
 
@@ -194,10 +202,23 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
         this.listener = listener;
     }
 
+    public void setOnLongClickListener(View.OnLongClickListener longlistener) {
+        this.longlistener = longlistener;
+    }
+
     @Override
     public void onClick(View view) {
         if(listener != null)
             listener.onClick(view);
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        if(longlistener != null) {
+            longlistener.onLongClick(view);
+            return true;
+        }
+        else return false;
     }
 
     public String getMatriculaSeleccionada(int posicion) {
@@ -209,7 +230,7 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
     // which view type is being created 1 for item row
     @Override
     public void onBindViewHolder(miAdaptadorCoches.ViewHolder holder, int position) {
-        if(holder.Holderid ==1) {                              // as the list view is going to be called after the header view so we decrement the
+        if(holder.Holderid == 1) {                              // as the list view is going to be called after the header view so we decrement the
             // position by 1 and pass it to the holder while setting the text and image
             holder.textView.setText(mNavMatriculas[position - 1]); // Setting the Text with the array of our Titles
             holder.imageView.setImageResource(mIcons[position -1]);// Settimg the image with array of our icons
