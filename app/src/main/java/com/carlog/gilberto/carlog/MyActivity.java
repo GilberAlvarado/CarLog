@@ -29,14 +29,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBMarcas;
 import com.carlog.gilberto.carlog.data.DBModelos;
-import com.gc.materialdesign.views.ButtonFlat;
 import com.gc.materialdesign.views.ButtonFloat;
-import com.gc.materialdesign.widgets.Dialog;
 
 
 import java.util.ArrayList;
@@ -44,6 +41,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import me.drakeet.materialdialog.MaterialDialog;
 
 
 public class MyActivity extends ActionBarActivity {
@@ -417,41 +415,60 @@ public class MyActivity extends ActionBarActivity {
         mAdapter.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View v) {
-
                 String matricula_seleccionada = mAdapter.getMatriculaSeleccionada(mRecyclerView.getChildPosition(v) - 1);
-                Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
 
-                int activo = 0;
+                final MaterialDialog mMaterialDialog = new MaterialDialog(v.getContext());
+                mMaterialDialog.setTitle("Eliminar coche");
+                mMaterialDialog.setMessage("¿Está seguro de eliminar el coche con matrícula " + matricula_seleccionada + " y todos sus logs?");
+                mMaterialDialog.setPositiveButton("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View w) {
+                        mMaterialDialog.dismiss();
+                        String matricula_seleccionada = mAdapter.getMatriculaSeleccionada(mRecyclerView.getChildPosition(v) - 1);
+                        Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
 
-                if (c.moveToFirst() == true) {
-                    activo = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
-                }
+                        int activo = 0;
 
-                dbcar.eliminarCoche(matricula_seleccionada); // Todo borrado en cascada de logs del coche
+                        if (c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
+                        }
 
-                // Si el borrado era el activo debemos poner activo otro (si hay más coches)
-                if(activo == 1) {
-                    Cursor c_todos = dbcar.buscarCoches();
-                    if (c_todos.moveToFirst() == true) { // desde que haya un coche lo ponemos activo
-                        matricula_seleccionada = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_MATRICULA));
-                        dbcar.ActualizarCocheActivo(matricula_seleccionada);
+                        dbcar.eliminarCoche(matricula_seleccionada); // Todo borrado en cascada de logs del coche
+
+                        // Si el borrado era el activo debemos poner activo otro (si hay más coches)
+                        if (activo == 1) {
+                            Cursor c_todos = dbcar.buscarCoches();
+                            if (c_todos.moveToFirst() == true) { // desde que haya un coche lo ponemos activo
+                                matricula_seleccionada = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_MATRICULA));
+                                dbcar.ActualizarCocheActivo(matricula_seleccionada);
+                            } else {
+                                // Si no hay más coches no se puede poner ninguno a activo, debemos poner las etiquetas vacío y las imagenes por defecto en el drawer
+                                VaciarPantalla();
+                                ImageView img_marca = (ImageView) mRecyclerView.findViewById(R.id.circleView);
+                                ImageView img_modelo = (ImageView) mRecyclerView.findViewById(R.id.background_modelo);
+                                img_modelo.setBackgroundResource(R.drawable.modelo_inicio);
+                                img_marca.setImageResource(R.drawable.logo_inicio);
+
+                            }
+                        } else {
+                            // Si no era el activo da igual pq seguirá activo el que estaba o pq no hay mas coches
+                        }
+
+
+                        ActualizarCochesDrawer(dbcar);
                     }
-                    else {
-                        // Si no hay más coches no se puede poner ninguno a activo, debemos poner las etiquetas vacío y las imagenes por defecto en el drawer
-                        VaciarPantalla();
-                        ImageView img_marca = (ImageView) mRecyclerView.findViewById(R.id.circleView);
-                        ImageView img_modelo = (ImageView) mRecyclerView.findViewById(R.id.background_modelo);
-                        img_modelo.setBackgroundResource(R.drawable.modelo_inicio);
-                        img_marca.setImageResource(R.drawable.logo_inicio);
+                });
+                mMaterialDialog.setNegativeButton("CANCEL", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMaterialDialog.dismiss();
 
                     }
-                }
-                else {
-                    // Si no era el activo da igual pq seguirá activo el que estaba o pq no hay mas coches
-                }
+                });
+
+                mMaterialDialog.show();
 
 
-                ActualizarCochesDrawer(dbcar);
 
 
 
