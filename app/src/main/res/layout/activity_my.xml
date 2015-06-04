@@ -45,14 +45,12 @@
 
 
 
-            <EditText
-                android:id="@+id/modelo"
+            <Spinner
+                android:id="@+id/cmb_modelo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="150dp"
-                android:hint="Introduzca Modelo"
-                android:elevation="3dp"
-                android:text="" />
+                android:elevation="3dp"/>
 
 
             <Spinner

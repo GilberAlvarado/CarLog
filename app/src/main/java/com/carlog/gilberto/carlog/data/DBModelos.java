@@ -49,11 +49,20 @@ public class DBModelos {
     }
 
 
+    public Cursor buscarModelos() {
+        String[] columnas = new String[]{CN_ID, CN_MODELO, CN_IMG, CN_MARCA};
+        return db.query(TABLE_NAME, columnas, null, null, null, null, null);
 
+    }
 
+    public Cursor buscarModelosDeMarca(int marca) {
+        String[] columnas = new String[]{CN_ID, CN_MARCA, CN_MODELO, CN_IMG};
+        return db.query(TABLE_NAME, columnas, CN_MARCA + "=?", new String[]{Integer.toString(marca)}, null, null, null);
+
+    }
 
     public Cursor buscarModelos(String modelo) {
-        String[] columnas = new String[]{CN_MARCA, CN_IMG};
+        String[] columnas = new String[]{CN_ID, CN_MARCA, CN_MODELO, CN_IMG};
         return db.query(TABLE_NAME, columnas, CN_MODELO + "=?", new String[]{modelo}, null, null, null);
 
     }

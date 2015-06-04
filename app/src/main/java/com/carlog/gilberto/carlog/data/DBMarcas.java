@@ -50,9 +50,15 @@ public class DBMarcas {
 
 
 
+    public Cursor buscarMarcas() {
+        String[] columnas = new String[]{CN_ID, CN_MARCA, CN_IMG};
+        return db.query(TABLE_NAME, columnas, null, null, null, null, null);
+
+    }
+
 
     public Cursor buscarMarcas(String marca) {
-        String[] columnas = new String[]{CN_MARCA, CN_IMG};
+        String[] columnas = new String[]{CN_ID, CN_MARCA, CN_IMG};
         return db.query(TABLE_NAME, columnas, CN_MARCA + "=?", new String[]{marca}, null, null, null);
 
     }

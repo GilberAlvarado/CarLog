@@ -1,6 +1,8 @@
 package com.carlog.gilberto.carlog;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -27,11 +29,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.data.DBMarcas;
+import com.carlog.gilberto.carlog.data.DBModelos;
 import com.gc.materialdesign.views.ButtonFlat;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.widgets.Dialog;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,8 +70,10 @@ public class MyActivity extends ActionBarActivity {
 
 
     private Spinner spinner_marcas;
+    private Spinner spinner_modelos;
     private Spinner spinner_years;
     private List<String> lista_marcas;
+    private List<String> lista_modelos;
     private List<String> lista_years;
 
     public final static int NO_YEARS = -1;
@@ -77,9 +85,17 @@ public class MyActivity extends ActionBarActivity {
         //spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
         lista_marcas = new ArrayList<String>();
         spinner_marcas = (Spinner) this.findViewById(R.id.cmb_marcas);
-        lista_marcas.add(INICIAL_MARCA);
-        lista_marcas.add("Audi");
-        lista_marcas.add("BMW");
+
+        DBMarcas dbmarcas = new DBMarcas(getApplicationContext());
+        Cursor cursor = dbmarcas.buscarMarcas();
+
+        int i = 0;
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            String marca = cursor.getString(cursor.getColumnIndex(DBMarcas.CN_MARCA));
+            lista_marcas.add(marca);
+        }
+
+
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_marcas);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_marcas.setAdapter(adaptador);
@@ -88,6 +104,93 @@ public class MyActivity extends ActionBarActivity {
             int spinnerPostion = adaptador.getPosition(marca);
             spinner_marcas.setSelection(spinnerPostion);
             spinnerPostion = 0;
+        }
+
+    }
+
+
+    private void RellenarModelos() {
+        spinner_marcas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                lista_modelos = new ArrayList<String>(); // para borrar los anteriores y no añadir al final
+
+                String marca_seleccionada = spinner_marcas.getSelectedItem().toString();
+                DBMarcas dbmarcas = new DBMarcas(getApplicationContext());
+                Cursor c_marcas = dbmarcas.buscarMarcas(marca_seleccionada);
+
+                System.out.println("marca_seleccionada "+marca_seleccionada);
+
+                int id_marca = 0;
+                for (c_marcas.moveToFirst(); !c_marcas.isAfterLast(); c_marcas.moveToNext()) {
+                    id_marca = c_marcas.getInt(c_marcas.getColumnIndex(DBMarcas.CN_ID));
+                }
+
+                DBModelos dbmodelos = new DBModelos(getApplicationContext());
+                Cursor cursor = dbmodelos.buscarModelosDeMarca(id_marca);
+
+                lista_modelos.add(INICIAL_MODELO);
+                if(id_marca > 0 ) { // No es inicial_marca
+                    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                        String modelo = cursor.getString(cursor.getColumnIndex(DBModelos.CN_MODELO));
+                        lista_modelos.add(modelo);
+                    }
+                }
+
+                ArrayAdapter<String> adaptador = new ArrayAdapter<String>(parentView.getContext(), android.R.layout.simple_spinner_item, lista_modelos);
+                adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_modelos.setAdapter(adaptador);
+
+                if (!modelo.equals(INICIAL_MODELO)) {
+                    int spinnerPostion = adaptador.getPosition(modelo);
+                    spinner_modelos.setSelection(spinnerPostion);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+
+        lista_modelos = new ArrayList<String>();
+        spinner_modelos = (Spinner) this.findViewById(R.id.cmb_modelo);
+
+        String marca_seleccionada = spinner_marcas.getSelectedItem().toString();
+        DBMarcas dbmarcas = new DBMarcas(getApplicationContext());
+        Cursor c_marcas = dbmarcas.buscarMarcas(marca_seleccionada);
+
+        int id_marca = 0;
+        for (c_marcas.moveToFirst(); !c_marcas.isAfterLast(); c_marcas.moveToNext()) {
+            id_marca = c_marcas.getInt(c_marcas.getColumnIndex(DBMarcas.CN_ID));
+        }
+
+        if(marca_seleccionada.equals(INICIAL_MARCA) || marca_seleccionada.isEmpty()) {
+            lista_modelos.add(INICIAL_MODELO);
+        }
+        else {
+            DBModelos dbmodelos = new DBModelos(getApplicationContext());
+            Cursor cursor = dbmodelos.buscarModelosDeMarca(id_marca);
+
+            lista_modelos.add(INICIAL_MODELO);
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                String modelo = cursor.getString(cursor.getColumnIndex(DBModelos.CN_MODELO));
+                lista_modelos.add(modelo);
+            }
+        }
+
+
+
+
+        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_modelos);
+        adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_modelos.setAdapter(adaptador);
+
+        if (!modelo.equals(INICIAL_MODELO)) {
+            int spinnerPostion = adaptador.getPosition(modelo);
+            spinner_modelos.setSelection(spinnerPostion);
         }
 
     }
@@ -186,14 +289,20 @@ public class MyActivity extends ActionBarActivity {
         TextView text = (TextView)findViewById(R.id.matricula);
         text.setText("");
 
-        text = (TextView)findViewById(R.id.modelo);
-        text.setText("");
-
         text=(TextView)findViewById(R.id.kms);
         text.setText("");
 
+        marca = INICIAL_MARCA;
+        modelo = INICIAL_MODELO;
+        kms = INICIAL_KMS;
+        year = INICIAL_YEAR;
+        matricula = INICIAL_MATRICULA;
+
+
         spinner_years.setSelection(0);
+        spinner_modelos.setSelection(0);
         spinner_marcas.setSelection(0);
+
 
 
         Calendar calendar = Calendar.getInstance();
@@ -268,6 +377,7 @@ public class MyActivity extends ActionBarActivity {
         }
     }
 
+
     private void coches_en_NavigationDrawer(final DBCar dbcar, Cursor c) {
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
 
@@ -306,10 +416,9 @@ public class MyActivity extends ActionBarActivity {
 
         mAdapter.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public boolean onLongClick(final View v) {
 
                 String matricula_seleccionada = mAdapter.getMatriculaSeleccionada(mRecyclerView.getChildPosition(v) - 1);
-
                 Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
 
                 int activo = 0;
@@ -344,10 +453,10 @@ public class MyActivity extends ActionBarActivity {
 
                 ActualizarCochesDrawer(dbcar);
 
+
+
+
                 return true;
-
-
-
             }
         });
 
@@ -386,14 +495,13 @@ public class MyActivity extends ActionBarActivity {
 
     private void RellenarPantalla() {
         RellenarMarcas();
+        RellenarModelos();
         RellenarYears();
 
         TextView text = (TextView)findViewById(R.id.matricula);
         text.setText(matricula);
         //if(!matricula.equals("Introduzca Matrícula")) text.setEnabled(false); //no editable si ya está la matrícula
 
-        text = (TextView)findViewById(R.id.modelo);
-        text.setText(modelo);
 
         text=(TextView)findViewById(R.id.kms);
         text.setText(kms);
@@ -413,13 +521,13 @@ public class MyActivity extends ActionBarActivity {
         marca = spinner_marca.getSelectedItem().toString();
         System.out.println(marca);
 
+        Spinner spinner_modelo = (Spinner)findViewById(R.id.cmb_modelo);
+        modelo = spinner_modelo.getSelectedItem().toString();
+        System.out.println(modelo);
+
         matriculaT = (EditText) findViewById (R.id.matricula);
         matricula = matriculaT.getText().toString();
         System.out.println(matricula);
-
-        modeloT = (EditText) findViewById (R.id.modelo);
-        modelo = modeloT.getText().toString();
-        System.out.println(modelo);
 
         Spinner spinner_year = (Spinner)findViewById(R.id.cmb_years);
         year = spinner_year.getSelectedItem().toString();
@@ -517,7 +625,7 @@ public class MyActivity extends ActionBarActivity {
                 Toast.makeText(MyActivity.this, "Ha de introducir la matrícula.", Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(marca) || marca.equals(INICIAL_MARCA)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir la marca.", Toast.LENGTH_LONG).show();
-            } else if (TextUtils.isEmpty(modelo)) {
+            } else if (TextUtils.isEmpty(modelo) || marca.equals(INICIAL_MODELO)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir el modelo.", Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(kms)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir el nº de kilómetros.", Toast.LENGTH_LONG).show();

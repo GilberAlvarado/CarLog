@@ -29,4 +29,7 @@ dependencies {
 
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.android.support:recyclerview-v7:+'
+
+    compile 'me.drakeet.materialdialog:library:1.2.2'
+    compile 'com.afollestad:material-dialogs:0.7.5.1'
 }
