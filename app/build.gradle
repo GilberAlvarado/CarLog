@@ -32,4 +32,7 @@ dependencies {
 
     compile 'me.drakeet.materialdialog:library:1.2.2'
     compile 'com.afollestad:material-dialogs:0.7.5.1'
+
+    compile 'com.github.ksoichiro:android-observablescrollview:1.5.0'
+    compile 'com.melnykov:floatingactionbutton:1.0.7'
 }
