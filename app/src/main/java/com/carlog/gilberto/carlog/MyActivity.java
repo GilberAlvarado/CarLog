@@ -18,17 +18,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBMarcas;
@@ -387,7 +390,12 @@ public class MyActivity extends ActionBarActivity {
         mAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String matricula_seleccionada = mAdapter.getMatriculaSeleccionada(mRecyclerView.getChildPosition(v) - 1);
+                System.out.println("hola");
+
+                TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
+
+               // String matricula_seleccionada = mAdapter.getMatriculaSeleccionada((mRecyclerView.getChildPosition(v) - 1));
+                String matricula_seleccionada = txtV_seleccionada.getText().toString();
                 String matricula_NoSeleccionada = "";
 
                 DBLogs dblogs = new DBLogs(getApplicationContext());
@@ -415,7 +423,10 @@ public class MyActivity extends ActionBarActivity {
         mAdapter.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View v) {
-                String matricula_seleccionada = mAdapter.getMatriculaSeleccionada(mRecyclerView.getChildPosition(v) - 1);
+                TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
+
+                // String matricula_seleccionada = mAdapter.getMatriculaSeleccionada((mRecyclerView.getChildPosition(v) - 1));
+                String matricula_seleccionada = txtV_seleccionada.getText().toString();
 
                 final MaterialDialog mMaterialDialog = new MaterialDialog(v.getContext());
                 mMaterialDialog.setTitle("Eliminar coche");
@@ -424,7 +435,11 @@ public class MyActivity extends ActionBarActivity {
                     @Override
                     public void onClick(View w) {
                         mMaterialDialog.dismiss();
-                        String matricula_seleccionada = mAdapter.getMatriculaSeleccionada(mRecyclerView.getChildPosition(v) - 1);
+                        TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
+
+                        // String matricula_seleccionada = mAdapter.getMatriculaSeleccionada((mRecyclerView.getChildPosition(v) - 1));
+                        String matricula_seleccionada = txtV_seleccionada.getText().toString();
+
                         Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
 
                         int activo = 0;

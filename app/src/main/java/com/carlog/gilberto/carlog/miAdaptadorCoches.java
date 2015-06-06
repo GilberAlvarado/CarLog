@@ -10,12 +10,15 @@ package com.carlog.gilberto.carlog;
         import android.widget.ImageView;
         import android.widget.TextView;
 
+        import com.balysv.materialripple.MaterialRippleLayout;
         import com.carlog.gilberto.carlog.data.DBCar;
         import com.carlog.gilberto.carlog.data.DBMarcas;
         import com.carlog.gilberto.carlog.data.DBModelos;
 
         import java.util.ArrayList;
         import java.util.List;
+
+        import static android.view.View.inflate;
 
 
 /**
@@ -79,6 +82,7 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
                 Holderid = 0;                                                // Setting holder id = 0 as the object being populated are of type header view
             }
         }
+
 
 
     }
@@ -169,16 +173,28 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
     // if the viewType is TYPE_HEADER
     // and pass it to the view holder
 
+
+
     @Override
     public miAdaptadorCoches.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         if (viewType == TYPE_ITEM) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row,parent,false); //Inflating the layout
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false); //Inflating the layout
 
             v.setOnClickListener(this);
             v.setOnLongClickListener(this);
 
-            ViewHolder vhItem = new ViewHolder(v,viewType); //Creating ViewHolder and passing the object of type view
+            ViewHolder vhItem = new ViewHolder(
+                    MaterialRippleLayout.on(v)
+                            .rippleOverlay(true)
+                            .rippleAlpha(0.2f)
+                            .rippleColor(0xFF585858)
+                            .rippleHover(true)
+                            .create()
+                    ,viewType);
+
+
+            //ViewHolder vhItem = new ViewHolder(v,viewType); //Creating ViewHolder and passing the object of type view
 
             return vhItem; // Returning the created object
 
