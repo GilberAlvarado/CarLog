@@ -2,12 +2,23 @@ package com.carlog.gilberto.carlog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.carlog.gilberto.carlog.data.DBCar;
+import com.carlog.gilberto.carlog.data.DBTiposRevision;
 
 import java.util.List;
 
@@ -20,6 +31,62 @@ public class miAdaptadorLog extends ArrayAdapter {
         super(activity, R.layout.list_logs , datos);
         this.activity = activity;
         this.datos = datos;
+    }
+
+
+
+    public static Bitmap decodeFile(Context context,int resId) {
+        try {
+            // decode image size
+            Context mcontext=context;
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeResource(mcontext.getResources(), resId, o);
+            // Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = 200;
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true)
+            {
+                if (width_tmp / 2 < REQUIRED_SIZE
+                        || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale++;
+            }
+            // decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeResource(mcontext.getResources(), resId, o2);
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+
+    public static Bitmap getRoundedShape(Bitmap scaleBitmapImage,int width) {
+        // TODO Auto-generated method stub
+        int targetWidth = width;
+        int targetHeight = width;
+        Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
+                targetHeight,Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(targetBitmap);
+        Path path = new Path();
+        path.addCircle(((float) targetWidth - 1) / 2,
+                ((float) targetHeight - 1) / 2,
+                (Math.min(((float) targetWidth),
+                        ((float) targetHeight)) / 2),
+                Path.Direction.CCW);
+        canvas.clipPath(path);
+        Bitmap sourceBitmap = scaleBitmapImage;
+        canvas.drawBitmap(sourceBitmap,
+                new Rect(0, 0, sourceBitmap.getWidth(),
+                        sourceBitmap.getHeight()),
+                new Rect(0, 0, targetWidth,
+                        targetHeight), null);
+        return targetBitmap;
     }
 
     @Override
@@ -38,6 +105,7 @@ public class miAdaptadorLog extends ArrayAdapter {
             sqView = new LogView();
             sqView.tipo = (TextView) rowView.findViewById(R.id.Lbl_tipo_log);
             sqView.fecha = (TextView) rowView.findViewById(R.id.Lbl_fecha_log);
+            sqView.img_tipo_log = (ImageView) rowView.findViewById(R.id.img_tipo_log);
 
             // Cache the view objects in the tag,
             // so they can be re-accessed later
@@ -49,11 +117,24 @@ public class miAdaptadorLog extends ArrayAdapter {
         // Transfer the stock data from the data object
         // to the view objects
         TipoLog miLog = (TipoLog) datos.get(position);
+        String tipo_log = miLog.getTipo((TipoLog) datos.get(position));
+
+        DBTiposRevision dbtr = new DBTiposRevision(getContext());
+        Cursor c_img = dbtr.buscarTipo(tipo_log);
+        String img = "";
+        if (c_img.moveToFirst() == true) {
+            img = c_img.getString(c_img.getColumnIndex(DBTiposRevision.CN_IMG));
+        }
+        int resID = getContext().getResources().getIdentifier(img, "drawable", getContext().getPackageName());
+
         sqView.tipo.setText(miLog.getTipo((TipoLog) datos.get(position)));
         sqView.fecha.setText(miLog.getFechatxt((TipoLog) datos.get(position)));
+        sqView.img_tipo_log.setImageBitmap(getRoundedShape(decodeFile(getContext(), resID), 200));
         if(miLog.getFechaint((TipoLog) datos.get(position)) <= funciones.date_a_int(funciones.fecha_mas_dias(1))) {
-            sqView.tipo.setBackgroundColor(Color.RED);
-            sqView.fecha.setBackgroundColor(Color.RED);
+            sqView.tipo.setTextColor(Color.RED);
+            sqView.fecha.setTextColor(Color.RED);
+            sqView.tipo.setTypeface(null, Typeface.BOLD);
+            sqView.fecha.setTypeface(null, Typeface.BOLD);
         }
 
         return rowView;
@@ -62,5 +143,6 @@ public class miAdaptadorLog extends ArrayAdapter {
     protected static class LogView {
         protected TextView tipo;
         protected TextView fecha;
+        protected ImageView img_tipo_log;
     }
 }

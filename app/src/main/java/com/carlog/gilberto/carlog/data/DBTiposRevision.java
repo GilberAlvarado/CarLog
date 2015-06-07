@@ -13,12 +13,12 @@ import com.carlog.gilberto.carlog.TipoLog;
 public class DBTiposRevision {
     public static final String TABLE_NAME = "tiposrevision";
 
-    public static final String CN_ID = "_id";
     public static final String CN_TIPO = "tipo";
+    public static final String CN_IMG = "img";
 
     public static final String CREATE_TABLE = "create table " +TABLE_NAME + " ("
-            + CN_ID + " integer primary key autoincrement,"
-            + CN_TIPO + " text not null);";
+            + CN_TIPO + " text primary key,"
+            + CN_IMG + " text not null);";
 
     private DbHelper helper;
     private SQLiteDatabase db;
@@ -31,14 +31,15 @@ public class DBTiposRevision {
     }
 
 
-    public ContentValues generarContentValues(String mytiporevision) {
+    public ContentValues generarContentValues(String mytiporevision, String img) {
         ContentValues valores = new ContentValues();
         valores.put(CN_TIPO, mytiporevision);
+        valores.put(CN_IMG, img);
         return valores;
     }
 
-    public void insertar(String mytiporevision) {
-        db.insert(TABLE_NAME, null, generarContentValues(mytiporevision));
+    public void insertar(String mytiporevision, String img) {
+        db.insert(TABLE_NAME, null, generarContentValues(mytiporevision, img));
     }
 
     public void eliminar(String mytiporevision) {
@@ -46,7 +47,7 @@ public class DBTiposRevision {
     }
 
     public Cursor cargarCursorTiposRevision() {
-        String[] columnas = new String[]{CN_ID, CN_TIPO};
+        String[] columnas = new String[]{CN_TIPO, CN_IMG};
         return db.query(TABLE_NAME, columnas, null, null, null, null, null);
 
     }
@@ -54,7 +55,7 @@ public class DBTiposRevision {
 
 
     public Cursor buscarTipo(String mytiporevision) {
-        String[] columnas = new String[]{CN_ID, CN_TIPO};
+        String[] columnas = new String[]{CN_TIPO, CN_IMG};
         return db.query(TABLE_NAME, columnas, CN_TIPO + "=?", new String[]{mytiporevision}, null, null, null);
 
     }

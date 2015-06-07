@@ -13,25 +13,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.balysv.materialripple.MaterialRippleLayout;
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBMarcas;
@@ -54,7 +48,6 @@ public class MyActivity extends ActionBarActivity {
     public final static String INICIAL_KMS = "Introduzca Kms";
     public final static String INICIAL_MATRICULA = "Introduzca matrícula";
     public final static String INICIAL_MODELO = "Introduzca Modelo";
-
 
 
 
@@ -299,12 +292,9 @@ public class MyActivity extends ActionBarActivity {
         year = INICIAL_YEAR;
         matricula = INICIAL_MATRICULA;
 
-
         spinner_years.setSelection(0);
         spinner_modelos.setSelection(0);
         spinner_marcas.setSelection(0);
-
-
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -317,13 +307,10 @@ public class MyActivity extends ActionBarActivity {
         //Instanciamos el Boton añadir
         ButtonFloat btn_addCar = (ButtonFloat) findViewById(R.id.buttonFloat);
 
-
         btn_addCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 VaciarPantalla();
-
             }
         });
     }
@@ -379,47 +366,7 @@ public class MyActivity extends ActionBarActivity {
     }
 
 
-    private void coches_en_NavigationDrawer(final DBCar dbcar, Cursor c) {
-        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
-
-        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
-
-
-        mAdapter = new miAdaptadorCoches(dbcar, c, getApplicationContext());       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
-
-        mAdapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("hola");
-
-                TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
-
-               // String matricula_seleccionada = mAdapter.getMatriculaSeleccionada((mRecyclerView.getChildPosition(v) - 1));
-                String matricula_seleccionada = txtV_seleccionada.getText().toString();
-                String matricula_NoSeleccionada = "";
-
-                DBLogs dblogs = new DBLogs(getApplicationContext());
-                Cursor cc = dblogs.cargarCursorLogs();
-                for(cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
-                    String mm = cc.getString(cc.getColumnIndex(DBLogs.CN_CAR));
-                    System.out.println("MATRICULA "+mm);
-                }
-
-                Cursor c = dbcar.buscarCocheActivo();
-
-                if (c.moveToFirst() == true) {
-                    matricula_NoSeleccionada = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-
-                }
-
-
-                dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
-                dbcar.ActualizarCocheActivo(matricula_seleccionada);
-
-                ActualizarCochesDrawer(dbcar);
-            }
-        });
-
+    private void eliminarCoche() {
         mAdapter.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View v) {
@@ -440,6 +387,7 @@ public class MyActivity extends ActionBarActivity {
                         // String matricula_seleccionada = mAdapter.getMatriculaSeleccionada((mRecyclerView.getChildPosition(v) - 1));
                         String matricula_seleccionada = txtV_seleccionada.getText().toString();
 
+                        DBCar dbcar = new DBCar(getApplicationContext());
                         Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
 
                         int activo = 0;
@@ -483,28 +431,64 @@ public class MyActivity extends ActionBarActivity {
 
                 mMaterialDialog.show();
 
-
-
-
-
-
                 return true;
+            }
+        });
+    }
+
+    // Actualiza la lista de coches en el menu
+    private void coches_en_NavigationDrawer(final DBCar dbcar, Cursor c) {
+        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
+
+        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
+
+
+        mAdapter = new miAdaptadorCoches(dbcar, c, getApplicationContext());       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
+
+        mAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("hola");
+
+                TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
+
+               // String matricula_seleccionada = mAdapter.getMatriculaSeleccionada((mRecyclerView.getChildPosition(v) - 1));
+                String matricula_seleccionada = txtV_seleccionada.getText().toString();
+                String matricula_NoSeleccionada = "";
+
+                DBLogs dblogs = new DBLogs(getApplicationContext());
+                Cursor cc = dblogs.cargarCursorLogs();
+                for(cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
+                    String mm = cc.getString(cc.getColumnIndex(DBLogs.CN_CAR));
+                    System.out.println("MATRICULA "+mm);
+                }
+
+                Cursor c = dbcar.buscarCocheActivo();
+
+                if (c.moveToFirst() == true) {
+                    matricula_NoSeleccionada = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+
+                }
+
+
+                dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
+                dbcar.ActualizarCocheActivo(matricula_seleccionada);
+
+                ActualizarCochesDrawer(dbcar);
             }
         });
 
 
+        eliminarCoche();
+
+
+
         mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
-
         mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-
         mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
-
-
-
-
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
-
-        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar, R.string.open_drawer, R.string.close_drawer){
+        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar, R.string.open_drawer, R.string.close_drawer)
+        {
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -670,16 +654,7 @@ public class MyActivity extends ActionBarActivity {
         return false;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
-
-        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
-        setSupportActionBar(toolbar);
-
-
-        final Context context = this;
+    private void RellenarCochesDrawer(Context context) {
         DBCar dbcar = new DBCar(context);
         Cursor c = dbcar.buscarCoches();
 
@@ -714,11 +689,22 @@ public class MyActivity extends ActionBarActivity {
             coches_en_NavigationDrawer(dbcar, c);
 
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my);
+
+        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        setSupportActionBar(toolbar);
+
+        final Context context = this;
+
+        RellenarCochesDrawer(context);
         RellenarPantalla();
         Siguiente(context);
         AddCar(context);
-
-
 
     }
 
@@ -742,12 +728,6 @@ public class MyActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
 
     }
-
-
-
-
-
-
 
 
 

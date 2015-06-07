@@ -2,20 +2,42 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/img_tipo_log"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_marginRight="20dp"
+        android:contentDescription="@string/app_name"/>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+
+        android:padding="4dp">
 
     <TextView android:id="@+id/Lbl_tipo_log"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:layout_height="30dp"
         android:textStyle="normal"
-        android:textSize="12sp" />
+        android:orientation="vertical"
+        android:textSize="14sp" />
 
     <TextView android:id="@+id/Lbl_fecha_log"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="60px"
         android:textStyle="normal"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
+    </FrameLayout>
 </LinearLayout>

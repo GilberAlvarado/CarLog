@@ -71,11 +71,11 @@ public class AddLog extends Activity {
 
                 String nuevoDato = edttxt.getText().toString();
                 nuevoDato=nuevoDato.trim();
-                if (nuevoDato.length()>1){ // si ha escrito algo
+                if (nuevoDato.length() > 1) { // si ha escrito algo
                     //primero miramos si existe para no insertar duplicados
                     Cursor c = managerTiposRevision.buscarTipo(nuevoDato);
                     if (c.moveToFirst() == false) {
-                        managerTiposRevision.insertar(nuevoDato);
+                        managerTiposRevision.insertar(nuevoDato, "ic_coche");
                         RellenarTipos(managerTiposRevision);
                         edttxt.setVisibility(View.INVISIBLE);
                         tv_nt.setVisibility(View.INVISIBLE);
@@ -111,7 +111,7 @@ public class AddLog extends Activity {
             if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
                 int ahora = funciones.date_a_int(new Date());
                 if(miTipoLog.getFechaint(miTipoLog) >= ahora) {
-                    Toast.makeText(getApplicationContext(), "Debe agregar primero ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + TipoLog.TIPO_ACEITE + " hecha.", Toast.LENGTH_SHORT).show();
                 }
                 intent = new Intent(AddLog.this, Aceite.class);
                 intent.putExtra("miTipoLog", miTipoLog);
