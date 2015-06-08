@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog;
+package com.carlog.gilberto.carlog.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,8 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.carlog.gilberto.carlog.data.DBCar;
+import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBTiposRevision;
+import com.carlog.gilberto.carlog.formats.funciones;
 
 import java.util.List;
 

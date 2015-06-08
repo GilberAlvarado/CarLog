@@ -4,14 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Spinner;
 
-import com.carlog.gilberto.carlog.Aceite;
-import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.TipoLog;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 
 /**
  * Created by Gilberto on 16/05/2015.

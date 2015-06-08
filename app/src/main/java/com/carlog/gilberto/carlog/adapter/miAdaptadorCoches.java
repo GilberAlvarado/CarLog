@@ -1,8 +1,7 @@
-package com.carlog.gilberto.carlog;
+package com.carlog.gilberto.carlog.adapter;
 
         import android.content.Context;
         import android.database.Cursor;
-        import android.graphics.drawable.Drawable;
         import android.support.v7.widget.RecyclerView;
         import android.view.LayoutInflater;
         import android.view.View;
@@ -11,14 +10,14 @@ package com.carlog.gilberto.carlog;
         import android.widget.TextView;
 
         import com.balysv.materialripple.MaterialRippleLayout;
+        import com.carlog.gilberto.carlog.R;
+        import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
         import com.carlog.gilberto.carlog.data.DBCar;
         import com.carlog.gilberto.carlog.data.DBMarcas;
         import com.carlog.gilberto.carlog.data.DBModelos;
 
         import java.util.ArrayList;
         import java.util.List;
-
-        import static android.view.View.inflate;
 
 
 /**
@@ -89,7 +88,7 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
 
 
 
-    miAdaptadorCoches(DBCar dbcar, Cursor c, Context context){ // MyAdapter Constructor with titles and icons parameter
+    public miAdaptadorCoches(DBCar dbcar, Cursor c, Context context){ // MyAdapter Constructor with titles and icons parameter
 
 
 

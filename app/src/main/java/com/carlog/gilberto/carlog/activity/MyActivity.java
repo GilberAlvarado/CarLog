@@ -1,8 +1,6 @@
-package com.carlog.gilberto.carlog;
+package com.carlog.gilberto.carlog.activity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -26,11 +24,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carlog.gilberto.carlog.tiposClases.CocheEsNuevo;
+import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBMarcas;
 import com.carlog.gilberto.carlog.data.DBModelos;
+import com.carlog.gilberto.carlog.formats.funciones;
+import com.carlog.gilberto.carlog.adapter.miAdaptadorCoches;
+import com.carlog.gilberto.carlog.negocio.procesarAceite;
 import com.gc.materialdesign.views.ButtonFloat;
+import com.wrapp.floatlabelededittext.FloatLabeledEditText;
 
 
 import java.util.ArrayList;
@@ -50,8 +55,8 @@ public class MyActivity extends ActionBarActivity {
     public final static String INICIAL_MODELO = "Introduzca Modelo";
 
 
-
     private Toolbar toolbar;
+
 
     RecyclerView mRecyclerView;                           // Declaring RecyclerView
     //RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
@@ -223,7 +228,7 @@ public class MyActivity extends ActionBarActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyActivity.this, DatosIniciales.class);
+                Intent intent = new Intent(MyActivity.this, ListaLogs.class);
 
                 LeerDatosPantalla();
                 DBCar dbcar = new DBCar(context);
@@ -283,8 +288,8 @@ public class MyActivity extends ActionBarActivity {
         TextView text = (TextView)findViewById(R.id.matricula);
         text.setText("");
 
-        text=(TextView)findViewById(R.id.kms);
-        text.setText("");
+        FloatLabeledEditText f_text= (FloatLabeledEditText) findViewById(R.id.kms);
+        f_text.getEditText().setText("");
 
         marca = INICIAL_MARCA;
         modelo = INICIAL_MODELO;
@@ -518,9 +523,9 @@ public class MyActivity extends ActionBarActivity {
         text.setText(matricula);
         //if(!matricula.equals("Introduzca Matrícula")) text.setEnabled(false); //no editable si ya está la matrícula
 
-
-        text=(TextView)findViewById(R.id.kms);
-        text.setText(kms);
+        FloatLabeledEditText f_text=(FloatLabeledEditText)findViewById(R.id.kms);
+       // text=(TextView)findViewById(R.id.kms);
+        f_text.getEditText().setText(kms);
 
         fechaITV = funciones.string_a_date(itv);
 
@@ -551,8 +556,9 @@ public class MyActivity extends ActionBarActivity {
         if(year.equals(INICIAL_YEAR)) int_year = NO_YEARS;
         else int_year = Integer.parseInt(year);
 
-        kmsT = (EditText) findViewById (R.id.kms);
-        kms = kmsT.getText().toString();
+        //kmsT = (EditText) findViewById (R.id.kms);
+        kmsT = (FloatLabeledEditText) findViewById (R.id.kms);
+        kms = kmsT.getEditText().getText().toString();
         if(kms.isEmpty() || kms.equals(INICIAL_KMS)) int_kms = NO_KMS;
         else {
             try {
@@ -595,7 +601,8 @@ public class MyActivity extends ActionBarActivity {
 
 
 
-    EditText matriculaT, modeloT, kmsT;
+    EditText matriculaT, modeloT;
+    FloatLabeledEditText kmsT;
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
     Date fechaITV = new Date();
     int int_year, int_kms, int_kms_anterior = 0, int_itv, int_kms_ini = 0, int_fecha_ini = 0;
@@ -678,8 +685,6 @@ public class MyActivity extends ActionBarActivity {
                 itv = funciones.int_a_string(int_itv);
                 int_kms_anterior = int_kms;
 
-                System.out.println("Fecha de creación del coche: " + funciones.int_a_string(int_fecha_ini));
-                System.out.println("Kms al crear el coche: " + int_kms_ini);
             }
 
 
@@ -698,6 +703,8 @@ public class MyActivity extends ActionBarActivity {
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
+
+
 
         final Context context = this;
 

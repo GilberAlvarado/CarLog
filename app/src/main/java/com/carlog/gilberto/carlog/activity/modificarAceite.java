@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog;
+package com.carlog.gilberto.carlog.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,10 +11,12 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.formats.funciones;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -77,7 +79,7 @@ public class modificarAceite extends Activity {
 
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(modificarAceite.this, DatosIniciales.class);
+                Intent intent = new Intent(modificarAceite.this, ListaLogs.class);
 
                 System.out.println("Modificamos el Log con id " + idLog + " por aceite " + int_aceite);
                 managerLogs.modificarTipoAceiteLog(idLog, int_aceite);

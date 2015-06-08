@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.carlog.gilberto.carlog.MyActivity;
-import com.carlog.gilberto.carlog.TipoCoche;
-
 /**
  * Created by Gilberto on 02/06/2015.
  */

@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog;
+package com.carlog.gilberto.carlog.negocio;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,6 +6,8 @@ import android.widget.Toast;
 
 import com.carlog.gilberto.carlog.data.DBAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.formats.funciones;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 
 import java.util.Date;
 

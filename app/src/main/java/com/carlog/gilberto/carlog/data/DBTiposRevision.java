@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.carlog.gilberto.carlog.TipoLog;
-
 /**
  * Created by Gilberto on 16/05/2015.
  */

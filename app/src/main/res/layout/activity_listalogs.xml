@@ -6,10 +6,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/tool_bar"
-        layout="@layout/tool_bar">
-    </include>
     <!--//////////////////////////////////////////// BEGIN OBSERVABLESCROLL-->
     <ImageView
         android:id="@+id/image"
@@ -71,51 +67,9 @@
 
     <!--//////////////////////////////////////////// OBSERVABLESCROLL END-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="1dp"
-        android:orientation="vertical">
-
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/matricula2" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/marca2" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/modelo2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/year2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/kms2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/itv2" />
-
-   <!-- <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
-        android:id="@+id/add_log" />-->
-
-
-    </LinearLayout>
 
     <com.gc.materialdesign.views.ButtonFloat
         android:id="@+id/add_log"

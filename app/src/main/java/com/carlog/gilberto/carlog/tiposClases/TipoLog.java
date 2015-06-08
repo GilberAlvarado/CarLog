@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog;
+package com.carlog.gilberto.carlog.tiposClases;
 
 import java.io.Serializable;
 import java.util.Date;

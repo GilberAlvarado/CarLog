@@ -4,16 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
-import com.carlog.gilberto.carlog.AddLog;
-import com.carlog.gilberto.carlog.TipoCoche;
-import com.carlog.gilberto.carlog.TipoLog;
-
-import java.net.ContentHandler;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.carlog.gilberto.carlog.activity.AddLog;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 
 /**
  * Created by Gilberto on 16/05/2015.

@@ -37,4 +37,6 @@ dependencies {
     compile 'com.melnykov:floatingactionbutton:1.0.7'
 
     compile 'com.balysv:material-ripple:1.0.2'
+
+    compile 'com.wrapp.floatlabelededittext:library:0.0.6'
 }

@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MyActivity"
+            android:name=".activity.MyActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,19 +17,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DatosIniciales"
+            android:name=".activity.ListaLogs"
             android:label="DatosIniciales" >
         </activity>
         <activity
-            android:name=".AddLog"
+            android:name=".activity.AddLog"
             android:label="@string/title_activity_add_log" >
         </activity>
         <activity
-            android:name=".Aceite"
+            android:name=".activity.Aceite"
             android:label="@string/title_activity_aceite" >
         </activity>
         <activity
-            android:name=".modificarAceite"
+            android:name=".activity.modificarAceite"
             android:label="@string/title_activity_modificaraceite" >
         </activity>
     </application>

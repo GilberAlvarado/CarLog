@@ -7,7 +7,6 @@
     tools:context=".MyActivity">
 
 
-
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/DrawerLayout"
         android:layout_width="match_parent"
@@ -64,14 +63,26 @@
                 android:elevation="3dp"
                 android:layout_marginTop="200dp" />
 
-            <EditText
+
+            <com.wrapp.floatlabelededittext.FloatLabeledEditText
                 android:id="@+id/kms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="230dp"
-                android:elevation="3dp"
-                android:hint="Introduzca Kms"
-                android:text="" />
+                android:elevation="3dp">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Introduzca Kms" />
+                <!--<EditText
+                    android:id="@+id/kms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="230dp"
+                    android:elevation="3dp"
+                    android:hint="Introduzca Kms"
+                    android:text="" />-->
+            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
 
 

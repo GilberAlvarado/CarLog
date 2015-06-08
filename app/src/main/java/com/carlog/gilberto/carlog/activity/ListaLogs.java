@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog;
+package com.carlog.gilberto.carlog.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -11,7 +11,6 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -22,8 +21,13 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
+import com.carlog.gilberto.carlog.adapter.miAdaptadorLog;
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.formats.funciones;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -32,7 +36,6 @@ import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -45,9 +48,7 @@ import java.util.List;
 /**
  * Created by Gilberto on 29/10/2014.
  */
-public class DatosIniciales extends AppCompatActivity implements ObservableScrollViewCallbacks  {
-
-    private Toolbar toolbar;
+public class ListaLogs extends MyActivity implements ObservableScrollViewCallbacks  {
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
 
@@ -70,7 +71,7 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
 
     private void borrarLogpulsado(final Cursor cursor, final DBLogs manager, final int posicion) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(DatosIniciales.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ListaLogs.this);
                 builder.setMessage("¿Está seguro de querer eliminar?")
                         .setTitle("Borrar de la lista")
                         .setCancelable(false)
@@ -118,7 +119,7 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
                 tipo = cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO));
                 if(tipo.equals(TipoLog.TIPO_ACEITE)) {
-                    intent = new Intent(DatosIniciales.this, modificarAceite.class);
+                    intent = new Intent(ListaLogs.this, modificarAceite.class);
                 }
                 ///////////ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
                 //************************************************************************
@@ -175,7 +176,7 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
 
     }
 
-    private void modificarLogPulsando() {
+    private void modificarLogPulsando(final String matricula) {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -185,9 +186,7 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
                 Context contextNew = getApplicationContext();
                 final DBLogs manager = new DBLogs(contextNew);
 
-                TextView text=(TextView)findViewById(R.id.matricula2);
-
-                final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, text.getText().toString());
+                final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, matricula);
 
                 modificarLogpulsado(cursor, manager, position);
             }
@@ -195,18 +194,12 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
     }
 
     private void ConsultarLogs(String matricula) {
-        System.out.println("CONSULTANDO LOGS "+ matricula);
         Context contextNew = getApplicationContext();
         final DBLogs manager = new DBLogs(contextNew);
-       // String[] from = new String[]{manager.CN_TIPO, "fecha_string"};
-       // int[] to = new int[] {android.R.id.text1, android.R.id.text2};
-
 
         int int_now = funciones.date_a_int(new Date());
 
         final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, matricula);
-
-
 
         List<TipoLog> listaLogs = new ArrayList<TipoLog>();
         //Recorremos el cursor
@@ -229,7 +222,7 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
         listView.setAdapter(adapter);
 
 
-        modificarLogPulsando();
+        modificarLogPulsando(matricula);
         //Asociamos el menú contextual a los controles para las opciones en longClick
         registerForContextMenu(listView);
 
@@ -257,13 +250,13 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
         listView.addHeaderView(paddingView);
         //setDummyData(listView);
         mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText("Logs próximos");
+        mTitleView.setText("Revisiones cercanas");
         setTitle(null);
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DatosIniciales.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ListaLogs.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
             }
         });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
@@ -295,7 +288,7 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DatosIniciales.this, AddLog.class);
+                Intent intent = new Intent(ListaLogs.this, AddLog.class);
 
 
                 intent.putExtra("miCoche", miCoche);
@@ -308,10 +301,8 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_datos_iniciales);
+        setContentView(R.layout.activity_listalogs);
 
-        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
-        setSupportActionBar(toolbar);
 
         DiseñoObservableScrollView();
 
@@ -341,23 +332,7 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
         final TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
 
 
-        TextView text=(TextView)findViewById(R.id.matricula2);
-        text.setText(matricula);
 
-        text=(TextView)findViewById(R.id.marca2);
-        text.setText(marca);
-
-        text=(TextView)findViewById(R.id.modelo2);
-        text.setText(modelo);
-
-        text=(TextView)findViewById(R.id.year2);
-        text.setText(year);
-
-        text=(TextView)findViewById(R.id.kms2);
-        text.setText(kms);
-
-        text=(TextView)findViewById(R.id.itv2);
-        text.setText(itv);
 
         ConsultarLogs(matricula);
         AgregarLog(miCoche);
@@ -481,10 +456,9 @@ public class DatosIniciales extends AppCompatActivity implements ObservableScrol
         AdapterView.AdapterContextMenuInfo info =
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        TextView text=(TextView)findViewById(R.id.matricula2);
 
 
-        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, text.getText().toString());
+        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, matricula);
 
         switch (item.getItemId()) {
             case R.id.menu_eliminarLog:

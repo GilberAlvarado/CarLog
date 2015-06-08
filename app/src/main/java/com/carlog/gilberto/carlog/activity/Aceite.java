@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog;
+package com.carlog.gilberto.carlog.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,8 +11,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.formats.funciones;
+import com.carlog.gilberto.carlog.negocio.procesarAceite;
 
 
 import java.util.ArrayList;

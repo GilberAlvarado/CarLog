@@ -5,10 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.carlog.gilberto.carlog.AddLog;
-import com.carlog.gilberto.carlog.MyActivity;
-import com.carlog.gilberto.carlog.TipoCoche;
-import com.carlog.gilberto.carlog.TipoLog;
+import com.carlog.gilberto.carlog.activity.MyActivity;
+import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 
 /**
  * Created by Gilberto on 19/05/2015.

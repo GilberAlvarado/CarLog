@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog;
+package com.carlog.gilberto.carlog.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,8 +17,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBTiposRevision;
+import com.carlog.gilberto.carlog.formats.funciones;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -123,7 +127,7 @@ public class AddLog extends Activity {
             } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente un " + TipoLog.TIPO_ACEITE, Toast.LENGTH_SHORT).show();
 
         } else {
-            intent = new Intent(AddLog.this, DatosIniciales.class);
+            intent = new Intent(AddLog.this, ListaLogs.class);
 
             managerLogs.insertar(miTipoLog);
 
