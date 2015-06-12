@@ -2,6 +2,7 @@ package com.carlog.gilberto.carlog.negocio;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,8 +16,10 @@ import android.support.v7.widget.RecyclerView;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.activity.ListaLogs;
+import com.carlog.gilberto.carlog.activity.MyActivity;
 import com.carlog.gilberto.carlog.adapter.miAdaptadorCoches;
 import com.carlog.gilberto.carlog.data.DBCar;
+import com.carlog.gilberto.carlog.data.DBModelos;
 import com.carlog.gilberto.carlog.formats.funciones;
 
 import me.drakeet.materialdialog.MaterialDialog;
@@ -34,7 +37,17 @@ public class CambiarCocheActivo {
     public static ActionBarDrawerToggle mDrawerToggle;
 
 
+    public static void CambiarImgLogs(Context context, Activity act, String modelo) {
+        DBModelos dbm = new DBModelos(context);
+        Cursor c = dbm.buscarModelos(modelo);
+        if (c.moveToFirst() == true) {
+            String mDrawableImg = c.getString(c.getColumnIndex(DBModelos.CN_IMG));
+            int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
 
+            ImageView img_listalogs = (ImageView) act.findViewById(R.id.image);
+            img_listalogs.setImageResource(resID);
+        }
+    }
 
     // Actualiza la lista de coches en el menu
     public static void CambiarCocheActivo(final DBCar dbcar, Cursor c, final Activity act, final Context context) {
@@ -53,24 +66,31 @@ public class CambiarCocheActivo {
 
                 String matricula_seleccionada = txtV_seleccionada.getText().toString();
                 String matricula_NoSeleccionada = "";
+                String modelo_Seleccionado = "";
 
                 Cursor c = dbcar.buscarCocheActivo();
 
                 if (c.moveToFirst() == true) {
                     matricula_NoSeleccionada = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-
                 }
 
 
                 dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
                 dbcar.ActualizarCocheActivo(matricula_seleccionada);
 
+                c = dbcar.buscarCocheActivo();
+                if(c.moveToFirst() == true) {
+                    modelo_Seleccionado = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+                }
+
+                CambiarImgLogs(context, act, modelo_Seleccionado);
+                
                 ActualizarCochesDrawer(dbcar, act, context);
             }
         });
 
 
-        eliminarCoche(act);
+        eliminarCoche(act, context);
 
 
         mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
@@ -100,7 +120,7 @@ public class CambiarCocheActivo {
 
     }
 
-    private static void eliminarCoche(final Activity act) {
+    private static void eliminarCoche(final Activity act, final Context context) {
         mAdapter.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View v) {
@@ -138,15 +158,18 @@ public class CambiarCocheActivo {
                                 dbcar.ActualizarCocheActivo(matricula_seleccionada);
                             } else {
                                 // Si no hay más coches no se puede poner ninguno a activo, debemos poner las etiquetas vacío y las imagenes por defecto en el drawer
-                       //         MyActivity.VaciarPantalla();
                                 ImageView img_marca = (ImageView) mRecyclerView.findViewById(R.id.circleView);
                                 ImageView img_modelo = (ImageView) mRecyclerView.findViewById(R.id.background_modelo);
                                 img_modelo.setBackgroundResource(R.drawable.modelo_inicio);
                                 img_marca.setImageResource(R.drawable.logo_inicio);
-
+                                //Al no tener coches vamos a la actividad inicial a pedir insertar coche
+                                Intent intent = new Intent(context, MyActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                context.startActivity(intent);
+                                act.finish();
                             }
                         } else {
-                            // Si no era el activo da igual pq seguirá activo el que estaba o pq no hay mas coches
+                            // Si no era el activo da igual pq seguirá activo
                         }
 
 

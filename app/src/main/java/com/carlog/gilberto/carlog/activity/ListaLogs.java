@@ -22,10 +22,12 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.data.DBModelos;
 import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
 import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
@@ -71,6 +73,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     private boolean mFabIsShown;
     private int mToolbarColor;
     private View mToolbar;
+    private Toolbar toolbar;
 
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
     int int_year = MyActivity.NO_YEARS, int_kms = MyActivity.NO_KMS, int_itv = MyActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
@@ -233,7 +236,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     }
 
     private void DiseñoObservableScrollView() {
-        setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
+        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        setSupportActionBar(toolbar);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -285,15 +289,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             @Override
             public void run() {
                 listView.scrollTo(0, mFlexibleSpaceImageHeight - mActionBarSize);
-
-                // If you'd like to start from scrollY == 0, don't write like this:
-                //mScrollView.scrollTo(0, 0);
-                // The initial scrollY is 0, so it won't invoke onScrollChanged().
-                // To do this, use the following:
-                //onScrollChanged(0, false, false);
-
-                // You can also achieve it with the following codes.
-                // This causes scroll change from 1 to 0.
                 listView.scrollTo(0, 1);
                 listView.scrollTo(0, 0);
             }
@@ -341,13 +336,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        System.out.println("ADIOSSSSSSSSSSS");
-
-
         setContentView(R.layout.activity_listalogs);
-
-
 
         Context context = getApplicationContext();
 
@@ -374,6 +363,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
             int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
         }
+
+        CambiarCocheActivo.CambiarImgLogs(context, ListaLogs.this, modelo);
 
         final TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
 

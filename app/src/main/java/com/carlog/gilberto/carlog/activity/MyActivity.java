@@ -223,11 +223,13 @@ public class MyActivity extends ActionBarActivity {
         //Instanciamos el Boton siguiente
         Button btn1 = (Button) findViewById(R.id.btn1);
 
-
+        /*
+          Definimos un método OnClickListener para que
+          al pulsar el botón se nos muestre la segunda actividad
+        */
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("einnnnnnn?????????");
                 Intent intent = new Intent(MyActivity.this, ListaLogs.class);
 
                 LeerDatosPantalla();
@@ -469,7 +471,7 @@ public class MyActivity extends ActionBarActivity {
                 Toast.makeText(MyActivity.this, "Ha de introducir la matrícula.", Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(marca) || marca.equals(INICIAL_MARCA)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir la marca.", Toast.LENGTH_LONG).show();
-            } else if (TextUtils.isEmpty(modelo) || marca.equals(INICIAL_MODELO)) {
+            } else if (TextUtils.isEmpty(modelo) || modelo.equals(INICIAL_MODELO)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir el modelo.", Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(kms)) {
                 Toast.makeText(MyActivity.this, "Ha de introducir el nº de kilómetros.", Toast.LENGTH_LONG).show();
@@ -488,14 +490,10 @@ public class MyActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-System.out.println("HOLA!");
-
-
         Context context = getApplicationContext();
 
         DBCar dbcar = new DBCar(context);
         Cursor c = dbcar.buscarCoches();
-
 
         if (c.moveToFirst() == false) {  // Desde que haya un coche no se mostrará la primera actividad
 
@@ -515,23 +513,9 @@ System.out.println("HOLA!");
             AddCar(context);
         }
         else {
-
-
-            System.out.println("juaztyyyyyyyyyyyyy");
             Intent intenta = new Intent(MyActivity.this, ListaLogs.class);
-           startActivity(intenta);
-           finish();
-            
-         /*   try {
-                Thread.sleep(2000);
-                System.out.println("juaztyyyyyyyyyyyyy");
-                Intent intenta = new Intent(MyActivity.this, ListaLogs.class);
-                startActivity(intenta);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-*/
+            startActivity(intenta);
+            finish();
         }
 
     }
