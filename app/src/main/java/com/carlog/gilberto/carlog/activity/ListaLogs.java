@@ -9,8 +9,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -19,9 +22,11 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
 import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.adapter.miAdaptadorLog;
@@ -48,11 +53,12 @@ import java.util.List;
 /**
  * Created by Gilberto on 29/10/2014.
  */
-public class ListaLogs extends MyActivity implements ObservableScrollViewCallbacks  {
+public class ListaLogs extends ActionBarActivity implements ObservableScrollViewCallbacks  {
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
+    private static final boolean TOOLBAR_IS_STICKY = true;
 
-    private ObservableListView listView;
+    private static ObservableListView listView;
     private View mImageView;
     private View mOverlayView;
     private View mListBackgroundView;
@@ -63,10 +69,11 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
     private int mFlexibleSpaceImageHeight;
     private int mFabMargin;
     private boolean mFabIsShown;
+    private int mToolbarColor;
+    private View mToolbar;
 
-
-
-
+    String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
+    int int_year = MyActivity.NO_YEARS, int_kms = MyActivity.NO_KMS, int_itv = MyActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
 
 
     private void borrarLogpulsado(final Cursor cursor, final DBLogs manager, final int posicion) {
@@ -92,7 +99,7 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
                                                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
                                                 String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
                                                 manager.eliminar_por_id(id);
-                                                ConsultarLogs(matricula);
+                                                ConsultarLogs(matricula, getApplicationContext(), ListaLogs.this);
 
                                                 break;
                                             }
@@ -108,7 +115,6 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
 
 
     private void modificarLogpulsado(final Cursor cursor, final DBLogs manager, int posicion) {
-        final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
         //Recorremos el cursor
         int i = 0;
@@ -119,7 +125,7 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
                 tipo = cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO));
                 if(tipo.equals(TipoLog.TIPO_ACEITE)) {
-                    intent = new Intent(ListaLogs.this, modificarAceite.class);
+                    intent = new Intent(ListaLogs.this, ModificarAceite.class);
                 }
                 ///////////ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
                 //************************************************************************
@@ -133,7 +139,6 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
 
                 TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_int(txt_fecha), aceite, matricula, DBLogs.NO_REALIZADO, kms);
                 intent.putExtra("miTipo", miTipo);
-                intent.putExtra("miCoche", miCoche);
                 intent.putExtra("idLog", id);
                 break;
             }
@@ -150,7 +155,6 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
     }
 
     private void realizadoLogpulsado(Cursor cursor, DBLogs manager, int posicion) {
-        final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
         //Recorremos el cursor
         int i = 0;
@@ -158,16 +162,15 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
 
             if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
-                String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
 
                 Date now = new Date();
                 System.out.println("fecha "+now);
                 System.out.println("id "+id);
                 System.out.println("int fecha "+funciones.date_a_int(now));
 
-                manager.marcarRealizadoLog(id, funciones.date_a_int(now), miCoche.getKms(miCoche)); //hoy
+                manager.marcarRealizadoLog(id, funciones.date_a_int(now), int_kms); //hoy
 
-                ConsultarLogs(matricula);
+                ConsultarLogs(matricula, getApplicationContext(), ListaLogs.this);
 
                 break;
             }
@@ -176,14 +179,14 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
 
     }
 
-    private void modificarLogPulsando(final String matricula) {
+    private void modificarLogPulsando(final String matricula, final Context context) {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
 
                 int int_now = funciones.date_a_int(new Date());
-                Context contextNew = getApplicationContext();
+                Context contextNew = context;
                 final DBLogs manager = new DBLogs(contextNew);
 
                 final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, matricula);
@@ -193,9 +196,9 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
         });
     }
 
-    private void ConsultarLogs(String matricula) {
-        Context contextNew = getApplicationContext();
-        final DBLogs manager = new DBLogs(contextNew);
+    public void ConsultarLogs(String matricula, Context context, Activity act) {
+
+        final DBLogs manager = new DBLogs(context);
 
         int int_now = funciones.date_a_int(new Date());
 
@@ -216,13 +219,13 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
         }
 
 
-        miAdaptadorLog adapter = new miAdaptadorLog(this, listaLogs);
+        miAdaptadorLog adapter = new miAdaptadorLog(act, listaLogs);
 
 
         listView.setAdapter(adapter);
 
 
-        modificarLogPulsando(matricula);
+        modificarLogPulsando(matricula, context);
         //Asociamos el menú contextual a los controles para las opciones en longClick
         registerForContextMenu(listView);
 
@@ -230,13 +233,25 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
     }
 
     private void DiseñoObservableScrollView() {
+        setSupportActionBar((Toolbar) findViewById(R.id.tool_bar));
+
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
         mActionBarSize = getActionBarSize();
+        mToolbarColor = getResources().getColor(R.color.ColorPrimary);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mToolbar = findViewById(R.id.tool_bar);
+        if (!TOOLBAR_IS_STICKY) {
+            mToolbar.setBackgroundColor(Color.TRANSPARENT);
+        }
+
+
         mImageView = findViewById(R.id.image);
         mOverlayView = findViewById(R.id.overlay);
         listView = (ObservableListView) findViewById(R.id.list);
         listView.setScrollViewCallbacks(this);
+
 
         // Set padding view for ListView. This is the flexible space.
         View paddingView = new View(this);
@@ -250,7 +265,7 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
         listView.addHeaderView(paddingView);
         //setDummyData(listView);
         mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText("Revisiones cercanas");
+        mTitleView.setText("Próximas revisiones");
         setTitle(null);
         mFab = findViewById(R.id.fab);
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -265,7 +280,32 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
 
         // mListBackgroundView makes ListView's background except header view.
         mListBackgroundView = findViewById(R.id.list_background);
+
+        ScrollUtils.addOnGlobalLayoutListener(listView, new Runnable() {
+            @Override
+            public void run() {
+                listView.scrollTo(0, mFlexibleSpaceImageHeight - mActionBarSize);
+
+                // If you'd like to start from scrollY == 0, don't write like this:
+                //mScrollView.scrollTo(0, 0);
+                // The initial scrollY is 0, so it won't invoke onScrollChanged().
+                // To do this, use the following:
+                //onScrollChanged(0, false, false);
+
+                // You can also achieve it with the following codes.
+                // This causes scroll change from 1 to 0.
+                listView.scrollTo(0, 1);
+                listView.scrollTo(0, 0);
+            }
+        });
+
+        LinearLayout difuminado = (LinearLayout) findViewById(R.id.difuminado_layout);
+        difuminado.setBackgroundColor(ScrollUtils.getColorWithAlpha(0.4f, mToolbarColor));
+
     }
+
+
+
 
     protected int getActionBarSize() {
         TypedValue typedValue = new TypedValue();
@@ -301,15 +341,24 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        System.out.println("ADIOSSSSSSSSSSS");
+
+
         setContentView(R.layout.activity_listalogs);
 
 
+
+        Context context = getApplicationContext();
+
+        DBCar dbcar = new DBCar(context);
+        Cursor c = dbcar.buscarCoches();
+
+        CambiarCocheActivo.CambiarCocheActivo(dbcar, c, ListaLogs.this, context);
+
         DiseñoObservableScrollView();
 
-
-       // final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
-        DBCar dbcar = new DBCar(this);
-        Cursor c = dbcar.buscarCocheActivo();
+        c = dbcar.buscarCocheActivo();
 
         String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
         int int_year = MyActivity.NO_YEARS, int_kms = MyActivity.NO_KMS, int_itv = MyActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
@@ -324,9 +373,6 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
             int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
             int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
             int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
-            year = String.valueOf(int_year);
-            kms = String.valueOf(int_kms);
-            itv = funciones.int_a_string(int_itv);
         }
 
         final TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
@@ -334,7 +380,7 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
 
 
 
-        ConsultarLogs(matricula);
+        ConsultarLogs(matricula, context, ListaLogs.this);
         AgregarLog(miCoche);
 
 
@@ -357,7 +403,7 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
 
         // Scale title text
         float scale = 1 + ScrollUtils.getFloat((flexibleRange - scrollY) / flexibleRange, 0, MAX_TEXT_SCALE_DELTA);
-        setPivotXToTitle();
+        ViewHelper.setPivotX(mTitleView, 0);
         ViewHelper.setPivotY(mTitleView, 0);
         ViewHelper.setScaleX(mTitleView, scale);
         ViewHelper.setScaleY(mTitleView, scale);
@@ -365,13 +411,17 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
         // Translate title text
         int maxTitleTranslationY = (int) (mFlexibleSpaceImageHeight - mTitleView.getHeight() * scale);
         int titleTranslationY = maxTitleTranslationY - scrollY;
+        if (TOOLBAR_IS_STICKY) {
+            titleTranslationY = Math.max(0, titleTranslationY);
+        }
         ViewHelper.setTranslationY(mTitleView, titleTranslationY);
+        ViewHelper.setTranslationX(mTitleView, 90);
 
         // Translate FAB
-        int maxFabTranslationY = mFlexibleSpaceImageHeight - mFab.getHeight() / 2;
+        int maxFabTranslationY = mFlexibleSpaceImageHeight - mFab.getHeight() / 3;
         float fabTranslationY = ScrollUtils.getFloat(
-                -scrollY + mFlexibleSpaceImageHeight - mFab.getHeight() / 2,
-                mActionBarSize - mFab.getHeight() / 2,
+                -scrollY + mFlexibleSpaceImageHeight - mFab.getHeight() / 3,
+                mActionBarSize - mFab.getHeight() / 3,
                 maxFabTranslationY);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             // On pre-honeycomb, ViewHelper.setTranslationX/Y does not set margin,
@@ -390,6 +440,21 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
             hideFab();
         } else {
             showFab();
+        }
+        if (TOOLBAR_IS_STICKY) {
+            // Change alpha of toolbar background
+            if (-scrollY + mFlexibleSpaceImageHeight <= mActionBarSize) {
+                mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(1, mToolbarColor));
+            } else {
+                mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, mToolbarColor));
+            }
+        } else {
+            // Translate Toolbar
+            if (scrollY < mFlexibleSpaceImageHeight) {
+                ViewHelper.setTranslationY(mToolbar, 0);
+            } else {
+                ViewHelper.setTranslationY(mToolbar, -scrollY);
+            }
         }
     }
 
@@ -480,10 +545,8 @@ public class ListaLogs extends MyActivity implements ObservableScrollViewCallbac
         switch(requestCode) {
             case (PETICION_ACTIVITY_ADD_LOG) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    //TipoLog miTipo = (TipoLog) data.getExtras().getSerializable("miTipo");
-                    final TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
-                    System.out.println("RESULTADO ACTIVITY "+miCoche.getMatricula(miCoche));
-                    ConsultarLogs(miCoche.getMatricula(miCoche));
+                    System.out.println("RESULTADO ACTIVITY "+matricula);
+                    ConsultarLogs(matricula, getApplicationContext(), ListaLogs.this);
 
 
                 }

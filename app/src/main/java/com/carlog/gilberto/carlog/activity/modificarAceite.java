@@ -23,7 +23,7 @@ import java.util.Date;
 /**
  * Created by Gilberto on 26/05/2015.
  */
-public class modificarAceite extends Activity {
+public class ModificarAceite extends Activity {
 
     private Spinner spinner1;
 
@@ -79,7 +79,7 @@ public class modificarAceite extends Activity {
 
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(modificarAceite.this, ListaLogs.class);
+                Intent intent = new Intent(ModificarAceite.this, ListaLogs.class);
 
                 System.out.println("Modificamos el Log con id " + idLog + " por aceite " + int_aceite);
                 managerLogs.modificarTipoAceiteLog(idLog, int_aceite);

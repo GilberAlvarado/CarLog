@@ -29,7 +29,7 @@
             android:label="@string/title_activity_aceite" >
         </activity>
         <activity
-            android:name=".activity.modificarAceite"
+            android:name=".activity.ModificarAceite"
             android:label="@string/title_activity_modificaraceite" >
         </activity>
     </application>

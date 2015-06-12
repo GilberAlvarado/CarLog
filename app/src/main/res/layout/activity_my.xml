@@ -14,145 +14,174 @@
         android:layout_height="match_parent">
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="1dp"
-            android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="1dp"
+                android:orientation="vertical">
+                <include
+                    android:id="@+id/tool_bar"
+                    layout="@layout/tool_bar">
+                </include>
 
-            <include
-                android:id="@+id/tool_bar"
-                layout="@layout/tool_bar">
-            </include>
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_marginTop="55dp"
+                    android:layout_height="wrap_content" >
 
-            <EditText
-                android:id="@+id/matricula"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Introduzca Matrícula"
-                android:elevation="3dp"
-                android:layout_marginTop="70dp"
-                android:text="" />
-
-            <Spinner
-                android:id="@+id/cmb_marcas"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:elevation="3dp"
-                android:layout_marginTop="120dp" />
-
-
-
-            <Spinner
-                android:id="@+id/cmb_modelo"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginTop="150dp"
-                android:elevation="3dp"/>
-
-
-            <Spinner
-                android:id="@+id/cmb_years"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:elevation="3dp"
-                android:layout_marginTop="200dp" />
-
-
-            <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                android:id="@+id/kms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="230dp"
-                android:elevation="3dp">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Introduzca Kms" />
-                <!--<EditText
-                    android:id="@+id/kms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="230dp"
-                    android:elevation="3dp"
-                    android:hint="Introduzca Kms"
-                    android:text="" />-->
-            </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="280dp"
-                android:text="@string/txt_itv" />
-
-            <DatePicker
-                android:id="@+id/date_itv"
-                android:layout_width="200dp"
-                android:layout_height="120dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:elevation="3dp"
-                android:layout_weight="1"
-                android:layout_marginTop="320dp"
-                android:calendarViewShown="false" />
-
-            <Button
-                android:id="@+id/btn1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="500dp"
-                android:layout_weight="1"
-                android:elevation="3dp"
-                android:onClick="siguiente"
-                android:text="@string/btn1" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:elevation="1dp"
+                        android:orientation="vertical">
 
 
 
 
 
-        </RelativeLayout>
 
+                        <EditText
+                            android:id="@+id/matricula"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Introduzca Matrícula"
+                            android:ellipsize="start"
+                            android:gravity="center"
+                            android:elevation="3dp"
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/RecyclerView"
-            android:layout_width="320dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:elevation="4dp"
-            android:background="#ffffff"
-            android:scrollbars="vertical">
-
-        </android.support.v7.widget.RecyclerView>
-
-
-
-
-    </android.support.v4.widget.DrawerLayout>
-
-
-    <com.gc.materialdesign.views.ButtonFloat
-        android:id="@+id/buttonFloat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="24dp"
-        android:elevation="5dp"
-        android:background="#1E88E5"
-        materialdesign:animate="true"
-        materialdesign:iconDrawable="@drawable/ic_action_new" />
+                            android:layout_gravity="center_horizontal"
+                            android:text="" />
 
 
 
+                       <Spinner
+                            android:id="@+id/cmb_marcas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:ellipsize="start"
+                            android:gravity="center"
+                            android:layout_gravity="center_horizontal"
+                            android:elevation="3dp"/>
 
 
+
+                        <Spinner
+                            android:id="@+id/cmb_modelo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:ellipsize="start"
+                            android:gravity="center"
+                            android:layout_gravity="center_horizontal"
+                            android:elevation="3dp"/>
+
+
+                        <Spinner
+                            android:id="@+id/cmb_years"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:ellipsize="start"
+                            android:gravity="center"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_gravity="center_horizontal"
+                            android:elevation="3dp"/>
+
+
+                        <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                            android:id="@+id/kms"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="start"
+                            android:layout_gravity="center_horizontal"
+                            android:elevation="3dp">
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:hint="Introduzca Kms" />
+                            <!--<EditText
+                                android:id="@+id/kms"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="230dp"
+                                android:elevation="3dp"
+                                android:hint="Introduzca Kms"
+                                android:text="" />-->
+                        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/txt_itv" />
+
+                        <DatePicker
+                            android:id="@+id/date_itv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:elevation="3dp"
+                            android:layout_weight="1"
+                            android:calendarViewShown="false" />
+
+                        <Button
+                            android:id="@+id/btn1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:elevation="3dp"
+                            android:onClick="siguiente"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/btn1" />
+
+
+
+
+
+                    </LinearLayout>
+                </ScrollView>
+            </RelativeLayout>
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/RecyclerView"
+                android:layout_width="320dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:elevation="4dp"
+                android:background="#ffffff"
+                android:scrollbars="vertical">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+
+
+        </android.support.v4.widget.DrawerLayout>
+
+
+        <com.gc.materialdesign.views.ButtonFloat
+            android:id="@+id/buttonFloat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="24dp"
+            android:elevation="5dp"
+            android:background="#1E88E5"
+            materialdesign:animate="true"
+            materialdesign:iconDrawable="@drawable/ic_action_new" />
 
 
 </RelativeLayout>
+
+

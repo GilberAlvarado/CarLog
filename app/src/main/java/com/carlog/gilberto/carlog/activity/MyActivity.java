@@ -1,14 +1,15 @@
 package com.carlog.gilberto.carlog.activity;
 
+import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
+
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -19,7 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +33,7 @@ import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBMarcas;
 import com.carlog.gilberto.carlog.data.DBModelos;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.adapter.miAdaptadorCoches;
-import com.carlog.gilberto.carlog.negocio.procesarAceite;
+import com.carlog.gilberto.carlog.negocio.ProcesarAceite;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.wrapp.floatlabelededittext.FloatLabeledEditText;
 
@@ -42,8 +42,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import me.drakeet.materialdialog.MaterialDialog;
 
 
 public class MyActivity extends ActionBarActivity {
@@ -58,13 +56,13 @@ public class MyActivity extends ActionBarActivity {
     private Toolbar toolbar;
 
 
-    RecyclerView mRecyclerView;                           // Declaring RecyclerView
+    //RecyclerView mRecyclerView;                           // Declaring RecyclerView
     //RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
-    miAdaptadorCoches mAdapter;
-    RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
-    DrawerLayout Drawer;                                  // Declaring DrawerLayout
+    //miAdaptadorCoches mAdapter;
+    //RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
+    //DrawerLayout Drawer;                                  // Declaring DrawerLayout
 
-    ActionBarDrawerToggle mDrawerToggle;
+    //ActionBarDrawerToggle mDrawerToggle;
 
 
 
@@ -80,7 +78,7 @@ public class MyActivity extends ActionBarActivity {
     public final static int NO_ITV = -1;
 
 
-    private void RellenarMarcas() {
+    private void RellenarMarcas(Cursor c_activo) {
         //spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
         lista_marcas = new ArrayList<String>();
         spinner_marcas = (Spinner) this.findViewById(R.id.cmb_marcas);
@@ -99,7 +97,8 @@ public class MyActivity extends ActionBarActivity {
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_marcas.setAdapter(adaptador);
 
-        if (!marca.equals(INICIAL_MARCA)) {
+        if (c_activo.moveToFirst() == true) {
+            marca = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MARCA));
             int spinnerPostion = adaptador.getPosition(marca);
             spinner_marcas.setSelection(spinnerPostion);
             spinnerPostion = 0;
@@ -108,7 +107,7 @@ public class MyActivity extends ActionBarActivity {
     }
 
 
-    private void RellenarModelos() {
+    private void RellenarModelos(final Cursor c_activo) {
         spinner_marcas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -140,7 +139,8 @@ public class MyActivity extends ActionBarActivity {
                 adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_modelos.setAdapter(adaptador);
 
-                if (!modelo.equals(INICIAL_MODELO)) {
+                if (c_activo.moveToFirst() == true) {
+                    modelo = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MODELO));
                     int spinnerPostion = adaptador.getPosition(modelo);
                     spinner_modelos.setSelection(spinnerPostion);
                 }
@@ -187,14 +187,15 @@ public class MyActivity extends ActionBarActivity {
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_modelos.setAdapter(adaptador);
 
-        if (!modelo.equals(INICIAL_MODELO)) {
+        if (c_activo.moveToFirst() == true) {
+            modelo = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MODELO));
             int spinnerPostion = adaptador.getPosition(modelo);
             spinner_modelos.setSelection(spinnerPostion);
         }
 
     }
 
-    private void RellenarYears() {
+    private void RellenarYears(Cursor c_activo) {
         //spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
         lista_years = new ArrayList<String>();
         spinner_years = (Spinner) this.findViewById(R.id.cmb_years);
@@ -209,7 +210,8 @@ public class MyActivity extends ActionBarActivity {
         spinner_years.setAdapter(adaptador);
 
 
-        if (!year.equals(INICIAL_YEAR)) {
+        if (c_activo.moveToFirst() == true) {
+            year = String.valueOf(c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_YEAR)));
             int spinnerPostion = adaptador.getPosition(year);
             spinner_years.setSelection(spinnerPostion);
             spinnerPostion = 0;
@@ -221,13 +223,11 @@ public class MyActivity extends ActionBarActivity {
         //Instanciamos el Boton siguiente
         Button btn1 = (Button) findViewById(R.id.btn1);
 
-        /*
-          Definimos un método OnClickListener para que
-          al pulsar el botón se nos muestre la segunda actividad
-        */
+
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("einnnnnnn?????????");
                 Intent intent = new Intent(MyActivity.this, ListaLogs.class);
 
                 LeerDatosPantalla();
@@ -237,16 +237,13 @@ public class MyActivity extends ActionBarActivity {
                     dbcar.ActualizarTodosCocheNOActivo(); // Nos aseguramos de que ponemos todos los coches a inactivos para marcar como activo el nuevo
                     if(CocheEsNuevo.getInstance().coche_es_nuevo == 1) {
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_int(new Date()), int_kms);
-                        intent.putExtra("miCoche", miCoche);
                         dbcar.insertinsertOrUpdate(miCoche);
                     } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_int(new Date()), int_kms);
-                        intent.putExtra("miCoche", miCoche);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
-                        intent.putExtra("miCoche", miCoche);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
@@ -254,11 +251,12 @@ public class MyActivity extends ActionBarActivity {
 
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
-                        intent.putExtra("miCoche", miCoche);
                     }
 
                     Cursor c = dbcar.buscarCoches();
-                    coches_en_NavigationDrawer(dbcar, c);  //actualizamos los coches en el navigation bar por si se crea uno nuevo
+
+                    CambiarCocheActivo cca = new CambiarCocheActivo();
+                    cca.CambiarCocheActivo(dbcar, c, MyActivity.this, context);  //actualizamos los coches en el navigation bar por si se crea uno nuevo
 
 
                     // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
@@ -267,7 +265,7 @@ public class MyActivity extends ActionBarActivity {
 
 
                     ///////////////////PARA EL ACEITE
-                    procesarAceite.procesar_aceite(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula);
+                    ProcesarAceite.procesar_aceite(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula);
                     //////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
 
                     ////////////////////////////////////////////////////////
@@ -282,7 +280,7 @@ public class MyActivity extends ActionBarActivity {
         });
     }
 
-    private void VaciarPantalla() {
+    public void VaciarPantalla() {
         CocheEsNuevo.getInstance().coche_es_nuevo = 1;
 
         TextView text = (TextView)findViewById(R.id.matricula);
@@ -320,204 +318,27 @@ public class MyActivity extends ActionBarActivity {
         });
     }
 
-    private void ActualizarCochesDrawer(DBCar dbcar) {
-        // Volvemos a actualizar los coches para mostrar el activo en la barra de navegacion
-        Cursor cursor = dbcar.buscarCoches();
 
-            coches_en_NavigationDrawer(dbcar, cursor);
-        if (cursor.moveToFirst() == true) {
-            // Actualizamos la pantalla main activity con el coche activo
-            Cursor c_coche_activo = dbcar.buscarCocheActivo();
-            for (c_coche_activo.moveToFirst(); !c_coche_activo.isAfterLast(); c_coche_activo.moveToNext()) {
-                matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
-                marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
-                year = String.valueOf(c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR)));
-                modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
-                kms = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
-                itv = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
 
-            }
 
-            RellenarPantalla();
 
-            // pero también hay que actualizar las variables globales al coche activo
 
-            if (c_coche_activo.moveToFirst() == true) {
-                matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
-                marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
-                modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
-                int_year = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR));
-                int_kms = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
-                int_itv = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
-                int_kms_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS_INI));
-                int_fecha_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_FECHA_INI));
-                year = String.valueOf(int_year);
-                kms = String.valueOf(int_kms);
-                itv = funciones.int_a_string(int_itv);
-                int_kms_anterior = int_kms;
 
-                System.out.println("Fecha de creación del coche: " + funciones.int_a_string(int_fecha_ini));
-                System.out.println("Kms al crear el coche: " + int_kms_ini);
-            } else {// no se da el caso pq si entra en el primer if ya existe minimo un coche y ya hemos forzado a q sea el activo
-            }
+
+    private void RellenarPantalla(Cursor c) {
+        RellenarMarcas(c);
+        RellenarModelos(c);
+        RellenarYears(c);
+
+        if (c.moveToFirst() == true) {
+            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
+            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
+            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+            kms = String.valueOf(int_kms);
+            itv = funciones.int_a_string(int_itv);
         }
-        else {// Solo puede ser el caso de que borramos un coche y no tengamos más (no se pudo poner activo ningun otro
-            //Ya se vació la pantalla y se pusieron las imagenes a las de por defecto
-            // O al abrir el programa sin coches
-            RellenarPantalla(); // para rellenar los combobox
-            VaciarPantalla(); // Para quitar el coche anterior
-
-        }
-    }
-
-
-    private void eliminarCoche() {
-        mAdapter.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(final View v) {
-                TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
-
-                // String matricula_seleccionada = mAdapter.getMatriculaSeleccionada((mRecyclerView.getChildPosition(v) - 1));
-                String matricula_seleccionada = txtV_seleccionada.getText().toString();
-
-                final MaterialDialog mMaterialDialog = new MaterialDialog(v.getContext());
-                mMaterialDialog.setTitle("Eliminar coche");
-                mMaterialDialog.setMessage("¿Está seguro de eliminar el coche con matrícula " + matricula_seleccionada + " y todos sus logs?");
-                mMaterialDialog.setPositiveButton("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View w) {
-                        mMaterialDialog.dismiss();
-                        TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
-
-                        // String matricula_seleccionada = mAdapter.getMatriculaSeleccionada((mRecyclerView.getChildPosition(v) - 1));
-                        String matricula_seleccionada = txtV_seleccionada.getText().toString();
-
-                        DBCar dbcar = new DBCar(getApplicationContext());
-                        Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
-
-                        int activo = 0;
-
-                        if (c.moveToFirst() == true) {
-                            activo = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
-                        }
-
-                        dbcar.eliminarCoche(matricula_seleccionada); // Todo borrado en cascada de logs del coche
-
-                        // Si el borrado era el activo debemos poner activo otro (si hay más coches)
-                        if (activo == 1) {
-                            Cursor c_todos = dbcar.buscarCoches();
-                            if (c_todos.moveToFirst() == true) { // desde que haya un coche lo ponemos activo
-                                matricula_seleccionada = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_MATRICULA));
-                                dbcar.ActualizarCocheActivo(matricula_seleccionada);
-                            } else {
-                                // Si no hay más coches no se puede poner ninguno a activo, debemos poner las etiquetas vacío y las imagenes por defecto en el drawer
-                                VaciarPantalla();
-                                ImageView img_marca = (ImageView) mRecyclerView.findViewById(R.id.circleView);
-                                ImageView img_modelo = (ImageView) mRecyclerView.findViewById(R.id.background_modelo);
-                                img_modelo.setBackgroundResource(R.drawable.modelo_inicio);
-                                img_marca.setImageResource(R.drawable.logo_inicio);
-
-                            }
-                        } else {
-                            // Si no era el activo da igual pq seguirá activo el que estaba o pq no hay mas coches
-                        }
-
-
-                        ActualizarCochesDrawer(dbcar);
-                    }
-                });
-                mMaterialDialog.setNegativeButton("CANCEL", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mMaterialDialog.dismiss();
-
-                    }
-                });
-
-                mMaterialDialog.show();
-
-                return true;
-            }
-        });
-    }
-
-    // Actualiza la lista de coches en el menu
-    private void coches_en_NavigationDrawer(final DBCar dbcar, Cursor c) {
-        mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
-
-        mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
-
-
-        mAdapter = new miAdaptadorCoches(dbcar, c, getApplicationContext());       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
-
-        mAdapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("hola");
-
-                TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
-
-               // String matricula_seleccionada = mAdapter.getMatriculaSeleccionada((mRecyclerView.getChildPosition(v) - 1));
-                String matricula_seleccionada = txtV_seleccionada.getText().toString();
-                String matricula_NoSeleccionada = "";
-
-                DBLogs dblogs = new DBLogs(getApplicationContext());
-                Cursor cc = dblogs.cargarCursorLogs();
-                for(cc.moveToFirst(); !cc.isAfterLast(); cc.moveToNext()) {
-                    String mm = cc.getString(cc.getColumnIndex(DBLogs.CN_CAR));
-                    System.out.println("MATRICULA "+mm);
-                }
-
-                Cursor c = dbcar.buscarCocheActivo();
-
-                if (c.moveToFirst() == true) {
-                    matricula_NoSeleccionada = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-
-                }
-
-
-                dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
-                dbcar.ActualizarCocheActivo(matricula_seleccionada);
-
-                ActualizarCochesDrawer(dbcar);
-            }
-        });
-
-
-        eliminarCoche();
-
-
-
-        mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
-        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
-        mRecyclerView.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
-        Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
-        mDrawerToggle = new ActionBarDrawerToggle(this,Drawer,toolbar, R.string.open_drawer, R.string.close_drawer)
-        {
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
-                // open I am not going to put anything here)
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                // Code here will execute once drawer is closed
-            }
-        }; // Drawer Toggle Object Made
-        Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
-        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
-
-
-    }
-
-    private void RellenarPantalla() {
-        RellenarMarcas();
-        RellenarModelos();
-        RellenarYears();
 
         TextView text = (TextView)findViewById(R.id.matricula);
         text.setText(matricula);
@@ -601,7 +422,7 @@ public class MyActivity extends ActionBarActivity {
 
 
 
-    EditText matriculaT, modeloT;
+    EditText matriculaT;
     FloatLabeledEditText kmsT;
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
     Date fechaITV = new Date();
@@ -661,59 +482,60 @@ public class MyActivity extends ActionBarActivity {
         return false;
     }
 
-    private void RellenarCochesDrawer(Context context) {
-        DBCar dbcar = new DBCar(context);
-        Cursor c = dbcar.buscarCoches();
 
-
-        if (c.moveToFirst() == true) { // Si no hay coches no se tiene que rellenar el drawer ni la pantalla
-
-            coches_en_NavigationDrawer(dbcar, c);
-
-            Cursor c_coche_activo = dbcar.buscarCocheActivo();
-            if (c_coche_activo.moveToFirst() == true) {
-                matricula = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MATRICULA));
-                marca = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MARCA));
-                modelo = c_coche_activo.getString(c_coche_activo.getColumnIndex(DBCar.CN_MODELO));
-                int_year = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_YEAR));
-                int_kms = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS));
-                int_itv = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_ITV));
-                int_kms_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_KMS_INI));
-                int_fecha_ini = c_coche_activo.getInt(c_coche_activo.getColumnIndex(DBCar.CN_FECHA_INI));
-                year = String.valueOf(int_year);
-                kms = String.valueOf(int_kms);
-                itv = funciones.int_a_string(int_itv);
-                int_kms_anterior = int_kms;
-
-            }
-
-
-
-        }
-        else {
-            coches_en_NavigationDrawer(dbcar, c);
-
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
 
-        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
-        setSupportActionBar(toolbar);
+System.out.println("HOLA!");
 
 
+        Context context = getApplicationContext();
 
-        final Context context = this;
+        DBCar dbcar = new DBCar(context);
+        Cursor c = dbcar.buscarCoches();
 
-        RellenarCochesDrawer(context);
-        RellenarPantalla();
-        Siguiente(context);
-        AddCar(context);
+
+        if (c.moveToFirst() == false) {  // Desde que haya un coche no se mostrará la primera actividad
+
+            setContentView(R.layout.activity_my);
+
+            toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+            setSupportActionBar(toolbar);
+
+
+            CambiarCocheActivo cca = new CambiarCocheActivo();
+            cca.CambiarCocheActivo(dbcar, c, MyActivity.this, context);
+
+            c = dbcar.buscarCocheActivo();
+
+            RellenarPantalla(c);
+            Siguiente(context);
+            AddCar(context);
+        }
+        else {
+
+
+            System.out.println("juaztyyyyyyyyyyyyy");
+            Intent intenta = new Intent(MyActivity.this, ListaLogs.class);
+           startActivity(intenta);
+           finish();
+            
+         /*   try {
+                Thread.sleep(2000);
+                System.out.println("juaztyyyyyyyyyyyyy");
+                Intent intenta = new Intent(MyActivity.this, ListaLogs.class);
+                startActivity(intenta);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+*/
+        }
 
     }
+
 
 
     @Override
@@ -735,8 +557,6 @@ public class MyActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
 
     }
-
-
 
 
 

@@ -88,7 +88,7 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
 
 
 
-    public miAdaptadorCoches(DBCar dbcar, Cursor c, Context context){ // MyAdapter Constructor with titles and icons parameter
+    public miAdaptadorCoches(Cursor c, Context context){ // MyAdapter Constructor with titles and icons parameter
 
 
 
