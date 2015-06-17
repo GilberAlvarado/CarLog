@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBTiposRevision;
 import com.carlog.gilberto.carlog.formats.funciones;
@@ -132,11 +133,20 @@ public class miAdaptadorLog extends ArrayAdapter {
         sqView.tipo.setText(miLog.getTipo((TipoLog) datos.get(position)));
         sqView.fecha.setText(miLog.getFechatxt((TipoLog) datos.get(position)));
         sqView.img_tipo_log.setImageBitmap(getRoundedShape(decodeFile(getContext(), resID), 200));
-        if(miLog.getFechaint((TipoLog) datos.get(position)) <= funciones.date_a_int(funciones.fecha_mas_dias(1))) {
-            sqView.tipo.setTextColor(Color.RED);
-            sqView.fecha.setTextColor(Color.RED);
+
+        if(miLog.getRealizado((TipoLog) datos.get(position)) == DBLogs.NO_REALIZADO) {
+            if (miLog.getFechaint((TipoLog) datos.get(position)) <= funciones.date_a_int(funciones.fecha_mas_dias(1))) {
+                sqView.tipo.setTextColor(Color.RED);
+                sqView.fecha.setTextColor(Color.RED);
+                sqView.tipo.setTypeface(null, Typeface.BOLD);
+                sqView.fecha.setTypeface(null, Typeface.BOLD);
+            }
+        }
+        else if(miLog.getRealizado((TipoLog) datos.get(position)) == DBLogs.REALIZADO) {
+            sqView.tipo.setTextColor(Color.GREEN);
+            sqView.fecha.setTextColor(Color.GREEN);
             sqView.tipo.setTypeface(null, Typeface.BOLD);
-            sqView.fecha.setTypeface(null, Typeface.BOLD);
+            sqView.fecha.setTypeface(null, Typeface.NORMAL);
         }
 
         return rowView;

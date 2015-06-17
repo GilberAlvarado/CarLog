@@ -87,7 +87,16 @@ public class DBLogs {
 
     }
 
-    public Cursor LogsTodosOrderByFechaString(int int_now, String matricula) {  // todos los tipos pero solo los logs futuros y no realizados
+
+    public Cursor LogsTodosOrderByFechaString(String matricula) {  // todos los tipos pero solo los logs futuros y no realizados
+        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
+              /*  + CN_FECHA + " > " + int_now + " AND " + CN_REALIZADO + " = " + NO_REALIZADO + " AND "*/ + CN_CAR + " = '" + matricula + "' ORDER BY "+ CN_FECHA;
+        Cursor c = db.rawQuery(sql, null);
+        return c;
+    }
+
+
+    public Cursor LogsFuturosOrderByFechaString(int int_now, String matricula) {  // todos los tipos pero solo los logs futuros y no realizados
         String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
               /*  + CN_FECHA + " > " + int_now + " AND " */+ CN_REALIZADO + " = " + NO_REALIZADO + " AND " + CN_CAR + " = '" + matricula + "' ORDER BY "+ CN_FECHA;
         Cursor c = db.rawQuery(sql, null);
@@ -127,7 +136,6 @@ public class DBLogs {
     }
 
     public void marcarRealizadoLog(int id, int fecha, int kms) {
-        System.out.println("DATOS "+id + " "+fecha + " "+ kms);
         String sql = "UPDATE " + TABLE_NAME + " SET " + CN_FECHA + " = " + fecha + ", " + CN_REALIZADO + " = " + REALIZADO + ", " + CN_KMS + " = " + kms+ " WHERE " + CN_ID + " = " + id;
         db.execSQL(sql);
     }

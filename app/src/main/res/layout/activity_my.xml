@@ -37,13 +37,9 @@
                         android:orientation="vertical">
 
 
-
-
-
-
                         <EditText
                             android:id="@+id/matricula"
-                            android:layout_width="wrap_content"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:hint="Introduzca Matrícula"
                             android:ellipsize="start"
@@ -57,7 +53,7 @@
 
                        <Spinner
                             android:id="@+id/cmb_marcas"
-                            android:layout_width="wrap_content"
+                            android:layout_width="fill_parent"
                             android:layout_height="40dp"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
@@ -70,7 +66,7 @@
 
                         <Spinner
                             android:id="@+id/cmb_modelo"
-                            android:layout_width="wrap_content"
+                            android:layout_width="fill_parent"
                             android:layout_height="40dp"
                             android:ellipsize="start"
                             android:gravity="center"
@@ -80,7 +76,7 @@
 
                         <Spinner
                             android:id="@+id/cmb_years"
-                            android:layout_width="wrap_content"
+                            android:layout_width="fill_parent"
                             android:layout_height="40dp"
                             android:ellipsize="start"
                             android:gravity="center"
@@ -92,13 +88,13 @@
 
                         <com.wrapp.floatlabelededittext.FloatLabeledEditText
                             android:id="@+id/kms"
-                            android:layout_width="wrap_content"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:ellipsize="start"
                             android:layout_gravity="center_horizontal"
                             android:elevation="3dp">
                             <EditText
-                                android:layout_width="match_parent"
+                                android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:hint="Introduzca Kms" />
@@ -115,7 +111,7 @@
 
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="10dp"
@@ -132,15 +128,15 @@
                             android:layout_weight="1"
                             android:calendarViewShown="false" />
 
-                        <Button
-                            android:id="@+id/btn1"
+
+
+                        <com.gc.materialdesign.views.ButtonRectangle
+                            android:id="@+id/button_siguiente"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:background="#1E88E5"
                             android:elevation="3dp"
-                            android:onClick="siguiente"
-                            android:layout_gravity="center_horizontal"
-                            android:text="@string/btn1" />
+                            android:text="Siguiente" />
 
 
 

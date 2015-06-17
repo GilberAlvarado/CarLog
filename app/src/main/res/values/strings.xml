@@ -8,6 +8,7 @@
     <string name="title_activity_add_log">AddLog</string>
     <string name="title_activity_aceite">Aceite</string>
     <string name="title_activity_modificaraceite">ModificarAceite</string>
+    <string name="title_activity_actualizarcoche">ActualizarCoche</string>
     <string name="txt_itv">Introduzca Fecha ITV</string>
 
     <string name="menu_Opc_modificar_log">Modificar</string>

@@ -109,8 +109,22 @@ public class AddLog extends Activity {
 
         Intent intent;
         if (miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ACEITE)) {
+            DBCar dbc = new DBCar(getApplicationContext());
+            Cursor c_activo = dbc.buscarCocheActivo();
+            String matricula = "", marca = "", modelo = "";
+            int int_year = 0, int_kms = 0, int_kms_ini = 0, int_itv = 0, int_fecha_ini = 0;
+            if (c_activo.moveToFirst() == true) {
+                matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
+                marca = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MARCA));
+                modelo = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MODELO));
+                int_year = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_YEAR));
+                int_kms = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_KMS));
+                int_itv = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_ITV));
+                int_kms_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_KMS_INI));
+                int_fecha_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_FECHA_INI));
+            }
+            TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
             // Antes de hacer nada miramos si ya existe algun tipo de aceite pues no debemos tener más de uno
-            TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
             int int_now = funciones.date_a_int(new Date());
             Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE, miCoche.getMatricula(miCoche));
             if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)

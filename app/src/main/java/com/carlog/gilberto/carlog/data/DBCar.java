@@ -69,6 +69,7 @@ public class DBCar {
 
 
     public static void insertinsertOrUpdate(TipoCoche coche) {
+        System.out.println("modificando kms " + coche.getKms(coche));
         String sql = "INSERT OR REPLACE INTO "+ TABLE_NAME +" (" +CN_MATRICULA+ ", " +CN_MARCA+ ", " +CN_MODELO+ ", " +CN_YEAR+ ", " +CN_KMS+ ", " +CN_ITV+ ", " +CN_PROFILE+ ", " +CN_FECHA_INI+ ", " +CN_KMS_INI + ") "
         +" VALUES ('" +coche.getMatricula(coche)+ "', '" +coche.getMarca(coche)+ "', '" + coche.getModelo(coche)+ "', '"
         + coche.getYear(coche)+ "', '" + coche.getKms(coche)+ "', '" + coche.getItv(coche)+ "', '" + coche.getProfile(coche)+ "', '" +coche.getFechaIni(coche)+ "', '" + coche.getKmsIni(coche)+ "');";

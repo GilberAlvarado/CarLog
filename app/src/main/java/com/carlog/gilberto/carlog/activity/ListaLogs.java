@@ -42,8 +42,11 @@ import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import android.widget.Toast;
 
@@ -76,6 +79,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     private int mToolbarColor;
     private View mToolbar;
     private Toolbar toolbar;
+    private FloatingActionMenu mFloatMenu;
 
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
     int int_year = MyActivity.NO_YEARS, int_kms = MyActivity.NO_KMS, int_itv = MyActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
@@ -100,7 +104,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                                         //Recorremos el cursor
                                         int i = 0;
                                         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-                                            System.out.println("iiiiii "+i);
                                             if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
                                                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
                                                 String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
@@ -191,7 +194,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int int_now = funciones.date_a_int(new Date());
                 final DBLogs manager = new DBLogs(context);
-                final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, matricula);
+                final Cursor cursor = manager.LogsTodosOrderByFechaString(matricula);
                 modificarLogpulsado(cursor, position, context);
             }
         });
@@ -205,13 +208,22 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
         final DBLogs manager = new DBLogs(context);
         int int_now = funciones.date_a_int(new Date());
-        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, matricula);
+        final Cursor cursor = manager.LogsTodosOrderByFechaString(matricula);
 
         List<TipoLog> listaLogs = new ArrayList<TipoLog>();
         //Recorremos el cursor
         int k = 0;
         cursor.moveToFirst();
-        //while (cursor.moveToNext()) {
+
+    /*    //buscamos la posición del primer no realizado para colocar la lista
+        int pos = 0;
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+            if(cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)) == DBLogs.NO_REALIZADO) {
+                break;
+            }
+            pos++;
+        }*/
+
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
                     funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
@@ -224,6 +236,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         miAdaptadorLog adapter = new miAdaptadorLog(act, listaLogs);
 
         listView.setAdapter(adapter);
+      //  listView.setSelection(pos);
 
         modificarLogPulsando(context);
         //Asociamos el menú contextual a los controles para las opciones en longClick
@@ -267,16 +280,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         mTitleView.setText("Próximas revisiones");
         setTitle(null);
         mFab = findViewById(R.id.fab);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ListaLogs.this, MyActivity.class);
-                intent.putExtra("CocheNuevo", true);
-                startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
-                // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
-                // Si no queremos agregar nuevo coche y pulsamos hacia atras regresamos a la lista de logs anterior
-            }
-        });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
@@ -296,10 +299,65 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         LinearLayout difuminado = (LinearLayout) findViewById(R.id.difuminado_layout);
         difuminado.setBackgroundColor(ScrollUtils.getColorWithAlpha(0.4f, mToolbarColor));
 
+        buildFloatingMenu();
     }
 
 
+    private void buildFloatingMenu() {
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        itemBuilder.setLayoutParams(new FrameLayout.LayoutParams(140, 140));
 
+        // Actualizar coche
+        ImageView itemIcon = new ImageView(this);
+        itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_actualizarcoche));
+        itemIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        SubActionButton addImageButton = itemBuilder.setContentView(itemIcon).build();
+        addImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ListaLogs.this, MyActivity.class);
+                intent.putExtra("EditarCoche", true);
+                startActivity(intent);
+            }
+        });
+
+        // Añadir nuevo coche
+        itemIcon = new ImageView(this);
+        itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_addcoche));
+        itemIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        SubActionButton addCommentButton = itemBuilder.setContentView(itemIcon).build();
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ListaLogs.this, MyActivity.class);
+                intent.putExtra("CocheNuevo", true);
+                startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
+                // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
+                // Si no queremos agregar nuevo coche y pulsamos hacia atras regresamos a la lista de logs anterior
+            }
+        });
+
+        // Añadir nuevo Log
+        itemIcon = new ImageView(this);
+        itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_addlog));
+        itemIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        SubActionButton addRatingButton = itemBuilder.setContentView(itemIcon).build();
+        addRatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ListaLogs.this, AddLog.class);
+                startActivityForResult(intent, PETICION_ACTIVITY_ADD_LOG);
+            }
+        });
+
+        mFloatMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(addImageButton)
+                .addSubActionView(addCommentButton)
+                .addSubActionView(addRatingButton)
+//            .addSubActionView(clothesButton)
+                .attachTo(mFab)
+                .build();
+    }
 
     protected int getActionBarSize() {
         TypedValue typedValue = new TypedValue();
@@ -311,22 +369,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         return actionBarSize;
     }
 
-    private void AgregarLog() {
-        //Instanciamos el Boton
-        ButtonFloat btn1 = (ButtonFloat) findViewById(R.id.add_log);
-
-        /*
-          Definimos un método OnClickListener para que
-          al pulsar el botón se nos muestre la segunda actividad
-        */
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ListaLogs.this, AddLog.class);
-                startActivityForResult(intent, PETICION_ACTIVITY_ADD_LOG);
-            }
-        });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -340,9 +382,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         CambiarCocheActivo.CambiarCocheActivo(dbcar, c, ListaLogs.this, context);
 
-        ObservableScrollView();
-
         c = dbcar.buscarCocheActivo();
+        ObservableScrollView();
 
         if (c.moveToFirst() == true) {
             matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
@@ -358,8 +399,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         CambiarCocheActivo.CambiarImgLogs(context, ListaLogs.this, modelo);
 
         ConsultarLogs(context, ListaLogs.this);
-        AgregarLog();
-
 
     }
 
@@ -456,6 +495,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     private void showFab() {
         if (!mFabIsShown) {
+            mFab.setVisibility(View.VISIBLE);
             ViewPropertyAnimator.animate(mFab).cancel();
             ViewPropertyAnimator.animate(mFab).scaleX(1).scaleY(1).setDuration(200).start();
             mFabIsShown = true;
@@ -466,6 +506,32 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         if (mFabIsShown) {
             ViewPropertyAnimator.animate(mFab).cancel();
             ViewPropertyAnimator.animate(mFab).scaleX(0).scaleY(0).setDuration(200).start();
+
+            ViewPropertyAnimator.animate(mFab).setListener(new Animator.AnimatorListener() {
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    mFloatMenu.close(true);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (!mFabIsShown) {
+                        mFab.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+
             mFabIsShown = false;
         }
     }
@@ -497,7 +563,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
         }
 
-        final Cursor cursor = manager.LogsTodosOrderByFechaString(int_now, matricula);
+        final Cursor cursor = manager.LogsTodosOrderByFechaString(matricula);
 
         switch (item.getItemId()) {
             //case R.id.menu_realizadoLog:

@@ -35,6 +35,7 @@ import com.carlog.gilberto.carlog.data.DBModelos;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.ProcesarAceite;
 import com.gc.materialdesign.views.ButtonFloat;
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.wrapp.floatlabelededittext.FloatLabeledEditText;
 
 
@@ -68,7 +69,7 @@ public class MyActivity extends ActionBarActivity {
     public final static int NO_ITV = -1;
 
 
-    private void RellenarMarcas() {
+    private void RellenarMarcas(Cursor c) {
         lista_marcas = new ArrayList<String>();
         spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
 
@@ -86,10 +87,16 @@ public class MyActivity extends ActionBarActivity {
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_marcas.setAdapter(adaptador);
 
+        if (c.moveToFirst() == true) {
+            marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
+            int spinnerPostion = adaptador.getPosition(marca);
+            spinner_marcas.setSelection(spinnerPostion);
+        }
+
     }
 
 
-    private void RellenarModelos() {
+    private void RellenarModelos(final Cursor c) {
         spinner_marcas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -120,6 +127,13 @@ public class MyActivity extends ActionBarActivity {
                 ArrayAdapter<String> adaptador = new ArrayAdapter<String>(parentView.getContext(), android.R.layout.simple_spinner_item, lista_modelos);
                 adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_modelos.setAdapter(adaptador);
+
+                if (c.moveToFirst() == true) {
+                    modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+                    int spinnerPostion = adaptador.getPosition(modelo);
+                    spinner_modelos.setSelection(spinnerPostion);
+                }
+
             }
 
             @Override
@@ -156,15 +170,19 @@ public class MyActivity extends ActionBarActivity {
             }
         }
 
-
-
-
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_modelos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_modelos.setAdapter(adaptador);
+
+        if (c.moveToFirst() == true) {
+            modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+            int spinnerPostion = adaptador.getPosition(modelo);
+            spinner_modelos.setSelection(spinnerPostion);
+        }
+
     }
 
-    private void RellenarYears() {
+    private void RellenarYears(Cursor c) {
         //spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
         lista_years = new ArrayList<String>();
         spinner_years = (Spinner) findViewById(R.id.cmb_years);
@@ -177,17 +195,84 @@ public class MyActivity extends ActionBarActivity {
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_years);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_years.setAdapter(adaptador);
+
+        if (c.moveToFirst() == true) {
+            year = String.valueOf(c.getInt(c.getColumnIndex(DBCar.CN_YEAR)));
+            int spinnerPostion = adaptador.getPosition(year);
+            spinner_years.setSelection(spinnerPostion);
+        }
+
     }
 
-    private void Siguiente(final Context context) {
-        //Instanciamos el Boton siguiente
-        Button btn1 = (Button) findViewById(R.id.btn1);
 
-        /*
-          Definimos un método OnClickListener para que
-          al pulsar el botón se nos muestre la segunda actividad
-        */
-        btn1.setOnClickListener(new View.OnClickListener() {
+    private void RellenarPantalla(Cursor c) {
+        RellenarMarcas(c);
+        RellenarModelos(c);
+        RellenarYears(c);
+
+        if (c.moveToFirst() == true) {
+            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
+            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
+            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+            kms = String.valueOf(int_kms);
+            int_kms_anterior = int_kms;
+            itv = funciones.int_a_string(int_itv);
+        }
+
+        TextView text = (TextView)findViewById(R.id.matricula);
+        text.setText(matricula);
+        //if(!matricula.equals("Introduzca Matrícula")) text.setEnabled(false); //no editable si ya está la matrícula
+
+        FloatLabeledEditText f_text=(FloatLabeledEditText)findViewById(R.id.kms);
+        // text=(TextView)findViewById(R.id.kms);
+        f_text.getEditText().setText(kms);
+
+        fechaITV = funciones.string_a_date(itv);
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fechaITV);
+
+        DatePicker datePicker2 = (DatePicker) findViewById(R.id.date_itv);
+        datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
+    }
+
+
+
+    private void procesar(Context context) {
+        DBCar dbcar = new DBCar(context);
+        Cursor c = dbcar.buscarCocheActivo();
+
+        if (c.moveToFirst() == true) {
+            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+            marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
+            modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+            int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
+            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
+            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
+            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+        }
+
+        // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
+        DBLogs dbLogs= new DBLogs(context);
+        int int_now = funciones.date_a_int(new Date());
+
+
+        ///////////////////PARA EL ACEITE
+        ProcesarAceite.procesar_aceite(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula);
+        //////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
+
+        ////////////////////////////////////////////////////////
+    }
+
+
+    private void Siguiente(final Context context, final boolean EditarCoche) {
+        ButtonRectangle btn_siguiente = (ButtonRectangle) findViewById(R.id.button_siguiente);
+
+        btn_siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MyActivity.this, ListaLogs.class);
@@ -195,9 +280,9 @@ public class MyActivity extends ActionBarActivity {
                 LeerDatosPantalla();
                 DBCar dbcar = new DBCar(context);
 
-                if (comprobaciones()) {
+                if (comprobaciones(EditarCoche)) {
                     dbcar.ActualizarTodosCocheNOActivo(); // Nos aseguramos de que ponemos todos los coches a inactivos para marcar como activo el nuevo
-                    if(CocheEsNuevo.getInstance().coche_es_nuevo == 1) {
+                    if(!EditarCoche) { // Si no estamos editando es nuevo
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_int(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
                     } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
@@ -209,8 +294,6 @@ public class MyActivity extends ActionBarActivity {
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
-
-
                         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
@@ -219,29 +302,9 @@ public class MyActivity extends ActionBarActivity {
 
                     CambiarCocheActivo.CambiarCocheActivo(dbcar, c, MyActivity.this, context);  //actualizamos los coches en el navigation bar por si se crea uno nuevo
 
-                    c = dbcar.buscarCocheActivo();
-
-                    if (c.moveToFirst() == true) {
-                        matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-                        marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
-                        modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
-                        int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
-                        int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-                        int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
-                        int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
-                        int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
-                    }
-
-                    // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
-                    DBLogs dbLogs= new DBLogs(context);
-                    int int_now = funciones.date_a_int(new Date());
 
 
-                    ///////////////////PARA EL ACEITE
-                    ProcesarAceite.procesar_aceite(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula);
-                    //////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
-
-                    ////////////////////////////////////////////////////////
+                    procesar(context);
 
 
                     startActivity(intent);
@@ -255,7 +318,7 @@ public class MyActivity extends ActionBarActivity {
         });
     }
 
-    public void AddCar() {
+    public void VaciarPantalla() {
         CocheEsNuevo.getInstance().coche_es_nuevo = 1;
 
         TextView text = (TextView) findViewById(R.id.matricula);
@@ -355,12 +418,24 @@ public class MyActivity extends ActionBarActivity {
 
 
 
+    private void ocultar_campos() {
+        // Se ocultan todos los campos obligatorios porque ya han sido agregados
+        TextView text = (TextView)findViewById(R.id.matricula);
+        text.setVisibility(View.GONE);
+        spinner_marcas.setVisibility(View.GONE);
+        spinner_modelos.setVisibility(View.GONE);
 
+        // Los no obligatorios debemos comprobar que se hayan añadido (luego no se van a poder modificar)
+        if (int_year != MyActivity.NO_KMS) {
+            spinner_years.setVisibility(View.GONE);
+        }
+    }
 
     //comprobaciones
-    private boolean comprobaciones() {
+    private boolean comprobaciones(boolean EditarCoche) {
+        System.out.println("editar cocheee" + EditarCoche + " " +kms + " " +int_kms_anterior);
         boolean ok = true;
-        if(CocheEsNuevo.getInstance().coche_es_nuevo == 0) {
+        if(EditarCoche) {
             try {
                 Integer mykms = Integer.parseInt(kms);
                 if (mykms < int_kms_anterior) {
@@ -420,8 +495,15 @@ public class MyActivity extends ActionBarActivity {
         catch (Exception e) {
             System.out.println("No es coche nuevo");
         }
+        Boolean EditarCoche = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            EditarCoche = getIntent().getExtras().getBoolean("EditarCoche");
+        }
+        catch (Exception e) {
+            System.out.println("No se está editando coche");
+        }
 
-        if ((c.moveToFirst() == false) || CocheNuevo) {  // Desde que haya un coche no se mostrará la primera actividad o si añadirmos un coche nuevo
+        if ((c.moveToFirst() == false) || CocheNuevo || EditarCoche) {  // Desde que haya un coche no se mostrará la primera actividad o si añadirmos un coche nuevo
             setContentView(R.layout.activity_my);
 
             toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
@@ -442,14 +524,21 @@ public class MyActivity extends ActionBarActivity {
                 int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
             }
 
-            RellenarMarcas();
-            RellenarModelos();
-            RellenarYears();
-            Siguiente(context);
-            AddCar();
+            RellenarMarcas(c);
+            RellenarModelos(c);
+            RellenarYears(c);
+            Siguiente(context, EditarCoche);
+            if(CocheNuevo) {
+                VaciarPantalla();
+            }
+            if(EditarCoche) {
+                RellenarPantalla(c);
+                ocultar_campos();
+            }
         }
         else {
             Intent intent = new Intent(MyActivity.this, ListaLogs.class);
+            procesar(context);
             startActivity(intent);
             finish();
         }

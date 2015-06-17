@@ -17,7 +17,6 @@ import java.util.Date;
 public class ProcesarAceite {
 
     public static void procesar_aceite(DBLogs dbLogs, int int_now, Context context, int int_kms, int int_fecha_ini, int int_kms_ini, String matricula) {
-
         int dias_coche = (int) funciones.dias_entre_2_fechas(funciones.int_a_date(int_fecha_ini), new Date());
         int int_media = 0;
         if(dias_coche == 0) { // se creó hoy el coche
