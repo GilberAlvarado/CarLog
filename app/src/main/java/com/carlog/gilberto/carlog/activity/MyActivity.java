@@ -54,17 +54,7 @@ public class MyActivity extends ActionBarActivity {
 
 
     private Toolbar toolbar;
-
-
-    //RecyclerView mRecyclerView;                           // Declaring RecyclerView
-    //RecyclerView.Adapter mAdapter;                        // Declaring Adapter For Recycler View
-    //miAdaptadorCoches mAdapter;
-    //RecyclerView.LayoutManager mLayoutManager;            // Declaring Layout Manager as a linear layout manager
-    //DrawerLayout Drawer;                                  // Declaring DrawerLayout
-
-    //ActionBarDrawerToggle mDrawerToggle;
-
-
+    private boolean add_car = false;
 
     private Spinner spinner_marcas;
     private Spinner spinner_modelos;
@@ -78,10 +68,9 @@ public class MyActivity extends ActionBarActivity {
     public final static int NO_ITV = -1;
 
 
-    private void RellenarMarcas(Cursor c_activo) {
-        //spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
+    private void RellenarMarcas() {
         lista_marcas = new ArrayList<String>();
-        spinner_marcas = (Spinner) this.findViewById(R.id.cmb_marcas);
+        spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
 
         DBMarcas dbmarcas = new DBMarcas(getApplicationContext());
         Cursor cursor = dbmarcas.buscarMarcas();
@@ -97,17 +86,10 @@ public class MyActivity extends ActionBarActivity {
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_marcas.setAdapter(adaptador);
 
-        if (c_activo.moveToFirst() == true) {
-            marca = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MARCA));
-            int spinnerPostion = adaptador.getPosition(marca);
-            spinner_marcas.setSelection(spinnerPostion);
-            spinnerPostion = 0;
-        }
-
     }
 
 
-    private void RellenarModelos(final Cursor c_activo) {
+    private void RellenarModelos() {
         spinner_marcas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -138,12 +120,6 @@ public class MyActivity extends ActionBarActivity {
                 ArrayAdapter<String> adaptador = new ArrayAdapter<String>(parentView.getContext(), android.R.layout.simple_spinner_item, lista_modelos);
                 adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_modelos.setAdapter(adaptador);
-
-                if (c_activo.moveToFirst() == true) {
-                    modelo = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MODELO));
-                    int spinnerPostion = adaptador.getPosition(modelo);
-                    spinner_modelos.setSelection(spinnerPostion);
-                }
             }
 
             @Override
@@ -155,7 +131,7 @@ public class MyActivity extends ActionBarActivity {
 
 
         lista_modelos = new ArrayList<String>();
-        spinner_modelos = (Spinner) this.findViewById(R.id.cmb_modelo);
+        spinner_modelos = (Spinner) findViewById(R.id.cmb_modelo);
 
         String marca_seleccionada = spinner_marcas.getSelectedItem().toString();
         DBMarcas dbmarcas = new DBMarcas(getApplicationContext());
@@ -186,19 +162,12 @@ public class MyActivity extends ActionBarActivity {
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_modelos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_modelos.setAdapter(adaptador);
-
-        if (c_activo.moveToFirst() == true) {
-            modelo = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MODELO));
-            int spinnerPostion = adaptador.getPosition(modelo);
-            spinner_modelos.setSelection(spinnerPostion);
-        }
-
     }
 
-    private void RellenarYears(Cursor c_activo) {
+    private void RellenarYears() {
         //spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
         lista_years = new ArrayList<String>();
-        spinner_years = (Spinner) this.findViewById(R.id.cmb_years);
+        spinner_years = (Spinner) findViewById(R.id.cmb_years);
         lista_years.add(INICIAL_YEAR);
         Calendar calen = Calendar.getInstance();
         Integer hoy = calen.get(Calendar.YEAR);
@@ -208,15 +177,6 @@ public class MyActivity extends ActionBarActivity {
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, lista_years);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_years.setAdapter(adaptador);
-
-
-        if (c_activo.moveToFirst() == true) {
-            year = String.valueOf(c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_YEAR)));
-            int spinnerPostion = adaptador.getPosition(year);
-            spinner_years.setSelection(spinnerPostion);
-            spinnerPostion = 0;
-        }
-
     }
 
     private void Siguiente(final Context context) {
@@ -257,9 +217,20 @@ public class MyActivity extends ActionBarActivity {
 
                     Cursor c = dbcar.buscarCoches();
 
-                    CambiarCocheActivo cca = new CambiarCocheActivo();
-                    cca.CambiarCocheActivo(dbcar, c, MyActivity.this, context);  //actualizamos los coches en el navigation bar por si se crea uno nuevo
+                    CambiarCocheActivo.CambiarCocheActivo(dbcar, c, MyActivity.this, context);  //actualizamos los coches en el navigation bar por si se crea uno nuevo
 
+                    c = dbcar.buscarCocheActivo();
+
+                    if (c.moveToFirst() == true) {
+                        matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+                        marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
+                        modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+                        int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
+                        int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
+                        int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+                        int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
+                        int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+                    }
 
                     // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
                     DBLogs dbLogs= new DBLogs(context);
@@ -273,19 +244,21 @@ public class MyActivity extends ActionBarActivity {
                     ////////////////////////////////////////////////////////
 
 
-
-
                     startActivity(intent);
+                    // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
+                    // Si no queremos agregar nuevo coche y pulsamos hacia atras regresamos a la lista de logs anterior
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
                 }
 
             }
         });
     }
 
-    public void VaciarPantalla() {
+    public void AddCar() {
         CocheEsNuevo.getInstance().coche_es_nuevo = 1;
 
-        TextView text = (TextView)findViewById(R.id.matricula);
+        TextView text = (TextView) findViewById(R.id.matricula);
         text.setText("");
 
         FloatLabeledEditText f_text= (FloatLabeledEditText) findViewById(R.id.kms);
@@ -308,57 +281,7 @@ public class MyActivity extends ActionBarActivity {
         datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
     }
 
-    private void AddCar(final Context context) {
-        //Instanciamos el Boton añadir
-        ButtonFloat btn_addCar = (ButtonFloat) findViewById(R.id.buttonFloat);
 
-        btn_addCar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VaciarPantalla();
-            }
-        });
-    }
-
-
-
-
-
-
-
-
-    private void RellenarPantalla(Cursor c) {
-        RellenarMarcas(c);
-        RellenarModelos(c);
-        RellenarYears(c);
-
-        if (c.moveToFirst() == true) {
-            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
-            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
-            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
-            kms = String.valueOf(int_kms);
-            itv = funciones.int_a_string(int_itv);
-        }
-
-        TextView text = (TextView)findViewById(R.id.matricula);
-        text.setText(matricula);
-        //if(!matricula.equals("Introduzca Matrícula")) text.setEnabled(false); //no editable si ya está la matrícula
-
-        FloatLabeledEditText f_text=(FloatLabeledEditText)findViewById(R.id.kms);
-       // text=(TextView)findViewById(R.id.kms);
-        f_text.getEditText().setText(kms);
-
-        fechaITV = funciones.string_a_date(itv);
-
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(fechaITV);
-
-        DatePicker datePicker2 = (DatePicker) findViewById(R.id.date_itv);
-        datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
-    }
 
     private void LeerDatosPantalla() {
         Spinner spinner_marca = (Spinner)findViewById(R.id.cmb_marcas);
@@ -484,39 +407,58 @@ public class MyActivity extends ActionBarActivity {
         return false;
     }
 
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    private void addCarOrShowLogs() {
         Context context = getApplicationContext();
 
         DBCar dbcar = new DBCar(context);
         Cursor c = dbcar.buscarCoches();
 
-        if (c.moveToFirst() == false) {  // Desde que haya un coche no se mostrará la primera actividad
+        Boolean CocheNuevo = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            CocheNuevo = getIntent().getExtras().getBoolean("CocheNuevo");
+        }
+        catch (Exception e) {
+            System.out.println("No es coche nuevo");
+        }
 
+        if ((c.moveToFirst() == false) || CocheNuevo) {  // Desde que haya un coche no se mostrará la primera actividad o si añadirmos un coche nuevo
             setContentView(R.layout.activity_my);
 
             toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
             setSupportActionBar(toolbar);
 
-
-            CambiarCocheActivo cca = new CambiarCocheActivo();
-            cca.CambiarCocheActivo(dbcar, c, MyActivity.this, context);
+            CambiarCocheActivo.CambiarCocheActivo(dbcar, c, MyActivity.this, context);
 
             c = dbcar.buscarCocheActivo();
 
-            RellenarPantalla(c);
+            if (c.moveToFirst() == true) {
+                matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+                marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
+                modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+                int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
+                int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
+                int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+                int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
+                int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+            }
+
+            RellenarMarcas();
+            RellenarModelos();
+            RellenarYears();
             Siguiente(context);
-            AddCar(context);
+            AddCar();
         }
         else {
-            Intent intenta = new Intent(MyActivity.this, ListaLogs.class);
-            startActivity(intenta);
+            Intent intent = new Intent(MyActivity.this, ListaLogs.class);
+            startActivity(intent);
             finish();
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addCarOrShowLogs();
 
     }
 
@@ -541,8 +483,6 @@ public class MyActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
 
     }
-
-
 
 
 }

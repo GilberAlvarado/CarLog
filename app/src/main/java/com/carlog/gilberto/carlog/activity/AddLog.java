@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBLogs;
@@ -169,19 +170,25 @@ public class AddLog extends Activity {
                 int int_fecha = funciones.string_a_int(txt_date_newlog);
                 Date fecha_newlog = funciones.string_a_date(txt_date_newlog);
 
-                TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+                DBCar dbcar = new DBCar(v.getContext());
+                Cursor c = dbcar.buscarCocheActivo();
 
-
+                String matricula = "";
+                int int_kms = 0;
+                if (c.moveToFirst() == true) {
+                    matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+                    int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
+                }
 
                 if (int_fecha > funciones.date_a_int(new Date())) {
                     // con NO_REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, matricula, DBLogs.NO_REALIZADO, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
                     addlog(miTipoLog, managerLogs);
                 }
                 else {
                     // con REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, matricula, DBLogs.REALIZADO, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
                     AlertDialog.Builder builder = new AlertDialog.Builder(AddLog.this);
                     builder.setMessage("¿Quiere añadir la última revisión hecha de " + miTipoLog.getTipo(miTipoLog) + "?")
@@ -215,9 +222,8 @@ public class AddLog extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Context contextNew = getApplicationContext();
-        DBLogs managerLogs = new DBLogs(contextNew);
-        DBTiposRevision managerTiposRevision = new DBTiposRevision(contextNew);
+        DBLogs managerLogs = new DBLogs(this);
+        DBTiposRevision managerTiposRevision = new DBTiposRevision(this);
 
         setContentView(R.layout.activity_add_log);
         RellenarTipos(managerTiposRevision);

@@ -1,5 +1,9 @@
 package com.carlog.gilberto.carlog.activity;
 
+/**
+ * Created by Gilberto on 14/06/2015.
+ */
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -12,10 +16,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,3 +115,4 @@ public class ModificarAceite extends Activity {
         ModificarLog(managerLog, managerAceite);
     }
 }
+

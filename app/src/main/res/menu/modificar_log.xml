@@ -2,13 +2,11 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
-tools:context=".DatosIniciales" >
+tools:context=".ListaLogs" >
     <item android:id="@+id/menu_realizadoLog"
         android:title="@string/menu_Opc_realizado_log"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:orderInCategory="100"/>
     <item android:id="@+id/menu_eliminarLog"
         android:title="@string/menu_Opc_eliminar_log"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:orderInCategory="100"/>
 </menu>

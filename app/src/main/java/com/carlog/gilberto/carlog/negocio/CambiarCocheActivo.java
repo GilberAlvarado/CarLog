@@ -253,7 +253,7 @@ public class CambiarCocheActivo {
 
                 // RellenarPantalla();
                 ListaLogs ll = new ListaLogs();
-                ll.ConsultarLogs(matricula, context, act);
+                ll.ConsultarLogs(context, act);
 
 
             } else {// no se da el caso pq si entra en el primer if ya existe minimo un coche y ya hemos forzado a q sea el activo

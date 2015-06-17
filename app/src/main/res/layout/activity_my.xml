@@ -169,18 +169,6 @@
         </android.support.v4.widget.DrawerLayout>
 
 
-        <com.gc.materialdesign.views.ButtonFloat
-            android:id="@+id/buttonFloat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="24dp"
-            android:elevation="5dp"
-            android:background="#1E88E5"
-            materialdesign:animate="true"
-            materialdesign:iconDrawable="@drawable/ic_action_new" />
-
 
 </RelativeLayout>
 
