@@ -141,6 +141,12 @@ public class miAdaptadorLog extends ArrayAdapter {
                 sqView.tipo.setTypeface(null, Typeface.BOLD);
                 sqView.fecha.setTypeface(null, Typeface.BOLD);
             }
+            else {
+                sqView.tipo.setTextColor(Color.BLACK);
+                sqView.fecha.setTextColor(Color.BLACK);
+                sqView.tipo.setTypeface(null, Typeface.BOLD);
+                sqView.fecha.setTypeface(null, Typeface.NORMAL);
+            }
         }
         else if(miLog.getRealizado((TipoLog) datos.get(position)) == DBLogs.REALIZADO) {
             sqView.tipo.setTextColor(Color.GREEN);

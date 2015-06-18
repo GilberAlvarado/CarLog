@@ -215,15 +215,15 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         int k = 0;
         cursor.moveToFirst();
 
-    /*    //buscamos la posición del primer no realizado para colocar la lista
+        //buscamos la posición del primer no realizado para colocar la lista
         int pos = 0;
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             if(cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)) == DBLogs.NO_REALIZADO) {
                 break;
             }
             pos++;
-        }*/
-
+        }
+System.out.println("POS VALE "+pos);
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
                     funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
@@ -236,7 +236,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         miAdaptadorLog adapter = new miAdaptadorLog(act, listaLogs);
 
         listView.setAdapter(adapter);
-      //  listView.setSelection(pos);
+        listView.setSelection(pos);
 
         modificarLogPulsando(context);
         //Asociamos el menú contextual a los controles para las opciones en longClick
@@ -382,8 +382,9 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         CambiarCocheActivo.CambiarCocheActivo(dbcar, c, ListaLogs.this, context);
 
-        c = dbcar.buscarCocheActivo();
         ObservableScrollView();
+        c = dbcar.buscarCocheActivo();
+
 
         if (c.moveToFirst() == true) {
             matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
