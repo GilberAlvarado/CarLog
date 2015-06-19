@@ -13,12 +13,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
@@ -29,15 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBModelos;
 import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
-import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.adapter.miAdaptadorLog;
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.gc.materialdesign.views.ButtonFloat;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -47,8 +41,6 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
-
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -83,7 +75,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
     int int_year = MyActivity.NO_YEARS, int_kms = MyActivity.NO_KMS, int_itv = MyActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
-
 
     private void borrarLogpulsado(final Cursor cursor, final DBLogs manager, final int posicion) {
 
@@ -207,7 +198,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
         }
         final DBLogs manager = new DBLogs(context);
-        int int_now = funciones.date_a_int(new Date());
         final Cursor cursor = manager.LogsTodosOrderByFechaString(matricula);
 
         List<TipoLog> listaLogs = new ArrayList<TipoLog>();
@@ -223,7 +213,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             }
             pos++;
         }
-System.out.println("POS VALE "+pos);
+
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
                     funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
@@ -234,6 +224,7 @@ System.out.println("POS VALE "+pos);
         }
 
         miAdaptadorLog adapter = new miAdaptadorLog(act, listaLogs);
+
 
         listView.setAdapter(adapter);
         listView.setSelection(pos);
@@ -267,15 +258,13 @@ System.out.println("POS VALE "+pos);
 
         // Set padding view for ListView. This is the flexible space.
         View paddingView = new View(this);
-        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
-                mFlexibleSpaceImageHeight);
+        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, mFlexibleSpaceImageHeight);
         paddingView.setLayoutParams(lp);
 
         // This is required to disable header's list selector effect
         paddingView.setClickable(true);
 
         listView.addHeaderView(paddingView);
-        //setDummyData(listView);
         mTitleView = (TextView) findViewById(R.id.title);
         mTitleView.setText("Próximas revisiones");
         setTitle(null);
@@ -402,6 +391,7 @@ System.out.println("POS VALE "+pos);
         ConsultarLogs(context, ListaLogs.this);
 
     }
+
 
 
     @Override

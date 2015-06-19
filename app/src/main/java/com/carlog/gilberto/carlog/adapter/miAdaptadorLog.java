@@ -143,7 +143,7 @@ public class miAdaptadorLog extends ArrayAdapter {
             }
             else {
                 sqView.tipo.setTextColor(Color.BLACK);
-                sqView.fecha.setTextColor(Color.BLACK);
+                sqView.fecha.setTextColor(Color.GRAY);
                 sqView.tipo.setTypeface(null, Typeface.BOLD);
                 sqView.fecha.setTypeface(null, Typeface.NORMAL);
             }

@@ -52,16 +52,12 @@ public class ProcesarAceite {
 
             int kms_que_faltan_x_hacer = kms_aceite_ultimo_log_hist - (int_kms - kms_ultimo_log_hist);
 
-
-            System.out.println("int_kms calidad = " + int_kms);
-            System.out.println("kms_que_faltan_x_hacer = " + kms_que_faltan_x_hacer);
+            Date fecha_log_futuro_recalculada = new Date();
             if((int_kms - kms_ultimo_log_hist) < kms_aceite_ultimo_log_hist) { // Actualizamos la fecha de la futura revisión de aceite
                 int dias_en_hacer_kms_x_hacer = 0;
                 if (int_media != 0) dias_en_hacer_kms_x_hacer = kms_que_faltan_x_hacer / int_media; // regla de 3 si en 1 día hago 5000kms, en cuantos haré X?
                 else dias_en_hacer_kms_x_hacer = kms_que_faltan_x_hacer;
-                System.out.println("dias_en_hacer_kms_x_hacer: " + dias_en_hacer_kms_x_hacer);
 
-                Date fecha_log_futuro_recalculada = new Date();
                 if(dias_en_hacer_kms_x_hacer == 0) { // La media es mucho más grande que los kms que quedan o se llega al día que toca
                     fecha_log_futuro_recalculada = funciones.fecha_mas_dias(dias_en_hacer_kms_x_hacer + 1); //Mañana y aviso
                     Toast.makeText(context, "Debería cambiar el aceite cuanto antes.", Toast.LENGTH_LONG).show();
@@ -78,9 +74,6 @@ public class ProcesarAceite {
 
                     int kms_supuestos_hasta_fecha_fut_aceite = (int) funciones.dias_entre_2_fechas(fecha_ultimo_log_hist, fecha_log_futuro_puesta) * int_media;
 
-                    System.out.println("kms_supuestos_hasta_fecha_fut_aceite: " + kms_supuestos_hasta_fecha_fut_aceite);
-                    System.out.println("ID LOG FUTURO: " +int_id_log);
-
                     dbLogs.ActualizarFechaLogFuturo(int_id_log, int_fecha_log_futuro_recalculada);
                 }
                 else {
@@ -94,7 +87,14 @@ public class ProcesarAceite {
 
             }
             else {
-                Toast.makeText(context, "Debería haber cambiado el aceite hace " + kms_que_faltan_x_hacer + " kms.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Debería haber cambiado el aceite hace " + kms_que_faltan_x_hacer * -1 + " kms.", Toast.LENGTH_LONG).show();
+                // Ponemos la fecha a mañana y alarma
+                fecha_log_futuro_recalculada = funciones.fecha_mas_dias(1); //Mañana y aviso
+                int int_fecha_log_futuro_recalculada = funciones.date_a_int(fecha_log_futuro_recalculada);
+                if (c_logs_aceite.moveToFirst() == true) {
+                    int int_id_log = c_logs_aceite.getInt(c_logs_aceite.getColumnIndex(dbLogs.CN_ID));
+                    dbLogs.ActualizarFechaLogFuturo(int_id_log, int_fecha_log_futuro_recalculada);
+                }
             }
 
 
