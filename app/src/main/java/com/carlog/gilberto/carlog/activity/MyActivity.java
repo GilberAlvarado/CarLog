@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Binder;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
@@ -12,15 +13,18 @@ import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
 
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +38,7 @@ import com.carlog.gilberto.carlog.data.DBMarcas;
 import com.carlog.gilberto.carlog.data.DBModelos;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.ProcesarAceite;
+import com.carlog.gilberto.carlog.view.SimpleDataView;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.wrapp.floatlabelededittext.FloatLabeledEditText;
@@ -47,11 +52,12 @@ import java.util.List;
 
 public class MyActivity extends ActionBarActivity {
 
-    public final static String INICIAL_MARCA = "Introduzca marca";
-    public final static String INICIAL_YEAR = "Introduzca año";
-    public final static String INICIAL_KMS = "Introduzca Kms";
-    public final static String INICIAL_MATRICULA = "Introduzca matrícula";
-    public final static String INICIAL_MODELO = "Introduzca Modelo";
+    public final static String INICIAL_MARCA = "Marca";
+    public final static String INICIAL_YEAR = "Año";
+    public final static String INICIAL_KMS = "Nº Kms";
+    public final static String INICIAL_MATRICULA = "Matrícula";
+    public final static String INICIAL_MODELO = "Modelo";
+    public final static String INICIAL_ITV = "Fecha ITV";
 
 
     private Toolbar toolbar;
@@ -67,6 +73,8 @@ public class MyActivity extends ActionBarActivity {
     public final static int NO_YEARS = -1;
     public final static int NO_KMS = -1;
     public final static int NO_ITV = -1;
+
+    View rootView;
 
 
     private void RellenarMarcas(Cursor c) {
@@ -91,6 +99,12 @@ public class MyActivity extends ActionBarActivity {
             marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
             int spinnerPostion = adaptador.getPosition(marca);
             spinner_marcas.setSelection(spinnerPostion);
+
+            SimpleDataView sdv = (SimpleDataView) findViewById(R.id.marca_view);
+            sdv.setTitle("Marca");
+            sdv.setValue(adaptador.getItem(spinnerPostion));
+            sdv.setEditInvisible();
+            sdv.setImage(getResources().getDrawable(R.drawable.ic_marca));
         }
 
     }
@@ -113,25 +127,21 @@ public class MyActivity extends ActionBarActivity {
                     id_marca = c_marcas.getInt(c_marcas.getColumnIndex(DBMarcas.CN_ID));
                 }
 
-                DBModelos dbmodelos = new DBModelos(getApplicationContext());
-                Cursor cursor = dbmodelos.buscarModelosDeMarca(id_marca);
+                if(id_marca != 0) {
+                    DBModelos dbmodelos = new DBModelos(getApplicationContext());
+                    Cursor cursor = dbmodelos.buscarModelosDeMarca(id_marca);
 
-                lista_modelos.add(INICIAL_MODELO);
-                if(id_marca > 0 ) { // No es inicial_marca
-                    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                        String modelo = cursor.getString(cursor.getColumnIndex(DBModelos.CN_MODELO));
-                        lista_modelos.add(modelo);
+                    lista_modelos.add(INICIAL_MODELO);
+                    if (id_marca > 0) { // No es inicial_marca
+                        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                            String modelo = cursor.getString(cursor.getColumnIndex(DBModelos.CN_MODELO));
+                            lista_modelos.add(modelo);
+                        }
                     }
-                }
 
-                ArrayAdapter<String> adaptador = new ArrayAdapter<String>(parentView.getContext(), android.R.layout.simple_spinner_item, lista_modelos);
-                adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner_modelos.setAdapter(adaptador);
-
-                if (c.moveToFirst() == true) {
-                    modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
-                    int spinnerPostion = adaptador.getPosition(modelo);
-                    spinner_modelos.setSelection(spinnerPostion);
+                    ArrayAdapter<String> adaptador = new ArrayAdapter<String>(parentView.getContext(), android.R.layout.simple_spinner_item, lista_modelos);
+                    adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner_modelos.setAdapter(adaptador);
                 }
 
             }
@@ -178,6 +188,12 @@ public class MyActivity extends ActionBarActivity {
             modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
             int spinnerPostion = adaptador.getPosition(modelo);
             spinner_modelos.setSelection(spinnerPostion);
+
+            SimpleDataView sdv = (SimpleDataView) findViewById(R.id.modelo_view);
+            sdv.setTitle("Modelo");
+            sdv.setValue(adaptador.getItem(spinnerPostion));
+            sdv.setImage(getResources().getDrawable(R.drawable.ic_modelo));
+            sdv.setEditInvisible();
         }
 
     }
@@ -200,7 +216,20 @@ public class MyActivity extends ActionBarActivity {
             year = String.valueOf(c.getInt(c.getColumnIndex(DBCar.CN_YEAR)));
             int spinnerPostion = adaptador.getPosition(year);
             spinner_years.setSelection(spinnerPostion);
+
+            SimpleDataView sdv = (SimpleDataView) findViewById(R.id.year_view);
+            if(c.getInt(c.getColumnIndex(DBCar.CN_YEAR)) != MyActivity.NO_YEARS) {
+                sdv.setTitle("Año");
+                sdv.setValue(adaptador.getItem(spinnerPostion));
+                sdv.setImage(getResources().getDrawable(R.drawable.ic_year));
+                sdv.setEditInvisible();
+            }
+            else {
+                // Porque aún se muestra el combo de los años (aún no se ha introducido el año)
+                sdv.setVisibility(View.GONE);
+            }
         }
+
 
     }
 
@@ -221,15 +250,25 @@ public class MyActivity extends ActionBarActivity {
             itv = funciones.int_a_string(int_itv);
         }
 
-        TextView text = (TextView)findViewById(R.id.matricula);
-        text.setText(matricula);
-        //if(!matricula.equals("Introduzca Matrícula")) text.setEnabled(false); //no editable si ya está la matrícula
+        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.matricula_view);
+        sdv.setTitle("Matrícula");
+        sdv.setValue(matricula);
+        sdv.setEditInvisible();
+        sdv.setImage(getResources().getDrawable(R.drawable.ic_matricula));
 
-        FloatLabeledEditText f_text=(FloatLabeledEditText)findViewById(R.id.kms);
-        // text=(TextView)findViewById(R.id.kms);
-        f_text.getEditText().setText(kms);
+        sdv = (SimpleDataView) findViewById(R.id.kms_view);
+        sdv.setTitle("Nº kms");
+        sdv.setValue(kms);
+        sdv.setEdit(kms);
+        sdv.setEditVisible();
+        sdv.setImage(getResources().getDrawable(R.drawable.ic_kms));
 
         fechaITV = funciones.string_a_date(itv);
+        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+        sdv.setTitle("Fecha ITV");
+        sdv.setValue(itv);
+        sdv.setEditInvisible();
+        sdv.setImage(getResources().getDrawable(R.drawable.ic_fecha));
 
 
         Calendar calendar = Calendar.getInstance();
@@ -271,6 +310,10 @@ public class MyActivity extends ActionBarActivity {
 
     private void Siguiente(final Context context, final boolean EditarCoche) {
         ButtonRectangle btn_siguiente = (ButtonRectangle) findViewById(R.id.button_siguiente);
+        if(EditarCoche)
+            btn_siguiente.setText("Actualizar");
+        if(!EditarCoche)
+            btn_siguiente.setText("Crear");
 
         btn_siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -321,11 +364,37 @@ public class MyActivity extends ActionBarActivity {
     public void VaciarPantalla() {
         CocheEsNuevo.getInstance().coche_es_nuevo = 1;
 
-        TextView text = (TextView) findViewById(R.id.matricula);
-        text.setText("");
+        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.matricula_view);
+        sdv.setTitle(MyActivity.INICIAL_MARCA);
+        sdv.setValue("");
+        sdv.setEdit("");
+        sdv.setEditHint(MyActivity.INICIAL_MARCA);
+        sdv.setEditVisible();
+        sdv.setImage(getResources().getDrawable(R.drawable.ic_matricula));
 
-        FloatLabeledEditText f_text= (FloatLabeledEditText) findViewById(R.id.kms);
-        f_text.getEditText().setText("");
+        sdv = (SimpleDataView) findViewById(R.id.kms_view);
+        sdv.setTitle(MyActivity.INICIAL_KMS);
+        sdv.setValue("");
+        sdv.setEdit("");
+        sdv.setEditHint(MyActivity.INICIAL_KMS);
+        sdv.setEditVisible();
+        sdv.setImage(getResources().getDrawable(R.drawable.ic_kms));
+
+        sdv = (SimpleDataView) findViewById(R.id.year_view);
+        sdv.setVisibility(View.GONE);
+
+        sdv = (SimpleDataView) findViewById(R.id.marca_view);
+        sdv.setVisibility(View.GONE);
+
+        sdv = (SimpleDataView) findViewById(R.id.modelo_view);
+        sdv.setVisibility(View.GONE);
+
+        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+        sdv.setTitle(MyActivity.INICIAL_ITV);
+        sdv.setValue("");
+        sdv.setEdit("");
+        sdv.setEditInvisible();
+        sdv.setImage(getResources().getDrawable(R.drawable.ic_fecha));
 
         marca = INICIAL_MARCA;
         modelo = INICIAL_MODELO;
@@ -355,8 +424,9 @@ public class MyActivity extends ActionBarActivity {
         modelo = spinner_modelo.getSelectedItem().toString();
         System.out.println(modelo);
 
-        matriculaT = (EditText) findViewById (R.id.matricula);
-        matricula = matriculaT.getText().toString();
+        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.matricula_view);
+        EditText et = sdv.getTextEditLeerPantalla();
+        matricula = et.getText().toString().toUpperCase();
         System.out.println(matricula);
 
         Spinner spinner_year = (Spinner)findViewById(R.id.cmb_years);
@@ -365,9 +435,9 @@ public class MyActivity extends ActionBarActivity {
         if(year.equals(INICIAL_YEAR)) int_year = NO_YEARS;
         else int_year = Integer.parseInt(year);
 
-        //kmsT = (EditText) findViewById (R.id.kms);
-        kmsT = (FloatLabeledEditText) findViewById (R.id.kms);
-        kms = kmsT.getEditText().getText().toString();
+        sdv = (SimpleDataView) findViewById(R.id.kms_view);
+        et = sdv.getTextEditLeerPantalla();
+        kms = et.getText().toString();
         if(kms.isEmpty() || kms.equals(INICIAL_KMS)) int_kms = NO_KMS;
         else {
             try {
@@ -406,28 +476,26 @@ public class MyActivity extends ActionBarActivity {
 
 
 
-
-
-
-
-    EditText matriculaT;
-    FloatLabeledEditText kmsT;
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
     Date fechaITV = new Date();
     int int_year, int_kms, int_kms_anterior = 0, int_itv, int_kms_ini = 0, int_fecha_ini = 0;
 
 
 
-    private void ocultar_campos() {
+    private void ocultar_campos() { //
         // Se ocultan todos los campos obligatorios porque ya han sido agregados
-        TextView text = (TextView)findViewById(R.id.matricula);
-        text.setVisibility(View.GONE);
         spinner_marcas.setVisibility(View.GONE);
         spinner_modelos.setVisibility(View.GONE);
+        ImageView iv = (ImageView) findViewById(R.id.view_image_cmb_marca);
+        iv.setVisibility(View.GONE);
+        iv = (ImageView) findViewById(R.id.view_image_cmb_modelo);
+        iv.setVisibility(View.GONE);
 
         // Los no obligatorios debemos comprobar que se hayan añadido (luego no se van a poder modificar)
         if (int_year != MyActivity.NO_KMS) {
             spinner_years.setVisibility(View.GONE);
+            iv = (ImageView) findViewById(R.id.view_image_cmb_year);
+            iv.setVisibility(View.GONE);
         }
     }
 
@@ -551,6 +619,25 @@ public class MyActivity extends ActionBarActivity {
 
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putString("EditKms", kms);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        kms = savedInstanceState.getString("EditKms");
+        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.kms_view);
+        if (!kms.equals(INICIAL_KMS)) {
+            sdv.setEdit(kms);
+        }
+        else {
+            sdv.setEditHint("Nº Kms");
+        }
+    }
 
 
     @Override

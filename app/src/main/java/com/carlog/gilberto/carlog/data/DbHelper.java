@@ -13,7 +13,7 @@ import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "carlog.sqlite";
-    private static final int DB_SCHEME_VERSION = 43;
+    private static final int DB_SCHEME_VERSION = 45;
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_SCHEME_VERSION);
@@ -22,15 +22,15 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
      //   sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
-     //   sqLiteDatabase.execSQL(DBMarcas.CREATE_TABLE);
-      //  sqLiteDatabase.execSQL(DBModelos.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
+     //   sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBMarcas.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBModelos.CREATE_TABLE);
+      //  sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
      //   sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
 
 
-     /*   /// Inicializamos la tabla de modelos
-        String[] lista_modelos = {"Introduzca Modelo", "TT", "Z3"};
+        /// Inicializamos la tabla de modelos
+        String[] lista_modelos = {"Modelo", "TT", "Z3"};
         String[] lista_img_modelos = {"modelo_inicio", "modelo_audi_tt", "modelo_bmw_z4"};
         int[] lista_marca_modelos = {0, 1, 2};
 
@@ -51,7 +51,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
         /// Inicializamos la tabla de marcas
-        String[] lista_marcas = {"Introduzca marca", "Audi", "BMW"};
+        String[] lista_marcas = {"Marca", "Audi", "BMW"};
         String[] lista_img_marcas = {"logo_inicio", "logo_audi", "logo_bmw"};
 
         sqLiteDatabase.beginTransaction();
@@ -67,7 +67,7 @@ public class DbHelper extends SQLiteOpenHelper {
         } finally {
             sqLiteDatabase.endTransaction();
         }
-        */
+        /*
 
 
         /// Inicializamos la tabla de tipos de revisión
@@ -85,7 +85,7 @@ public class DbHelper extends SQLiteOpenHelper {
             sqLiteDatabase.setTransactionSuccessful();
         } finally {
             sqLiteDatabase.endTransaction();
-        }
+        }*/
 
 /*
         /// Inicializamos la tabla de tipos de aceite
@@ -111,11 +111,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
+      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
        // sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCar.TABLE_NAME);
-     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBMarcas.TABLE_NAME);
-      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBModelos.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBTiposRevision.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBMarcas.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBModelos.TABLE_NAME);
+      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBTiposRevision.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBAceite.TABLE_NAME);
         onCreate(sqLiteDatabase);
         //sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
