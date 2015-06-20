@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
@@ -23,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
@@ -185,7 +187,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int int_now = funciones.date_a_int(new Date());
                 final DBLogs manager = new DBLogs(context);
-                final Cursor cursor = manager.LogsTodosOrderByFechaString(matricula);
+                Date hoy = new Date();
+                final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_int(hoy), matricula);
                 modificarLogpulsado(cursor, position, context);
             }
         });
@@ -198,21 +201,14 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
         }
         final DBLogs manager = new DBLogs(context);
-        final Cursor cursor = manager.LogsTodosOrderByFechaString(matricula);
+        Date hoy = new Date();
+        final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_int(hoy), matricula);
 
         List<TipoLog> listaLogs = new ArrayList<TipoLog>();
         //Recorremos el cursor
         int k = 0;
         cursor.moveToFirst();
 
-        //buscamos la posición del primer no realizado para colocar la lista
-        int pos = 0;
-        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            if(cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)) == DBLogs.NO_REALIZADO) {
-                break;
-            }
-            pos++;
-        }
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
@@ -227,7 +223,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
 
         listView.setAdapter(adapter);
-        listView.setSelection(pos);
 
         modificarLogPulsando(context);
         //Asociamos el menú contextual a los controles para las opciones en longClick
@@ -399,7 +394,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         // Translate overlay and image
         float flexibleRange = mFlexibleSpaceImageHeight - mActionBarSize;
         int minOverlayTransitionY = mActionBarSize - mOverlayView.getHeight();
-        ViewHelper.setTranslationY(mOverlayView, ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
+        ViewHelper.setTranslationY(mOverlayView, +ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
         ViewHelper.setTranslationY(mImageView, ScrollUtils.getFloat(-scrollY / 2, minOverlayTransitionY, 0));
 
         // Translate list background
@@ -528,6 +523,26 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.my, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
@@ -554,7 +569,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
         }
 
-        final Cursor cursor = manager.LogsTodosOrderByFechaString(matricula);
+        Date hoy = new Date();
+        final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_int(hoy), matricula);
 
         switch (item.getItemId()) {
             //case R.id.menu_realizadoLog:
