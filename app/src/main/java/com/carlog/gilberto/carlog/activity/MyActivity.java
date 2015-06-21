@@ -365,10 +365,10 @@ public class MyActivity extends ActionBarActivity {
         CocheEsNuevo.getInstance().coche_es_nuevo = 1;
 
         SimpleDataView sdv = (SimpleDataView) findViewById(R.id.matricula_view);
-        sdv.setTitle(MyActivity.INICIAL_MARCA);
+        sdv.setTitle(MyActivity.INICIAL_MATRICULA);
         sdv.setValue("");
         sdv.setEdit("");
-        sdv.setEditHint(MyActivity.INICIAL_MARCA);
+        sdv.setEditHint(MyActivity.INICIAL_MATRICULA);
         sdv.setEditVisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_matricula));
 
