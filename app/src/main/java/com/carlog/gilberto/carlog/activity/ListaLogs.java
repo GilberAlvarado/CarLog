@@ -128,17 +128,21 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 if(tipo.equals(TipoLog.TIPO_ACEITE)) {
                     intent = new Intent(context, ModificarAceite.class);
                 }
-                ///////////ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
+                if(tipo.equals(TipoLog.TIPO_REV_GENERAL)) {
+                    intent = new Intent(context, ModificarRevGral.class);
+                }
+                ///////////Todo ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
                 //************************************************************************
 
 
                 String txt_fecha = cursor.getString(cursor.getColumnIndex("fecha_string"));
                 int aceite = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE));
+                int revgral = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL));
                 String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
                 int kms = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS));
 
 
-                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_int(txt_fecha), aceite, matricula, DBLogs.NO_REALIZADO, kms);
+                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_int(txt_fecha), aceite, revgral,matricula, DBLogs.NO_REALIZADO, kms);
                 intent.putExtra("miTipo", miTipo);
                 intent.putExtra("idLog", id);
                 break;
@@ -150,7 +154,11 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
-        ///////////ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
+        if(tipo.equals(TipoLog.TIPO_REV_GENERAL)) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
+        ///////////Todo ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
         //************************************************************************
 
 
@@ -212,7 +220,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
-                    funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
+                    funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
                     cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS)));
             listaLogs.add(miTipoLog);
 

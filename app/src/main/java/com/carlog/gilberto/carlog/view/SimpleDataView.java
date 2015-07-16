@@ -112,6 +112,14 @@ public class SimpleDataView extends RelativeLayout {
         tv.setVisibility(View.VISIBLE);
     }
 
+    public void setLos2Invisible() {
+        EditText et = (EditText)this.findViewById(R.id.view_value_edit);
+        et.setVisibility(View.GONE);
+
+        TextView tv = (TextView)this.findViewById(R.id.view_value);
+        tv.setVisibility(View.GONE);
+    }
+
     public void setEditHint(String hint) {
         EditText et = (EditText)this.findViewById(R.id.view_value_edit);
         et.setHint(hint);

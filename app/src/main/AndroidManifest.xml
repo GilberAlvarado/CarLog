@@ -29,8 +29,20 @@
             android:label="@string/title_activity_aceite" >
         </activity>
         <activity
+            android:name=".activity.RevGral"
+            android:label="@string/title_activity_revgral" >
+        </activity>
+        <activity
             android:name=".activity.ModificarAceite"
             android:label="@string/title_activity_modificaraceite" >
+        </activity>
+        <activity
+            android:name=".activity.ModificarRevGral"
+            android:label="@string/title_activity_modificarrevgral" >
+        </activity>
+        <activity
+            android:name=".activity.AddItv"
+            android:label="@string/title_activity_additv" >
         </activity>
     </application>
 

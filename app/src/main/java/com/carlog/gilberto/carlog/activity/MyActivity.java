@@ -1,11 +1,9 @@
 package com.carlog.gilberto.carlog.activity;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Binder;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
@@ -13,22 +11,18 @@ import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
 
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.CocheEsNuevo;
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
@@ -37,11 +31,10 @@ import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBMarcas;
 import com.carlog.gilberto.carlog.data.DBModelos;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.negocio.ProcesarAceite;
+import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.view.SimpleDataView;
-import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.ButtonRectangle;
-import com.wrapp.floatlabelededittext.FloatLabeledEditText;
+import com.melnykov.fab.FloatingActionButton;
 
 
 import java.util.ArrayList;
@@ -253,6 +246,7 @@ public class MyActivity extends ActionBarActivity {
         SimpleDataView sdv = (SimpleDataView) findViewById(R.id.matricula_view);
         sdv.setTitle("Matrícula");
         sdv.setValue(matricula);
+        sdv.setEdit(matricula);
         sdv.setEditInvisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_matricula));
 
@@ -269,13 +263,9 @@ public class MyActivity extends ActionBarActivity {
         sdv.setValue(itv);
         sdv.setEditInvisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_fecha));
+        FloatingActionButton button_addItv = (FloatingActionButton) findViewById(R.id.button_additv);
+        button_addItv.setVisibility(View.GONE);
 
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(fechaITV);
-
-        DatePicker datePicker2 = (DatePicker) findViewById(R.id.date_itv);
-        datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
     }
 
 
@@ -300,9 +290,11 @@ public class MyActivity extends ActionBarActivity {
         int int_now = funciones.date_a_int(new Date());
 
 
-        ///////////////////PARA EL ACEITE
-        ProcesarAceite.procesar_aceite(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula);
-        //////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
+        /////////////////// PROCESAR ACEITE
+        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ACEITE);
+        /////////////////// PROCESAR REV. GRAL.
+        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_REV_GENERAL);
+        // Todo /////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
 
         ////////////////////////////////////////////////////////
     }
@@ -320,7 +312,7 @@ public class MyActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MyActivity.this, ListaLogs.class);
 
-                LeerDatosPantalla();
+                LeerDatosPantalla(EditarCoche);
                 DBCar dbcar = new DBCar(context);
 
                 if (comprobaciones(EditarCoche)) {
@@ -393,8 +385,10 @@ public class MyActivity extends ActionBarActivity {
         sdv.setTitle(MyActivity.INICIAL_ITV);
         sdv.setValue("");
         sdv.setEdit("");
-        sdv.setEditInvisible();
+        sdv.setLos2Invisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_fecha));
+        FloatingActionButton button_addItv = (FloatingActionButton) findViewById(R.id.button_additv);
+        button_addItv.setVisibility(View.VISIBLE);
 
         marca = INICIAL_MARCA;
         modelo = INICIAL_MODELO;
@@ -406,16 +400,12 @@ public class MyActivity extends ActionBarActivity {
         spinner_modelos.setSelection(0);
         spinner_marcas.setSelection(0);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
 
-        DatePicker datePicker2 = (DatePicker) findViewById(R.id.date_itv);
-        datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);
     }
 
 
 
-    private void LeerDatosPantalla() {
+    private void LeerDatosPantalla(boolean EditarCoche) {
         Spinner spinner_marca = (Spinner)findViewById(R.id.cmb_marcas);
         marca = spinner_marca.getSelectedItem().toString();
         System.out.println(marca);
@@ -450,28 +440,18 @@ public class MyActivity extends ActionBarActivity {
 
         System.out.println(kms);
 
-        DatePicker datePicker = (DatePicker) findViewById(R.id.date_itv);
+        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+        if (EditarCoche) {
+            itv = sdv.getValue();
+            fechaITV = funciones.string_a_date(itv);
+            int_itv = funciones.string_a_int(itv);
+        }
+        else { //crear coche
+            itv = sdv.getmEdit();
+            fechaITV = funciones.string_a_date(itv);
+            int_itv = funciones.string_a_int(itv);
+        }
 
-
-
-        if ((datePicker.getDayOfMonth() < 10) && ((datePicker.getMonth()+1) < 10)) {
-            itv = "0"+datePicker.getDayOfMonth() +"-0"+ (datePicker.getMonth()+1) + "-" + datePicker.getYear();
-        } else
-        if ((datePicker.getDayOfMonth() < 10) && ((datePicker.getMonth()+1) >= 10)) {
-            itv = "0"+datePicker.getDayOfMonth() +"-"+ (datePicker.getMonth()+1)+ "-" + datePicker.getYear();
-        } else
-        if ((datePicker.getDayOfMonth() >= 10) && ((datePicker.getMonth()+1) < 10)) {
-            itv = datePicker.getDayOfMonth() +"-0"+ (datePicker.getMonth()+1) + "-" + datePicker.getYear();
-        } else
-            itv = datePicker.getDayOfMonth() +"-"+ (datePicker.getMonth()+1)+ "-" + datePicker.getYear();
-
-
-        fechaITV = funciones.string_a_date(itv);
-        int_itv = funciones.string_a_int(itv);
-
-
-
-        System.out.println(""+datePicker.getDayOfMonth()+ "-" + (datePicker.getMonth()+1) + "-" + datePicker.getYear());
     }
 
 
@@ -543,11 +523,21 @@ public class MyActivity extends ActionBarActivity {
                 Toast.makeText(MyActivity.this, "Ha de introducir el nº de kilómetros.", Toast.LENGTH_LONG).show();
             } else {
                 return true;
-
             }
-
         }
         return false;
+    }
+
+    private void addItv() {
+        FloatingActionButton btn_addItv = (FloatingActionButton) findViewById(R.id.button_additv);
+        btn_addItv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyActivity.this, AddItv.class);
+                intent.putExtra("fechaITV", fechaITV);
+                startActivityForResult(intent, PETICION_ACTIVITY_ADDITV);
+            }
+        });
     }
 
     private void addCarOrShowLogs() {
@@ -570,8 +560,15 @@ public class MyActivity extends ActionBarActivity {
         catch (Exception e) {
             System.out.println("No se está editando coche");
         }
+        Boolean addItv = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            addItv = getIntent().getExtras().getBoolean("addItv");
+        }
+        catch (Exception e) {
+            System.out.println("No se está añadiendo fecha itv");
+        }
 
-        if ((c.moveToFirst() == false) || CocheNuevo || EditarCoche) {  // Desde que haya un coche no se mostrará la primera actividad o si añadirmos un coche nuevo
+        if ((c.moveToFirst() == false) || CocheNuevo || EditarCoche || addItv) {  // Desde que haya un coche no se mostrará la primera actividad o si añadirmos un coche nuevo
             setContentView(R.layout.activity_my);
 
             toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
@@ -603,6 +600,7 @@ public class MyActivity extends ActionBarActivity {
                 RellenarPantalla(c);
                 ocultar_campos();
             }
+            addItv();
         }
         else {
             Intent intent = new Intent(MyActivity.this, ListaLogs.class);
@@ -623,20 +621,35 @@ public class MyActivity extends ActionBarActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
-        outState.putString("EditKms", kms);
+        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.kms_view);
+        outState.putString("EditKms", sdv.getmEdit());
+        sdv = (SimpleDataView) findViewById(R.id.matricula_view);
+        outState.putString("EditMatricula", sdv.getmEdit());
+        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+        outState.putString("NoEditItv", sdv.getValue());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState){
         super.onRestoreInstanceState(savedInstanceState);
-        kms = savedInstanceState.getString("EditKms");
+
         SimpleDataView sdv = (SimpleDataView) findViewById(R.id.kms_view);
-        if (!kms.equals(INICIAL_KMS)) {
+        String kms_restore = savedInstanceState.getString("EditKms");
+        sdv.setEdit(kms_restore);
+
+        sdv = (SimpleDataView) findViewById(R.id.matricula_view);
+        String matricula_restore = savedInstanceState.getString("EditMatricula");
+        sdv.setEdit(matricula_restore);
+
+      /*  if (!kms.equals(INICIAL_KMS)) {
             sdv.setEdit(kms);
         }
         else {
             sdv.setEditHint("Nº Kms");
-        }
+        }*/
+        String itv_restore = savedInstanceState.getString("NoEditItv");
+        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+        sdv.setValue(itv_restore);
     }
 
 
@@ -658,6 +671,27 @@ public class MyActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    public static final int PETICION_ACTIVITY_ADDITV = 1;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("requestCoderequestCode "+ requestCode);
+        switch(requestCode) {
+            case (PETICION_ACTIVITY_ADDITV) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String itv_string = data.getExtras().getString("itv_string");
+                    System.out.println("itv stringgg "+itv_string);
+                    SimpleDataView sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+                    sdv.setTitle("Fecha ITV");
+                    sdv.setValue(itv_string);
+                    sdv.setEditInvisible();
+                    sdv.setImage(getResources().getDrawable(R.drawable.ic_fecha));
+                }
+                break;
+            }
+        }
     }
 
 

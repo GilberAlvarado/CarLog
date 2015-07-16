@@ -32,6 +32,7 @@ import java.util.Date;
 public class AddLog extends Activity {
 
     public final static int NO_ACEITE = -1;
+    public final static int NO_REVGRAL = -1;
     private Spinner spinner1;
 
     private void RellenarTipos(DBTiposRevision managerTiposRevision) {
@@ -108,27 +109,28 @@ public class AddLog extends Activity {
     private void addlog(TipoLog miTipoLog, DBLogs managerLogs) {
 
         Intent intent;
+        DBCar dbc = new DBCar(getApplicationContext());
+        Cursor c_activo = dbc.buscarCocheActivo();
+        String matricula = "", marca = "", modelo = "";
+        int int_year = 0, int_kms = 0, int_kms_ini = 0, int_itv = 0, int_fecha_ini = 0;
+        if (c_activo.moveToFirst() == true) {
+            matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
+            marca = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MARCA));
+            modelo = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MODELO));
+            int_year = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_YEAR));
+            int_kms = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_KMS));
+            int_itv = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_ITV));
+            int_kms_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_KMS_INI));
+            int_fecha_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_FECHA_INI));
+        }
+        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+        int int_now = funciones.date_a_int(new Date());
+        int ahora = funciones.date_a_int(new Date());
+
         if (miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ACEITE)) {
-            DBCar dbc = new DBCar(getApplicationContext());
-            Cursor c_activo = dbc.buscarCocheActivo();
-            String matricula = "", marca = "", modelo = "";
-            int int_year = 0, int_kms = 0, int_kms_ini = 0, int_itv = 0, int_fecha_ini = 0;
-            if (c_activo.moveToFirst() == true) {
-                matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
-                marca = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MARCA));
-                modelo = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MODELO));
-                int_year = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_YEAR));
-                int_kms = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_KMS));
-                int_itv = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_ITV));
-                int_kms_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_KMS_INI));
-                int_fecha_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_FECHA_INI));
-            }
-            TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
             // Antes de hacer nada miramos si ya existe algun tipo de aceite pues no debemos tener más de uno
-            int int_now = funciones.date_a_int(new Date());
             Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE, miCoche.getMatricula(miCoche));
             if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
-                int ahora = funciones.date_a_int(new Date());
                 if(miTipoLog.getFechaint(miTipoLog) >= ahora) {
                     Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + TipoLog.TIPO_ACEITE + " hecha.", Toast.LENGTH_SHORT).show();
                 }
@@ -137,17 +139,29 @@ public class AddLog extends Activity {
                 intent.putExtra("miCoche", miCoche);
                 startActivity(intent);
                 setResult(Activity.RESULT_OK, intent);
-
                 finish();
             } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente un " + TipoLog.TIPO_ACEITE, Toast.LENGTH_SHORT).show();
 
-        } else {
+        }
+        else if (miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_REV_GENERAL)) {
+            // Antes de hacer nada miramos si ya existe algun tipo de revgral pues no debemos tener más de una
+            Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_REV_GENERAL, miCoche.getMatricula(miCoche));
+            if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
+                if(miTipoLog.getFechaint(miTipoLog) >= ahora) {
+                    Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + TipoLog.TIPO_REV_GENERAL + " hecha.", Toast.LENGTH_SHORT).show();
+                }
+                intent = new Intent(AddLog.this, RevGral.class);
+                intent.putExtra("miTipoLog", miTipoLog);
+                intent.putExtra("miCoche", miCoche);
+                startActivity(intent);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente un " + TipoLog.TIPO_REV_GENERAL, Toast.LENGTH_SHORT).show();
+
+        }else {
             intent = new Intent(AddLog.this, ListaLogs.class);
-
             managerLogs.insertar(miTipoLog);
-
             setResult(Activity.RESULT_OK, intent);
-
             finish();
         }
     }
@@ -155,17 +169,14 @@ public class AddLog extends Activity {
     private void GuardarLog(final DBLogs managerLogs) {
         //Instanciamos el Boton
         Button btn1 = (Button) findViewById(R.id.guardar);
-
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos);
                 String tipo = spinner.getSelectedItem().toString();
-
                 DatePicker datePicker = (DatePicker) findViewById(R.id.date_newlog);
                 String txt_date_newlog = "";
-
 
                 if ((datePicker.getDayOfMonth() < 10) && ((datePicker.getMonth() + 1) < 10)) {
                     txt_date_newlog = "0" + datePicker.getDayOfMonth() + "-0" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
@@ -175,9 +186,6 @@ public class AddLog extends Activity {
                     txt_date_newlog = datePicker.getDayOfMonth() + "-0" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
                 } else
                     txt_date_newlog = datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
-
-
-
 
                 System.out.println("FECHA NEW LOG " + datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear());
 
@@ -196,13 +204,13 @@ public class AddLog extends Activity {
 
                 if (int_fecha > funciones.date_a_int(new Date())) {
                     // con NO_REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, matricula, DBLogs.NO_REALIZADO, int_kms);
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
                     addlog(miTipoLog, managerLogs);
                 }
                 else {
                     // con REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, matricula, DBLogs.REALIZADO, int_kms);
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, NO_REVGRAL, matricula, DBLogs.REALIZADO, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
                     AlertDialog.Builder builder = new AlertDialog.Builder(AddLog.this);
                     builder.setMessage("¿Quiere añadir la última revisión hecha de " + miTipoLog.getTipo(miTipoLog) + "?")
