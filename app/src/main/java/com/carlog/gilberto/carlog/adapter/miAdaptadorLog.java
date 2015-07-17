@@ -23,6 +23,7 @@ import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBTiposRevision;
 import com.carlog.gilberto.carlog.formats.funciones;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -69,7 +70,6 @@ public class miAdaptadorLog extends ArrayAdapter {
 
 
     public static Bitmap getRoundedShape(Bitmap scaleBitmapImage,int width) {
-        // TODO Auto-generated method stub
         int targetWidth = width;
         int targetHeight = width;
         Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
@@ -135,7 +135,7 @@ public class miAdaptadorLog extends ArrayAdapter {
         sqView.img_tipo_log.setImageBitmap(getRoundedShape(decodeFile(getContext(), resID), 200));
 
         if(miLog.getRealizado((TipoLog) datos.get(position)) == DBLogs.NO_REALIZADO) {
-            if (miLog.getFechaint((TipoLog) datos.get(position)) <= funciones.date_a_int(funciones.fecha_mas_dias(1))) {
+            if (miLog.getFechaint((TipoLog) datos.get(position)) <= funciones.date_a_int(funciones.fecha_mas_dias(new Date(), 1))) {
                 sqView.tipo.setTextColor(Color.RED);
                 sqView.fecha.setTextColor(Color.RED);
                 sqView.tipo.setTypeface(null, Typeface.BOLD);

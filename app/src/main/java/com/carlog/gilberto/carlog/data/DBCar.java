@@ -56,7 +56,7 @@ public class DBCar {
             valores.put(CN_YEAR, miCoche.getYear(miCoche));
         if (miCoche.getKms(miCoche) != MyActivity.NO_KMS)
             valores.put(CN_KMS, miCoche.getKms(miCoche));
-            valores.put(CN_ITV, miCoche.getItv(miCoche));
+        valores.put(CN_ITV, miCoche.getItv(miCoche));
         valores.put(CN_PROFILE, miCoche.getProfile(miCoche));
         valores.put(CN_FECHA_INI, miCoche.getFechaIni(miCoche));
         valores.put(CN_KMS_INI, miCoche.getKmsIni(miCoche));
@@ -95,7 +95,10 @@ public class DBCar {
 
     }
 
-
+    public void ActualizarITVCocheActivo(String matricula, int itv) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_ITV + " = '" + itv + "' WHERE " + CN_PROFILE + " = '" + TipoCoche.PROFILE_ACTIVO + "' AND " +CN_MATRICULA + " = '" + matricula + "'";
+        db.execSQL(sql);
+    }
 
     public void ActualizarCocheActivo(String matricula) {
         String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + TipoCoche.PROFILE_ACTIVO + "' WHERE " + CN_MATRICULA + " = '" + matricula + "'";

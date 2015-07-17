@@ -8,11 +8,12 @@ import java.util.Date;
  */
 public class TipoLog implements Serializable {
 
-    public final static String TIPO_ACEITE = "Cambio de aceite";
+    public final static String TIPO_ACEITE = "Cambio de aceite y filtro";
     public final static String TIPO_REV_GENERAL = "Revisión general";
-    public final static String TIPO_FILTRO_AIRE = "Cambio de filtro de aire";
-    public final static String TIPO_FILTRO_ACEITE = "Cambio de filtro de aceite";
+    public final static String TIPO_CORREA = "Cambio correa de distribución";
+    public final static String TIPO_BOMBA_AGUA = "Cambio bomba de agua";
     public final static String TIPO_FILTRO_GASOLINA = "Cambio de filtro de gasolina";
+    public final static String TIPO_ITV = "I.T.V.";
 
 
     private String tipo;

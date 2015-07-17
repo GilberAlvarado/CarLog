@@ -294,6 +294,12 @@ public class MyActivity extends ActionBarActivity {
         ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ACEITE);
         /////////////////// PROCESAR REV. GRAL.
         ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_REV_GENERAL);
+        /////////////////// PROCESAR CORREA DIST.
+        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_CORREA);
+        /////////////////// PROCESAR BOMBA AGUA
+        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BOMBA_AGUA);
+        /////////////////// PROCESAR ITV
+        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ITV);
         // Todo /////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
 
         ////////////////////////////////////////////////////////

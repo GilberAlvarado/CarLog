@@ -81,8 +81,9 @@ public class funciones {
 
     }
 
-    public static Date fecha_mas_dias(int dias) {
+    public static Date fecha_mas_dias(Date fecha, int dias) {
         Calendar hoy = Calendar.getInstance();
+        hoy.setTime(fecha);
         System.out.println("DIA " + hoy.getTime() + " + "  + dias + " días =  ");
         hoy.add(Calendar.DATE, dias);
         System.out.println(hoy.getTime());
