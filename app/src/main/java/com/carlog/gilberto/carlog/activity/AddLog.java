@@ -207,6 +207,10 @@ public class AddLog extends Activity {
                     final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
                     addlog(miTipoLog, managerLogs);
+                    if(tipo.equals(TipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
+                        DBCar dbc = new DBCar(getApplicationContext());
+                        dbc.ActualizarITVCocheActivo(matricula, int_fecha);
+                    }
                 }
                 else {
                     // con REALIZADO
@@ -227,6 +231,10 @@ public class AddLog extends Activity {
                                         public void onClick(DialogInterface dialog, int id_dialog) {
                                             // metodo que se debe implementar Sí
                                             addlog(miTipoLog, managerLogs);
+                                            if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
+                                                DBCar dbc = new DBCar(getApplicationContext());
+                                                dbc.ActualizarITVCocheActivo(miTipoLog.getCoche(miTipoLog), miTipoLog.getFechaint(miTipoLog));
+                                            }
                                         }
                                     });
                     AlertDialog alert = builder.create();

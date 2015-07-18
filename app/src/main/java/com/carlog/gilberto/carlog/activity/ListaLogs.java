@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
+import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.adapter.miAdaptadorLog;
 import com.carlog.gilberto.carlog.data.DBCar;
@@ -165,28 +166,31 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     }
 
     private void realizadoLogpulsado(Cursor cursor, DBLogs manager, int posicion) {
-
         //Recorremos el cursor
         int i = 0;
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-
             if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
-
+                String tipo_rev = cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO));
+                if(tipo_rev.equals(TipoLog.TIPO_ITV)) {
+                    Date f_revision_por_fecha = funciones.fecha_mas_dias(new Date(), ProcesarTipos.F_MAX_ITV);
+                    DBCar dbc = new DBCar(getApplicationContext());
+                    int int_revision_por_fecha = funciones.date_a_int(f_revision_por_fecha);
+                    dbc.ActualizarITVCocheActivo(matricula, int_revision_por_fecha);
+                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.int_a_string(int_revision_por_fecha), int_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
+                    DBLogs dbLogs = new DBLogs(getApplicationContext());
+                    dbLogs.insertar(miTipoLog);
+                }
                 Date now = new Date();
                 System.out.println("fecha "+now);
                 System.out.println("id "+id);
                 System.out.println("int fecha "+funciones.date_a_int(now));
-
                 manager.marcarRealizadoLog(id, funciones.date_a_int(now), int_kms); //hoy
-
                 ConsultarLogs(getApplicationContext(), ListaLogs.this);
-
                 break;
             }
             i++;
         }
-
     }
 
     private void modificarLogPulsando(final Context context) {
@@ -217,7 +221,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         int k = 0;
         cursor.moveToFirst();
 
-
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
                     funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
@@ -228,10 +231,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
 
         miAdaptadorLog adapter = new miAdaptadorLog(act, listaLogs);
-
-
         listView.setAdapter(adapter);
-
         modificarLogPulsando(context);
         //Asociamos el menú contextual a los controles para las opciones en longClick
         registerForContextMenu(listView);
@@ -257,7 +257,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         mOverlayView = findViewById(R.id.overlay);
         listView = (ObservableListView) findViewById(R.id.list);
         listView.setScrollViewCallbacks(this);
-
 
         // Set padding view for ListView. This is the flexible space.
         View paddingView = new View(this);
@@ -290,7 +289,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         LinearLayout difuminado = (LinearLayout) findViewById(R.id.difuminado_layout);
         difuminado.setBackgroundColor(ScrollUtils.getColorWithAlpha(0.4f, mToolbarColor));
-
         buildFloatingMenu();
     }
 
@@ -366,17 +364,12 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listalogs);
-
         Context context = this;
-
         DBCar dbcar = new DBCar(context);
         Cursor c = dbcar.buscarCoches();
-
         CambiarCocheActivo.CambiarCocheActivo(dbcar, c, ListaLogs.this, context);
-
         ObservableScrollView();
         c = dbcar.buscarCocheActivo();
-
 
         if (c.moveToFirst() == true) {
             matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
@@ -390,9 +383,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
 
         CambiarCocheActivo.CambiarImgLogs(context, ListaLogs.this, modelo);
-
         ConsultarLogs(context, ListaLogs.this);
-
     }
 
 

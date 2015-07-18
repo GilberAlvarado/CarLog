@@ -68,19 +68,16 @@ public class SimpleDataView extends RelativeLayout {
 
     public void setTitle(String title) {
         this.mTitle = title;
-
         ((TextView)this.findViewById(R.id.view_title)).setText(mTitle);
     }
 
     public void setValue(String value) {
         this.mValue = value;
-
         ((TextView)this.findViewById(R.id.view_value)).setText(mValue);
     }
 
     public void setEdit(String edit) {
         this.mEdit = edit;
-
         ((EditText)this.findViewById(R.id.view_value_edit)).setText(mEdit);
     }
 

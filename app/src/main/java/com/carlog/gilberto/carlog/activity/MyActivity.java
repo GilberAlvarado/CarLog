@@ -261,11 +261,16 @@ public class MyActivity extends ActionBarActivity {
         sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
         sdv.setTitle("Fecha ITV");
         sdv.setValue(itv);
-        sdv.setEditInvisible();
-        sdv.setImage(getResources().getDrawable(R.drawable.ic_fecha));
         FloatingActionButton button_addItv = (FloatingActionButton) findViewById(R.id.button_additv);
-        button_addItv.setVisibility(View.GONE);
-
+        if(!itv.equals("01-01-1970")) {
+            sdv.setEditInvisible();
+            button_addItv.setVisibility(View.GONE);
+        }
+        else {
+            sdv.setEditVisible();
+            button_addItv.setVisibility(View.VISIBLE);
+        }
+        sdv.setImage(getResources().getDrawable(R.drawable.ic_fecha));
     }
 
 
@@ -318,7 +323,7 @@ public class MyActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MyActivity.this, ListaLogs.class);
 
-                LeerDatosPantalla(EditarCoche);
+                LeerDatosPantalla();
                 DBCar dbcar = new DBCar(context);
 
                 if (comprobaciones(EditarCoche)) {
@@ -405,13 +410,9 @@ public class MyActivity extends ActionBarActivity {
         spinner_years.setSelection(0);
         spinner_modelos.setSelection(0);
         spinner_marcas.setSelection(0);
-
-
     }
 
-
-
-    private void LeerDatosPantalla(boolean EditarCoche) {
+    private void LeerDatosPantalla() {
         Spinner spinner_marca = (Spinner)findViewById(R.id.cmb_marcas);
         marca = spinner_marca.getSelectedItem().toString();
         System.out.println(marca);
@@ -447,26 +448,20 @@ public class MyActivity extends ActionBarActivity {
         System.out.println(kms);
 
         sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
-        if (EditarCoche) {
-            itv = sdv.getValue();
+        itv = sdv.getValue();
+        if(!itv.isEmpty()) {
             fechaITV = funciones.string_a_date(itv);
             int_itv = funciones.string_a_int(itv);
         }
-        else { //crear coche
-            itv = sdv.getmEdit();
-            fechaITV = funciones.string_a_date(itv);
-            int_itv = funciones.string_a_int(itv);
+        else {
+            fechaITV = new Date(0);
+            int_itv = MyActivity.NO_ITV;
         }
-
     }
-
-
 
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
     Date fechaITV = new Date();
     int int_year, int_kms, int_kms_anterior = 0, int_itv, int_kms_ini = 0, int_fecha_ini = 0;
-
-
 
     private void ocultar_campos() { //
         // Se ocultan todos los campos obligatorios porque ya han sido agregados
