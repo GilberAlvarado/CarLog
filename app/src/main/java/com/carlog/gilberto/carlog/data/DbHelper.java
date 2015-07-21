@@ -16,6 +16,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "carlog.sqlite";
     private static final int DB_SCHEME_VERSION = 64;
+    public static final int MAX_TIPOS_REV = 13; // 14 pq cuenta el 0
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_SCHEME_VERSION);
@@ -111,11 +112,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
         /// Inicializamos la tabla de tipos de revisión
-        String[] lista_tipo = {TipoLog.TIPO_REV_GENERAL, TipoLog.TIPO_ACEITE, TipoLog.TIPO_CORREA, TipoLog.TIPO_BOMBA_AGUA, TipoLog.TIPO_FILTRO_ACEITE, TipoLog.TIPO_FILTRO_GASOLINA,
-                TipoLog.TIPO_FILTRO_AIRE, TipoLog.TIPO_ITV, TipoLog.TIPO_BUJIAS, TipoLog.TIPO_FRENOS, TipoLog.TIPO_LIQUIDO_FRENOS, TipoLog.TIPO_LIMPIAPARABRISAS,
-                TipoLog.TIPO_LUCES, TipoLog.TIPO_RUEDAS};
-        String[] lista_img = {"ic_revgen", "ic_aceite", "ic_correa", "ic_bomba_agua", "ic_fil_aceite", "ic_fil_gasolina", "ic_fil_aire", "ic_itv_rev", "ic_bujias",
-                "ic_frenos", "ic_liquido_frenos", "ic_limpiaparabrisas", "ic_luces", "ic_ruedas"};
+        ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV *************************//////
+        String[] lista_tipo = {TipoLog.TIPO_ACEITE, TipoLog.TIPO_BOMBA_AGUA, TipoLog.TIPO_BUJIAS, TipoLog.TIPO_CORREA, TipoLog.TIPO_FILTRO_ACEITE, TipoLog.TIPO_FILTRO_AIRE,
+                TipoLog.TIPO_FILTRO_GASOLINA, TipoLog.TIPO_FRENOS, TipoLog.TIPO_ITV, TipoLog.TIPO_LIMPIAPARABRISAS, TipoLog.TIPO_LIQUIDO_FRENOS,
+                TipoLog.TIPO_LUCES, TipoLog.TIPO_REV_GENERAL, TipoLog.TIPO_RUEDAS};
+        String[] lista_img = {"ic_aceite", "ic_bomba_agua", "ic_bujias", "ic_correa", "ic_fil_aceite", "ic_fil_aire", "ic_fil_gasolina", "ic_frenos", "ic_itv_rev",
+                "ic_limpiaparabrisas", "ic_liquido_frenos", "ic_luces", "ic_revgen", "ic_ruedas"};
+        ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV *************************//////
 
         sqLiteDatabase.beginTransaction();
         try {

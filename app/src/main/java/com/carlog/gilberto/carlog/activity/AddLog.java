@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,11 +18,13 @@ import android.widget.Toast;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.DBCar;
+import com.carlog.gilberto.carlog.data.DbHelper;
 import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBTiposRevision;
 import com.carlog.gilberto.carlog.formats.funciones;
+import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +68,7 @@ public class AddLog extends Activity {
 
         final EditText edttxt = (EditText) findViewById (R.id.txt_nuevoTipo);
         final TextView tv_nt = (TextView) findViewById(R.id.nuevoTipo);
-        Button btm_agregar = (Button) findViewById (R.id.btm_addTipo);
+        ButtonRectangle btm_agregar = (ButtonRectangle) findViewById (R.id.btm_addTipo);
         btm_agregar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View arg0) {
@@ -81,7 +82,7 @@ public class AddLog extends Activity {
                     //primero miramos si existe para no insertar duplicados
                     Cursor c = managerTiposRevision.buscarTipo(nuevoDato);
                     if (c.moveToFirst() == false) {
-                        managerTiposRevision.insertar(nuevoDato, "ic_coche");
+                        managerTiposRevision.insertar(nuevoDato, "ic_launcher"); // los personalizados van a tener el logo de la app
                         RellenarTipos(managerTiposRevision);
                         edttxt.setVisibility(View.INVISIBLE);
                         tv_nt.setVisibility(View.INVISIBLE);
@@ -92,15 +93,29 @@ public class AddLog extends Activity {
             }
         });
 
-        Button btm_eliminar = (Button) findViewById (R.id.btm_elimTipo);
+        ButtonRectangle btm_eliminar = (ButtonRectangle) findViewById (R.id.btm_elimTipo);
         btm_eliminar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View arg0) {
-
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos);
                 String elimdata = spinner.getSelectedItem().toString();
-                managerTiposRevision.eliminar(elimdata);
-                RellenarTipos(managerTiposRevision);
+                //Solo podremos eliminar revisiones que no estén por defecto en la app
+                DBTiposRevision dbtr = new DBTiposRevision(getApplicationContext());
+                Cursor c_tr = dbtr.cargarCursorTiposRevision();
+                int i = 0;
+                String tipo = "";
+                for(c_tr.moveToFirst(); !c_tr.isAfterLast(); c_tr.moveToNext()){
+                    tipo = c_tr.getString(c_tr.getColumnIndex(DBTiposRevision.CN_TIPO));
+                    if(tipo.equals(elimdata)) break;
+                    i++;
+                }
+                if ((i > DbHelper.MAX_TIPOS_REV) && (elimdata.equals(tipo))) {
+                    managerTiposRevision.eliminar(elimdata);
+                    RellenarTipos(managerTiposRevision);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "No se pueden eliminar revisiones por defecto.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -200,7 +215,7 @@ public class AddLog extends Activity {
 
     private void GuardarLog(final DBLogs managerLogs) {
         //Instanciamos el Boton
-        Button btn1 = (Button) findViewById(R.id.guardar);
+        ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

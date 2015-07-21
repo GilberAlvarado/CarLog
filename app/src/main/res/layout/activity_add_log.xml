@@ -1,94 +1,100 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.carlog.gilberto.carlog.activity.AddLog">
-
-    <TextView
-        android:text="Introduzca tipo:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txt_tipo" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cmb_tipos"
-        android:layout_below="@+id/txt_tipo"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:id="@+id/txt_nuevoTipo"
+    android:layout_height="match_parent" >
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:visibility="invisible"
-        android:layout_below="@+id/nuevoTipo"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <requestFocus />
-    </EditText>
-    <Button
-        android:id="@+id/btm_addTipo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Agregar tipo"
-        android:layout_marginLeft="201dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:orientation="vertical">
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Introduzca tipo:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_tipo" />
 
-    <Button
-        android:id="@+id/btm_elimTipo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Eliminar tipo"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="201dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cmb_tipos"
+            android:layout_below="@+id/txt_tipo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-    <TextView
-        android:text="Introduzca fecha:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txt_fecha"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="200dp"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:text="Añadir nuevo tipo:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nuevoTipo"
+            android:layout_below="@+id/cmb_tipos"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            android:layout_alignParentStart="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Guardar"
-        android:id="@+id/guardar"
-        android:layout_below="@+id/txt_fecha"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="181dp" />
+        <EditText
+            android:id="@+id/txt_nuevoTipo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:visibility="gone"
+            android:layout_below="@+id/nuevoTipo"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <requestFocus />
+        </EditText>
 
-    <TextView
-        android:text="Añadir nuevo tipo:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/nuevoTipo"
-        android:layout_below="@+id/cmb_tipos"
-        android:layout_alignParentLeft="true"
-        android:visibility="invisible"
-        android:layout_alignParentStart="true" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.gc.materialdesign.views.ButtonRectangle
+                android:id="@+id/btm_addTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="#1E88E5"
+                android:text="Agregar tipo" />
 
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/date_newlog"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="210dp"
-        android:calendarViewShown="false"/>
+            <com.gc.materialdesign.views.ButtonRectangle
+                android:id="@+id/btm_elimTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eliminar tipo"
+                android:background="#1E88E5"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </LinearLayout>
 
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:text="Introduzca fecha:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_fecha"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
-</RelativeLayout>
+        <DatePicker
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="350dp"
+            android:id="@+id/date_newlog"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:calendarViewShown="false"/>
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar"
+            android:id="@+id/guardar"
+            android:background="#1E88E5"
+            android:layout_below="@+id/txt_fecha"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+    </LinearLayout>
+</ScrollView>
+
