@@ -95,7 +95,7 @@ public class DBCar {
 
     }
 
-    public void ActualizarITVCocheActivo(String matricula, int itv) {
+    public void ActualizarITVCocheActivo(String matricula, long itv) {
         String sql = "UPDATE " + TABLE_NAME + " SET " + CN_ITV + " = '" + itv + "' WHERE " + CN_PROFILE + " = '" + TipoCoche.PROFILE_ACTIVO + "' AND " +CN_MATRICULA + " = '" + matricula + "'";
         db.execSQL(sql);
     }

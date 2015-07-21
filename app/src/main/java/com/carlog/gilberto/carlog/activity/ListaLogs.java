@@ -143,7 +143,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 int kms = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS));
 
 
-                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_int(txt_fecha), aceite, revgral,matricula, DBLogs.NO_REALIZADO, kms);
+                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, revgral,matricula, DBLogs.NO_REALIZADO, kms);
                 intent.putExtra("miTipo", miTipo);
                 intent.putExtra("idLog", id);
                 break;
@@ -175,17 +175,17 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 if(tipo_rev.equals(TipoLog.TIPO_ITV)) {
                     Date f_revision_por_fecha = funciones.fecha_mas_dias(new Date(), ProcesarTipos.F_MAX_ITV);
                     DBCar dbc = new DBCar(getApplicationContext());
-                    int int_revision_por_fecha = funciones.date_a_int(f_revision_por_fecha);
-                    dbc.ActualizarITVCocheActivo(matricula, int_revision_por_fecha);
-                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.int_a_string(int_revision_por_fecha), int_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
+                    long long_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
+                    dbc.ActualizarITVCocheActivo(matricula, long_revision_por_fecha);
+                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
                     DBLogs dbLogs = new DBLogs(getApplicationContext());
                     dbLogs.insertar(miTipoLog);
                 }
                 Date now = new Date();
                 System.out.println("fecha "+now);
                 System.out.println("id "+id);
-                System.out.println("int fecha "+funciones.date_a_int(now));
-                manager.marcarRealizadoLog(id, funciones.date_a_int(now), int_kms); //hoy
+                System.out.println("int fecha "+funciones.date_a_long(now));
+                manager.marcarRealizadoLog(id, funciones.date_a_long(now), int_kms); //hoy
                 ConsultarLogs(getApplicationContext(), ListaLogs.this);
                 break;
             }
@@ -197,10 +197,10 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int int_now = funciones.date_a_int(new Date());
+                long long_now = funciones.date_a_long(new Date());
                 final DBLogs manager = new DBLogs(context);
                 Date hoy = new Date();
-                final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_int(hoy), matricula);
+                final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_long(hoy), matricula);
                 modificarLogpulsado(cursor, position, context);
             }
         });
@@ -214,7 +214,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
         final DBLogs manager = new DBLogs(context);
         Date hoy = new Date();
-        final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_int(hoy), matricula);
+        final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_long(hoy), matricula);
 
         List<TipoLog> listaLogs = new ArrayList<TipoLog>();
         //Recorremos el cursor
@@ -223,7 +223,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
-                    funciones.string_a_int(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
+                    funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
                     cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS)));
             listaLogs.add(miTipoLog);
 
@@ -558,7 +558,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        int int_now = funciones.date_a_int(new Date());
+        long long_now = funciones.date_a_long(new Date());
         final DBLogs manager = new DBLogs(this);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
@@ -569,7 +569,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
 
         Date hoy = new Date();
-        final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_int(hoy), matricula);
+        final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_long(hoy), matricula);
 
         switch (item.getItemId()) {
             //case R.id.menu_realizadoLog:

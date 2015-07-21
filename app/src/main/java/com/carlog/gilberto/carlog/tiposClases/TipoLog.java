@@ -8,29 +8,37 @@ import java.util.Date;
  */
 public class TipoLog implements Serializable {
 
-    public final static String TIPO_ACEITE = "Cambio de aceite y filtro";
+    public final static String TIPO_ACEITE = "Aceite";
     public final static String TIPO_REV_GENERAL = "Revisión general";
-    public final static String TIPO_CORREA = "Cambio correa de distribución";
-    public final static String TIPO_BOMBA_AGUA = "Cambio bomba de agua";
-    public final static String TIPO_FILTRO_GASOLINA = "Cambio de filtro de gasolina";
+    public final static String TIPO_CORREA = "Correa de distribución";
+    public final static String TIPO_BOMBA_AGUA = "Bomba de agua";
+    public final static String TIPO_FILTRO_ACEITE = "Filtro de aceite";
+    public final static String TIPO_FILTRO_GASOLINA = "Filtro de gasolina";
     public final static String TIPO_ITV = "I.T.V.";
+    public final static String TIPO_BUJIAS = "Bujías";
+    public final static String TIPO_FILTRO_AIRE = "Filtro de aire";
+    public final static String TIPO_FRENOS = "Discos y pastillas de freno";
+    public final static String TIPO_LIQUIDO_FRENOS = "Líquido de frenos";
+    public final static String TIPO_LIMPIAPARABRISAS = "Limpiaparabrisas";
+    public final static String TIPO_LUCES = "Luces";
+    public final static String TIPO_RUEDAS = "Ruedas";
 
 
     private String tipo;
     private Date fecha;
     private String datetxt;
-    private int int_fecha;
+    private long long_fecha;
     private int aceite;
     private int revgral;
     private String matricula;
     private int realizado;
     private int kms;
 
-    public TipoLog(String tipo, Date fecha, String datetxt, int int_fecha, int aceite, int revgral, String matricula, int realizado, int kms) {
+    public TipoLog(String tipo, Date fecha, String datetxt, long long_fecha, int aceite, int revgral, String matricula, int realizado, int kms) {
         this.tipo = tipo;
         this.fecha = fecha;
         this.datetxt = datetxt;
-        this.int_fecha = int_fecha;
+        this.long_fecha = long_fecha;
         this.aceite = aceite;
         this.revgral = revgral;
         this.matricula = matricula;
@@ -50,8 +58,8 @@ public class TipoLog implements Serializable {
         return(miTipo.datetxt);
     }
 
-    public int getFechaint(TipoLog miTipo) {
-        return(miTipo.int_fecha);
+    public long getFechalong(TipoLog miTipo) {
+        return(miTipo.long_fecha);
     }
 
     public String getCoche(TipoLog miTipo) {

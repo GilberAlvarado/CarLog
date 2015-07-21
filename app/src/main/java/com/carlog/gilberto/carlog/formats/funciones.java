@@ -37,7 +37,7 @@ public class funciones {
         return fecha_newlog;
     }
 
-    public static int string_a_int(String txt_fecha) {
+    public static long string_a_long(String txt_fecha) {
         Date fecha_newlog = new Date();
         try {
 
@@ -46,30 +46,26 @@ public class funciones {
             formato.setTimeZone(TimeZone.getTimeZone("UTC")); // hay días mal en gmt+1
             fecha_newlog = formato.parse(txt_fecha);
 
-
-
         } catch (ParseException e) {
             // Log.e(TAG, "Funcion diferenciaFechas: Error Parse " + e);
         } catch (Exception e) {
             // Log.e(TAG, "Funcion diferenciaFechas: Error " + e);
         }
-        int int_fecha = (int) ((fecha_newlog).getTime() / 1000);
-        return int_fecha;
+        return ((fecha_newlog).getTime() / 1000);
     }
 
-    public static int date_a_int(Date fecha) {
-        int int_fecha = (int) ((fecha).getTime() / 1000);
-        return int_fecha;
+    public static long date_a_long(Date fecha) {
+        return ((fecha).getTime() / 1000);
     }
 
-    public static String int_a_string(int fecha) {
+    public static String long_a_string(long fecha) {
         return new SimpleDateFormat("dd-MM-yyyy").format(new Date(fecha * 1000L));
 
 
     }
 
-    public static Date int_a_date(int dato) {
-        String txt = int_a_string(dato);
+    public static Date long_a_date(long dato) {
+        String txt = long_a_string(dato);
         return string_a_date(txt);
     }
 

@@ -51,6 +51,7 @@ public class MyActivity extends ActionBarActivity {
     public final static String INICIAL_MATRICULA = "Matrícula";
     public final static String INICIAL_MODELO = "Modelo";
     public final static String INICIAL_ITV = "Fecha ITV";
+    public final static int FIRST_DATE = 157766400; // para comparar si es antes del 01/01/1975 da igual que haya fechas antes pq solo podemos hacer itv de hoy en adelante
 
 
     private Toolbar toolbar;
@@ -235,12 +236,12 @@ public class MyActivity extends ActionBarActivity {
         if (c.moveToFirst() == true) {
             matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
             int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+            long_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
             int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
             int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
             kms = String.valueOf(int_kms);
             int_kms_anterior = int_kms;
-            itv = funciones.int_a_string(int_itv);
+            itv = funciones.long_a_string(long_itv);
         }
 
         SimpleDataView sdv = (SimpleDataView) findViewById(R.id.matricula_view);
@@ -262,7 +263,7 @@ public class MyActivity extends ActionBarActivity {
         sdv.setTitle("Fecha ITV");
         sdv.setValue(itv);
         FloatingActionButton button_addItv = (FloatingActionButton) findViewById(R.id.button_additv);
-        if(!itv.equals("01-01-1970")) {
+        if(long_itv > FIRST_DATE) {
             sdv.setEditInvisible();
             button_addItv.setVisibility(View.GONE);
         }
@@ -285,26 +286,32 @@ public class MyActivity extends ActionBarActivity {
             modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
             int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
             int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+            long_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
             int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
             int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
         }
 
         // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
         DBLogs dbLogs= new DBLogs(context);
-        int int_now = funciones.date_a_int(new Date());
+        long long_now = funciones.date_a_long(new Date());
 
 
         /////////////////// PROCESAR ACEITE
-        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ACEITE);
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ACEITE);
         /////////////////// PROCESAR REV. GRAL.
-        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_REV_GENERAL);
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_REV_GENERAL);
         /////////////////// PROCESAR CORREA DIST.
-        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_CORREA);
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_CORREA);
         /////////////////// PROCESAR BOMBA AGUA
-        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BOMBA_AGUA);
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BOMBA_AGUA);
         /////////////////// PROCESAR ITV
-        ProcesarTipos.procesar(dbLogs, int_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ITV);
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ITV);
+        /////////////////// PROCESAR FILTRO GASOLINA
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_GASOLINA);
+        /////////////////// PROCESAR FILTRO AIRE
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_AIRE);
+        /////////////////// PROCESAR BUJIAS
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BUJIAS);
         // Todo /////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
 
         ////////////////////////////////////////////////////////
@@ -323,24 +330,24 @@ public class MyActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MyActivity.this, ListaLogs.class);
 
-                LeerDatosPantalla();
+                boolean leidos = LeerDatosPantalla();
                 DBCar dbcar = new DBCar(context);
 
-                if (comprobaciones(EditarCoche)) {
+                if (comprobaciones(EditarCoche) && leidos) {
                     dbcar.ActualizarTodosCocheNOActivo(); // Nos aseguramos de que ponemos todos los coches a inactivos para marcar como activo el nuevo
                     if(!EditarCoche) { // Si no estamos editando es nuevo
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_int(new Date()), int_kms);
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
                     } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_int(new Date()), int_kms);
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
 
@@ -412,7 +419,8 @@ public class MyActivity extends ActionBarActivity {
         spinner_marcas.setSelection(0);
     }
 
-    private void LeerDatosPantalla() {
+    private boolean LeerDatosPantalla() {
+        boolean ok = true;
         Spinner spinner_marca = (Spinner)findViewById(R.id.cmb_marcas);
         marca = spinner_marca.getSelectedItem().toString();
         System.out.println(marca);
@@ -441,6 +449,8 @@ public class MyActivity extends ActionBarActivity {
                 int_kms = Integer.parseInt(kms);
             } catch(NumberFormatException nfe) {
                 Toast.makeText(MyActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
+                ok = false;
+                return ok;
             }
 
         }
@@ -451,17 +461,19 @@ public class MyActivity extends ActionBarActivity {
         itv = sdv.getValue();
         if(!itv.isEmpty()) {
             fechaITV = funciones.string_a_date(itv);
-            int_itv = funciones.string_a_int(itv);
+            long_itv = funciones.string_a_long(itv);
         }
         else {
             fechaITV = new Date(0);
-            int_itv = MyActivity.NO_ITV;
+            long_itv = MyActivity.NO_ITV;
         }
+        return ok;
     }
 
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
     Date fechaITV = new Date();
-    int int_year, int_kms, int_kms_anterior = 0, int_itv, int_kms_ini = 0, int_fecha_ini = 0;
+    int int_year, int_kms, int_kms_anterior = 0, int_kms_ini = 0, int_fecha_ini = 0;
+    long long_itv = 0;
 
     private void ocultar_campos() { //
         // Se ocultan todos los campos obligatorios porque ya han sido agregados
@@ -575,9 +587,11 @@ public class MyActivity extends ActionBarActivity {
             toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
             setSupportActionBar(toolbar);
 
-            CambiarCocheActivo.CambiarCocheActivo(dbcar, c, MyActivity.this, context);
+            if(c.moveToFirst() == true) {
+                CambiarCocheActivo.CambiarCocheActivo(dbcar, c, MyActivity.this, context);
+                c = dbcar.buscarCocheActivo();
+            }
 
-            c = dbcar.buscarCocheActivo();
 
             if (c.moveToFirst() == true) {
                 matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
@@ -585,7 +599,7 @@ public class MyActivity extends ActionBarActivity {
                 modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
                 int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
                 int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-                int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
+                long_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
                 int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
                 int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
             }
@@ -594,7 +608,7 @@ public class MyActivity extends ActionBarActivity {
             RellenarModelos(c);
             RellenarYears(c);
             Siguiente(context, EditarCoche);
-            if(CocheNuevo) {
+            if(CocheNuevo || (c.moveToFirst() == false)) {
                 VaciarPantalla();
             }
             if(EditarCoche) {

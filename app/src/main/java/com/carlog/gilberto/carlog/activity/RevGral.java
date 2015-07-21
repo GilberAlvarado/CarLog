@@ -90,25 +90,25 @@ public class RevGral extends Activity {
                 String datetxt = txtTexto.getText().toString();
 
                 Date fecha = funciones.string_a_date(datetxt);
-                int int_fecha = funciones.string_a_int(datetxt);
+                long long_fecha = funciones.string_a_long(datetxt);
 
                 TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
                 System.out.println("SE inserta revgral id : "+int_revgral);
-                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_REV_GENERAL, fecha, datetxt, int_fecha, AddLog.NO_ACEITE, int_revgral, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
+                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_revgral, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
 
 
-                if(miTipoLog.getFechaint(miTipoLog) < funciones.date_a_int(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
+                if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                     // Creamos el nuevo futuro log
                     // Se pone como REALIZADO!
-                    miTipoLog = new TipoLog(TipoLog.TIPO_REV_GENERAL, fecha, datetxt, int_fecha, AddLog.NO_ACEITE, int_revgral, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
+                    miTipoLog = new TipoLog(TipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_revgral, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
                 }
 
                 Intent intent = new Intent(RevGral.this, AddLog.class);
 
                 managerLogs.insertar(miTipoLog);
                 // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
-                ProcesarTipos.procesar(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), TipoLog.TIPO_REV_GENERAL); // actualizamos fechas
+                ProcesarTipos.procesar(managerLogs, funciones.date_a_long(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), TipoLog.TIPO_REV_GENERAL); // actualizamos fechas
 
                 setResult(Activity.RESULT_OK, intent);
 

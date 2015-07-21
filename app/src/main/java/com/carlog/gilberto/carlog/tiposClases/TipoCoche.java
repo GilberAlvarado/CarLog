@@ -15,14 +15,14 @@ public class TipoCoche implements Serializable {
     private String modelo;
     private int year;
     private int kms;
-    private int itv;
+    private long itv;
     private int profile;
     private String matricula;
-    private int fecha_ini;
+    private long fecha_ini;
     private int kms_ini;
 
 
-    public TipoCoche(String matricula, String marca, String modelo, int year, int kms, int itv, int profile, int fecha_ini, int kms_ini) {
+    public TipoCoche(String matricula, String marca, String modelo, int year, int kms, long itv, int profile, long fecha_ini, int kms_ini) {
         this.matricula = matricula;
         this.marca = marca;
         this.modelo = modelo;
@@ -54,7 +54,7 @@ public class TipoCoche implements Serializable {
         return(miCoche.kms);
     }
 
-    public int getItv(TipoCoche miCoche) {
+    public long getItv(TipoCoche miCoche) {
         return(miCoche.itv);
     }
 
@@ -62,7 +62,7 @@ public class TipoCoche implements Serializable {
         return(miCoche.profile);
     }
 
-    public int getFechaIni(TipoCoche miCoche) {
+    public long getFechaIni(TipoCoche miCoche) {
         return(miCoche.fecha_ini);
     }
 

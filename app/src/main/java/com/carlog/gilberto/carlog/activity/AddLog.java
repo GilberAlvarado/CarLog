@@ -124,14 +124,14 @@ public class AddLog extends Activity {
             int_fecha_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_FECHA_INI));
         }
         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
-        int int_now = funciones.date_a_int(new Date());
-        int ahora = funciones.date_a_int(new Date());
+        long long_now = funciones.date_a_long(new Date());
+        long ahora = funciones.date_a_long(new Date());
 
         if (miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ACEITE)) {
             // Antes de hacer nada miramos si ya existe algun tipo de aceite pues no debemos tener más de uno
             Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE, miCoche.getMatricula(miCoche));
             if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
-                if(miTipoLog.getFechaint(miTipoLog) >= ahora) {
+                if(miTipoLog.getFechalong(miTipoLog) >= ahora) {
                     Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + TipoLog.TIPO_ACEITE + " hecha.", Toast.LENGTH_SHORT).show();
                 }
                 intent = new Intent(AddLog.this, Aceite.class);
@@ -147,7 +147,7 @@ public class AddLog extends Activity {
             // Antes de hacer nada miramos si ya existe algun tipo de revgral pues no debemos tener más de una
             Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_REV_GENERAL, miCoche.getMatricula(miCoche));
             if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
-                if(miTipoLog.getFechaint(miTipoLog) >= ahora) {
+                if(miTipoLog.getFechalong(miTipoLog) >= ahora) {
                     Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + TipoLog.TIPO_REV_GENERAL + " hecha.", Toast.LENGTH_SHORT).show();
                 }
                 intent = new Intent(AddLog.this, RevGral.class);
@@ -189,7 +189,7 @@ public class AddLog extends Activity {
 
                 System.out.println("FECHA NEW LOG " + datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear());
 
-                int int_fecha = funciones.string_a_int(txt_date_newlog);
+                long long_fecha = funciones.string_a_long(txt_date_newlog);
                 Date fecha_newlog = funciones.string_a_date(txt_date_newlog);
 
                 DBCar dbcar = new DBCar(v.getContext());
@@ -202,20 +202,21 @@ public class AddLog extends Activity {
                     int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
                 }
 
-                if (int_fecha > funciones.date_a_int(new Date())) {
+                if (long_fecha > funciones.date_a_long(new Date())) {
                     // con NO_REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, int_kms);
-                    System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, int_kms);
+                    System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     addlog(miTipoLog, managerLogs);
                     if(tipo.equals(TipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
                         DBCar dbc = new DBCar(getApplicationContext());
-                        dbc.ActualizarITVCocheActivo(matricula, int_fecha);
+                        dbc.ActualizarITVCocheActivo(matricula, long_fecha);
+
                     }
                 }
                 else {
                     // con REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, int_fecha, NO_ACEITE, NO_REVGRAL, matricula, DBLogs.REALIZADO, int_kms);
-                    System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + int_fecha);
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_REVGRAL, matricula, DBLogs.REALIZADO, int_kms);
+                    System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     AlertDialog.Builder builder = new AlertDialog.Builder(AddLog.this);
                     builder.setMessage("¿Quiere añadir la última revisión hecha de " + miTipoLog.getTipo(miTipoLog) + "?")
                             .setTitle("Historial")
@@ -233,7 +234,7 @@ public class AddLog extends Activity {
                                             addlog(miTipoLog, managerLogs);
                                             if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
                                                 DBCar dbc = new DBCar(getApplicationContext());
-                                                dbc.ActualizarITVCocheActivo(miTipoLog.getCoche(miTipoLog), miTipoLog.getFechaint(miTipoLog));
+                                                dbc.ActualizarITVCocheActivo(miTipoLog.getCoche(miTipoLog), miTipoLog.getFechalong(miTipoLog));
                                             }
                                         }
                                     });

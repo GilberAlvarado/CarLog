@@ -135,7 +135,7 @@ public class miAdaptadorLog extends ArrayAdapter {
         sqView.img_tipo_log.setImageBitmap(getRoundedShape(decodeFile(getContext(), resID), 200));
 
         if(miLog.getRealizado((TipoLog) datos.get(position)) == DBLogs.NO_REALIZADO) {
-            if (miLog.getFechaint((TipoLog) datos.get(position)) <= funciones.date_a_int(funciones.fecha_mas_dias(new Date(), 1))) {
+            if (miLog.getFechalong((TipoLog) datos.get(position)) <= funciones.date_a_long(funciones.fecha_mas_dias(new Date(), 1))) {
                 sqView.tipo.setTextColor(Color.RED);
                 sqView.fecha.setTextColor(Color.RED);
                 sqView.tipo.setTypeface(null, Typeface.BOLD);

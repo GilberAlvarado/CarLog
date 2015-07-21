@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.view.SimpleDataView;
 import com.gc.materialdesign.views.ButtonRectangle;
@@ -32,6 +33,9 @@ public class AddItv extends Activity {
         DatePicker datePicker2 = (DatePicker) findViewById(R.id.date_itv);
         datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);*/
 
+        if(funciones.date_a_long(fechaITV) < MyActivity.FIRST_DATE) {
+            fechaITV = new Date();
+        }
         //rellenar
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fechaITV);
