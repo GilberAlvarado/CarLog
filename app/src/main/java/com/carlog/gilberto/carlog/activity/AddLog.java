@@ -108,7 +108,7 @@ public class AddLog extends Activity {
 
     private void addlog(TipoLog miTipoLog, DBLogs managerLogs) {
 
-        Intent intent;
+        Intent intent = null;
         DBCar dbc = new DBCar(getApplicationContext());
         Cursor c_activo = dbc.buscarCocheActivo();
         String matricula = "", marca = "", modelo = "";
@@ -127,43 +127,75 @@ public class AddLog extends Activity {
         long long_now = funciones.date_a_long(new Date());
         long ahora = funciones.date_a_long(new Date());
 
-        if (miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ACEITE)) {
-            // Antes de hacer nada miramos si ya existe algun tipo de aceite pues no debemos tener más de uno
-            Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE, miCoche.getMatricula(miCoche));
-            if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
-                if(miTipoLog.getFechalong(miTipoLog) >= ahora) {
-                    Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + TipoLog.TIPO_ACEITE + " hecha.", Toast.LENGTH_SHORT).show();
-                }
+        // Antes de hacer nada miramos si ya existe algun tipo igual pues no debemos tener más de uno
+        Cursor c = managerLogs.buscarTipo(miTipoLog.getTipo(miTipoLog), miCoche.getMatricula(miCoche));
+        if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
+            if(miTipoLog.getFechalong(miTipoLog) >= ahora) {
+                Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + miTipoLog.getTipo(miTipoLog) + " hecha.", Toast.LENGTH_SHORT).show();
+            }
+            if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ACEITE)) {
                 intent = new Intent(AddLog.this, Aceite.class);
                 intent.putExtra("miTipoLog", miTipoLog);
                 intent.putExtra("miCoche", miCoche);
                 startActivity(intent);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente un " + TipoLog.TIPO_ACEITE, Toast.LENGTH_SHORT).show();
-
-        }
-        else if (miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_REV_GENERAL)) {
-            // Antes de hacer nada miramos si ya existe algun tipo de revgral pues no debemos tener más de una
-            Cursor c = managerLogs.buscarTipo(TipoLog.TIPO_REV_GENERAL, miCoche.getMatricula(miCoche));
-            if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
-                if(miTipoLog.getFechalong(miTipoLog) >= ahora) {
-                    Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + TipoLog.TIPO_REV_GENERAL + " hecha.", Toast.LENGTH_SHORT).show();
-                }
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_REV_GENERAL)) {
                 intent = new Intent(AddLog.this, RevGral.class);
                 intent.putExtra("miTipoLog", miTipoLog);
                 intent.putExtra("miCoche", miCoche);
                 startActivity(intent);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente un " + TipoLog.TIPO_REV_GENERAL, Toast.LENGTH_SHORT).show();
-
-        }else {
-            intent = new Intent(AddLog.this, ListaLogs.class);
-            managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ITV)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_CORREA)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_BOMBA_AGUA)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FILTRO_ACEITE)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FILTRO_AIRE)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_BUJIAS)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FRENOS)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_LIQUIDO_FRENOS)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_LIMPIAPARABRISAS)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_LUCES)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
+            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_RUEDAS)) {
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
             setResult(Activity.RESULT_OK, intent);
             finish();
-        }
+        } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente una revisión de " + miTipoLog.getTipo(miTipoLog), Toast.LENGTH_SHORT).show();
     }
 
     private void GuardarLog(final DBLogs managerLogs) {
