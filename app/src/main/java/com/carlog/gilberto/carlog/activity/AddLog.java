@@ -7,6 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,11 +34,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class AddLog extends Activity {
+public class AddLog extends ActionBarActivity {
 
     public final static int NO_ACEITE = -1;
     public final static int NO_REVGRAL = -1;
     private Spinner spinner1;
+    private Toolbar toolbar;
 
     private void RellenarTipos(DBTiposRevision managerTiposRevision) {
         spinner1 = (Spinner) findViewById(R.id.cmb_tipos);
@@ -208,6 +213,10 @@ public class AddLog extends Activity {
                 intent = new Intent(AddLog.this, ListaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
+            else { // es un tipo agregado por el usuario
+                intent = new Intent(AddLog.this, ListaLogs.class);
+                managerLogs.insertar(miTipoLog);
+            }
             setResult(Activity.RESULT_OK, intent);
             finish();
         } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente una revisión de " + miTipoLog.getTipo(miTipoLog), Toast.LENGTH_SHORT).show();
@@ -299,11 +308,15 @@ public class AddLog extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_log);
+
+        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         DBLogs managerLogs = new DBLogs(this);
         DBTiposRevision managerTiposRevision = new DBTiposRevision(this);
-
-        setContentView(R.layout.activity_add_log);
         RellenarTipos(managerTiposRevision);
         SeleccionarTipo(managerTiposRevision);
         GuardarLog(managerLogs);
@@ -312,6 +325,24 @@ public class AddLog extends Activity {
 
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.my, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
 
 }

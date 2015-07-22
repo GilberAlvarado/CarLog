@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,13 +31,13 @@ import java.util.Date;
 /**
  * Created by Gilberto on 19/05/2015.
  */
-public class Aceite extends Activity {
+public class Aceite extends ActionBarActivity {
 
     public final static String TIPO_10K_KM = "10 mil kms - 5w30 – 5w40 – 5w50";
     public final static String TIPO_7M_KM = "7 mil kms - 10w40";
     public final static String TIPO_5K_KM = "5 mil kms - 15w40 - 20w50 - 25w60";
 
-
+    private Toolbar toolbar;
     private Spinner spinner1;
 
     private void RellenarTiposAceite(DBAceite managerAceite) {
@@ -113,6 +117,11 @@ public class Aceite extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aceite);
 
+        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Context contextNew = getApplicationContext();
         DBAceite managerAceite = new DBAceite(contextNew);
         DBLogs managerLog = new DBLogs(contextNew);
@@ -121,4 +130,25 @@ public class Aceite extends Activity {
         //SeleccionarTipo(managerTiposRevision);
         GuardarLog(managerLog, managerAceite);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.my, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
 }

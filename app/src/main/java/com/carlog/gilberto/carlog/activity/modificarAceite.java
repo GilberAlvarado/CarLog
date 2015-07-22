@@ -9,9 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,6 +23,7 @@ import com.carlog.gilberto.carlog.data.DBAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
+import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,9 +31,10 @@ import java.util.Date;
 /**
  * Created by Gilberto on 26/05/2015.
  */
-public class ModificarAceite extends Activity {
+public class ModificarAceite extends ActionBarActivity {
 
     private Spinner spinner1;
+    private Toolbar toolbar;
 
     private void RellenarTiposAceite(DBAceite managerAceite, TipoLog miTipo) {
         String txt_fecha = miTipo.getFechatxt(miTipo);
@@ -55,7 +60,7 @@ public class ModificarAceite extends Activity {
 
     private void ModificarLog(final DBLogs managerLogs, final DBAceite managerAceite) {
         //Instanciamos el Boton
-        Button btn1 = (Button) findViewById(R.id.guardar_aceite);
+        ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_aceite);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,12 +102,37 @@ public class ModificarAceite extends Activity {
         setContentView(R.layout.activity_aceite);
 
         Context contextNew = getApplicationContext();
+        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         DBAceite managerAceite = new DBAceite(contextNew);
         DBLogs managerLog = new DBLogs(contextNew);
         TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
 
         RellenarTiposAceite(managerAceite, miTipo);
         ModificarLog(managerLog, managerAceite);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.my, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 }
 

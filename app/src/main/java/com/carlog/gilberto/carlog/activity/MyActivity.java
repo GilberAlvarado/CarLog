@@ -351,10 +351,10 @@ public class MyActivity extends ActionBarActivity {
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
 
-                    Cursor c = dbcar.buscarCoches();
+                /*    Cursor c = dbcar.buscarCoches();
 
                     CambiarCocheActivo.CambiarCocheActivo(dbcar, c, MyActivity.this, context);  //actualizamos los coches en el navigation bar por si se crea uno nuevo
-
+*/
 
 
                     procesar(context);
@@ -587,10 +587,15 @@ public class MyActivity extends ActionBarActivity {
             toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
             setSupportActionBar(toolbar);
 
-            if(c.moveToFirst() == true) {
+            if(CocheNuevo || EditarCoche || addItv) {  // El back arrow solo lo ponemos en la actividad principal si tiene actividad padre (sin coches es la principal)
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            }
+
+       /*     if((c.moveToFirst() == true) &&()) {
                 CambiarCocheActivo.CambiarCocheActivo(dbcar, c, MyActivity.this, context);
                 c = dbcar.buscarCocheActivo();
-            }
+            }*/
 
 
             if (c.moveToFirst() == true) {

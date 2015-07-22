@@ -9,6 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,7 +34,7 @@ import java.util.Date;
 /**
  * Created by Gilberto on 19/05/2015.
  */
-public class RevGral extends Activity {
+public class RevGral extends ActionBarActivity {
 
     public final static String TIPO_5K_KM = "5 mil kms";
     public final static String TIPO_10K_KM = "10 mil kms";
@@ -43,7 +47,7 @@ public class RevGral extends Activity {
     public final static String TIPO_45K_KM = "45 mil kms";
     public final static String TIPO_50K_KM = "50 mil kms";
 
-
+    private Toolbar toolbar;
     private Spinner spinner1;
 
     private void RellenarTiposRevGral(DBRevGral managerRevGral) {
@@ -123,6 +127,11 @@ public class RevGral extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_revgral);
 
+        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Context contextNew = getApplicationContext();
         DBRevGral managerRevGral = new DBRevGral(contextNew);
         DBLogs managerLog = new DBLogs(contextNew);
@@ -130,6 +139,26 @@ public class RevGral extends Activity {
         RellenarTiposRevGral(managerRevGral);
         //SeleccionarTipo(managerTiposRevision);
         GuardarLog(managerLog, managerRevGral);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.my, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 }
 

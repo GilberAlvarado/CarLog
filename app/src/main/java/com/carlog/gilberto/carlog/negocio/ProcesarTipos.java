@@ -40,6 +40,116 @@ public class ProcesarTipos {
     public final static int KMS_RUEDAS = 15000;
 
 
+    private static int procesarPorKms(Context context, String tipo_rev, int id_aceite_ultimo_log_hist, int id_revgral_ultimo_log_hist) {
+        int kms_tipo_ultimo_log_hist = 0;
+        ///////ACEITE tiene id pq tiene su propia tabla
+        if(tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
+            DBAceite dbaceite = new DBAceite(context);
+            Cursor c_aceite = dbaceite.buscarTiposAceite(id_aceite_ultimo_log_hist);
+
+            if (c_aceite.moveToFirst() == true) {
+                kms_tipo_ultimo_log_hist = c_aceite.getInt(c_aceite.getColumnIndex(DBAceite.CN_KMS));
+                System.out.println("KMS " + tipo_rev + " ultimo log hist: " + kms_tipo_ultimo_log_hist);
+                System.out.println(tipo_rev + " ultimo log hist id: " +id_aceite_ultimo_log_hist);
+            }
+        }
+        ///////REV GRAL tiene id pq tiene su propia tabla
+        if(tipo_rev.equals(TipoLog.TIPO_REV_GENERAL)) {
+            DBRevGral dbRevGral = new DBRevGral(context);
+            Cursor c_revgral = dbRevGral.buscarTiposRevGral(id_revgral_ultimo_log_hist);
+
+            if (c_revgral.moveToFirst() == true) {
+                kms_tipo_ultimo_log_hist = c_revgral.getInt(c_revgral.getColumnIndex(DBRevGral.CN_KMS));
+                System.out.println("KMS " + tipo_rev + " ultimo log hist: " + kms_tipo_ultimo_log_hist);
+                System.out.println(tipo_rev + " ultimo log hist id: " +id_revgral_ultimo_log_hist);
+            }
+        }
+        // correa no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        if(tipo_rev.equals(TipoLog.TIPO_CORREA)) {
+            kms_tipo_ultimo_log_hist = KMS_CORREA;
+        }
+        // bomba de agua no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        if(tipo_rev.equals(TipoLog.TIPO_BOMBA_AGUA)) {
+            kms_tipo_ultimo_log_hist = KMS_BOMBA_AGUA;
+        }
+        // filtro de gasolina no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        if(tipo_rev.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
+            kms_tipo_ultimo_log_hist = KMS_FIL_GASOLINA;
+        }
+        // filtro de aire no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        if(tipo_rev.equals(TipoLog.TIPO_FILTRO_AIRE)) {
+            kms_tipo_ultimo_log_hist = KMS_FIL_AIRE;
+        }
+        // bujias no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        if(tipo_rev.equals(TipoLog.TIPO_BUJIAS)) {
+            kms_tipo_ultimo_log_hist = KMS_BUJIAS;
+        }
+        // itv no va por kms así que no se hacen comprobaciones aquí
+
+        return kms_tipo_ultimo_log_hist;
+    }
+
+
+
+
+
+    private static Date procesarPorFecha(String tipo_rev, Date fecha_ultimo_log_hist) {
+        Date f_revision_por_fecha = new Date();
+        if (tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
+            f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_REV_ACEITE);
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_REV_GENERAL)) {
+            f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_REV_REVGRAL);
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_CORREA)) {
+            f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_CORREA);
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_BOMBA_AGUA)) {
+            f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_BOMBA_AGUA);
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_FILTRO_AIRE)) {
+            f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_FIL_AIRE);
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
+            f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_FIL_GASOLINA);
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_BUJIAS)) {
+            f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_BUJIAS);
+        }
+        // la itv solo se procesa al marcar el log como realizado pq no depende de los kms ni de fecha sino cuando la realice
+
+        return f_revision_por_fecha;
+    }
+
+
+
+    private static void avisoSobrepasadaRev(Context context, String tipo_rev) {
+        if (tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
+            Toast.makeText(context, "Debería cambiar el aceite cuanto antes.", Toast.LENGTH_LONG).show();
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_REV_GENERAL)) {
+            Toast.makeText(context, "Debería realizar una revisión general cuanto antes.", Toast.LENGTH_LONG).show();
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_CORREA)) {
+            Toast.makeText(context, "Debería cambiar la correa de distribución cuanto antes.", Toast.LENGTH_LONG).show();
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_BOMBA_AGUA)) {
+            Toast.makeText(context, "Debería cambiar la bomba de agua cuanto antes.", Toast.LENGTH_LONG).show();
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
+            Toast.makeText(context, "Debería cambiar el filtro de gasolina cuanto antes.", Toast.LENGTH_LONG).show();
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_FILTRO_AIRE)) {
+            Toast.makeText(context, "Debería cambiar el filtro de aire cuanto antes.", Toast.LENGTH_LONG).show();
+        }
+        if (tipo_rev.equals(TipoLog.TIPO_BUJIAS)) {
+            Toast.makeText(context, "Debería cambiar las bujías cuanto antes.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
+
     public static void procesar(DBLogs dbLogs, long long_now, Context context, int int_kms, long long_fecha_ini, int int_kms_ini, String matricula, String tipo_rev) {
         int dias_coche = (int) funciones.dias_entre_2_fechas(funciones.long_a_date(long_fecha_ini), new Date());
         int int_media = 0;
@@ -51,57 +161,14 @@ public class ProcesarTipos {
         Cursor c_historico_tipo = dbLogs.LogsHistoricoTipoOrderByFechaString(long_now, matricula, tipo_rev);
         Cursor c_logs_tipo = dbLogs.LogsTipoOrderByFechaString(long_now, matricula, tipo_rev);
 
-
         if (c_historico_tipo.moveToFirst() == true) { // Si existen logs históricos de aceite hay que actualizar la fecha del futuro (pq siempre tiene q existir) log de aceite
             String txt_fecha_h = c_historico_tipo.getString(c_historico_tipo.getColumnIndex("fecha_string")); // recuperamos el último de los logs
             Date fecha_ultimo_log_hist = funciones.string_a_date(txt_fecha_h);
             int kms_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_KMS));
             String txt_matricula_ultimo_log_hist = c_historico_tipo.getString(c_historico_tipo.getColumnIndex(DBLogs.CN_CAR));
-            int kms_tipo_ultimo_log_hist = 0;
-
             int id_aceite_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_ACEITE));
-            if(tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
-                DBAceite dbaceite = new DBAceite(context);
-                Cursor c_aceite = dbaceite.buscarTiposAceite(id_aceite_ultimo_log_hist);
-
-                if (c_aceite.moveToFirst() == true) {
-                    kms_tipo_ultimo_log_hist = c_aceite.getInt(c_aceite.getColumnIndex(DBAceite.CN_KMS));
-                    System.out.println("KMS " + tipo_rev + " ultimo log hist: " + kms_tipo_ultimo_log_hist);
-                    System.out.println(tipo_rev + " ultimo log hist id: " +id_aceite_ultimo_log_hist);
-                }
-            }
             int id_revgral_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_REVGRAL));
-            if(tipo_rev.equals(TipoLog.TIPO_REV_GENERAL)) {
-                DBRevGral dbRevGral = new DBRevGral(context);
-                Cursor c_revgral = dbRevGral.buscarTiposRevGral(id_revgral_ultimo_log_hist);
-
-                if (c_revgral.moveToFirst() == true) {
-                    kms_tipo_ultimo_log_hist = c_revgral.getInt(c_revgral.getColumnIndex(DBRevGral.CN_KMS));
-                    System.out.println("KMS " + tipo_rev + " ultimo log hist: " + kms_tipo_ultimo_log_hist);
-                    System.out.println(tipo_rev + " ultimo log hist id: " +id_revgral_ultimo_log_hist);
-                }
-            }
-            // correa no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-            if(tipo_rev.equals(TipoLog.TIPO_CORREA)) {
-                kms_tipo_ultimo_log_hist = KMS_CORREA;
-            }
-            // bomba de agua no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-            if(tipo_rev.equals(TipoLog.TIPO_BOMBA_AGUA)) {
-                kms_tipo_ultimo_log_hist = KMS_BOMBA_AGUA;
-            }
-            // filtro de gasolina no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-            if(tipo_rev.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
-                kms_tipo_ultimo_log_hist = KMS_FIL_GASOLINA;
-            }
-            // filtro de aire no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-            if(tipo_rev.equals(TipoLog.TIPO_FILTRO_AIRE)) {
-                kms_tipo_ultimo_log_hist = KMS_FIL_AIRE;
-            }
-            // bujias no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-            if(tipo_rev.equals(TipoLog.TIPO_BUJIAS)) {
-                kms_tipo_ultimo_log_hist = KMS_BUJIAS;
-            }
-            // itv no va por kms así que no se hacen comprobaciones aquí
+            int kms_tipo_ultimo_log_hist = procesarPorKms(context, tipo_rev, id_aceite_ultimo_log_hist, id_revgral_ultimo_log_hist);
 
             System.out.println("int_media: " + int_media + " kms_ultimo_log_hist "+kms_ultimo_log_hist);
 
@@ -117,66 +184,19 @@ public class ProcesarTipos {
 
                     if (dias_en_hacer_kms_x_hacer == 0) { // La media es mucho más grande que los kms que quedan o se llega al día que toca
                         fecha_log_futuro_recalculada = funciones.fecha_mas_dias(new Date(), dias_en_hacer_kms_x_hacer + 1); //Mañana y aviso
-                        if (tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
-                            Toast.makeText(context, "Debería cambiar el aceite cuanto antes.", Toast.LENGTH_LONG).show();
-                        }
-                        if (tipo_rev.equals(TipoLog.TIPO_REV_GENERAL)) {
-                            Toast.makeText(context, "Debería realizar una revisión general cuanto antes.", Toast.LENGTH_LONG).show();
-                        }
-                        if (tipo_rev.equals(TipoLog.TIPO_CORREA)) {
-                            Toast.makeText(context, "Debería cambiar la correa de distribución cuanto antes.", Toast.LENGTH_LONG).show();
-                        }
-                        if (tipo_rev.equals(TipoLog.TIPO_BOMBA_AGUA)) {
-                            Toast.makeText(context, "Debería cambiar la bomba de agua cuanto antes.", Toast.LENGTH_LONG).show();
-                        }
-                        if (tipo_rev.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
-                            Toast.makeText(context, "Debería cambiar el filtro de gasolina cuanto antes.", Toast.LENGTH_LONG).show();
-                        }
-                        if (tipo_rev.equals(TipoLog.TIPO_FILTRO_AIRE)) {
-                            Toast.makeText(context, "Debería cambiar el filtro de aire cuanto antes.", Toast.LENGTH_LONG).show();
-                        }
-                        if (tipo_rev.equals(TipoLog.TIPO_BUJIAS)) {
-                            Toast.makeText(context, "Debería cambiar las bujías cuanto antes.", Toast.LENGTH_LONG).show();
-                        }
+                        avisoSobrepasadaRev(context, tipo_rev);
                     } else {
                         fecha_log_futuro_recalculada = funciones.fecha_mas_dias(new Date(), dias_en_hacer_kms_x_hacer);
                     }
-System.out.println("fecha_log_futuro_recalculada fuera "+fecha_log_futuro_recalculada);
                     long long_fecha_log_futuro_recalculada = funciones.date_a_long(fecha_log_futuro_recalculada);
-System.out.println("LONGGGGGGGGGGGGGGGG "+long_fecha_log_futuro_recalculada);
-                    Date f_revision_por_fecha = new Date();
-                    if (tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
-                        f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_REV_ACEITE);
-                    }
-                    if (tipo_rev.equals(TipoLog.TIPO_REV_GENERAL)) {
-                        f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_REV_REVGRAL);
-                    }
-                    if (tipo_rev.equals(TipoLog.TIPO_CORREA)) {
-                        f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_CORREA);
-                    }
-                    if (tipo_rev.equals(TipoLog.TIPO_BOMBA_AGUA)) {
-                        f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_BOMBA_AGUA);
-                    }
-                    if (tipo_rev.equals(TipoLog.TIPO_FILTRO_AIRE)) {
-                        f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_FIL_AIRE);
-                    }
-                    if (tipo_rev.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
-                        f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_FIL_GASOLINA);
-                    }
-                    if (tipo_rev.equals(TipoLog.TIPO_BUJIAS)) {
-                        f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_BUJIAS);
-                    }
-                    // la itv solo se procesa al marcar el log como realizado pq no depende de los kms ni de fecha sino cuando la realice
 
-System.out.println("pruebaaaa22222" + fecha_ultimo_log_hist);
-System.out.println("pruebaaaa22222" + f_revision_por_fecha);
+                    Date f_revision_por_fecha = procesarPorFecha(tipo_rev, fecha_ultimo_log_hist);
+
                     long long_f_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
                     if (long_fecha_log_futuro_recalculada > long_f_revision_por_fecha) { // el cambio sería por fecha y no por kms
-System.out.println("primera menor segunda");
                         long_fecha_log_futuro_recalculada = long_f_revision_por_fecha;
                         System.out.println("EL cambio es por fecha: fecha calculada " + fecha_log_futuro_recalculada + " y por fecha " + f_revision_por_fecha);
                     }
-System.out.println("33333333 " + long_fecha_log_futuro_recalculada);
                     if (c_logs_tipo.moveToFirst() == true) {
                         String txt_fecha_l = c_logs_tipo.getString(c_logs_tipo.getColumnIndex("fecha_string")); // recuperamos el último de los logs del tiporev
                         int int_id_log = c_logs_tipo.getInt(c_logs_tipo.getColumnIndex(dbLogs.CN_ID));

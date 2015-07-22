@@ -9,10 +9,14 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activity.MyActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -22,27 +26,57 @@
         </activity>
         <activity
             android:name=".activity.AddLog"
-            android:label="@string/title_activity_add_log" >
+            android:label="@string/title_activity_add_log"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
         </activity>
         <activity
             android:name=".activity.Aceite"
-            android:label="@string/title_activity_aceite" >
+            android:label="@string/title_activity_aceite"
+            android:parentActivityName=".activity.AddLog" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.AddLog" />
         </activity>
         <activity
             android:name=".activity.RevGral"
-            android:label="@string/title_activity_revgral" >
+            android:label="@string/title_activity_revgral"
+            android:parentActivityName=".activity.AddLog" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.AddLog" />
         </activity>
         <activity
             android:name=".activity.ModificarAceite"
-            android:label="@string/title_activity_modificaraceite" >
+            android:label="@string/title_activity_modificaraceite"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
         </activity>
         <activity
             android:name=".activity.ModificarRevGral"
-            android:label="@string/title_activity_modificarrevgral" >
+            android:label="@string/title_activity_modificarrevgral"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
         </activity>
         <activity
             android:name=".activity.AddItv"
-            android:label="@string/title_activity_additv" >
+            android:label="@string/title_activity_additv"
+            android:parentActivityName=".activity.MyActivity" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MyActivity" />
         </activity>
     </application>
 
