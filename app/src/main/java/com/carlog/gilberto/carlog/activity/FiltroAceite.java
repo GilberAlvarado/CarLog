@@ -82,8 +82,10 @@ public class FiltroAceite extends ActionBarActivity {
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fil_aceite);
                 String datetxt = txtTexto.getText().toString();
 
-                Date fecha = funciones.string_a_date(datetxt);
-                long long_fecha = funciones.string_a_long(datetxt);
+                //Date fecha = funciones.string_a_date(datetxt);
+                Date fecha = funciones.fecha_mas_dias(new Date(), ProcesarTipos.F_MAX_REV_ACEITE); // da igual la fecha siempre va a poner un año y cuando toque el contador la misma fecha del aceite
+                //long long_fecha = funciones.string_a_long(datetxt);
+                long long_fecha = funciones.date_a_long(fecha);
 
                 TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 

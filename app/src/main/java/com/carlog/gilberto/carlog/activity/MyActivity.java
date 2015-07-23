@@ -294,6 +294,10 @@ public class MyActivity extends ActionBarActivity {
         ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_AIRE);
         /////////////////// PROCESAR BUJIAS
         ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BUJIAS);
+        /////////////////// PROCESAR LIMPIAPARABRISAS
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIMPIAPARABRISAS);
+        /////////////////// PROCESAR LÍQUIDO DE FRENOS
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIQUIDO_FRENOS);
     }
 
     private void procesar(Context context) {
