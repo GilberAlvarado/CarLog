@@ -11,18 +11,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBTiposRevision;
 import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
+import com.gc.materialdesign.views.ButtonRectangle;
 
 
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ public class Aceite extends ActionBarActivity {
         TextView text=(TextView)findViewById(R.id.txt_fecha_aceite);
         text.setText(txt_fecha);
 
-        //spinner1 = (Spinner) findViewById(R.id.cmb_tipos_aceite);
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_aceite);
 
         Cursor cursor = managerAceite.buscarTiposAceite();
@@ -64,7 +62,7 @@ public class Aceite extends ActionBarActivity {
 
     private void GuardarLog(final DBLogs managerLogs, final DBAceite managerAceite) {
         //Instanciamos el Boton
-        Button btn1 = (Button) findViewById(R.id.guardar_aceite);
+        ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_aceite);
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,13 +87,13 @@ public class Aceite extends ActionBarActivity {
                 TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
                 System.out.println("SE inserta aceite id : "+int_aceite);
-                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
+                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
 
 
                 if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                     // Creamos el nuevo futuro log
                     // Se pone como REALIZADO!
-                    miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
+                    miTipoLog = new TipoLog(TipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
                 }
 
                 Intent intent = new Intent(Aceite.this, AddLog.class);
@@ -127,7 +125,6 @@ public class Aceite extends ActionBarActivity {
         DBLogs managerLog = new DBLogs(contextNew);
 
         RellenarTiposAceite(managerAceite);
-        //SeleccionarTipo(managerTiposRevision);
         GuardarLog(managerLog, managerAceite);
     }
 

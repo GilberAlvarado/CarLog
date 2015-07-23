@@ -27,8 +27,6 @@ public class DBAceite {
     public DBAceite(Context context) {
         helper = new DbHelper(context);
         db = helper.getWritableDatabase();
-
-
     }
 
 

@@ -43,6 +43,15 @@
                 android:value=".activity.AddLog" />
         </activity>
         <activity
+            android:name=".activity.FiltroAceite"
+            android:label="@string/title_activity_fil_aceite"
+            android:parentActivityName=".activity.AddLog" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.AddLog" />
+        </activity>
+        <activity
             android:name=".activity.RevGral"
             android:label="@string/title_activity_revgral"
             android:parentActivityName=".activity.AddLog" >

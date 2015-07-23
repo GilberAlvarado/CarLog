@@ -21,6 +21,8 @@ public class DBLogs {
     public static final String CN_TIPO = "tipo";
     public static final String CN_FECHA = "fecha";
     public static final String CN_ACEITE = "aceite";
+    public static final String CN_VECES_FIL_ACEITE = "veces_aceite"; // cada cuantos cambios de aceite se cambia el filtro (para los tipo_rev filtro aceite)
+    public static final String CN_CONTADOR_FIL_ACEITE = "contador_aceite"; // nº de veces que se ha cambiado el aceite sin cambiar el filtro (para tipo_rev aceite)
     public static final String CN_REVGRAL = "revgral";
     public static final String CN_CAR = "matricula";
     public static final String CN_REALIZADO = "realizado";
@@ -31,6 +33,8 @@ public class DBLogs {
             + CN_TIPO + " text not null,"
             + CN_FECHA + " integer not null,"
             + CN_ACEITE + " int,"
+            + CN_VECES_FIL_ACEITE + " int,"
+            + CN_CONTADOR_FIL_ACEITE + " int,"
             + CN_REVGRAL + " int,"
             + CN_CAR + " text not null,"
             + CN_REALIZADO + " integer not null,"
@@ -46,8 +50,6 @@ public class DBLogs {
     public DBLogs(Context context) {
         helper = new DbHelper(context);
         db = helper.getWritableDatabase();
-
-
     }
 
 
@@ -58,6 +60,13 @@ public class DBLogs {
         if (milog.getAceite(milog) != AddLog.NO_ACEITE) {
             valores.put(CN_ACEITE, milog.getAceite(milog));
         }
+        if (milog.getVecesFilAceite(milog) != AddLog.NO_VECES_FIL_ACEITE) {
+            valores.put(CN_VECES_FIL_ACEITE, milog.getVecesFilAceite(milog));
+        }
+        if (milog.getVecesFilAceite(milog) != AddLog.NO_CONTADOR_FIL_ACEITE) {
+            valores.put(CN_CONTADOR_FIL_ACEITE, milog.getVecesFilAceite(milog));
+        }
+        else valores.put(CN_CONTADOR_FIL_ACEITE, 0);
         if (milog.getRevgral(milog) != AddLog.NO_REVGRAL) {
             valores.put(CN_REVGRAL, milog.getRevgral(milog));
         }
@@ -82,20 +91,20 @@ public class DBLogs {
 
 
     public Cursor cargarCursorLogs() {
-        String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA, CN_ACEITE, CN_REVGRAL, CN_CAR, CN_REALIZADO, CN_KMS};
+        String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA, CN_ACEITE, CN_VECES_FIL_ACEITE, CN_CONTADOR_FIL_ACEITE, CN_REVGRAL, CN_CAR, CN_REALIZADO, CN_KMS};
         return db.query(TABLE_NAME, columnas, null, null, null, null, null);
 
     }
 
     public Cursor LogsOrderByFecha() { // Todos los tipos y historicos o no
-        String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA, CN_ACEITE, CN_REVGRAL, CN_CAR, CN_REALIZADO, CN_KMS};
+        String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA, CN_ACEITE, CN_VECES_FIL_ACEITE, CN_CONTADOR_FIL_ACEITE, CN_REVGRAL, CN_CAR, CN_REALIZADO, CN_KMS};
         return db.query(TABLE_NAME, columnas, null, null, null, null, CN_FECHA + " ASC");
 
     }
 
 
     public Cursor LogsTodosOrderByFechaString(String matricula) {  // todos los tipos pero solo los logs futuros y no realizados
-        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
+        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, veces_aceite, contador_aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
               /*  + CN_FECHA + " > " + int_now + " AND " + CN_REALIZADO + " = " + NO_REALIZADO + " AND "*/ + CN_CAR + " = '" + matricula + "' ORDER BY "+ CN_FECHA;
         Cursor c = db.rawQuery(sql, null);
         return c;
@@ -103,21 +112,21 @@ public class DBLogs {
 
 
     public Cursor LogsFuturosOrderByFechaString(long long_now, String matricula) {  // todos los tipos pero solo los logs futuros y no realizados
-        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
+        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, veces_aceite, contador_aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
               /*  + CN_FECHA + " > " + int_now + " AND " */+ CN_REALIZADO + " = " + NO_REALIZADO + " AND " + CN_CAR + " = '" + matricula + "' ORDER BY "+ CN_FECHA;
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
 
     public Cursor LogsHistoricoTipoOrderByFechaString(long long_now, String matricula, String tipo_rev) { // Los de tipo aceite del histórico para elegir el más reciente
-        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
+        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, veces_aceite, contador_aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
                /* + CN_FECHA + " < " + int_now + " AND " */+ CN_TIPO + " = '" + tipo_rev + "' AND " + CN_REALIZADO + " = " + REALIZADO+ " AND " + CN_CAR + " = '" + matricula  +  "' ORDER BY "+ CN_FECHA + " DESC";
         Cursor c = db.rawQuery(sql, null);
         return c;
     }
 
-    public Cursor LogsTipoOrderByFechaString(long long_now, String matricula, String tipo_rev) { // Los de tipo aceite del futuro
-        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
+    public Cursor LogsTipoOrderByFechaString(long long_now, String matricula, String tipo_rev) { // Los de tipo tipo del futuro
+        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, veces_aceite, contador_aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
                 /*+ CN_FECHA + " > " + int_now + " AND " */+ CN_TIPO + " = '" + tipo_rev + "' AND " + CN_REALIZADO + " = " + NO_REALIZADO+ " AND " + CN_CAR + " = '" + matricula + "' ORDER BY "+ CN_FECHA + " DESC";
         Cursor c = db.rawQuery(sql, null);
         return c;
@@ -125,7 +134,7 @@ public class DBLogs {
 
 
     public Cursor buscarTipo(String tipo, String matricula) {
-        String sql = "SELECT _id, tipo, fecha, aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
+        String sql = "SELECT _id, tipo, fecha, aceite, veces_aceite, contador_aceite, revgral, matricula, realizado, kms FROM "+TABLE_NAME + " WHERE "
                 /*+ CN_FECHA + " > " + int_now + " AND " */+ CN_TIPO + " = '" + tipo + "' AND " + CN_CAR + " = '" + matricula + "'";
         Cursor c = db.rawQuery(sql, null);
         return c;
@@ -138,6 +147,11 @@ public class DBLogs {
 
     public void ActualizarFechaLogFuturo(int id, long fecha) {
         String sql = "UPDATE " + TABLE_NAME + " SET " + CN_FECHA + " = " + fecha + " WHERE " + CN_ID + " = " + id;
+        db.execSQL(sql);
+    }
+
+    public void ActualizarContadorFilAceite(int id, int contador) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_CONTADOR_FIL_ACEITE + " = " + contador +  " WHERE " + CN_ID + " = " + id;
         db.execSQL(sql);
     }
 

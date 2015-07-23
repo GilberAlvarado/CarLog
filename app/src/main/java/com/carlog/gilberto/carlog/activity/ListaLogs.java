@@ -143,7 +143,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 int kms = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS));
 
 
-                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, revgral,matricula, DBLogs.NO_REALIZADO, kms);
+                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, revgral,matricula, DBLogs.NO_REALIZADO, kms);
                 intent.putExtra("miTipo", miTipo);
                 intent.putExtra("idLog", id);
                 break;
@@ -177,15 +177,52 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                     DBCar dbc = new DBCar(getApplicationContext());
                     long long_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
                     dbc.ActualizarITVCocheActivo(matricula, long_revision_por_fecha);
-                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
-                    DBLogs dbLogs = new DBLogs(getApplicationContext());
-                    dbLogs.insertar(miTipoLog);
+                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
+                    manager.insertar(miTipoLog);
+                }
+                if(tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
+                    // Si tiene revisiones de filtro de aceite tenemos que leer cada cuantos cambios de aceite se cambia el filtro
+                    Cursor c_fil = manager.LogsTipoOrderByFechaString(funciones.date_a_long(new Date()), matricula, TipoLog.TIPO_FILTRO_ACEITE);
+                    if (c_fil.moveToFirst() == true) {
+                        int id_log_fil = c_fil.getInt(c_fil.getColumnIndex(DBLogs.CN_ID));
+                        int int_veces = c_fil.getInt(c_fil.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
+                        // tenemos que ver como va el contador y compararlo con los cambios defiltro que se han realizado
+                        Cursor c_ac_hist = manager.LogsHistoricoTipoOrderByFechaString(funciones.date_a_long(new Date()), matricula, TipoLog.TIPO_ACEITE);
+                        if (c_ac_hist.moveToFirst() == true) {
+                            int int_contador = c_ac_hist.getInt(c_ac_hist.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE));
+                            if (int_contador < int_veces) { // + 1 pq empieza en 0
+                                manager.ActualizarContadorFilAceite(id, int_contador + 1);
+                            } else { // si se sobrepasa marcamos como realizado también el log del filtro y reseteamos el contador
+                                Date now = new Date();
+                                manager.marcarRealizadoLog(id_log_fil, funciones.date_a_long(now), int_kms); //hoy
+                                manager.ActualizarContadorFilAceite(id, 1);
+                            }
+                        }
+                        else { // si tiene futuro filtro pero no tiene histórico de aceite hay que incrementar el contador
+                            //pero si justo int_veces es 1 hay que marcar como realizado tambien el log de filtro y resetear el contador
+                            if(int_veces == 1) {
+                                Date now = new Date();
+                                manager.marcarRealizadoLog(id_log_fil, funciones.date_a_long(now), int_kms); //hoy
+                                manager.ActualizarContadorFilAceite(id, 1);
+                            }
+                            else manager.ActualizarContadorFilAceite(id, 2); // se incrementa el contador en 1
+
+                        }
+                    }
+                }
+                if(tipo_rev.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
+                    // Marcamos como realizado tambien el futuro de aceite y reseteamos el contador pq acabamos de hacer un cambio de filtro
+                    Cursor c_ac = manager.LogsTipoOrderByFechaString(funciones.date_a_long(new Date()), matricula, TipoLog.TIPO_ACEITE);
+                    if (c_ac.moveToFirst() == true) {
+                        int id_log_ac = c_ac.getInt(c_ac.getColumnIndex(DBLogs.CN_ID));
+                        Date now = new Date();
+                        manager.marcarRealizadoLog(id_log_ac, funciones.date_a_long(now), int_kms); //hoy
+                        manager.ActualizarContadorFilAceite(id_log_ac, 1);
+                    }
                 }
                 Date now = new Date();
-                System.out.println("fecha "+now);
-                System.out.println("id "+id);
-                System.out.println("int fecha "+funciones.date_a_long(now));
                 manager.marcarRealizadoLog(id, funciones.date_a_long(now), int_kms); //hoy
+
                 ConsultarLogs(getApplicationContext(), ListaLogs.this);
                 break;
             }
@@ -223,7 +260,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
-                    funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
+                    funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
                     cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS)));
             listaLogs.add(miTipoLog);
 

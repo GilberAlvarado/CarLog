@@ -29,17 +29,21 @@ public class TipoLog implements Serializable {
     private String datetxt;
     private long long_fecha;
     private int aceite;
+    private int veces_fil_aceite;
+    private int contador_fil_aceite;
     private int revgral;
     private String matricula;
     private int realizado;
     private int kms;
 
-    public TipoLog(String tipo, Date fecha, String datetxt, long long_fecha, int aceite, int revgral, String matricula, int realizado, int kms) {
+    public TipoLog(String tipo, Date fecha, String datetxt, long long_fecha, int aceite, int veces_fil_aceite, int contador_fil_aceite, int revgral, String matricula, int realizado, int kms) {
         this.tipo = tipo;
         this.fecha = fecha;
         this.datetxt = datetxt;
         this.long_fecha = long_fecha;
         this.aceite = aceite;
+        this.veces_fil_aceite = veces_fil_aceite;
+        this.contador_fil_aceite = contador_fil_aceite;
         this.revgral = revgral;
         this.matricula = matricula;
         this.realizado = realizado;
@@ -70,6 +74,14 @@ public class TipoLog implements Serializable {
         return(miTipo.aceite);
     }
 
+    public int getVecesFilAceite(TipoLog miTipo) {
+        return(miTipo.veces_fil_aceite);
+    }
+
+    public int getContadorFilAceite(TipoLog miTipo) {
+        return(miTipo.contador_fil_aceite);
+    }
+
     public int getRevgral(TipoLog miTipo) {
         return(miTipo.revgral);
     }
@@ -83,6 +95,10 @@ public class TipoLog implements Serializable {
     }
 
     public void setAceite(TipoLog miTipo, int aceite) {  miTipo.aceite = aceite;    }
+
+    public void setVecesFiAceite(TipoLog miTipo, int veces_fil_aceite) {  miTipo.veces_fil_aceite = veces_fil_aceite;    }
+
+    public void setContadorFiAceite(TipoLog miTipo, int contador_fil_aceite) {  miTipo.contador_fil_aceite = contador_fil_aceite;    }
 
     public void setRevgral(TipoLog miTipo, int revgral) {  miTipo.revgral = revgral;    }
 

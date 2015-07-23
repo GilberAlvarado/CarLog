@@ -275,6 +275,26 @@ public class MyActivity extends ActionBarActivity {
     }
 
 
+    public void procesado_revisiones(DBLogs dbLogs, long long_now, Context context) {
+        /////////////////// PROCESAR ACEITE
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ACEITE);
+        /////////////////// PROCESAR FILTRO ACEITE
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_ACEITE);
+        /////////////////// PROCESAR REV. GRAL.
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_REV_GENERAL);
+        /////////////////// PROCESAR CORREA DIST.
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_CORREA);
+        /////////////////// PROCESAR BOMBA AGUA
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BOMBA_AGUA);
+        /////////////////// PROCESAR ITV
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ITV);
+        /////////////////// PROCESAR FILTRO GASOLINA
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_GASOLINA);
+        /////////////////// PROCESAR FILTRO AIRE
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_AIRE);
+        /////////////////// PROCESAR BUJIAS
+        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BUJIAS);
+    }
 
     private void procesar(Context context) {
         DBCar dbcar = new DBCar(context);
@@ -296,25 +316,7 @@ public class MyActivity extends ActionBarActivity {
         long long_now = funciones.date_a_long(new Date());
 
 
-        /////////////////// PROCESAR ACEITE
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ACEITE);
-        /////////////////// PROCESAR REV. GRAL.
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_REV_GENERAL);
-        /////////////////// PROCESAR CORREA DIST.
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_CORREA);
-        /////////////////// PROCESAR BOMBA AGUA
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BOMBA_AGUA);
-        /////////////////// PROCESAR ITV
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ITV);
-        /////////////////// PROCESAR FILTRO GASOLINA
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_GASOLINA);
-        /////////////////// PROCESAR FILTRO AIRE
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_AIRE);
-        /////////////////// PROCESAR BUJIAS
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BUJIAS);
-        // Todo /////////////////IR AÑADIENDO PARA EL RESTO DE TIPOS
-
-        ////////////////////////////////////////////////////////
+        procesado_revisiones(dbLogs, long_now, context);
     }
 
 
@@ -713,6 +715,7 @@ public class MyActivity extends ActionBarActivity {
             }
         }
     }
+
 
 
 }

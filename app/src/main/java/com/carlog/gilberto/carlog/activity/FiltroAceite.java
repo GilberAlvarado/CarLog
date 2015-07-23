@@ -1,9 +1,5 @@
 package com.carlog.gilberto.carlog.activity;
 
-/**
- * Created by Gilberto on 15/07/2015.
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +16,9 @@ import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.DBAceite;
+import com.carlog.gilberto.carlog.data.DBCar;
+import com.carlog.gilberto.carlog.data.DBFiltroAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.data.DBRevGral;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
@@ -32,39 +29,31 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by Gilberto on 19/05/2015.
+ * Created by Gilberto on 22/07/2015.
  */
-public class RevGral extends ActionBarActivity {
+public class FiltroAceite extends ActionBarActivity {
 
-    public final static String TIPO_5K_KM = "5 mil kms";
-    public final static String TIPO_10K_KM = "10 mil kms";
-    public final static String TIPO_15K_KM = "15 mil kms";
-    public final static String TIPO_20K_KM = "20 mil kms";
-    public final static String TIPO_25K_KM = "25 mil kms";
-    public final static String TIPO_30K_KM = "30 mil kms";
-    public final static String TIPO_35K_KM = "35 mil kms";
-    public final static String TIPO_40K_KM = "40 mil kms";
-    public final static String TIPO_45K_KM = "45 mil kms";
-    public final static String TIPO_50K_KM = "50 mil kms";
+    public final static String TIPO_1 = "Siempre que cambie el aceite (recomendada)";
+    public final static String TIPO_2 = "Cada 2 cambios de aceite";
+    public final static String TIPO_3 = "Cada 3 cambios de aceite";
 
     private Toolbar toolbar;
     private Spinner spinner1;
 
-    private void RellenarTiposRevGral(DBRevGral managerRevGral) {
+    private void RellenarTiposFiltroAceite(DBFiltroAceite managerFiltroAceite) {
         TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipoLog");
         String txt_fecha = miTipo.getFechatxt(miTipo);
-        TextView text=(TextView)findViewById(R.id.txt_fecha_revgral);
+        TextView text=(TextView)findViewById(R.id.txt_fecha_fil_aceite);
         text.setText(txt_fecha);
 
-        //spinner1 = (Spinner) findViewById(R.id.cmb_tipos_aceite);
-        spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_revgral);
+        spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_fil_aceite);
 
-        Cursor cursor = managerRevGral.buscarTiposRevGral();
+        Cursor cursor = managerFiltroAceite.buscarTiposFiltroAceite();
         //Recorremos el cursor
         ArrayList<String> tipos = new ArrayList<String>();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            String tipo_revgral = cursor.getString(cursor.getColumnIndex(managerRevGral.CN_TIPO));
-            tipos.add(tipo_revgral);
+            String tipo_aceite = cursor.getString(cursor.getColumnIndex(managerFiltroAceite.CN_TIPO));
+            tipos.add(tipo_aceite);
         }
 
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
@@ -72,25 +61,25 @@ public class RevGral extends ActionBarActivity {
         spinner1.setAdapter(adaptador);
     }
 
-    private void GuardarLog(final DBLogs managerLogs, final DBRevGral managerRevGral) {
+    private void GuardarLog(final Context context, final DBLogs managerLogs, final DBFiltroAceite managerFiltroAceite) {
         //Instanciamos el Boton
-        ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_revgral);
+        ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_fil_aceite);
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_revgral);
-                String tipo_revgral = spinner.getSelectedItem().toString();
+                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fil_aceite);
+                String tipo_fil_aceite = spinner.getSelectedItem().toString();
 
-                Cursor c = DBRevGral.buscarTiposRevGral(tipo_revgral);
+                Cursor c = DBFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
 
-                int int_revgral = AddLog.NO_REVGRAL; // solo para inicializar
+                int int_veces = AddLog.NO_ACEITE; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
-                    int_revgral = c.getInt(c.getColumnIndex(managerRevGral.CN_ID));
+                    int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
                 }
 
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_revgral);
+                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fil_aceite);
                 String datetxt = txtTexto.getText().toString();
 
                 Date fecha = funciones.string_a_date(datetxt);
@@ -98,21 +87,20 @@ public class RevGral extends ActionBarActivity {
 
                 TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
-                System.out.println("SE inserta revgral id : "+int_revgral);
-                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, int_revgral, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
+                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
 
 
                 if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                     // Creamos el nuevo futuro log
                     // Se pone como REALIZADO!
-                    miTipoLog = new TipoLog(TipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, int_revgral, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
+                    miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
                 }
 
-                Intent intent = new Intent(RevGral.this, AddLog.class);
+                Intent intent = new Intent(FiltroAceite.this, AddLog.class);
 
                 managerLogs.insertar(miTipoLog);
                 // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
-                ProcesarTipos.procesar(managerLogs, funciones.date_a_long(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), TipoLog.TIPO_REV_GENERAL); // actualizamos fechas
+                ProcesarTipos.procesar(managerLogs, funciones.date_a_long(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), TipoLog.TIPO_ACEITE); // actualizamos fechas
 
                 setResult(Activity.RESULT_OK, intent);
 
@@ -125,7 +113,7 @@ public class RevGral extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_revgral);
+        setContentView(R.layout.activity_fil_aceite);
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
@@ -133,12 +121,11 @@ public class RevGral extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Context contextNew = getApplicationContext();
-        DBRevGral managerRevGral = new DBRevGral(contextNew);
+        DBFiltroAceite managerFiltroAceite = new DBFiltroAceite(contextNew);
         DBLogs managerLog = new DBLogs(contextNew);
 
-        RellenarTiposRevGral(managerRevGral);
-        //SeleccionarTipo(managerTiposRevision);
-        GuardarLog(managerLog, managerRevGral);
+        RellenarTiposFiltroAceite(managerFiltroAceite);
+        GuardarLog(contextNew, managerLog, managerFiltroAceite);
     }
 
     @Override
@@ -160,5 +147,5 @@ public class RevGral extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
 
     }
-}
 
+}

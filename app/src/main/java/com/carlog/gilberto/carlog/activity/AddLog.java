@@ -37,6 +37,8 @@ import java.util.Date;
 public class AddLog extends ActionBarActivity {
 
     public final static int NO_ACEITE = -1;
+    public final static int NO_VECES_FIL_ACEITE = -1;
+    public final static int NO_CONTADOR_FIL_ACEITE = -1;
     public final static int NO_REVGRAL = -1;
     private Spinner spinner1;
     private Toolbar toolbar;
@@ -146,12 +148,12 @@ public class AddLog extends ActionBarActivity {
         TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
         long long_now = funciones.date_a_long(new Date());
         long ahora = funciones.date_a_long(new Date());
-
+        boolean seguir_rellenando = false; // si insertamos un filtro de aceite sin tener aceite tenemos q poder seguir añadiendo
         // Antes de hacer nada miramos si ya existe algun tipo igual pues no debemos tener más de uno
         Cursor c = managerLogs.buscarTipo(miTipoLog.getTipo(miTipoLog), miCoche.getMatricula(miCoche));
         if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
             if(miTipoLog.getFechalong(miTipoLog) >= ahora) {
-                Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + miTipoLog.getTipo(miTipoLog) + " hecha.", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + miTipoLog.getTipo(miTipoLog) + " hecha.", Toast.LENGTH_SHORT).show();
             }
             if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ACEITE)) {
                 intent = new Intent(AddLog.this, Aceite.class);
@@ -178,8 +180,18 @@ public class AddLog extends ActionBarActivity {
                 managerLogs.insertar(miTipoLog);
             }
             else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FILTRO_ACEITE)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
-                managerLogs.insertar(miTipoLog);
+                // Solo podemos agregar cambio de filtro de aceite si tenemos añadido el aceite
+                Cursor c_ac = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE, matricula);
+                if (c_ac.moveToFirst() == true) {
+                    intent = new Intent(AddLog.this, FiltroAceite.class);
+                    intent.putExtra("miTipoLog", miTipoLog);
+                    intent.putExtra("miCoche", miCoche);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "No puede agregar revisión de filtro de aceite sin tener una revisión de aceite.", Toast.LENGTH_SHORT).show();
+                    seguir_rellenando = true;
+                }
             }
             else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
                 intent = new Intent(AddLog.this, ListaLogs.class);
@@ -217,8 +229,10 @@ public class AddLog extends ActionBarActivity {
                 intent = new Intent(AddLog.this, ListaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+            if(!seguir_rellenando) {
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
         } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente una revisión de " + miTipoLog.getTipo(miTipoLog), Toast.LENGTH_SHORT).show();
     }
 
@@ -260,7 +274,7 @@ public class AddLog extends ActionBarActivity {
 
                 if (long_fecha > funciones.date_a_long(new Date())) {
                     // con NO_REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, int_kms);
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     addlog(miTipoLog, managerLogs);
                     if(tipo.equals(TipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
@@ -271,7 +285,7 @@ public class AddLog extends ActionBarActivity {
                 }
                 else {
                     // con REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_REVGRAL, matricula, DBLogs.REALIZADO, int_kms);
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, matricula, DBLogs.REALIZADO, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     AlertDialog.Builder builder = new AlertDialog.Builder(AddLog.this);
                     builder.setMessage("¿Quiere añadir la última revisión hecha de " + miTipoLog.getTipo(miTipoLog) + "?")
