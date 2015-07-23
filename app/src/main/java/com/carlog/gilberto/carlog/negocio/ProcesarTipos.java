@@ -84,7 +84,7 @@ public class ProcesarTipos {
         if(tipo_rev.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
             int int_veces = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
             DBLogs dbl = new DBLogs(context);
-            Cursor c_log_ac_hist = dbl.LogsHistoricoTipoOrderByFechaString(funciones.date_a_long(new Date()), matricula, TipoLog.TIPO_ACEITE); // en tipofiltro aceite cogemos el tipo aceite
+            Cursor c_log_ac_hist = dbl.LogsHistoricoTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE); // en tipofiltro aceite cogemos el tipo aceite
             if (c_log_ac_hist.moveToFirst() == true) {
                 int id_aceite_hist = c_log_ac_hist.getInt(c_log_ac_hist.getColumnIndex(DBLogs.CN_ACEITE));
                 DBAceite dba = new DBAceite(context);
@@ -190,11 +190,11 @@ public class ProcesarTipos {
         return int_media;
     }
 
-    public static void procesar(DBLogs dbLogs, long long_now, Context context, int int_kms, long long_fecha_ini, int int_kms_ini, String matricula, String tipo_rev) {
+    public static void procesar(DBLogs dbLogs, Context context, int int_kms, long long_fecha_ini, int int_kms_ini, String matricula, String tipo_rev) {
         int int_media = calcular_media(long_fecha_ini, int_kms, int_kms_ini);
 
-        Cursor c_historico_tipo = dbLogs.LogsHistoricoTipoOrderByFechaString(long_now, matricula, tipo_rev);
-        Cursor c_logs_tipo = dbLogs.LogsTipoOrderByFechaString(long_now, matricula, tipo_rev);
+        Cursor c_historico_tipo = dbLogs.LogsHistoricoTipoOrderByFechaString(matricula, tipo_rev);
+        Cursor c_logs_tipo = dbLogs.LogsTipoOrderByFechaString(matricula, tipo_rev);
 
         if (c_historico_tipo.moveToFirst() == true) { // Si existen logs históricos de tipo hay que actualizar la fecha del futuro (pq siempre tiene q existir) log de aceite
             String txt_fecha_h = c_historico_tipo.getString(c_historico_tipo.getColumnIndex("fecha_string")); // recuperamos el último de los logs
@@ -253,7 +253,6 @@ public class ProcesarTipos {
                             // El caso de filtro de aceite y aceite es especial y se debe de tener en cuenta que existan pq se comparan de 2 en 2 y no siempre están los 2 eliminados
                             // por eso se debe de actualizar el log si existe
                             if (tipo_rev.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
-System.out.println("PROCESANDO");
                             /*if (c_historico_tipo.moveToFirst() == true) {
                                 int int_veces = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
                                 TipoLog miTipoLog = new TipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_tipo);
@@ -261,21 +260,17 @@ System.out.println("PROCESANDO");
                             }*/
                                 // prefiero hacerlo en vez de precalculando poner siempre en la feha xx/xx/xx hasta que toque cambiar el aceite y copiar la fecha de aceite (as´´i siempre coincidirán)
                                 int int_veces = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
-                                Cursor c_contador_aceite_hist = dbLogs.LogsHistoricoTipoOrderByFechaString(long_now, matricula, TipoLog.TIPO_ACEITE);
-                                Cursor c_copiar_fecha_aceite_futuro = dbLogs.LogsTipoOrderByFechaString(long_now, matricula, TipoLog.TIPO_ACEITE);
+                                Cursor c_contador_aceite_hist = dbLogs.LogsHistoricoTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE);
+                                Cursor c_copiar_fecha_aceite_futuro = dbLogs.LogsTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE);
                                 if (c_contador_aceite_hist.moveToFirst() == true) {
-System.out.println("hay aceite futuro");
                                     int contador = c_contador_aceite_hist.getInt(c_contador_aceite_hist.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE));
                                     if (c_copiar_fecha_aceite_futuro.moveToFirst() == true) {
                                         String fecha_aceite_futuro = c_copiar_fecha_aceite_futuro.getString(c_copiar_fecha_aceite_futuro.getColumnIndex("fecha_string"));
-System.out.println("111 "+contador + " veces " + int_veces);
                                         if (contador == int_veces) {
-System.out.println("1111111111111111111111111 ");
                                             TipoLog miTipoLog = new TipoLog(tipo_rev, funciones.string_a_date(fecha_aceite_futuro), fecha_aceite_futuro, funciones.string_a_long(fecha_aceite_futuro), id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_tipo);
                                             dbLogs.eliminar_por_id(int_id_log);
                                             dbLogs.insertar(miTipoLog);
                                         } else {
-System.out.println("2222222222222222222222222222 ");
                                             Date f_max_aceite_provisional = funciones.fecha_mas_dias(new Date(), F_MAX_REV_ACEITE); //provisional pq no se va a cambiar hasta que llegue a contador
                                             long long_max_aceite_provisional = funciones.date_a_long(f_max_aceite_provisional);
                                             TipoLog miTipoLog = new TipoLog(tipo_rev, f_max_aceite_provisional, funciones.long_a_string(long_max_aceite_provisional), long_max_aceite_provisional, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_tipo);
@@ -286,7 +281,6 @@ System.out.println("2222222222222222222222222222 ");
                                     else {
                                         Date f_max_aceite_provisional = funciones.fecha_mas_dias(new Date(), F_MAX_REV_ACEITE); //provisional pq no se va a cambiar hasta que llegue a contador
                                         long long_max_aceite_provisional = funciones.date_a_long(f_max_aceite_provisional);
-System.out.println("8888888888888888888888888 " +  funciones.long_a_string(long_max_aceite_provisional));
                                         TipoLog miTipoLog = new TipoLog(tipo_rev, f_max_aceite_provisional, funciones.long_a_string(long_max_aceite_provisional), long_max_aceite_provisional, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_tipo);
                                         dbLogs.eliminar_por_id(int_id_log);
                                         dbLogs.insertar(miTipoLog);
@@ -314,19 +308,16 @@ System.out.println("8888888888888888888888888 " +  funciones.long_a_string(long_
                             }*/
                                 // prefiero hacerlo en vez de precalculando poner siempre en la feha xx/xx/xx hasta que toque cambiar el aceite y copiar la fecha de aceite (as´´i siempre coincidirán)
                                 int int_veces = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
-                                Cursor c_contador_aceite_hist = dbLogs.LogsHistoricoTipoOrderByFechaString(long_now, matricula, TipoLog.TIPO_ACEITE);
-                                Cursor c_copiar_fecha_aceite_futuro = dbLogs.LogsTipoOrderByFechaString(long_now, matricula, TipoLog.TIPO_ACEITE);
+                                Cursor c_contador_aceite_hist = dbLogs.LogsHistoricoTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE);
+                                Cursor c_copiar_fecha_aceite_futuro = dbLogs.LogsTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE);
                                 if (c_contador_aceite_hist.moveToFirst() == true) {
                                     int contador = c_contador_aceite_hist.getInt(c_contador_aceite_hist.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE));
                                     if (c_copiar_fecha_aceite_futuro.moveToFirst() == true) {
                                         String fecha_aceite_futuro = c_copiar_fecha_aceite_futuro.getString(c_copiar_fecha_aceite_futuro.getColumnIndex("fecha_string"));
-System.out.println("222 "+contador + " veces " + int_veces);
                                         if (contador == int_veces) {
-System.out.println("333333333333333333333333 ");
                                             TipoLog miTipoLog = new TipoLog(tipo_rev, funciones.string_a_date(fecha_aceite_futuro), fecha_aceite_futuro, funciones.string_a_long(fecha_aceite_futuro), id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_tipo);
                                             dbLogs.insertar(miTipoLog);
                                         } else {
-System.out.println("44444444444444444444444 ");
                                             Date f_max_aceite_provisional = funciones.fecha_mas_dias(new Date(), F_MAX_REV_ACEITE); //provisional pq no se va a cambiar hasta que llegue a contador
                                             long long_max_aceite_provisional = funciones.date_a_long(f_max_aceite_provisional);
                                             TipoLog miTipoLog = new TipoLog(tipo_rev, f_max_aceite_provisional, funciones.long_a_string(long_max_aceite_provisional), long_max_aceite_provisional, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_tipo);

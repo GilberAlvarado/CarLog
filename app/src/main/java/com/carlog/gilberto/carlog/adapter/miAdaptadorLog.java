@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.negocio.Notificaciones;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.data.DBTiposRevision;
 import com.carlog.gilberto.carlog.formats.funciones;
@@ -135,7 +136,7 @@ public class miAdaptadorLog extends ArrayAdapter {
         sqView.img_tipo_log.setImageBitmap(getRoundedShape(decodeFile(getContext(), resID), 200));
 
         if(miLog.getRealizado((TipoLog) datos.get(position)) == DBLogs.NO_REALIZADO) {
-            if (miLog.getFechalong((TipoLog) datos.get(position)) <= funciones.date_a_long(funciones.fecha_mas_dias(new Date(), 1))) {
+            if (miLog.getFechalong((TipoLog) datos.get(position)) <= funciones.date_a_long(funciones.fecha_mas_dias(new Date(), Notificaciones.DIAS_SEMANA))) {
                 sqView.tipo.setTextColor(Color.RED);
                 sqView.fecha.setTextColor(Color.RED);
                 sqView.tipo.setTypeface(null, Typeface.BOLD);

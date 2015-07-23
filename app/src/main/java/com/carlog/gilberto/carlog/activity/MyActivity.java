@@ -1,6 +1,10 @@
 package com.carlog.gilberto.carlog.activity;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
 
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -22,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.carlog.gilberto.carlog.negocio.Notificaciones;
 import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.CocheEsNuevo;
 import com.carlog.gilberto.carlog.R;
@@ -275,29 +281,29 @@ public class MyActivity extends ActionBarActivity {
     }
 
 
-    public void procesado_revisiones(DBLogs dbLogs, long long_now, Context context) {
+    public void procesado_revisiones(DBLogs dbLogs, Context context) {
         /////////////////// PROCESAR ACEITE
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ACEITE);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ACEITE);
         /////////////////// PROCESAR FILTRO ACEITE
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_ACEITE);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_ACEITE);
         /////////////////// PROCESAR REV. GRAL.
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_REV_GENERAL);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_REV_GENERAL);
         /////////////////// PROCESAR CORREA DIST.
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_CORREA);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_CORREA);
         /////////////////// PROCESAR BOMBA AGUA
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BOMBA_AGUA);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BOMBA_AGUA);
         /////////////////// PROCESAR ITV
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ITV);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ITV);
         /////////////////// PROCESAR FILTRO GASOLINA
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_GASOLINA);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_GASOLINA);
         /////////////////// PROCESAR FILTRO AIRE
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_AIRE);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_AIRE);
         /////////////////// PROCESAR BUJIAS
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BUJIAS);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BUJIAS);
         /////////////////// PROCESAR LIMPIAPARABRISAS
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIMPIAPARABRISAS);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIMPIAPARABRISAS);
         /////////////////// PROCESAR LÍQUIDO DE FRENOS
-        ProcesarTipos.procesar(dbLogs, long_now, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIQUIDO_FRENOS);
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIQUIDO_FRENOS);
     }
 
     private void procesar(Context context) {
@@ -317,10 +323,8 @@ public class MyActivity extends ActionBarActivity {
 
         // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
         DBLogs dbLogs= new DBLogs(context);
-        long long_now = funciones.date_a_long(new Date());
 
-
-        procesado_revisiones(dbLogs, long_now, context);
+        procesado_revisiones(dbLogs, context);
     }
 
 
@@ -636,11 +640,25 @@ public class MyActivity extends ActionBarActivity {
         }
     }
 
+
+    // lanzamos el servicio cada 30seg
+    private void comprobarNotificaciones() {
+        int comprobacionIntervaloSegundos = 30;
+        PendingIntent pendingIntent;
+        Intent myIntent = new Intent(MyActivity.this, Notificaciones.class);
+        pendingIntent = PendingIntent.getService(MyActivity.this, 0, myIntent, 0);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.SECOND, 10);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), comprobacionIntervaloSegundos * 1000, pendingIntent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        comprobarNotificaciones();
         addCarOrShowLogs();
-
     }
 
 

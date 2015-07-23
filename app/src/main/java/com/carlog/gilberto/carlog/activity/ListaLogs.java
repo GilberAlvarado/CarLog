@@ -182,12 +182,12 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 }
                 if(tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
                     // Si tiene revisiones de filtro de aceite tenemos que leer cada cuantos cambios de aceite se cambia el filtro
-                    Cursor c_fil = manager.LogsTipoOrderByFechaString(funciones.date_a_long(new Date()), matricula, TipoLog.TIPO_FILTRO_ACEITE);
+                    Cursor c_fil = manager.LogsTipoOrderByFechaString(matricula, TipoLog.TIPO_FILTRO_ACEITE);
                     if (c_fil.moveToFirst() == true) {
                         int id_log_fil = c_fil.getInt(c_fil.getColumnIndex(DBLogs.CN_ID));
                         int int_veces = c_fil.getInt(c_fil.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
                         // tenemos que ver como va el contador y compararlo con los cambios defiltro que se han realizado
-                        Cursor c_ac_hist = manager.LogsHistoricoTipoOrderByFechaString(funciones.date_a_long(new Date()), matricula, TipoLog.TIPO_ACEITE);
+                        Cursor c_ac_hist = manager.LogsHistoricoTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE);
                         if (c_ac_hist.moveToFirst() == true) {
                             int int_contador = c_ac_hist.getInt(c_ac_hist.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE));
                             if (int_contador < int_veces) { // + 1 pq empieza en 0
@@ -212,7 +212,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 }
                 if(tipo_rev.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
                     // Marcamos como realizado tambien el futuro de aceite y reseteamos el contador pq acabamos de hacer un cambio de filtro
-                    Cursor c_ac = manager.LogsTipoOrderByFechaString(funciones.date_a_long(new Date()), matricula, TipoLog.TIPO_ACEITE);
+                    Cursor c_ac = manager.LogsTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE);
                     if (c_ac.moveToFirst() == true) {
                         int id_log_ac = c_ac.getInt(c_ac.getColumnIndex(DBLogs.CN_ID));
                         Date now = new Date();
@@ -234,10 +234,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                long long_now = funciones.date_a_long(new Date());
                 final DBLogs manager = new DBLogs(context);
-                Date hoy = new Date();
-                final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_long(hoy), matricula);
+                final Cursor cursor = manager.LogsFuturosOrderByFechaString(matricula);
                 modificarLogpulsado(cursor, position, context);
             }
         });
@@ -250,8 +248,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
         }
         final DBLogs manager = new DBLogs(context);
-        Date hoy = new Date();
-        final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_long(hoy), matricula);
+        final Cursor cursor = manager.LogsFuturosOrderByFechaString(matricula);
 
         List<TipoLog> listaLogs = new ArrayList<TipoLog>();
         //Recorremos el cursor
@@ -595,7 +592,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        long long_now = funciones.date_a_long(new Date());
         final DBLogs manager = new DBLogs(this);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
@@ -605,8 +601,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
         }
 
-        Date hoy = new Date();
-        final Cursor cursor = manager.LogsFuturosOrderByFechaString(funciones.date_a_long(hoy), matricula);
+        final Cursor cursor = manager.LogsFuturosOrderByFechaString(matricula);
 
         switch (item.getItemId()) {
             //case R.id.menu_realizadoLog:

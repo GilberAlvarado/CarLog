@@ -87,6 +87,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MyActivity" />
         </activity>
+        <service android:name=".negocio.Notificaciones" />
     </application>
 
 </manifest>
