@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        mavenCentral()
+    }
 }
 
 dependencies {
@@ -40,4 +43,7 @@ dependencies {
 
     compile 'com.wrapp.floatlabelededittext:library:0.0.6'
     compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
+
+    //compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile 'com.facebook.android:facebook-android-sdk:3.21.1'
 }

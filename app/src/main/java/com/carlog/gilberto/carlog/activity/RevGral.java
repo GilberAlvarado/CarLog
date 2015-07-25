@@ -26,6 +26,7 @@ import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
+import com.carlog.gilberto.carlog.tiposClases.Usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.ArrayList;
@@ -156,6 +157,13 @@ public class RevGral extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_logout) {
+            Usuario u = new Usuario();
+            u.logout(RevGral.this);
+            Intent intent = new Intent(RevGral.this, Login.class);
+            startActivity(intent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
 

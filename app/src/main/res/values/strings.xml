@@ -4,6 +4,7 @@
     <string name="app_name">CarLog</string>
     <string name="adios">Adios</string>
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Cerrar sesión</string>
     <string name="btn1">Siguiente</string>
     <string name="title_activity_add_log">AddLog</string>
     <string name="title_activity_aceite">Aceite</string>
@@ -15,6 +16,8 @@
     <string name="title_activity_actualizarcoche">ActualizarCoche</string>
     <string name="txt_itv">Introduzca Fecha ITV</string>
 
+    <string name="facebook_app_id">663858277047070</string>
+
     <string name="menu_Opc_modificar_log">Modificar</string>
     <string name="menu_Opc_eliminar_log">Eliminar</string>
     <string name="menu_Opc_realizado_log">Marcar como Realizado</string>
@@ -24,5 +27,37 @@
 
     <string name="open_drawer">Drawer abierto</string>
     <string name="close_drawer">Drawer cerrado</string>
+
+    <!-- Name Shared Preferences -->
+    <string name="sp_sharedpreferences">sp_carlog</string>
+    <string name="sp_fb_id">SPFBID</string>
+    <string name="sp_fb_name">SPFBNAME</string>
+    <string name="sp_fb_email">SPFBEMAIL</string>
+    <string name="sp_fb_img_profile">SPFBIMGPROFILE</string>
+
+    <!-- Name Temp Image (Take Camera Pictures) -->
+    <string name="temp_picture">tempPLP.jpg</string>
+
+    <!-- Messages -->
+    <string name="anonymous">Incognito</string>
+    <string name="select_picture">Select a Picture</string>
+    <string name="upload_picture">Uploading Picture</string>
+    <string name="upload_comment">Sending Comment</string>
+    <string name="upload_rating">Sending Rating</string>
+    <string name="procesando">Please, wait... Processing...</string>
+    <string name="take_picture">Take a Picture</string>
+    <string name="gallery_picture">Choose from Gallery</string>
+    <string name="cancel">Cancel</string>
+    <string name="login">Login</string>
+    <string name="login_required">Login is required</string>
+    <string name="title_activity_info">Information of Interest</string>
+    <string name="dialog_rating_title">Your Rating</string>
+    <string name="dialog_rating_subtitle">FROM 1 TO 5</string>
+    <string name="dialog_rating_footer_subtitle">CLOSE</string>
+    <string name="dialog_rating_footer_confirm">Agree</string>
+    <string name="more_comments">More Comments</string>
+    <string name="no_comments">There are NO Comments.\nBe the first to comment!</string>
+    <string name="process_title">Processing</string>
+    <string name="load_db">Configuring the Database for the first time. This may take several minutes. Be patient, NO internet connection required.</string>
 
 </resources>

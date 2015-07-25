@@ -42,8 +42,6 @@ public class DBCar {
     public DBCar(Context context) {
         helper = new DbHelper(context);
         db = helper.getWritableDatabase();
-
-
     }
 
 

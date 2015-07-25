@@ -23,6 +23,7 @@ import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
+import com.carlog.gilberto.carlog.tiposClases.Usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.ArrayList;
@@ -145,6 +146,13 @@ public class FiltroAceite extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_logout) {
+            Usuario u = new Usuario();
+            u.logout(FiltroAceite.this);
+            Intent intent = new Intent(FiltroAceite.this, Login.class);
+            startActivity(intent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
 

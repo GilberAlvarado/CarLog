@@ -35,6 +35,7 @@ import com.carlog.gilberto.carlog.adapter.miAdaptadorLog;
 import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
+import com.carlog.gilberto.carlog.tiposClases.Usuario;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -571,6 +572,13 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_logout) {
+            Usuario u = new Usuario();
+            u.logout(ListaLogs.this);
+            Intent intent = new Intent(ListaLogs.this, Login.class);
+            startActivity(intent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
 

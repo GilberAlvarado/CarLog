@@ -38,6 +38,7 @@ import com.carlog.gilberto.carlog.data.DBMarcas;
 import com.carlog.gilberto.carlog.data.DBModelos;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
+import com.carlog.gilberto.carlog.tiposClases.Usuario;
 import com.carlog.gilberto.carlog.view.SimpleDataView;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
@@ -654,11 +655,29 @@ public class MyActivity extends ActionBarActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), comprobacionIntervaloSegundos * 1000, pendingIntent);
     }
 
+
+    public boolean login() {
+        Usuario usuario = new Usuario();
+        if(usuario.isUserLoggedIn(this)) {
+            usuario.readUser(this);
+            return true;
+        }
+        else {
+            Intent intent = new Intent(MyActivity.this, Login.class);
+            startActivity(intent);
+            finish();
+            return false;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        comprobarNotificaciones();
-        addCarOrShowLogs();
+        boolean logueado = login();
+        if(logueado) {
+            comprobarNotificaciones();
+            addCarOrShowLogs();
+        }
     }
 
 
@@ -704,6 +723,8 @@ public class MyActivity extends ActionBarActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -712,6 +733,13 @@ public class MyActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_logout) {
+            Usuario u = new Usuario();
+            u.logout(MyActivity.this);
+            Intent intent = new Intent(MyActivity.this, Login.class);
+            startActivity(intent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
 

@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
+import com.carlog.gilberto.carlog.tiposClases.Usuario;
 import com.carlog.gilberto.carlog.view.SimpleDataView;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
@@ -100,6 +101,13 @@ public class AddItv extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_logout) {
+            Usuario u = new Usuario();
+            u.logout(AddItv.this);
+            Intent intent = new Intent(AddItv.this, Login.class);
+            startActivity(intent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
 
