@@ -275,7 +275,7 @@ public class AddLog extends ActionBarActivity {
 
                 if (long_fecha > funciones.date_a_long(new Date())) {
                     // con NO_REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, int_kms);
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     addlog(miTipoLog, managerLogs);
                     if(tipo.equals(TipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
@@ -286,7 +286,7 @@ public class AddLog extends ActionBarActivity {
                 }
                 else {
                     // con REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, matricula, DBLogs.REALIZADO, int_kms);
+                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, matricula, DBLogs.REALIZADO, DBLogs.NO_FMODIFICADA, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     AlertDialog.Builder builder = new AlertDialog.Builder(AddLog.this);
                     builder.setMessage("¿Quiere añadir la última revisión hecha de " + miTipoLog.getTipo(miTipoLog) + "?")

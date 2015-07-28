@@ -3,8 +3,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 tools:context=".ListaLogs" >
-    <item android:id="@+id/menu_realizadoLog"
-        android:title="@string/menu_Opc_realizado_log"
+    <item android:id="@+id/menu_realizadoLogHoy"
+        android:title="@string/menu_Opc_realizado_log_hoy"
+        android:orderInCategory="100"/>
+    <item android:id="@+id/menu_realizadoLogFecha"
+        android:title="@string/menu_Opc_realizado_log_fecha"
         android:orderInCategory="100"/>
     <item android:id="@+id/menu_eliminarLog"
         android:title="@string/menu_Opc_eliminar_log"

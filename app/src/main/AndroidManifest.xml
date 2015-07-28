@@ -91,6 +91,15 @@
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
+            android:name=".activity.ModificarItv"
+            android:label="@string/title_activity_modificarrevgral"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
             android:name=".activity.AddItv"
             android:label="@string/title_activity_additv"
             android:parentActivityName=".activity.MyActivity" >

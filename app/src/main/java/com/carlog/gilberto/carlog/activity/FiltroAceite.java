@@ -90,13 +90,13 @@ public class FiltroAceite extends ActionBarActivity {
 
                 TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
-                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, miCoche.getKms(miCoche));
+                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
 
 
                 if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                     // Creamos el nuevo futuro log
                     // Se pone como REALIZADO!
-                    miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, miCoche.getKms(miCoche));
+                    miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, DBLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
                 }
 
                 Intent intent = new Intent(FiltroAceite.this, AddLog.class);

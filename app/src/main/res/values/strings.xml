@@ -12,6 +12,7 @@
     <string name="title_activity_revgral">RevGral</string>
     <string name="title_activity_modificaraceite">ModificarAceite</string>
     <string name="title_activity_modificarrevgral">ModificarRevGral</string>
+    <string name="title_activity_modificaritv">ModificarITV</string>
     <string name="title_activity_additv">AddItv</string>
     <string name="title_activity_actualizarcoche">ActualizarCoche</string>
     <string name="txt_itv">Introduzca Fecha ITV</string>
@@ -20,7 +21,8 @@
 
     <string name="menu_Opc_modificar_log">Modificar</string>
     <string name="menu_Opc_eliminar_log">Eliminar</string>
-    <string name="menu_Opc_realizado_log">Marcar como Realizado</string>
+    <string name="menu_Opc_realizado_log_hoy">Marcar como Realizado hoy</string>
+    <string name="menu_Opc_realizado_log_fecha">Marcar como Realizado en fecha</string>
 
     <string name="menu_Opc_seleccionar_car">Seleccionar</string>
     <string name="menu_Opc_eliminar_car">Eliminar</string>

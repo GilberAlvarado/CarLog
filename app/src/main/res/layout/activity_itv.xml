@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,27 +24,36 @@
         tools:context="com.carlog.gilberto.carlog.activity.Aceite">
 
         <TextView
-            android:text="Introduzca tipo de aceite:"
+            android:text="Fecha:"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:id="@+id/txt_tipo_aceite" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cmb_tipos_aceite"
-            android:layout_below="@+id/txt_tipo_aceite"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_marginTop="65dp"
+            android:id="@+id/txt_tipo_itv" />
 
 
         <TextView
             android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:id="@+id/txt_fecha_aceite" />
+            android:layout_marginTop="65dp"
+            android:layout_marginLeft="50dp"
+            android:id="@+id/txt_fecha_itv" />
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/button_modifitv"
+            android:layout_marginTop="58dp"
+            android:layout_marginLeft="140dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            android:layout_gravity="left|top"
+            app:fab_colorNormal="@color/ColorPrimary"
+            android:padding="7dp"
+            fab:fab_type="mini"
+            android:layout_weight="1"
+            android:src="@drawable/ic_itv"
+            app:fab_colorPressed="@color/ColorPrimaryDark" />
+
 
 
 
@@ -52,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Guardar"
-            android:id="@+id/guardar_aceite"
+            android:id="@+id/btn_guardar_itv"
             android:background="#1E88E5"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"

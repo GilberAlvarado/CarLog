@@ -306,6 +306,16 @@ public class MyActivity extends ActionBarActivity {
         ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIMPIAPARABRISAS);
         /////////////////// PROCESAR LÍQUIDO DE FRENOS
         ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIQUIDO_FRENOS);
+        /////////////////// PROCESAR LÍQUIDO FRENOS
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FRENOS);
+        /////////////////// PROCESAR RUEDAS
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_RUEDAS);
+        /////////////////// PROCESAR LUCES
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LUCES);
+        /////////////////// PROCESAR EMBRAGUE
+        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_EMBRAGUE);
+        // De momento las tipo personalizadas no se procesan,  sólo se avisa en su fecha
+
     }
 
     private void procesar(Context context) {
@@ -569,7 +579,7 @@ public class MyActivity extends ActionBarActivity {
         Context context = getApplicationContext();
 
         DBCar dbcar = new DBCar(context);
-        Cursor c = dbcar.buscarCoches();
+        Cursor c = dbcar.buscarCocheActivo();
 
         Boolean CocheNuevo = false;
         try { // Solo si añadimos un coche desde la activity ListaLogs

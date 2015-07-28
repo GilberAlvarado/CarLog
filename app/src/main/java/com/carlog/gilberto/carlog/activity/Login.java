@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -57,13 +58,14 @@ public class Login extends Activity {
                 Log.d("Facebook", "Session State: " + session.getState());
                 // you can make request to the /me API or do other stuff like post, etc. here
                 if (state.equals(SessionState.OPENED)) {
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
                     Request.newMeRequest(session, new Request.GraphUserCallback() {
 
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
                             if (session == Session.getActiveSession()) {
                                 if (user != null) {
-                                    System.out.println("USER not null ");
                                     // Display the parsed user info
                                     try {
                                         Intent intent = new Intent(activity, goTo);
@@ -86,7 +88,7 @@ public class Login extends Activity {
                                 }
                             }
                         }
-                    }).executeAsync();
+                    }).executeAndWait();
                 }
             }
         });

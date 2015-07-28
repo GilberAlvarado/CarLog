@@ -36,6 +36,7 @@ import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.view.SimpleDataView;
 import com.facebook.LoginActivity;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -135,6 +136,9 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 if(tipo.equals(TipoLog.TIPO_REV_GENERAL)) {
                     intent = new Intent(context, ModificarRevGral.class);
                 }
+                if(tipo.equals(TipoLog.TIPO_ITV)) {
+                    intent = new Intent(context, ModificarItv.class);
+                }
                 ///////////Todo ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
                 //************************************************************************
 
@@ -146,7 +150,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 int kms = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS));
 
 
-                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, revgral,matricula, DBLogs.NO_REALIZADO, kms);
+                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, revgral,matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms);
                 intent.putExtra("miTipo", miTipo);
                 intent.putExtra("idLog", id);
                 break;
@@ -162,25 +166,34 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
+        if(tipo.equals(TipoLog.TIPO_ITV)) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
         ///////////Todo ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
         //************************************************************************
 
 
     }
 
-    private void realizadoLogpulsado(Cursor cursor, DBLogs manager, int posicion) {
+    private void realizadoLogpulsado(Cursor cursor, DBLogs manager, int posicion, boolean hoy) {
+        Date f_hoy = new Date();
+        Date f_revision_por_fecha = new Date();
         //Recorremos el cursor
         int i = 0;
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
                 int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
                 String tipo_rev = cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO));
+                String txtfecha_rev = cursor.getString(cursor.getColumnIndex("fecha_string"));
+                Date f_rev = funciones.string_a_date(txtfecha_rev);
                 if(tipo_rev.equals(TipoLog.TIPO_ITV)) {
-                    Date f_revision_por_fecha = funciones.fecha_mas_dias(new Date(), ProcesarTipos.F_MAX_ITV);
+                    if(hoy) f_revision_por_fecha = funciones.fecha_mas_dias(f_hoy, ProcesarTipos.F_MAX_ITV);
+                    else f_revision_por_fecha = funciones.fecha_mas_dias(f_rev, ProcesarTipos.F_MAX_ITV);
                     DBCar dbc = new DBCar(getApplicationContext());
                     long long_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
                     dbc.ActualizarITVCocheActivo(matricula, long_revision_por_fecha);
-                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
+                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
                     manager.insertar(miTipoLog);
                 }
                 if(tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
@@ -196,20 +209,19 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                             if (int_contador < int_veces) { // + 1 pq empieza en 0
                                 manager.ActualizarContadorFilAceite(id, int_contador + 1);
                             } else { // si se sobrepasa marcamos como realizado también el log del filtro y reseteamos el contador
-                                Date now = new Date();
-                                manager.marcarRealizadoLog(id_log_fil, funciones.date_a_long(now), int_kms); //hoy
+                                if(hoy) manager.marcarRealizadoLog(id_log_fil, funciones.date_a_long(f_hoy), int_kms); //hoy
+                                else manager.marcarRealizadoLog(id_log_fil, funciones.date_a_long(f_rev), int_kms);
                                 manager.ActualizarContadorFilAceite(id, 1);
                             }
                         }
                         else { // si tiene futuro filtro pero no tiene histórico de aceite hay que incrementar el contador
                             //pero si justo int_veces es 1 hay que marcar como realizado tambien el log de filtro y resetear el contador
                             if(int_veces == 1) {
-                                Date now = new Date();
-                                manager.marcarRealizadoLog(id_log_fil, funciones.date_a_long(now), int_kms); //hoy
+                                if(hoy) manager.marcarRealizadoLog(id_log_fil, funciones.date_a_long(f_hoy), int_kms); //hoy
+                                else manager.marcarRealizadoLog(id_log_fil, funciones.date_a_long(f_rev), int_kms);
                                 manager.ActualizarContadorFilAceite(id, 1);
                             }
                             else manager.ActualizarContadorFilAceite(id, 2); // se incrementa el contador en 1
-
                         }
                     }
                 }
@@ -218,13 +230,13 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                     Cursor c_ac = manager.LogsTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE);
                     if (c_ac.moveToFirst() == true) {
                         int id_log_ac = c_ac.getInt(c_ac.getColumnIndex(DBLogs.CN_ID));
-                        Date now = new Date();
-                        manager.marcarRealizadoLog(id_log_ac, funciones.date_a_long(now), int_kms); //hoy
+                        if(hoy) manager.marcarRealizadoLog(id_log_ac, funciones.date_a_long(f_hoy), int_kms); //hoy
+                        else manager.marcarRealizadoLog(id_log_ac, funciones.date_a_long(f_rev), int_kms);
                         manager.ActualizarContadorFilAceite(id_log_ac, 1);
                     }
                 }
-                Date now = new Date();
-                manager.marcarRealizadoLog(id, funciones.date_a_long(now), int_kms); //hoy
+                if(hoy) manager.marcarRealizadoLog(id, funciones.date_a_long(f_hoy), int_kms); //hoy
+                else manager.marcarRealizadoLog(id, funciones.date_a_long(f_rev), int_kms);
 
                 ConsultarLogs(getApplicationContext(), ListaLogs.this);
                 break;
@@ -261,7 +273,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
                     funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
-                    cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS)));
+                    cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FMODIFICADA)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS)));
             listaLogs.add(miTipoLog);
 
             k++;
@@ -457,6 +469,17 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listalogs);
         Context context = this;
+
+        Boolean modifyItv = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyItv = getIntent().getExtras().getBoolean("modifyItv");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha itv");
+        }
+        if(modifyItv) ConsultarLogs(context, ListaLogs.this); // para actualizar la fecha de itv modificada
+
+
         DBCar dbcar = new DBCar(context);
         Cursor c = dbcar.buscarCoches();
         CambiarCocheActivo.CambiarCocheActivo(dbcar, c, ListaLogs.this, context);
@@ -662,8 +685,9 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
     {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, 0, 0, "Marcar como Realizado");
-        menu.add(1, 1, 1, "Eliminar");
+        menu.add(0, 0, 0, "Marcar como Realizado hoy");
+        menu.add(1, 1, 1, "Marcar como Realizado en su fecha");
+        menu.add(2, 2, 2, "Eliminar");
      //   MenuInflater inflater = getMenuInflater();
 //        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
  //       inflater.inflate(R.menu.modificar_log, menu);
@@ -687,10 +711,13 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         switch (item.getItemId()) {
             //case R.id.menu_realizadoLog:
             case 0:
-                realizadoLogpulsado(cursor, manager, info.position);
+                realizadoLogpulsado(cursor, manager, info.position, true);
+                return true;
+            case 1:
+                realizadoLogpulsado(cursor, manager, info.position, false);
                 return true;
             //case R.id.menu_eliminarLog:
-            case 1:
+            case 2:
                 borrarLogpulsado(cursor, manager, info.position);
                 return true;
             default:
@@ -701,10 +728,11 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     public static final int PETICION_ACTIVITY_ADD_LOG = 1;
     public static final int PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR = 2;
+    public static final int PETICION_ACTIVITY_MODIFYITV = 3;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("result "+ resultCode);
+        System.out.println("result "+ requestCode);
         switch(requestCode) {
             case (PETICION_ACTIVITY_ADD_LOG) : {
                 if (resultCode == Activity.RESULT_OK) {
@@ -719,6 +747,20 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 if(resultCode == Activity.RESULT_OK) {
                     finish();
                 }
+            }
+            case (PETICION_ACTIVITY_MODIFYITV) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String itv_string = data.getExtras().getString("itv_string");
+                    System.out.println("itv stringgg2 "+itv_string);
+
+                 /*   SimpleDataView sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+                    sdv.setTitle("Fecha ITV");
+                    sdv.setValue(itv_string);
+                    sdv.setEditInvisible();
+                    sdv.setImage(getResources().getDrawable(R.drawable.ic_fecha));*/
+                    ConsultarLogs(getApplicationContext(), ListaLogs.this);
+                }
+                break;
             }
         }
     }

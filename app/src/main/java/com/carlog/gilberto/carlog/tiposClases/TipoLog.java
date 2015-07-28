@@ -22,6 +22,7 @@ public class TipoLog implements Serializable {
     public final static String TIPO_LIMPIAPARABRISAS = "Limpiaparabrisas";
     public final static String TIPO_LUCES = "Luces";
     public final static String TIPO_RUEDAS = "Ruedas";
+    public final static String TIPO_EMBRAGUE = "Embrague";
 
 
     private String tipo;
@@ -34,9 +35,10 @@ public class TipoLog implements Serializable {
     private int revgral;
     private String matricula;
     private int realizado;
+    private int fmodificada;
     private int kms;
 
-    public TipoLog(String tipo, Date fecha, String datetxt, long long_fecha, int aceite, int veces_fil_aceite, int contador_fil_aceite, int revgral, String matricula, int realizado, int kms) {
+    public TipoLog(String tipo, Date fecha, String datetxt, long long_fecha, int aceite, int veces_fil_aceite, int contador_fil_aceite, int revgral, String matricula, int realizado, int fmodificada, int kms) {
         this.tipo = tipo;
         this.fecha = fecha;
         this.datetxt = datetxt;
@@ -47,6 +49,7 @@ public class TipoLog implements Serializable {
         this.revgral = revgral;
         this.matricula = matricula;
         this.realizado = realizado;
+        this.fmodificada = fmodificada;
         this.kms = kms;
     }
 
@@ -92,6 +95,10 @@ public class TipoLog implements Serializable {
 
     public int getRealizado(TipoLog miTipo) {
         return(miTipo.realizado);
+    }
+
+    public int getFmodificada(TipoLog miTipo) {
+        return(miTipo.fmodificada);
     }
 
     public void setAceite(TipoLog miTipo, int aceite) {  miTipo.aceite = aceite;    }

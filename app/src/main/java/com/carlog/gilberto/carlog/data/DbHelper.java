@@ -16,8 +16,8 @@ import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "carlog.sqlite";
-    private static final int DB_SCHEME_VERSION = 69;
-    public static final int MAX_TIPOS_REV = 13; // 14 pq cuenta el 0
+    private static final int DB_SCHEME_VERSION = 71;
+    public static final int MAX_TIPOS_REV = 14; // 15 pq cuenta el 0
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_SCHEME_VERSION);
@@ -26,14 +26,14 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
      //   sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
-     //   sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
+      //  sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBRevGral.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBMarcas.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBModelos.CREATE_TABLE);
-      //  sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBFiltroAceite.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBLogin.SQLCreateLogin);
+      //  sqLiteDatabase.execSQL(DBLogin.SQLCreateLogin);
 
 /*
         /// Inicializamos la tabla de modelos
@@ -116,14 +116,15 @@ public class DbHelper extends SQLiteOpenHelper {
 
         /// Inicializamos la tabla de tipos de revisión
         ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV *************************//////
-  /*      String[] lista_tipo = {TipoLog.TIPO_ACEITE, TipoLog.TIPO_BOMBA_AGUA, TipoLog.TIPO_BUJIAS, TipoLog.TIPO_CORREA, TipoLog.TIPO_FILTRO_ACEITE, TipoLog.TIPO_FILTRO_AIRE,
+        String[] lista_tipo = {TipoLog.TIPO_ACEITE, TipoLog.TIPO_BOMBA_AGUA, TipoLog.TIPO_BUJIAS, TipoLog.TIPO_CORREA, TipoLog.TIPO_EMBRAGUE,
+                TipoLog.TIPO_FILTRO_ACEITE, TipoLog.TIPO_FILTRO_AIRE,
                 TipoLog.TIPO_FILTRO_GASOLINA, TipoLog.TIPO_FRENOS, TipoLog.TIPO_ITV, TipoLog.TIPO_LIMPIAPARABRISAS, TipoLog.TIPO_LIQUIDO_FRENOS,
                 TipoLog.TIPO_LUCES, TipoLog.TIPO_REV_GENERAL, TipoLog.TIPO_RUEDAS};
-        String[] lista_img = {"ic_aceite", "ic_bomba_agua", "ic_bujias", "ic_correa", "ic_fil_aceite", "ic_fil_aire", "ic_fil_gasolina", "ic_frenos", "ic_itv_rev",
+        String[] lista_img = {"ic_aceite", "ic_bomba_agua", "ic_bujias", "ic_correa", "ic_embrague", "ic_fil_aceite", "ic_fil_aire", "ic_fil_gasolina", "ic_frenos", "ic_itv_rev",
                 "ic_limpiaparabrisas", "ic_liquido_frenos", "ic_luces", "ic_revgen", "ic_ruedas"};
         ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV *************************//////
 
-  /*      sqLiteDatabase.beginTransaction();
+        sqLiteDatabase.beginTransaction();
         try {
             ContentValues values = new ContentValues();
             for (int i = 0; i < lista_tipo.length; i++) {
@@ -201,10 +202,10 @@ public class DbHelper extends SQLiteOpenHelper {
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBMarcas.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBModelos.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBFiltroAceite.TABLE_NAME);
-      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBTiposRevision.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBTiposRevision.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBAceite.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBRevGral.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogin.Table);
+     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogin.Table);
         onCreate(sqLiteDatabase);
     }
 }
