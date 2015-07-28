@@ -26,11 +26,21 @@
                 layout="@layout/tool_bar">
             </include>
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:elevation="3dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/com_facebook_profile_default_icon"
+                android:id="@+id/profilePicture"
+                app:border_color="@color/ColorPrimary"/>
 
             <TextView
                 android:id="@+id/title"
                 android:elevation="3dp"
-                android:paddingLeft="20dp"
+                android:paddingLeft="40dp"
+                android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -38,7 +48,7 @@
                 android:maxLines="1"
                 android:minHeight="?attr/actionBarSize"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -86,6 +96,8 @@
         android:paddingEnd="@dimen/margin_standard"
         android:paddingLeft="@dimen/margin_standard"
         android:paddingStart="@dimen/margin_standard">
+
+
 
 
     </LinearLayout>

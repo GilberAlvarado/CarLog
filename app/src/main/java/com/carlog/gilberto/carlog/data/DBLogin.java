@@ -37,6 +37,7 @@ public class DBLogin {
             + " created_at TEXT" + ")";
 
 
+
     public void addUser(String name, String email, String uid, String created_at) {
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, name);

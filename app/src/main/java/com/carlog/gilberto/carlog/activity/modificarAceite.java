@@ -135,6 +135,7 @@ public class ModificarAceite extends ActionBarActivity {
         if (id == R.id.action_logout) {
             Usuario u = new Usuario();
             u.logout(ModificarAceite.this);
+            Login.closeFacebookSession(ModificarAceite.this, Login.class);
             Intent intent = new Intent(ModificarAceite.this, Login.class);
             startActivity(intent);
             finish();

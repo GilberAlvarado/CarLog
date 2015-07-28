@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.data.DBLogin;
 import com.carlog.gilberto.carlog.formats.SharedPreferencesUtils;
 import com.carlog.gilberto.carlog.formats.Utilities;
 import com.carlog.gilberto.carlog.tiposClases.Usuario;
@@ -45,7 +46,7 @@ public class Login extends Activity {
 
     public void openFacebookSession(final Activity activity, final Class goTo){
         // set the permissions in the third parameter of the call
-        String[] perm = {"public_profile", "user_friends", "email"};
+        String[] perm = {"public_profile", "user_friends"};
         List permissions = Arrays.asList(perm);
         openActiveSessionFacebook(activity, true, permissions, new Session.StatusCallback() {
             @Override
@@ -62,18 +63,23 @@ public class Login extends Activity {
                         public void onCompleted(GraphUser user, Response response) {
                             if (session == Session.getActiveSession()) {
                                 if (user != null) {
+                                    System.out.println("USER not null ");
                                     // Display the parsed user info
                                     try {
                                         Intent intent = new Intent(activity, goTo);
-                                        System.out.println("DATOS FB"+ user.getId()+ " "+ user.getName()+ " "+user.asMap().get("email").toString());
-                                        saveParamsFacebook(activity, user.getId(), user.getName(), user.asMap().get("email").toString());
-                                        loginUsuarioFacebook(user.asMap().get("email").toString(), user.getName());
+                                        // System.out.println("DATOS FB"+ user.getId()+ " "+ user.getName()+ " "+user.asMap().get("email").toString()); //user.getProperty("email")
+                                        saveParamsFacebook(activity, user.getId(), user.getName());
+                                        Usuario usuario = new Usuario();
+                                        usuario.login(Login.this, user.getId(), "PASS_IGNORE_FB", true);
+                                        registerUsuarioFacebook(user.getName(), user.getId());
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         activity.startActivity(intent);
-                                    } catch (Exception e){
+                                        finish();
+                                    } catch (Exception e) {
                                         e.getStackTrace();
                                     }
                                 }
+
                             } else {
                                 if (response.getError() != null) {
                                     // Handle errors, will do so later.
@@ -98,10 +104,9 @@ public class Login extends Activity {
         return null;
     }
 
-    public static void saveParamsFacebook (final Activity activity, final String idFacebook, String name, String email){
+    public static void saveParamsFacebook (final Activity activity, final String idFacebook, String name){
         SharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_id), idFacebook);
         SharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_name), name);
-        SharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_email), email);
         Thread thread = new Thread(new Runnable(){
             @Override
             public void run() {
@@ -125,7 +130,6 @@ public class Login extends Activity {
     public static void deleteParamsFacebook (Activity activity){
         SharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_id), null);
         SharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_name), null);
-        SharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_email), null);
         SharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_img_profile), null);
 
     }
@@ -138,10 +142,6 @@ public class Login extends Activity {
         return SharedPreferencesUtils.getString(activity, activity.getString(R.string.sp_fb_name));
     }
 
-    public static String getEmailFacebook (Activity activity){
-        return SharedPreferencesUtils.getString(activity, activity.getString(R.string.sp_fb_email));
-    }
-
     public static Bitmap getImgProfileFacebook (Activity activity){
         String imgProfileStr = SharedPreferencesUtils.getString(activity, activity.getString(R.string.sp_fb_img_profile));
         if (imgProfileStr != null){
@@ -150,12 +150,38 @@ public class Login extends Activity {
         return null;
     }
     public static void closeFacebookSession(final Activity activity, final Class goTo){
-        Session session = Session.getActiveSession();
+     /*   Session session = Session.getActiveSession();
         session.closeAndClearTokenInformation();
         Intent intent = new Intent(activity, goTo);
         deleteParamsFacebook(activity);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        activity.startActivity(intent);
+        activity.startActivity(intent);*/
+        Session session = Session.getActiveSession();
+        if (session != null) {
+
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+                Intent intent = new Intent(activity, goTo);
+                deleteParamsFacebook(activity);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                activity.startActivity(intent);
+                Usuario u = new Usuario();
+                u.logout(activity);
+                //clear your preferences if saved
+            }
+        } else {
+            session = new Session(activity.getApplicationContext());
+            Session.setActiveSession(session);
+
+            session.closeAndClearTokenInformation();
+            Intent intent = new Intent(activity, goTo);
+            deleteParamsFacebook(activity);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            activity.startActivity(intent);
+            Usuario u = new Usuario();
+            u.logout(activity);
+            //clear your preferences if saved
+        }
     }
 
     public static void goToLoginScreen (Activity activity){
@@ -224,7 +250,7 @@ public class Login extends Activity {
                         finish();
                     }
                 });
-                usuario.login(Login.this, email, password);
+                usuario.login(Login.this, email, password, false);
             }
         });
 
@@ -240,9 +266,10 @@ public class Login extends Activity {
 
 
 
-    public void loginUsuarioFacebook(String email, String usuario) {
+    public void registerUsuarioFacebook(String name , String id) {
+
         Usuario u = new Usuario();
-        u.register(Login.this, usuario, email, "PASS_IGNORE_FB");
+        u.register(Login.this, name, id, "PASS_IGNORE_FB", true);
         Intent itemintent = new Intent(Login.this, MyActivity.class);
         Login.this.startActivity(itemintent);
         finish();

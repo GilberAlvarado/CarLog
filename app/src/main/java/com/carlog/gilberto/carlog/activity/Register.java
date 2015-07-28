@@ -62,7 +62,7 @@ public class Register extends Activity {
                         registerErrorMsg.setText(msg);
                     }
                 });
-                usuario.register(Register.this, name, email, password);
+                usuario.register(Register.this, name, email, password, false);
             }
         });
 

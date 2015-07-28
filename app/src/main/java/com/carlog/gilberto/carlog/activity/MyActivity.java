@@ -40,6 +40,7 @@ import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.tiposClases.Usuario;
 import com.carlog.gilberto.carlog.view.SimpleDataView;
+import com.facebook.LoginActivity;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -603,12 +604,6 @@ public class MyActivity extends ActionBarActivity {
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
             }
 
-       /*     if((c.moveToFirst() == true) &&()) {
-                CambiarCocheActivo.CambiarCocheActivo(dbcar, c, MyActivity.this, context);
-                c = dbcar.buscarCocheActivo();
-            }*/
-
-
             if (c.moveToFirst() == true) {
                 matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
                 marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
@@ -644,7 +639,7 @@ public class MyActivity extends ActionBarActivity {
 
     // lanzamos el servicio cada 30seg
     private void comprobarNotificaciones() {
-        int comprobacionIntervaloSegundos = 30;
+        int comprobacionIntervaloSegundos = 10;
         PendingIntent pendingIntent;
         Intent myIntent = new Intent(MyActivity.this, Notificaciones.class);
         pendingIntent = PendingIntent.getService(MyActivity.this, 0, myIntent, 0);
@@ -653,30 +648,32 @@ public class MyActivity extends ActionBarActivity {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 10);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), comprobacionIntervaloSegundos * 1000, pendingIntent);
+        Toast.makeText(MyActivity.this, "Alarmas iniciadas.", Toast.LENGTH_LONG).show();
     }
 
 
-    public boolean login() {
-        Usuario usuario = new Usuario();
-        if(usuario.isUserLoggedIn(this)) {
-            usuario.readUser(this);
-            return true;
-        }
-        else {
-            Intent intent = new Intent(MyActivity.this, Login.class);
-            startActivity(intent);
-            finish();
-            return false;
-        }
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean logueado = login();
-        if(logueado) {
-            comprobarNotificaciones();
+
+        String getIdFacebook = Login.getIdFacebook(this);
+        Usuario usuario = new Usuario();
+        System.out.println("MyACTIVITY "+ usuario.isUserLoggedIn(this) + " " + getIdFacebook);
+        if(usuario.isUserLoggedIn(this) || (getIdFacebook != null)) {
+            System.out.println("Logueado");
+            usuario.readUser(this);
+            // aqui tenemos toda la info del usuario
+
             addCarOrShowLogs();
+            comprobarNotificaciones();
+        }
+        else {
+            System.out.println("No Logueado");
+            Intent intent = new Intent(MyActivity.this, Login.class);
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -735,10 +732,15 @@ public class MyActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(MyActivity.this);
-            Intent intent = new Intent(MyActivity.this, Login.class);
-            startActivity(intent);
+            if (Login.getIdFacebook(this) == null){
+                Login.goToLoginScreen(this);
+                Usuario u = new Usuario();
+                u.logout(MyActivity.this);
+                Intent intent = new Intent(MyActivity.this, Login.class);
+                startActivity(intent);
+            } else {
+                Login.closeFacebookSession(this, Login.class);
+            }
             finish();
         }
         return super.onOptionsItemSelected(item);

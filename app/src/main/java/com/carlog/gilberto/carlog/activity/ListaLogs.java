@@ -36,6 +36,7 @@ import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.facebook.LoginActivity;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -50,7 +51,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -66,6 +67,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     private View mOverlayView;
     private View mListBackgroundView;
     private TextView mTitleView;
+    private CircleImageView profileImg;
     private View mFab;
     private int mActionBarSize;
     private int mFlexibleSpaceShowFabOffset;
@@ -272,9 +274,65 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         registerForContextMenu(listView);
     }
 
-    private void ObservableScrollView() {
+    private void imagenFB(final Activity activity) {
+        String idFB = Login.getIdFacebook(activity);
+        profileImg = (CircleImageView) findViewById(R.id.profilePicture);
+        if (idFB != null) {
+            try {
+                mTitleView = (TextView) findViewById(R.id.title);
+                //mTitleView.setText("Próximas revisiones");
+                mTitleView.setText(Login.getNameFacebook(activity));
+                System.out.println("profileImg "+profileImg);
+                if (Login.getImgProfileFacebook(activity) != null) {
+                    profileImg.setImageBitmap(Login.getImgProfileFacebook(activity));
+                }
+                else {
+                    Thread thread=  new Thread(){
+                        @Override
+                        public void run(){
+                            try {
+                                synchronized(this){
+                                    while (Login.getImgProfileFacebook(activity) == null){
+                                        wait(1000);
+                                        if (Login.getImgProfileFacebook(activity) != null) {
+                                            ListaLogs.this.runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                    profileImg.setImageBitmap(Login.getImgProfileFacebook(activity));
+                                                }
+                                            });
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            catch(InterruptedException ex){
+                            }
+                        }
+                    };
+
+                    thread.start();
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        else { //sesión iniciada por registro
+            Usuario usuario = new Usuario();
+            if(usuario.isUserLoggedIn(this)) {
+                System.out.println("Logueado");
+                usuario.readUser(this);
+                String nombre = usuario.getName();
+                mTitleView = (TextView) findViewById(R.id.title);
+                mTitleView.setText(nombre);
+            }
+        }
+    }
+
+    private void ObservableScrollView(Activity activity) {
         toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
         setSupportActionBar(toolbar);
+
+        imagenFB(activity);
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -303,7 +361,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         listView.addHeaderView(paddingView);
         mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText("Próximas revisiones");
         setTitle(null);
         mFab = findViewById(R.id.fab);
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
@@ -403,7 +460,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         DBCar dbcar = new DBCar(context);
         Cursor c = dbcar.buscarCoches();
         CambiarCocheActivo.CambiarCocheActivo(dbcar, c, ListaLogs.this, context);
-        ObservableScrollView();
+        ObservableScrollView(ListaLogs.this);
         c = dbcar.buscarCocheActivo();
 
         if (c.moveToFirst() == true) {
@@ -443,6 +500,11 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         ViewHelper.setPivotY(mTitleView, 0);
         ViewHelper.setScaleX(mTitleView, scale);
         ViewHelper.setScaleY(mTitleView, scale);
+        // Scale image fb
+        ViewHelper.setPivotX(profileImg, 0);
+        ViewHelper.setPivotY(profileImg, 0);
+        ViewHelper.setScaleX(profileImg, scale);
+        ViewHelper.setScaleY(profileImg, scale);
 
         // Translate title text
         int maxTitleTranslationY = (int) (mFlexibleSpaceImageHeight - mTitleView.getHeight() * scale);
@@ -452,6 +514,10 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
         ViewHelper.setTranslationY(mTitleView, titleTranslationY);
         ViewHelper.setTranslationX(mTitleView, 90);
+        // Translate fb image
+        ViewHelper.setTranslationY(profileImg, titleTranslationY);
+        ViewHelper.setTranslationX(profileImg, 90);
+
 
         // Translate FAB
         int maxFabTranslationY = mFlexibleSpaceImageHeight - mFab.getHeight() / 3;
@@ -508,8 +574,10 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         if (Build.VERSION_CODES.JELLY_BEAN_MR1 <= Build.VERSION.SDK_INT
                 && config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             ViewHelper.setPivotX(mTitleView, findViewById(android.R.id.content).getWidth());
+            ViewHelper.setPivotX(profileImg, findViewById(android.R.id.content).getWidth());
         } else {
             ViewHelper.setPivotX(mTitleView, 0);
+            ViewHelper.setPivotX(profileImg, 0);
         }
     }
 
@@ -574,10 +642,15 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(ListaLogs.this);
-            Intent intent = new Intent(ListaLogs.this, Login.class);
-            startActivity(intent);
+            if (Login.getIdFacebook(this) == null){
+                Login.goToLoginScreen(this);
+                Usuario u = new Usuario();
+                u.logout(ListaLogs.this);
+                Intent intent = new Intent(ListaLogs.this, Login.class);
+                startActivity(intent);
+            } else {
+                Login.closeFacebookSession(this, Login.class);
+            }
             finish();
         }
         return super.onOptionsItemSelected(item);

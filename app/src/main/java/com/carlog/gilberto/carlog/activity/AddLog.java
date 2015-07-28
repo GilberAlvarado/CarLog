@@ -359,6 +359,7 @@ public class AddLog extends ActionBarActivity {
         if (id == R.id.action_logout) {
             Usuario u = new Usuario();
             u.logout(AddLog.this);
+            Login.closeFacebookSession(AddLog.this, Login.class);
             Intent intent = new Intent(AddLog.this, Login.class);
             startActivity(intent);
             finish();

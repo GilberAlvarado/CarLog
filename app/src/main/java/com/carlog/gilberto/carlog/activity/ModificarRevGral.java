@@ -128,6 +128,7 @@ public class ModificarRevGral extends ActionBarActivity {
         if (id == R.id.action_logout) {
             Usuario u = new Usuario();
             u.logout(ModificarRevGral.this);
+            Login.closeFacebookSession(ModificarRevGral.this, Login.class);
             Intent intent = new Intent(ModificarRevGral.this, Login.class);
             startActivity(intent);
             finish();
