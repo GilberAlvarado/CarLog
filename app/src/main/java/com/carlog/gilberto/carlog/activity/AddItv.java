@@ -79,8 +79,11 @@ public class AddItv extends ActionBarActivity {
 
                 Intent intent = new Intent(AddItv.this, MyActivity.class);
                 intent.putExtra("itv_string", itv_string);
+                intent.putExtra("aceite_string", itv_string);
+                intent.putExtra("revgral_string", itv_string);
                 intent.putExtra("addItv", true);
                 setResult(Activity.RESULT_OK, intent);
+
                 finish();
             }
         });

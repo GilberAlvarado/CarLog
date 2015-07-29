@@ -64,6 +64,7 @@ public class ModificarItv extends ActionBarActivity {
                 intent.putExtra("itv_string", txtTexto.getText().toString());
                 intent.putExtra("modifyItv", true);
                 setResult(Activity.RESULT_OK, intent);
+
                 finish();
             }
         });

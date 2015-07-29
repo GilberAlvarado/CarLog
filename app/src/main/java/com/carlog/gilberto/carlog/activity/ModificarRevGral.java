@@ -22,6 +22,7 @@ import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 import com.carlog.gilberto.carlog.tiposClases.Usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +56,18 @@ public class ModificarRevGral extends ActionBarActivity {
 
     }
 
+    private void ChangeFRevGral(final String txt_fecha) {
+        FloatingActionButton btn_modificarFItv = (FloatingActionButton) findViewById(R.id.button_modif_revgral);
+        btn_modificarFItv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ModificarRevGral.this, AddItv.class);
+                intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
+                startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_REVGRAL);
+            }
+        });
+    }
+
     private void ModificarLog(final DBLogs managerLogs, final DBRevGral managerRevGral) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_revgral);
@@ -76,15 +89,22 @@ public class ModificarRevGral extends ActionBarActivity {
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
                 Intent intent = new Intent(ModificarRevGral.this, ListaLogs.class);
-
-                System.out.println("Modificamos el Log con id " + idLog + " por revgral " + int_revgral);
-                managerLogs.modificarTipoRevGralLog(idLog, int_revgral);
+                Cursor c_log = managerLogs.buscarLogID(idLog);
+                if (c_log.moveToFirst() == true) {
+                    long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
+                    String txt_fecha_log = funciones.long_a_string(fecha_log);
+                    System.out.println("Modificamos el Log con id " + idLog + " por revgral " + int_revgral);
+                    if (txt_fecha_log.equals(txtTexto.getText().toString())) managerLogs.modificarTipoRevGralLog(idLog, int_revgral);
+                    else
+                        managerLogs.modificarFechaRevGralLog(idLog, int_revgral, funciones.string_a_long(txtTexto.getText().toString()));
+                }
 
                 /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
                 TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
                 procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
                 */
 
+                intent.putExtra("modifyRevGral", true);
                 setResult(Activity.RESULT_OK, intent);
 
                 finish();
@@ -105,7 +125,9 @@ public class ModificarRevGral extends ActionBarActivity {
         DBRevGral managerRevGral = new DBRevGral(contextNew);
         DBLogs managerLog = new DBLogs(contextNew);
         TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+        String txt_fecha = miTipo.getFechatxt(miTipo);
         RellenarTiposRevGral(managerRevGral, miTipo);
+        ChangeFRevGral(txt_fecha);
         ModificarLog(managerLog, managerRevGral);
     }
 
@@ -135,5 +157,23 @@ public class ModificarRevGral extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    public static final int PETICION_ACTIVITY_MODIFY_REVGRAL = 1;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("requestCoderequestCode "+ requestCode);
+        switch(requestCode) {
+            case (PETICION_ACTIVITY_MODIFY_REVGRAL) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String itv_string = data.getExtras().getString("revgral_string");
+                    TextView text=(TextView)findViewById(R.id.txt_fecha_revgral);
+                    text.setText(itv_string);
+                }
+                break;
+            }
+
+        }
     }
 }

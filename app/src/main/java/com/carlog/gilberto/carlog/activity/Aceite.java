@@ -33,9 +33,11 @@ import java.util.Date;
  */
 public class Aceite extends ActionBarActivity {
 
-    public final static String TIPO_10K_KM = "10 mil kms - 5w30 – 5w40 – 5w50";
-    public final static String TIPO_7M_KM = "7 mil kms - 10w40";
-    public final static String TIPO_5K_KM = "5 mil kms - 15w40 - 20w50 - 25w60";
+    public final static String TIPO_7K5_KM = "7.500 kms - Minerales";
+    public final static String TIPO_10M_KM = "10.000 kms - Semisintéticos";
+    public final static String TIPO_15K_KM = "15 mil kms - Sintéticos";
+    public final static String TIPO_20K_KM = "20 mil kms - Longlife";
+    public final static String TIPO_30K_KM = "30 mil kms - Longlife";
 
     private Toolbar toolbar;
     private Spinner spinner1;

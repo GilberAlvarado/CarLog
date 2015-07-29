@@ -98,7 +98,11 @@ public class DBLogs {
     public Cursor cargarCursorLogs() {
         String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA, CN_ACEITE, CN_VECES_FIL_ACEITE, CN_CONTADOR_FIL_ACEITE, CN_REVGRAL, CN_CAR, CN_REALIZADO, CN_FMODIFICADA, CN_KMS};
         return db.query(TABLE_NAME, columnas, null, null, null, null, null);
+    }
 
+    public Cursor buscarLogID(int id) {
+        String[] columnas = new String[]{CN_ID, CN_TIPO, CN_FECHA, CN_ACEITE, CN_VECES_FIL_ACEITE, CN_CONTADOR_FIL_ACEITE, CN_REVGRAL, CN_CAR, CN_REALIZADO, CN_FMODIFICADA, CN_KMS};
+        return db.query(TABLE_NAME, columnas, CN_ID + "=?", new String[]{Integer.toString(id)}, null, null, null);
     }
 
     public Cursor LogsOrderByFecha() { // Todos los tipos y historicos o no
@@ -174,12 +178,22 @@ public class DBLogs {
     }
 
     public void modificarTipoAceiteLog(int id, int aceite) {
-        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_ACEITE + " = " + aceite+ " WHERE " + CN_ID + " = " + id;
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_ACEITE + " = " + aceite + " WHERE " + CN_ID + " = " + id;
+        db.execSQL(sql);
+    }
+
+    public void modificarFechaAceiteLog(int id, int aceite, long fecha) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_ACEITE + " = " + aceite + ", " + CN_FECHA + " = " + fecha + ", " + CN_FMODIFICADA + " = " + FMODIFICADA + " WHERE " + CN_ID + " = " + id;
         db.execSQL(sql);
     }
 
     public void modificarTipoRevGralLog(int id, int revgral) {
-        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_REVGRAL + " = " + revgral+ " WHERE " + CN_ID + " = " + id;
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_REVGRAL  + " = " + revgral + " WHERE " + CN_ID + " = " + id;
+        db.execSQL(sql);
+    }
+
+    public void modificarFechaRevGralLog(int id, int revgral, long fecha) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_REVGRAL  + " = " + revgral + ", " + CN_FECHA + " = " + fecha + ", " + CN_FMODIFICADA + " = " + FMODIFICADA + " WHERE " + CN_ID + " = " + id;
         db.execSQL(sql);
     }
 

@@ -121,7 +121,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     }
 
 
-    private void modificarLogpulsado(final Cursor cursor, int posicion, Context context) {
+    private void modificarLogpulsado(final Cursor cursor, int posicion, Activity context) {
         //Recorremos el cursor
         int i = 0;
         String tipo = "";
@@ -159,16 +159,13 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
 
         if(tipo.equals(TipoLog.TIPO_ACEITE)) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
         if(tipo.equals(TipoLog.TIPO_REV_GENERAL)) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
         if(tipo.equals(TipoLog.TIPO_ITV)) {
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
         ///////////Todo ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
         //************************************************************************
@@ -245,13 +242,13 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
     }
 
-    private void modificarLogPulsando(final Context context) {
+    private void modificarLogPulsando(final Activity act) {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final DBLogs manager = new DBLogs(context);
+                final DBLogs manager = new DBLogs(act.getApplicationContext());
                 final Cursor cursor = manager.LogsFuturosOrderByFechaString(matricula);
-                modificarLogpulsado(cursor, position, context);
+                modificarLogpulsado(cursor, position, act);
             }
         });
     }
@@ -281,7 +278,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         miAdaptadorLog adapter = new miAdaptadorLog(act, listaLogs);
         listView.setAdapter(adapter);
-        modificarLogPulsando(context);
+        modificarLogPulsando(act);
         //Asociamos el menú contextual a los controles para las opciones en longClick
         registerForContextMenu(listView);
     }
@@ -464,12 +461,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listalogs);
-        Context context = this;
-
+    private void modificarFechasRevisiones(Context context) {
         Boolean modifyItv = false;
         try { // Solo si añadimos un coche desde la activity ListaLogs
             modifyItv = getIntent().getExtras().getBoolean("modifyItv");
@@ -477,8 +469,31 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         catch (Exception e) {
             System.out.println("No se ha modificado fecha itv");
         }
-        if(modifyItv) ConsultarLogs(context, ListaLogs.this); // para actualizar la fecha de itv modificada
+        Boolean modifyRevGral = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyRevGral = getIntent().getExtras().getBoolean("modifyRevGral");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha revgral");
+        }
+        Boolean modifyAceite = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyAceite = getIntent().getExtras().getBoolean("modifyAceite");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha aceite");
+        }
+        if((modifyItv) || (modifyAceite) || (modifyRevGral))
+            ConsultarLogs(context, ListaLogs.this); // para actualizar la fecha de revision modificada
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_listalogs);
+        Context context = this;
+
+        modificarFechasRevisiones(context);
 
         DBCar dbcar = new DBCar(context);
         Cursor c = dbcar.buscarCoches();

@@ -37,16 +37,20 @@ import java.util.Date;
  */
 public class RevGral extends ActionBarActivity {
 
+    public final static String TIPO_30K_KM = "30 mil kms (Recomendada)";
     public final static String TIPO_5K_KM = "5 mil kms";
     public final static String TIPO_10K_KM = "10 mil kms";
     public final static String TIPO_15K_KM = "15 mil kms";
     public final static String TIPO_20K_KM = "20 mil kms";
     public final static String TIPO_25K_KM = "25 mil kms";
-    public final static String TIPO_30K_KM = "30 mil kms";
     public final static String TIPO_35K_KM = "35 mil kms";
     public final static String TIPO_40K_KM = "40 mil kms";
     public final static String TIPO_45K_KM = "45 mil kms";
     public final static String TIPO_50K_KM = "50 mil kms";
+    public final static String TIPO_60K_KM = "60 mil kms";
+    public final static String TIPO_80K_KM = "80 mil kms";
+    public final static String TIPO_100K_KM = "100 mil kms";
+    public final static String TIPO_120K_KM = "120 mil kms";
 
     private Toolbar toolbar;
     private Spinner spinner1;
