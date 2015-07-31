@@ -33,12 +33,19 @@ public class TipoLog implements Serializable {
     private int veces_fil_aceite;
     private int contador_fil_aceite;
     private int revgral;
+    private int correa;
+    private int bombaagua;
+    private int fgasolina;
+    private int faire;
+    private int bujias;
+    private int embrague;
     private String matricula;
     private int realizado;
     private int fmodificada;
     private int kms;
 
-    public TipoLog(String tipo, Date fecha, String datetxt, long long_fecha, int aceite, int veces_fil_aceite, int contador_fil_aceite, int revgral, String matricula, int realizado, int fmodificada, int kms) {
+    public TipoLog(String tipo, Date fecha, String datetxt, long long_fecha, int aceite, int veces_fil_aceite, int contador_fil_aceite, int revgral,
+                   int correa, int bombaagua, int fgasolina, int faire, int bujias, int embrague, String matricula, int realizado, int fmodificada, int kms) {
         this.tipo = tipo;
         this.fecha = fecha;
         this.datetxt = datetxt;
@@ -47,6 +54,12 @@ public class TipoLog implements Serializable {
         this.veces_fil_aceite = veces_fil_aceite;
         this.contador_fil_aceite = contador_fil_aceite;
         this.revgral = revgral;
+        this.correa = correa;
+        this.bombaagua = bombaagua;
+        this.faire = faire;
+        this.fgasolina = fgasolina;
+        this.bujias = bujias;
+        this.embrague = embrague;
         this.matricula = matricula;
         this.realizado = realizado;
         this.fmodificada = fmodificada;
@@ -87,6 +100,25 @@ public class TipoLog implements Serializable {
 
     public int getRevgral(TipoLog miTipo) {
         return(miTipo.revgral);
+    }
+
+    public int getCorrea(TipoLog miTipo) {
+        return(miTipo.correa);
+    }
+    public int getBombaagua(TipoLog miTipo) {
+        return(miTipo.bombaagua);
+    }
+    public int getFgasolina(TipoLog miTipo) {
+        return(miTipo.fgasolina);
+    }
+    public int getFaire(TipoLog miTipo) {
+        return(miTipo.faire);
+    }
+    public int getBujias(TipoLog miTipo) {
+        return(miTipo.bujias);
+    }
+    public int getEmbrague(TipoLog miTipo) {
+        return(miTipo.embrague);
     }
 
     public int getKms(TipoLog miTipo) {

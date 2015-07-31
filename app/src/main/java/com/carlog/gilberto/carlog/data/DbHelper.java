@@ -16,7 +16,7 @@ import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "carlog.sqlite";
-    private static final int DB_SCHEME_VERSION = 74;
+    private static final int DB_SCHEME_VERSION = 76;
     public static final int MAX_TIPOS_REV = 14; // 15 pq cuenta el 0
 
     public DbHelper(Context context) {
@@ -26,12 +26,18 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
      //   sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
-      //  sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBRevGral.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBMarcas.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBModelos.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBCorrea.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBBombaAgua.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBFiltroGasolina.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBFiltroAire.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBBujias.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBEmbrague.CREATE_TABLE);
+      //  sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBFiltroAceite.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBLogin.SQLCreateLogin);
 
@@ -115,14 +121,14 @@ public class DbHelper extends SQLiteOpenHelper {
 */
 
         /// Inicializamos la tabla de tipos de revisión
-        ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV *************************//////
+        ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV  para poder borrar los personalizados*************************//////
   /*      String[] lista_tipo = {TipoLog.TIPO_ACEITE, TipoLog.TIPO_BOMBA_AGUA, TipoLog.TIPO_BUJIAS, TipoLog.TIPO_CORREA, TipoLog.TIPO_EMBRAGUE,
                 TipoLog.TIPO_FILTRO_ACEITE, TipoLog.TIPO_FILTRO_AIRE,
                 TipoLog.TIPO_FILTRO_GASOLINA, TipoLog.TIPO_FRENOS, TipoLog.TIPO_ITV, TipoLog.TIPO_LIMPIAPARABRISAS, TipoLog.TIPO_LIQUIDO_FRENOS,
                 TipoLog.TIPO_LUCES, TipoLog.TIPO_REV_GENERAL, TipoLog.TIPO_RUEDAS};
         String[] lista_img = {"ic_aceite", "ic_bomba_agua", "ic_bujias", "ic_correa", "ic_embrague", "ic_fil_aceite", "ic_fil_aire", "ic_fil_gasolina", "ic_frenos", "ic_itv_rev",
                 "ic_limpiaparabrisas", "ic_liquido_frenos", "ic_luces", "ic_revgen", "ic_ruedas"};
-        ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV *************************//////
+        ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV para poder borrar los personalizados *************************//////
 /*
         sqLiteDatabase.beginTransaction();
         try {
@@ -137,6 +143,8 @@ public class DbHelper extends SQLiteOpenHelper {
             sqLiteDatabase.endTransaction();
         }
 */
+
+
  /*       /// Inicializamos la tabla de tipos de revision general
         String[] lista_revgral = {RevGral.TIPO_30K_KM, RevGral.TIPO_5K_KM, RevGral.TIPO_10K_KM, RevGral.TIPO_15K_KM, RevGral.TIPO_20K_KM, RevGral.TIPO_25K_KM,
                 RevGral.TIPO_35K_KM, RevGral.TIPO_40K_KM, RevGral.TIPO_45K_KM, RevGral.TIPO_50K_KM, RevGral.TIPO_60K_KM, RevGral.TIPO_80K_KM, RevGral.TIPO_100K_KM, RevGral.TIPO_120K_KM};
@@ -156,8 +164,119 @@ public class DbHelper extends SQLiteOpenHelper {
             sqLiteDatabase.endTransaction();
         }
 */
+
+        /// Inicializamos la tabla de tipos de revision general
+        String[] lista_correa = {DBCorrea.TIPO_60K_KM, DBCorrea.TIPO_80K_KM, DBCorrea.TIPO_100K_KM, DBCorrea.TIPO_120K_KM};
+        int[] lista_kms_correa =  {60000, 80000, 100000, 120000};
+
+        sqLiteDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            for (int i = 0; i < lista_correa.length; i++) {
+                values.put(DBCorrea.CN_ID, i+1);
+                values.put(DBCorrea.CN_TIPO, lista_correa[i]);
+                values.put(DBCorrea.CN_KMS, lista_kms_correa[i]);
+                sqLiteDatabase.insert(DBCorrea.TABLE_NAME, null, values);
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
+
+        /// Inicializamos la tabla de tipos de bomba de agua
+        String[] lista_bombaagua = {DBBombaAgua.TIPO_80K_KM, DBBombaAgua.TIPO_60K_KM, DBBombaAgua.TIPO_100K_KM, DBBombaAgua.TIPO_120K_KM};
+        int[] lista_kms_bombaagua =  {80000, 60000, 100000, 120000};
+
+        sqLiteDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            for (int i = 0; i < lista_bombaagua.length; i++) {
+                values.put(DBBombaAgua.CN_ID, i+1);
+                values.put(DBBombaAgua.CN_TIPO, lista_bombaagua[i]);
+                values.put(DBBombaAgua.CN_KMS, lista_kms_bombaagua[i]);
+                sqLiteDatabase.insert(DBBombaAgua.TABLE_NAME, null, values);
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
+
+
+        /// Inicializamos la tabla de tipos de filtro de gasolina
+        String[] lista_fgasolina = {DBFiltroGasolina.TIPO_30K_KM, DBFiltroGasolina.TIPO_40K_KM, DBFiltroGasolina.TIPO_50K_KM, DBFiltroGasolina.TIPO_60K_KM, DBFiltroGasolina.TIPO_80K_KM};
+        int[] lista_kms_fgasolina =  {30000, 40000, 500000, 60000, 80000};
+
+        sqLiteDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            for (int i = 0; i < lista_fgasolina.length; i++) {
+                values.put(DBFiltroGasolina.CN_ID, i+1);
+                values.put(DBFiltroGasolina.CN_TIPO, lista_fgasolina[i]);
+                values.put(DBFiltroGasolina.CN_KMS, lista_kms_fgasolina[i]);
+                sqLiteDatabase.insert(DBFiltroGasolina.TABLE_NAME, null, values);
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
+
+        /// Inicializamos la tabla de tipos de filtro de aire
+        String[] lista_faire = {DBFiltroAire.TIPO_30K_KM, DBFiltroAire.TIPO_40K_KM, DBFiltroAire.TIPO_50K_KM, DBFiltroAire.TIPO_60K_KM, DBFiltroAire.TIPO_80K_KM};
+        int[] lista_kms_faire =  {30000, 40000, 50000, 60000, 80000};
+
+        sqLiteDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            for (int i = 0; i < lista_faire.length; i++) {
+                values.put(DBFiltroAire.CN_ID, i+1);
+                values.put(DBFiltroAire.CN_TIPO, lista_faire[i]);
+                values.put(DBFiltroAire.CN_KMS, lista_kms_faire[i]);
+                sqLiteDatabase.insert(DBFiltroAire.TABLE_NAME, null, values);
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
+
+        /// Inicializamos la tabla de tipos de filtro de bujjias
+        String[] lista_bujias = {DBBujias.TIPO_60K_KM, DBBujias.TIPO_50K_KM, DBBujias.TIPO_55K_KM, DBBujias.TIPO_65K_KM, DBBujias.TIPO_80K_KM};
+        int[] lista_kms_bujias =  {60000, 50000, 55000, 65000, 80000};
+
+        sqLiteDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            for (int i = 0; i < lista_bujias.length; i++) {
+                values.put(DBBujias.CN_ID, i+1);
+                values.put(DBBujias.CN_TIPO, lista_bujias[i]);
+                values.put(DBBujias.CN_KMS, lista_kms_bujias[i]);
+                sqLiteDatabase.insert(DBBujias.TABLE_NAME, null, values);
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
+
+        /// Inicializamos la tabla de tipos de filtro de embrague
+        String[] lista_embrague = {DBEmbrague.TIPO_60K_KM, DBEmbrague.TIPO_70K_KM, DBEmbrague.TIPO_80K_KM, DBEmbrague.TIPO_100K_KM, DBEmbrague.TIPO_120K_KM};
+        int[] lista_kms_embrague =  {30000, 40000, 500000, 60000, 80000};
+
+        sqLiteDatabase.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            for (int i = 0; i < lista_embrague.length; i++) {
+                values.put(DBEmbrague.CN_ID, i+1);
+                values.put(DBEmbrague.CN_TIPO, lista_embrague[i]);
+                values.put(DBEmbrague.CN_KMS, lista_kms_embrague[i]);
+                sqLiteDatabase.insert(DBEmbrague.TABLE_NAME, null, values);
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
+
+
         /// Inicializamos la tabla de tipos de aceite
-        String[] lista_aceite = {Aceite.TIPO_7K5_KM, Aceite.TIPO_10M_KM, Aceite.TIPO_15K_KM, Aceite.TIPO_20K_KM, Aceite.TIPO_30K_KM};
+  /*      String[] lista_aceite = {Aceite.TIPO_7K5_KM, Aceite.TIPO_10M_KM, Aceite.TIPO_15K_KM, Aceite.TIPO_20K_KM, Aceite.TIPO_30K_KM};
         int[] lista_kms2 =  {7500, 10000, 15000, 20000, 30000};
 
         sqLiteDatabase.beginTransaction();
@@ -173,6 +292,7 @@ public class DbHelper extends SQLiteOpenHelper {
         } finally {
             sqLiteDatabase.endTransaction();
         }
+        */
 
 /*
         /// Inicializamos la tabla de tipos de filtro de aceite
@@ -197,13 +317,19 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
-      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCar.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBMarcas.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBModelos.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBFiltroAceite.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBTiposRevision.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBAceite.TABLE_NAME);
+      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBAceite.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCorrea.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBBombaAgua.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBFiltroGasolina.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBFiltroAire.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBBujias.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBEmbrague.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBRevGral.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogin.Table);
         onCreate(sqLiteDatabase);

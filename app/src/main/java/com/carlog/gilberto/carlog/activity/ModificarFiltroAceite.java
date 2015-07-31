@@ -15,8 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBAceite;
-import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBFiltroAceite;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
@@ -30,22 +28,19 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by Gilberto on 22/07/2015.
+ * Created by Gilberto on 30/07/2015.
  */
-public class FiltroAceite extends ActionBarActivity {
-
-    public final static String TIPO_1 = "Siempre que cambie el aceite (recomendada)";
-    public final static String TIPO_2 = "Cada 2 cambios de aceite";
-    public final static String TIPO_3 = "Cada 3 cambios de aceite";
-
+public class ModificarFiltroAceite extends ActionBarActivity {
     private Toolbar toolbar;
     private Spinner spinner1;
 
     private void RellenarTiposFiltroAceite(DBFiltroAceite managerFiltroAceite) {
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipoLog");
+        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_fil_aceite);
         text.setText(txt_fecha);
+
+        System.out.println("miTipo.getVecesFilAceite(miTipo)-1  " + miTipo.getVecesFilAceite(miTipo));
 
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_fil_aceite);
 
@@ -60,54 +55,37 @@ public class FiltroAceite extends ActionBarActivity {
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adaptador);
+
+        spinner1.setSelection(miTipo.getVecesFilAceite(miTipo)-1);
     }
 
-    private void GuardarLog(final Context context, final DBLogs managerLogs, final DBFiltroAceite managerFiltroAceite) {
+    private void ModificarLog(final DBLogs managerLogs, final DBFiltroAceite managerFiltroAceite) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_fil_aceite);
-
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fil_aceite);
-                String tipo_fil_aceite = spinner.getSelectedItem().toString();
+            Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fil_aceite);
+            String tipo_fil_aceite = spinner.getSelectedItem().toString();
 
-                Cursor c = DBFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
+            System.out.println("TipoFiltroVeces " + tipo_fil_aceite);
+            Cursor c = DBFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
 
-                int int_veces = AddLog.NO_VECES_FIL_ACEITE; // solo para inicializar
+            int int_veces = AddLog.NO_ACEITE; // solo para inicializar
 
-                if (c.moveToFirst() == true) {
-                    int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
-                }
+            if (c.moveToFirst() == true) {
+                int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
+            }
 
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fil_aceite);
-                String datetxt = txtTexto.getText().toString();
+            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fil_aceite);
+            String datetxt = txtTexto.getText().toString();
 
-                //Date fecha = funciones.string_a_date(datetxt);
-                Date fecha = funciones.fecha_mas_dias(new Date(), ProcesarTipos.F_MAX_REV_ACEITE); // da igual la fecha siempre va a poner un año y cuando toque el contador la misma fecha del aceite
-                //long long_fecha = funciones.string_a_long(datetxt);
-                long long_fecha = funciones.date_a_long(fecha);
+            Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
+            Intent intent = new Intent(ModificarFiltroAceite.this, ListaLogs.class);
+            System.out.println("Modificamos el Log con id " + idLog + " por filtro aceite " + int_veces);
+            managerLogs.modificarFechaFiltroAceite(idLog, int_veces);
 
-                TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
-
-                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
-
-
-                if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
-                    // Creamos el nuevo futuro log
-                    // Se pone como REALIZADO!
-                    miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, DBLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
-                }
-
-                Intent intent = new Intent(FiltroAceite.this, AddLog.class);
-
-                managerLogs.insertar(miTipoLog);
-                // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
-                ProcesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), TipoLog.TIPO_ACEITE); // actualizamos fechas
-
-                setResult(Activity.RESULT_OK, intent);
-
-                finish();
+            finish();
             }
         });
     };
@@ -128,7 +106,7 @@ public class FiltroAceite extends ActionBarActivity {
         DBLogs managerLog = new DBLogs(contextNew);
 
         RellenarTiposFiltroAceite(managerFiltroAceite);
-        GuardarLog(contextNew, managerLog, managerFiltroAceite);
+        ModificarLog(managerLog, managerFiltroAceite);
     }
 
     @Override
@@ -149,9 +127,9 @@ public class FiltroAceite extends ActionBarActivity {
         }
         if (id == R.id.action_logout) {
             Usuario u = new Usuario();
-            u.logout(FiltroAceite.this);
-            Login.closeFacebookSession(FiltroAceite.this, Login.class);
-            Intent intent = new Intent(FiltroAceite.this, Login.class);
+            u.logout(ModificarFiltroAceite.this);
+            Login.closeFacebookSession(ModificarFiltroAceite.this, Login.class);
+            Intent intent = new Intent(ModificarFiltroAceite.this, Login.class);
             startActivity(intent);
             finish();
         }

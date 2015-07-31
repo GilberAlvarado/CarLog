@@ -13,6 +13,13 @@
     <string name="title_activity_modificaraceite">ModificarAceite</string>
     <string name="title_activity_modificarrevgral">ModificarRevGral</string>
     <string name="title_activity_modificaritv">ModificarITV</string>
+    <string name="title_activity_modificarcorrea">ModificarCorrea</string>
+    <string name="title_activity_modificarbombaagua">ModificarBombaAgua</string>
+    <string name="title_activity_modificarfgasolina">ModificarFiltroGasolina</string>
+    <string name="title_activity_modificarfaire">ModificarFiltroAire</string>
+    <string name="title_activity_modificarbujias">ModificarBujias</string>
+    <string name="title_activity_modificarEmbrague">ModificarEmbrague</string>
+    <string name="title_activity_modificarFiltroAceite">ModificarFiltroAceite</string>
     <string name="title_activity_additv">AddItv</string>
     <string name="title_activity_actualizarcoche">ActualizarCoche</string>
     <string name="txt_itv">Introduzca Fecha ITV</string>

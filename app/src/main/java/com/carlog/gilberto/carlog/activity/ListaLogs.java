@@ -136,21 +136,48 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 if(tipo.equals(TipoLog.TIPO_REV_GENERAL)) {
                     intent = new Intent(context, ModificarRevGral.class);
                 }
+                if(tipo.equals(TipoLog.TIPO_CORREA)) {
+                    intent = new Intent(context, ModificarCorrea.class);
+                }
+                if(tipo.equals(TipoLog.TIPO_BOMBA_AGUA)) {
+                    intent = new Intent(context, ModificarBombaAgua.class);
+                }
+                if(tipo.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
+                    intent = new Intent(context, ModificarFiltroGasolina.class);
+                }
+                if(tipo.equals(TipoLog.TIPO_FILTRO_AIRE)) {
+                    intent = new Intent(context, ModificarFiltroAire.class);
+                }
+                if(tipo.equals(TipoLog.TIPO_BUJIAS)) {
+                    intent = new Intent(context, ModificarBujias.class);
+                }
+                if(tipo.equals(TipoLog.TIPO_EMBRAGUE)) {
+                    intent = new Intent(context, ModificarEmbrague.class);
+                }
                 if(tipo.equals(TipoLog.TIPO_ITV)) {
                     intent = new Intent(context, ModificarItv.class);
                 }
-                ///////////Todo ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
+                if(tipo.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
+                    intent = new Intent(context, ModificarFiltroAceite.class);
+                }
                 //************************************************************************
 
 
                 String txt_fecha = cursor.getString(cursor.getColumnIndex("fecha_string"));
                 int aceite = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE));
                 int revgral = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL));
+                int correa = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_CORREA));
+                int bombaagua = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_BOMBAAGUA));
+                int fgasolina = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FGASOLINA));
+                int faire = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FAIRE));
+                int bujias = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_BUJIAS));
+                int embrague = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_EMBRAGUE));
                 String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
                 int kms = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS));
+                int veces_filaceite = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
 
 
-                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, revgral,matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms);
+                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, veces_filaceite, AddLog.NO_CONTADOR_FIL_ACEITE, revgral, correa, bombaagua, fgasolina, faire, bujias, embrague, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms);
                 intent.putExtra("miTipo", miTipo);
                 intent.putExtra("idLog", id);
                 break;
@@ -166,6 +193,27 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
         if(tipo.equals(TipoLog.TIPO_ITV)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
+        }
+        if(tipo.equals(TipoLog.TIPO_CORREA)) {
+            context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
+        }
+        if(tipo.equals(TipoLog.TIPO_BOMBA_AGUA)) {
+            context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
+        }
+        if(tipo.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
+            context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
+        }
+        if(tipo.equals(TipoLog.TIPO_FILTRO_AIRE)) {
+            context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
+        }
+        if(tipo.equals(TipoLog.TIPO_EMBRAGUE)) {
+            context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
+        }
+        if(tipo.equals(TipoLog.TIPO_BUJIAS)) {
+            context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
+        }
+        if(tipo.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
+            context.startActivity(intent); // No cambia la fecha solo cada cuantos cambios de aceite se hará
         }
         ///////////Todo ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
         //************************************************************************
@@ -190,7 +238,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                     DBCar dbc = new DBCar(getApplicationContext());
                     long long_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
                     dbc.ActualizarITVCocheActivo(matricula, long_revision_por_fecha);
-                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
+                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
                     manager.insertar(miTipoLog);
                 }
                 if(tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
@@ -269,7 +317,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
-                    funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
+                    funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL))
+                    , cursor.getInt(cursor.getColumnIndex(DBLogs.CN_CORREA)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_BOMBAAGUA)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FGASOLINA)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FAIRE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_BUJIAS)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_EMBRAGUE)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
                     cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FMODIFICADA)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS)));
             listaLogs.add(miTipoLog);
 
@@ -483,7 +532,50 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         catch (Exception e) {
             System.out.println("No se ha modificado fecha aceite");
         }
-        if((modifyItv) || (modifyAceite) || (modifyRevGral))
+        Boolean modifyCorrea = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyCorrea = getIntent().getExtras().getBoolean("modifyCorrea");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha correa");
+        }
+        Boolean modifyBombaAgua = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyBombaAgua = getIntent().getExtras().getBoolean("modifyBombaAgua");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha bomba de agua");
+        }
+        Boolean modifyFiltroGasolina = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyFiltroGasolina = getIntent().getExtras().getBoolean("modifyFiltroGasolina");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha filtro de gasolina");
+        }
+        Boolean modifyFiltroAire = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyFiltroAire = getIntent().getExtras().getBoolean("modifyFiltroAire");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha filtro de aire");
+        }
+        Boolean modifyBujias = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyBujias = getIntent().getExtras().getBoolean("modifyBujias");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha bujías");
+        }
+        Boolean modifyEmbrague = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyEmbrague = getIntent().getExtras().getBoolean("modifyEmbrague");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha embrague");
+        }
+        if((modifyItv) || (modifyAceite) || (modifyRevGral) || (modifyCorrea) || (modifyBombaAgua) ||
+                (modifyFiltroGasolina) || (modifyFiltroAire) || (modifyBujias) || (modifyEmbrague))
             ConsultarLogs(context, ListaLogs.this); // para actualizar la fecha de revision modificada
     }
 
@@ -767,12 +859,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 if (resultCode == Activity.RESULT_OK) {
                     String itv_string = data.getExtras().getString("itv_string");
                     System.out.println("itv stringgg2 "+itv_string);
-
-                 /*   SimpleDataView sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
-                    sdv.setTitle("Fecha ITV");
-                    sdv.setValue(itv_string);
-                    sdv.setEditInvisible();
-                    sdv.setImage(getResources().getDrawable(R.drawable.ic_fecha));*/
                     ConsultarLogs(getApplicationContext(), ListaLogs.this);
                 }
                 break;

@@ -8,7 +8,13 @@ import com.carlog.gilberto.carlog.activity.AddLog;
 import com.carlog.gilberto.carlog.activity.ListaLogs;
 import com.carlog.gilberto.carlog.activity.MyActivity;
 import com.carlog.gilberto.carlog.data.DBAceite;
+import com.carlog.gilberto.carlog.data.DBBombaAgua;
+import com.carlog.gilberto.carlog.data.DBBujias;
 import com.carlog.gilberto.carlog.data.DBCar;
+import com.carlog.gilberto.carlog.data.DBCorrea;
+import com.carlog.gilberto.carlog.data.DBEmbrague;
+import com.carlog.gilberto.carlog.data.DBFiltroAire;
+import com.carlog.gilberto.carlog.data.DBFiltroGasolina;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.data.DBRevGral;
 import com.carlog.gilberto.carlog.formats.funciones;
@@ -31,17 +37,18 @@ public class ProcesarTipos {
     public final static int F_MAX_BUJIAS = 365 * 6;
     public final static int F_MAX_LIQUIDO_FRENOS = 365 * 2;
     public final static int F_MAX_LIMPIAPARABRISAS = 365;
-    public final static int KMS_CORREA = 100000;
-    public final static int KMS_BOMBA_AGUA = 100000;
-    public final static int KMS_FIL_GASOLINA = 30000;
-    public final static int KMS_FIL_AIRE = 30000;
-    public final static int KMS_BUJIAS = 60000;
-    public final static int KMS_EMBRAGUE = 60000;
+    // aceite y revgral no tienen kms pq se inician al valor q inserte el usuario y no automaticamente
+    //public final static int KMS_CORREA = 100000;
+    //public final static int KMS_BOMBA_AGUA = 100000;
+    //public final static int KMS_FIL_GASOLINA = 30000;
+    //public final static int KMS_FIL_AIRE = 30000;
+    //public final static int KMS_BUJIAS = 60000;
+    //public final static int KMS_EMBRAGUE = 60000;
     public final static int KMS_LUCES = 30000;
     public final static int KMS_RUEDAS = 15000;
 
 
-    private static int procesarPorKms(Context context, String tipo_rev, int id_aceite_ultimo_log_hist, int id_revgral_ultimo_log_hist, String matricula, Cursor c_historico_tipo) {
+    private static int procesarPorKms(Context context, String tipo_rev, int id_aceite_ultimo_log_hist, int id_revgral_ultimo_log_hist, int id_correa_ultimo_log_hist, int id_bombaagua_ultimo_log_hist, int id_fgasolina_ultimo_log_hist, int id_faire_ultimo_log_hist, int id_bujias_ultimo_log_hist, int id_embrague_ultimo_log_hist, String matricula, Cursor c_historico_tipo) {
         int kms_tipo_ultimo_log_hist = 0;
         ///////ACEITE tiene id pq tiene su propia tabla
         if(tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
@@ -61,37 +68,67 @@ public class ProcesarTipos {
                 kms_tipo_ultimo_log_hist = c_revgral.getInt(c_revgral.getColumnIndex(DBRevGral.CN_KMS));
             }
         }
-        // correa no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        ///////CORREA tiene id pq tiene su propia tabla
         if(tipo_rev.equals(TipoLog.TIPO_CORREA)) {
-            kms_tipo_ultimo_log_hist = KMS_CORREA;
+            DBCorrea dbCorrea = new DBCorrea(context);
+            Cursor c_correa = dbCorrea.buscarTiposCorrea(id_correa_ultimo_log_hist);
+
+            if (c_correa.moveToFirst() == true) {
+                kms_tipo_ultimo_log_hist = c_correa.getInt(c_correa.getColumnIndex(DBCorrea.CN_KMS));
+            }
         }
-        // bomba de agua no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        ///////Bomba Agua tiene id pq tiene su propia tabla
         if(tipo_rev.equals(TipoLog.TIPO_BOMBA_AGUA)) {
-            kms_tipo_ultimo_log_hist = KMS_BOMBA_AGUA;
+            DBBombaAgua dbBombaagua = new DBBombaAgua(context);
+            Cursor c_bombaagua = dbBombaagua.buscarTiposBombaAgua(id_bombaagua_ultimo_log_hist);
+
+            if (c_bombaagua.moveToFirst() == true) {
+                kms_tipo_ultimo_log_hist = c_bombaagua.getInt(c_bombaagua.getColumnIndex(DBBombaAgua.CN_KMS));
+            }
         }
-        // filtro de gasolina no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        ///////Filtro Gasolina tiene id pq tiene su propia tabla
         if(tipo_rev.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
-            kms_tipo_ultimo_log_hist = KMS_FIL_GASOLINA;
+            DBFiltroGasolina dbFG = new DBFiltroGasolina(context);
+            Cursor c_fg = dbFG.buscarTiposFiltroGasolina(id_fgasolina_ultimo_log_hist);
+
+            if (c_fg.moveToFirst() == true) {
+                kms_tipo_ultimo_log_hist = c_fg.getInt(c_fg.getColumnIndex(DBFiltroGasolina.CN_KMS));
+            }
         }
-        // filtro de aire no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        ///////Filtro Aire tiene id pq tiene su propia tabla
         if(tipo_rev.equals(TipoLog.TIPO_FILTRO_AIRE)) {
-            kms_tipo_ultimo_log_hist = KMS_FIL_AIRE;
+            DBFiltroAire dbFa = new DBFiltroAire(context);
+            Cursor c_fa = dbFa.buscarTiposFiltroAire(id_faire_ultimo_log_hist);
+
+            if (c_fa.moveToFirst() == true) {
+                kms_tipo_ultimo_log_hist = c_fa.getInt(c_fa.getColumnIndex(DBFiltroAire.CN_KMS));
+            }
         }
-        // bujias no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        ///////Bujias tiene id pq tiene su propia tabla
         if(tipo_rev.equals(TipoLog.TIPO_BUJIAS)) {
-            kms_tipo_ultimo_log_hist = KMS_BUJIAS;
+            DBBujias dbBujias = new DBBujias(context);
+            Cursor c_bujias = dbBujias.buscarTiposBujias(id_bujias_ultimo_log_hist);
+
+            if (c_bujias.moveToFirst() == true) {
+                kms_tipo_ultimo_log_hist = c_bujias.getInt(c_bujias.getColumnIndex(DBBujias.CN_KMS));
+            }
         }
-        // luces no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-        if(tipo_rev.equals(TipoLog.TIPO_LUCES)) {
-            kms_tipo_ultimo_log_hist = KMS_LUCES;
+        ///////Embrague tiene id pq tiene su propia tabla
+        if(tipo_rev.equals(TipoLog.TIPO_EMBRAGUE)) {
+            DBEmbrague dbEmbrague = new DBEmbrague(context);
+            Cursor c_embrague = dbEmbrague.buscarTiposEmbrague(id_bombaagua_ultimo_log_hist);
+
+            if (c_embrague.moveToFirst() == true) {
+                kms_tipo_ultimo_log_hist = c_embrague.getInt(c_embrague.getColumnIndex(DBEmbrague.CN_KMS));
+            }
         }
         // ruedas no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
         if(tipo_rev.equals(TipoLog.TIPO_RUEDAS)) {
             kms_tipo_ultimo_log_hist = KMS_RUEDAS;
         }
-        // embrague no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-        if(tipo_rev.equals(TipoLog.TIPO_EMBRAGUE)) {
-            kms_tipo_ultimo_log_hist = KMS_EMBRAGUE;
+        // ruedas no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        if(tipo_rev.equals(TipoLog.TIPO_LUCES)) {
+            kms_tipo_ultimo_log_hist = KMS_LUCES;
         }
         // filtro aceite
         if(tipo_rev.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
@@ -231,6 +268,12 @@ public class ProcesarTipos {
                 int kms_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_KMS));
                 String txt_matricula_ultimo_log_hist = c_historico_tipo.getString(c_historico_tipo.getColumnIndex(DBLogs.CN_CAR));
                 int id_aceite_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_ACEITE));
+                int id_correa_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_CORREA));
+                int id_bombaagua_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_BOMBAAGUA));
+                int id_fgasolina_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_FGASOLINA));
+                int id_faire_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_FAIRE));
+                int id_bujias_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_BUJIAS));
+                int id_embrague_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_EMBRAGUE));
                 int id_revgral_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_REVGRAL));
 
                 // Los tipo de revisión que se procesan unicamente por fecha y no por kms
@@ -238,11 +281,11 @@ public class ProcesarTipos {
                     if (c_logs_tipo.moveToFirst() == false) { // Si existen no se tienen que procesar pq se procesan unicamente al actualizar el nº de kms excepto los especiales aceite y filtro de aceite
                         Date f_revision_por_fecha = procesarPorFecha(tipo_rev, fecha_ultimo_log_hist);
                         long long_f_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
-                        TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_f_revision_por_fecha), long_f_revision_por_fecha, id_aceite_ultimo_log_hist, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, MyActivity.NO_KMS);
+                        TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_f_revision_por_fecha), long_f_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, MyActivity.NO_KMS);
                         dbLogs.insertar(miTipoLog);
                     }
                 } else {
-                    int kms_tipo_ultimo_log_hist = procesarPorKms(context, tipo_rev, id_aceite_ultimo_log_hist, id_revgral_ultimo_log_hist, matricula, c_historico_tipo);
+                    int kms_tipo_ultimo_log_hist = procesarPorKms(context, tipo_rev, id_aceite_ultimo_log_hist, id_revgral_ultimo_log_hist, id_correa_ultimo_log_hist, id_bombaagua_ultimo_log_hist, id_fgasolina_ultimo_log_hist, id_faire_ultimo_log_hist, id_bujias_ultimo_log_hist, id_embrague_ultimo_log_hist, matricula, c_historico_tipo);
 
                     int kms_que_faltan_x_hacer = kms_tipo_ultimo_log_hist - (int_kms - kms_ultimo_log_hist);
 
@@ -298,20 +341,20 @@ public class ProcesarTipos {
                                         if (c_copiar_fecha_aceite_futuro.moveToFirst() == true) {
                                             String fecha_aceite_futuro = c_copiar_fecha_aceite_futuro.getString(c_copiar_fecha_aceite_futuro.getColumnIndex("fecha_string"));
                                             if (contador == int_veces) {
-                                                TipoLog miTipoLog = new TipoLog(tipo_rev, funciones.string_a_date(fecha_aceite_futuro), fecha_aceite_futuro, funciones.string_a_long(fecha_aceite_futuro), id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
+                                                TipoLog miTipoLog = new TipoLog(tipo_rev, funciones.string_a_date(fecha_aceite_futuro), fecha_aceite_futuro, funciones.string_a_long(fecha_aceite_futuro), id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
                                                 dbLogs.eliminar_por_id(int_id_log);
                                                 dbLogs.insertar(miTipoLog);
                                             } else {
                                                 Date f_max_aceite_provisional = funciones.fecha_mas_dias(new Date(), F_MAX_REV_ACEITE); //provisional pq no se va a cambiar hasta que llegue a contador
                                                 long long_max_aceite_provisional = funciones.date_a_long(f_max_aceite_provisional);
-                                                TipoLog miTipoLog = new TipoLog(tipo_rev, f_max_aceite_provisional, funciones.long_a_string(long_max_aceite_provisional), long_max_aceite_provisional, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
+                                                TipoLog miTipoLog = new TipoLog(tipo_rev, f_max_aceite_provisional, funciones.long_a_string(long_max_aceite_provisional), long_max_aceite_provisional, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
                                                 dbLogs.eliminar_por_id(int_id_log);
                                                 dbLogs.insertar(miTipoLog);
                                             }
                                         } else {
                                             Date f_max_aceite_provisional = funciones.fecha_mas_dias(new Date(), F_MAX_REV_ACEITE); //provisional pq no se va a cambiar hasta que llegue a contador
                                             long long_max_aceite_provisional = funciones.date_a_long(f_max_aceite_provisional);
-                                            TipoLog miTipoLog = new TipoLog(tipo_rev, f_max_aceite_provisional, funciones.long_a_string(long_max_aceite_provisional), long_max_aceite_provisional, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
+                                            TipoLog miTipoLog = new TipoLog(tipo_rev, f_max_aceite_provisional, funciones.long_a_string(long_max_aceite_provisional), long_max_aceite_provisional, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
                                             dbLogs.eliminar_por_id(int_id_log);
                                             dbLogs.insertar(miTipoLog);
                                         }
@@ -319,7 +362,7 @@ public class ProcesarTipos {
                                 } else if (tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
                                     if (c_historico_tipo.moveToFirst() == true) {
                                         int int_contador = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE));
-                                        TipoLog miTipoLog = new TipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, AddLog.NO_VECES_FIL_ACEITE, int_contador + 1, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
+                                        TipoLog miTipoLog = new TipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, AddLog.NO_VECES_FIL_ACEITE, int_contador + 1, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
                                         dbLogs.eliminar_por_id(int_id_log);
                                         dbLogs.insertar(miTipoLog);
                                     }
@@ -345,12 +388,12 @@ public class ProcesarTipos {
                                         if (c_copiar_fecha_aceite_futuro.moveToFirst() == true) {
                                             String fecha_aceite_futuro = c_copiar_fecha_aceite_futuro.getString(c_copiar_fecha_aceite_futuro.getColumnIndex("fecha_string"));
                                             if (contador == int_veces) {
-                                                TipoLog miTipoLog = new TipoLog(tipo_rev, funciones.string_a_date(fecha_aceite_futuro), fecha_aceite_futuro, funciones.string_a_long(fecha_aceite_futuro), id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
+                                                TipoLog miTipoLog = new TipoLog(tipo_rev, funciones.string_a_date(fecha_aceite_futuro), fecha_aceite_futuro, funciones.string_a_long(fecha_aceite_futuro), id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
                                                 dbLogs.insertar(miTipoLog);
                                             } else {
                                                 Date f_max_aceite_provisional = funciones.fecha_mas_dias(new Date(), F_MAX_REV_ACEITE); //provisional pq no se va a cambiar hasta que llegue a contador
                                                 long long_max_aceite_provisional = funciones.date_a_long(f_max_aceite_provisional);
-                                                TipoLog miTipoLog = new TipoLog(tipo_rev, f_max_aceite_provisional, funciones.long_a_string(long_max_aceite_provisional), long_max_aceite_provisional, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
+                                                TipoLog miTipoLog = new TipoLog(tipo_rev, f_max_aceite_provisional, funciones.long_a_string(long_max_aceite_provisional), long_max_aceite_provisional, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
                                                 dbLogs.insertar(miTipoLog);
                                             }
                                         }
@@ -358,11 +401,11 @@ public class ProcesarTipos {
                                 } else if (tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
                                     if (c_historico_tipo.moveToFirst() == true) {
                                         int int_contador = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE));
-                                        TipoLog miTipoLog = new TipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, AddLog.NO_VECES_FIL_ACEITE, int_contador + 1, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
+                                        TipoLog miTipoLog = new TipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, AddLog.NO_VECES_FIL_ACEITE, int_contador + 1, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
                                         dbLogs.insertar(miTipoLog);
                                     }
                                 } else {
-                                    TipoLog miTipoLog = new TipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
+                                    TipoLog miTipoLog = new TipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, id_correa_ultimo_log_hist, id_bombaagua_ultimo_log_hist, id_fgasolina_ultimo_log_hist, id_faire_ultimo_log_hist, id_bujias_ultimo_log_hist, id_embrague_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
                                     dbLogs.insertar(miTipoLog);
                                 }
                             }
@@ -392,7 +435,7 @@ public class ProcesarTipos {
                         int int_itv = c_itv.getInt(c_itv.getColumnIndex(dbc.CN_ITV));
                         Date f_itv = funciones.long_a_date(int_itv);
                         if (int_itv != MyActivity.NO_ITV) { // menor de 1975 (no se ha insertado fecha itv)
-                            TipoLog miTipoLog = new TipoLog(tipo_rev, f_itv, funciones.long_a_string(int_itv), int_itv, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, MyActivity.NO_KMS); // los kms de itv da igual pq la itv solo va por fecha
+                            TipoLog miTipoLog = new TipoLog(tipo_rev, f_itv, funciones.long_a_string(int_itv), int_itv, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, MyActivity.NO_KMS); // los kms de itv da igual pq la itv solo va por fecha
                             dbLogs.insertar(miTipoLog);
                         }
                     }

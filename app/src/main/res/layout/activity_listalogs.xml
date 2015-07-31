@@ -62,6 +62,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab"
+                android:elevation="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:layout_gravity="left|top"
+                app:fab_colorNormal="@color/ColorPrimary"
+                android:padding="16dp"
+                android:src="@drawable/ic_action_new"
+                app:fab_colorPressed="@color/ColorPrimaryDark" />
+
 
         </RelativeLayout>
 
@@ -114,23 +126,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white" />
-
-
-
-
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:layout_gravity="left|top"
-        app:fab_colorNormal="@color/ColorPrimary"
-        android:padding="16dp"
-        android:src="@drawable/ic_action_new"
-        app:fab_colorPressed="@color/ColorPrimaryDark" />
-
-    <!--//////////////////////////////////////////// OBSERVABLESCROLL END-->
-
 
 
 </RelativeLayout>

@@ -100,6 +100,69 @@
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
+            android:name=".activity.ModificarCorrea"
+            android:label="@string/title_activity_modificarcorrea"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
+            android:name=".activity.ModificarBombaAgua"
+            android:label="@string/title_activity_modificarbombaagua"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
+            android:name=".activity.ModificarFiltroGasolina"
+            android:label="@string/title_activity_modificarfgasolina"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
+            android:name=".activity.ModificarFiltroAire"
+            android:label="@string/title_activity_modificarfaire"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
+            android:name=".activity.ModificarBujias"
+            android:label="@string/title_activity_modificarbujias"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
+            android:name=".activity.ModificarEmbrague"
+            android:label="@string/title_activity_modificarEmbrague"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
+            android:name=".activity.ModificarFiltroAceite"
+            android:label="@string/title_activity_modificarEmbrague"
+            android:parentActivityName=".activity.ListaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
             android:name=".activity.AddItv"
             android:label="@string/title_activity_additv"
             android:parentActivityName=".activity.MyActivity" >
