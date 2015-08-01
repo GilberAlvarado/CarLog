@@ -923,6 +923,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                         dbc.ActualizarImgModelo(matricula, uriEncoded);
                         ImageView img_listalogs = (ImageView) ListaLogs.this.findViewById(R.id.image);
                         img_listalogs.setImageURI(selectedPictureUri);
+                        CambiarCocheActivo.ActualizarCochesDrawer(dbc,ListaLogs.this, getApplicationContext());
                     }
                     //File chosenFile = new File(DocumentHelper.getPath(this, selectedPictureUri));
                    // Utilities.changeImage(this, chosenFile, Utilities.getBitMapFromUri(this, selectedPictureUri), selectedPictureUri.getPath(), LoginMethods.getIdFacebook(this), mSendero.getServerId(), 0, 0, pd);
