@@ -41,24 +41,23 @@ public class CambiarCocheActivo {
     public static DrawerLayout Drawer;                                  // Declaring DrawerLayout
     public static ActionBarDrawerToggle mDrawerToggle;
 
-    public static void CambiarImgLogs(Context context, Activity act, String txt_uri, String modelo, int img_modelo_cambiada) {
-        DBModelos dbm = new DBModelos(context);
-        Cursor c = dbm.buscarModelos(modelo);
-        if (c.moveToFirst() == true) {
-            ImageView img_listalogs = (ImageView) act.findViewById(R.id.image);
-            if(img_modelo_cambiada == DBCar.IMG_MODELO_NOCAMBIADA) {
+    public static void CambiarImgLogs(Context context, Activity act, String img_modelo_personalizada, String modelo, int img_modelo_cambiada) {
+        ImageView img_listalogs = (ImageView) act.findViewById(R.id.image);
+        if(img_modelo_cambiada == DBCar.IMG_MODELO_NOCAMBIADA) {
+            DBModelos dbm = new DBModelos(context);
+            Cursor c = dbm.buscarModelos(modelo);
+            if (c.moveToFirst() == true) {
                 String mDrawableImg = c.getString(c.getColumnIndex(DBModelos.CN_IMG));
                 int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
                 img_listalogs.setImageResource(resID);
             }
-            else {
-                Uri myUri = Uri.parse(txt_uri);
-                File imgFile = new  File(Utilities.getPathPictureFromUri(context, myUri));
-                if(imgFile.exists()) {
-                    Drawable d = Drawable.createFromPath(imgFile.getAbsolutePath());
-                    img_listalogs.setImageDrawable(d);
-                    //img_listalogs.setImageURI(Uri.fromFile(imgFile));
-                }
+        }
+        else {
+            Uri myUri = Uri.parse(img_modelo_personalizada);
+            File imgFile = new  File(Utilities.getPathPictureFromUri(context, myUri));
+            if(imgFile.exists()) {
+                Drawable d = Drawable.createFromPath(imgFile.getAbsolutePath());
+                img_listalogs.setImageDrawable(d);
             }
         }
     }
@@ -72,29 +71,24 @@ public class CambiarCocheActivo {
             @Override
             public void onClick(View v) {
                 TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
-
                 String matricula_seleccionada = txtV_seleccionada.getText().toString();
                 String matricula_NoSeleccionada = "";
                 String modelo_Seleccionado = "";
                 int img_changed_seleccionado = DBCar.IMG_MODELO_NOCAMBIADA;
-
                 Cursor c = dbcar.buscarCocheActivo();
-
                 if (c.moveToFirst() == true) {
                     matricula_NoSeleccionada = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
                 }
-
                 dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
                 dbcar.ActualizarCocheActivo(matricula_seleccionada);
-
                 c = dbcar.buscarCocheActivo();
-                String txt_uri = "";
+                String img_modelo_personalizada = "";
                 if(c.moveToFirst() == true) {
                     modelo_Seleccionado = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
                     img_changed_seleccionado = c.getInt(c.getColumnIndex(DBCar.CN_IMG_MODELO_CAMBIADA));
-                    txt_uri = c.getString(c.getColumnIndex(DBCar.CN_IMG_MODELO_PERSONALIZADA));
+                    img_modelo_personalizada = c.getString(c.getColumnIndex(DBCar.CN_IMG_MODELO_PERSONALIZADA));
                 }
-                CambiarImgLogs(context, act, txt_uri, modelo_Seleccionado, img_changed_seleccionado);
+                CambiarImgLogs(context, act, img_modelo_personalizada, modelo_Seleccionado, img_changed_seleccionado);
                 ActualizarCochesDrawer(dbcar, act, context);
             }
         });
@@ -108,14 +102,12 @@ public class CambiarCocheActivo {
         toolbar = (Toolbar) act.findViewById(R.id.tool_bar);
         mDrawerToggle = new ActionBarDrawerToggle(act, Drawer, toolbar, R.string.open_drawer, R.string.close_drawer)
         {
-
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
                 // open I am not going to put anything here)
             }
-
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -131,9 +123,7 @@ public class CambiarCocheActivo {
             @Override
             public boolean onLongClick(final View v) {
                 TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
-
                 String matricula_seleccionada = txtV_seleccionada.getText().toString();
-
                 final MaterialDialog mMaterialDialog = new MaterialDialog(v.getContext());
                 mMaterialDialog.setTitle("Eliminar coche");
                 mMaterialDialog.setMessage("¿Está seguro de eliminar el coche con matrícula " + matricula_seleccionada + " y todos sus logs?");
@@ -145,9 +135,7 @@ public class CambiarCocheActivo {
                         String matricula_seleccionada = txtV_seleccionada.getText().toString();
                         DBCar dbcar = new DBCar(v.getContext());
                         Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
-
                         int activo = 0;
-
                         if (c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
                         }
@@ -166,7 +154,11 @@ public class CambiarCocheActivo {
                             Cursor c_todos = dbcar.buscarCoches();
                             if (c_todos.moveToFirst() == true) { // desde que haya un coche lo ponemos activo
                                 matricula_seleccionada = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_MATRICULA));
+                                String img_modelo_personalizada = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_IMG_MODELO_PERSONALIZADA));
+                                int img_modelo_cambiada = c_todos.getInt(c_todos.getColumnIndex(DBCar.CN_IMG_MODELO_CAMBIADA));
+                                String modelo = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_MODELO));
                                 dbcar.ActualizarCocheActivo(matricula_seleccionada);
+                                CambiarImgLogs(context, act, img_modelo_personalizada, modelo, img_modelo_cambiada);
                             } else {
                                 // Si no hay más coches no se puede poner ninguno a activo, debemos poner las etiquetas vacío y las imagenes por defecto en el drawer
                                 ImageView img_marca = (ImageView) mRecyclerView.findViewById(R.id.circleView);
