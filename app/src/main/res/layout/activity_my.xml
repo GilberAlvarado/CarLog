@@ -162,7 +162,7 @@
                             android:layout_width="0dp"
                             android:layout_height="60dp"
                             android:padding="4sp"
-                            android:layout_weight="5"
+                            android:layout_weight="3"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
                             android:ellipsize="start"
@@ -179,7 +179,7 @@
                             custom:myvalue=""
                             custom:image="@drawable/ic_year"
                             android:padding="4sp"
-                            android:layout_weight="6"/>
+                            android:layout_weight="4"/>
 
                         <com.carlog.gilberto.carlog.view.SimpleDataView
                             android:layout_width="0dp"
@@ -189,41 +189,36 @@
                             custom:myvalue=""
                             custom:image="@drawable/ic_fecha"
                             android:padding="4sp"
-                            android:layout_weight="6"/>
-
-                        <com.melnykov.fab.FloatingActionButton
-                            android:id="@+id/button_additv"
-                            android:layout_marginTop="10dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerInside"
-                            android:layout_gravity="left|top"
-                            app:fab_colorNormal="@color/ColorPrimary"
-                            android:padding="7dp"
-                            fab:fab_type="mini"
-                            android:layout_weight="1"
-                            android:src="@drawable/ic_itv"
-                            app:fab_colorPressed="@color/ColorPrimaryDark" />
-
-
-
-
+                            android:layout_weight="4"/>
                     </LinearLayout>
 
 
+                    <com.melnykov.fab.FloatingActionButton
+                        android:id="@+id/button_additv"
+                        android:layout_marginTop="-15dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerInside"
+                        android:layout_gravity="right|top"
+                        app:fab_colorNormal="@color/ColorPrimary"
+                        android:padding="7dp"
+                        fab:fab_type="mini"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_itv"
+                        app:fab_colorPressed="@color/ColorPrimaryDark" />
 
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:id="@+id/button_siguiente"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:background="#1E88E5"
                         android:elevation="3dp"
                         android:text="Siguiente" />
-
-
-
 
 
                 </LinearLayout>
