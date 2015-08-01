@@ -13,6 +13,8 @@ public class TipoCoche implements Serializable {
 
     private String marca;
     private String modelo;
+    private int imgmodelocambiada;
+    private String imgmodelopersonalizada;
     private int year;
     private int kms;
     private long itv;
@@ -22,10 +24,12 @@ public class TipoCoche implements Serializable {
     private int kms_ini;
 
 
-    public TipoCoche(String matricula, String marca, String modelo, int year, int kms, long itv, int profile, long fecha_ini, int kms_ini) {
+    public TipoCoche(String matricula, String marca, String modelo, int imgmodelocambiada, String imgmodelopersonalizada, int year, int kms, long itv, int profile, long fecha_ini, int kms_ini) {
         this.matricula = matricula;
         this.marca = marca;
         this.modelo = modelo;
+        this.imgmodelocambiada = imgmodelocambiada;
+        this.imgmodelopersonalizada = imgmodelopersonalizada;
         this.year = year;
         this.kms = kms;
         this.itv = itv;
@@ -40,6 +44,14 @@ public class TipoCoche implements Serializable {
 
     public String getModelo(TipoCoche miCoche) {
         return(miCoche.modelo);
+    }
+
+    public int getImgModeloCambiada(TipoCoche miCoche) {
+        return(miCoche.imgmodelocambiada);
+    }
+
+    public String getImgModeloPersonalizada(TipoCoche miCoche) {
+        return(miCoche.imgmodelopersonalizada);
     }
 
     public int getYear(TipoCoche miCoche) {

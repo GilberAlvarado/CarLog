@@ -152,7 +152,7 @@ public class AddLog extends ActionBarActivity {
             int_kms_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_KMS_INI));
             int_fecha_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_FECHA_INI));
         }
-        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
         long long_now = funciones.date_a_long(new Date());
         long ahora = funciones.date_a_long(new Date());
         boolean seguir_rellenando = false; // si insertamos un filtro de aceite sin tener aceite tenemos q poder seguir añadiendo

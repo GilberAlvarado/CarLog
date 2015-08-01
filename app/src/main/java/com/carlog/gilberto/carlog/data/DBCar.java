@@ -13,14 +13,19 @@ import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
  */
 public class DBCar {
     public static final String TABLE_NAME = "cars";
+    public static final int IMG_MODELO_CAMBIADA = 1;
+    public static final int IMG_MODELO_NOCAMBIADA = 0;
+    public static final int IMG_MODELO_REDIS_CAMBIADA = -1;
 
     public static final String CN_MATRICULA = "matricula";
     public static final String CN_MARCA = "marca";
     public static final String CN_MODELO = "modelo";
+    public static final String CN_IMG_MODELO_PERSONALIZADA = "img_modelo_pers";
+    public static final String CN_IMG_MODELO_CAMBIADA = "img_modelo"; // desde q el usuario la cambie se leera del movil no de drawable
     public static final String CN_YEAR = "year";
     public static final String CN_KMS = "kms";
     public static final String CN_ITV = "itv";
-    public static final String CN_PROFILE = "profile";
+    public static final String CN_PROFILE = "profile"; // coche activo
     public static final String CN_FECHA_INI = "fecha_ini";
     public static final String CN_KMS_INI = "kms_ini";
 
@@ -28,6 +33,8 @@ public class DBCar {
             + CN_MATRICULA + " text primary key,"
             + CN_MARCA + " text not null,"
             + CN_MODELO + " text not null,"
+            + CN_IMG_MODELO_PERSONALIZADA + " text,"
+            + CN_IMG_MODELO_CAMBIADA + " integer not null,"
             + CN_YEAR + " integer,"
             + CN_KMS + " integer,"
             + CN_ITV + " text,"
@@ -50,6 +57,8 @@ public class DBCar {
         valores.put(CN_MATRICULA, miCoche.getMatricula(miCoche));
         valores.put(CN_MARCA, miCoche.getMarca(miCoche));
         valores.put(CN_MODELO, miCoche.getModelo(miCoche));
+        valores.put(CN_IMG_MODELO_PERSONALIZADA, miCoche.getImgModeloPersonalizada(miCoche));
+        valores.put(CN_IMG_MODELO_CAMBIADA, miCoche.getImgModeloCambiada(miCoche));
         if (miCoche.getYear(miCoche) != MyActivity.NO_YEARS)
             valores.put(CN_YEAR, miCoche.getYear(miCoche));
         if (miCoche.getKms(miCoche) != MyActivity.NO_KMS)
@@ -68,8 +77,8 @@ public class DBCar {
 
     public static void insertinsertOrUpdate(TipoCoche coche) {
         System.out.println("modificando kms " + coche.getKms(coche));
-        String sql = "INSERT OR REPLACE INTO "+ TABLE_NAME +" (" +CN_MATRICULA+ ", " +CN_MARCA+ ", " +CN_MODELO+ ", " +CN_YEAR+ ", " +CN_KMS+ ", " +CN_ITV+ ", " +CN_PROFILE+ ", " +CN_FECHA_INI+ ", " +CN_KMS_INI + ") "
-        +" VALUES ('" +coche.getMatricula(coche)+ "', '" +coche.getMarca(coche)+ "', '" + coche.getModelo(coche)+ "', '"
+        String sql = "INSERT OR REPLACE INTO "+ TABLE_NAME +" (" +CN_MATRICULA+ ", " +CN_MARCA+ ", " +CN_MODELO+ ", " +CN_IMG_MODELO_PERSONALIZADA+ ", " +CN_IMG_MODELO_CAMBIADA+ ", " +CN_YEAR+ ", " +CN_KMS+ ", " +CN_ITV+ ", " +CN_PROFILE+ ", " +CN_FECHA_INI+ ", " +CN_KMS_INI + ") "
+        +" VALUES ('" +coche.getMatricula(coche)+ "', '" +coche.getMarca(coche)+ "', '" + coche.getModelo(coche)+ "', '" + coche.getImgModeloCambiada(coche)+ "', '" + coche.getImgModeloPersonalizada(coche)+ "', '"
         + coche.getYear(coche)+ "', '" + coche.getKms(coche)+ "', '" + coche.getItv(coche)+ "', '" + coche.getProfile(coche)+ "', '" +coche.getFechaIni(coche)+ "', '" + coche.getKmsIni(coche)+ "');";
         db.execSQL(sql);
     }
@@ -77,18 +86,18 @@ public class DBCar {
 
 
     public Cursor buscarCoches() {
-        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
+        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_IMG_MODELO_PERSONALIZADA, CN_IMG_MODELO_CAMBIADA, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
         return db.query(TABLE_NAME, columnas, null, null, null, null, null);
 
     }
 
     public Cursor buscarCocheActivo() {
-        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
+        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_IMG_MODELO_PERSONALIZADA, CN_IMG_MODELO_CAMBIADA, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
         return db.query(TABLE_NAME, columnas, CN_PROFILE + "=?", new String[]{Integer.toString(TipoCoche.PROFILE_ACTIVO)}, null, null, null);
 
     }
     public Cursor buscarCochesNoActivos() {
-        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
+        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_IMG_MODELO_PERSONALIZADA, CN_IMG_MODELO_CAMBIADA, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
         return db.query(TABLE_NAME, columnas, CN_PROFILE + "=?", new String[]{Integer.toString(TipoCoche.PROFILE_INACTIVO)}, null, null, null);
 
     }
@@ -113,24 +122,20 @@ public class DBCar {
         db.execSQL(sql);
     }
 
+    public void ActualizarImgModelo(String matricula, String img) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_IMG_MODELO_CAMBIADA + " = " + IMG_MODELO_CAMBIADA + ", " + CN_IMG_MODELO_PERSONALIZADA + " = '" + img + "' WHERE " + CN_MATRICULA + " = '" + matricula + "'";
+        db.execSQL(sql);
+    }
+
+
 
     public Cursor buscarCoche(String matricula) {
-        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
+        String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_IMG_MODELO_PERSONALIZADA, CN_IMG_MODELO_CAMBIADA, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
         return db.query(TABLE_NAME, columnas, CN_MATRICULA + "=?", new String[]{matricula}, null, null, null);
 
     }
 
     public void eliminarCoche(String matricula) {
-       /* try {
-            db.beginTransaction();
-            db.execSQL("PRAGMA foreign_keys=ON;");
-            db.delete(TABLE_NAME, CN_MATRICULA + "=?", new String[]{matricula});
-            db.execSQL("PRAGMA foreign_keys=OFF;");
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            e.printStackTrace();
-            db.endTransaction();
-        }*/
         db.delete(TABLE_NAME, CN_MATRICULA + "=?", new String[]{matricula});
     }
 

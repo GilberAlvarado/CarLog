@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -24,10 +26,10 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.formats.DocumentHelper;
+import com.carlog.gilberto.carlog.formats.Utilities;
 import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
 import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.TipoLog;
@@ -36,8 +38,6 @@ import com.carlog.gilberto.carlog.data.DBCar;
 import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.Usuario;
-import com.carlog.gilberto.carlog.view.SimpleDataView;
-import com.facebook.LoginActivity;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -47,7 +47,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -84,40 +84,36 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     int int_year = MyActivity.NO_YEARS, int_kms = MyActivity.NO_KMS, int_itv = MyActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
 
     private void borrarLogpulsado(final Cursor cursor, final DBLogs manager, final int posicion) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(ListaLogs.this);
-                builder.setMessage("¿Está seguro de querer eliminar?")
-                        .setTitle("Borrar de la lista")
-                        .setCancelable(false)
-                        .setNegativeButton("Cancelar",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id_dialog) {
-                                        dialog.cancel();
-                                    }
-                                })
-                        .setPositiveButton("Continuar",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id_dialog) {
-                                        // metodo que se debe implementar Sí
-                                        //Recorremos el cursor
-                                        int i = 0;
-                                        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-                                            if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
-                                                int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
-                                                String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
-                                                manager.eliminar_por_id(id);
-                                                ConsultarLogs(getApplicationContext(), ListaLogs.this);
-
-                                                break;
-                                            }
-                                            i++;
-                                        }
-                                    }
-                                });
-                AlertDialog alert = builder.create();
-                alert.show();
-
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListaLogs.this);
+        builder.setMessage("¿Está seguro de querer eliminar?")
+            .setTitle("Borrar de la lista")
+            .setCancelable(false)
+            .setNegativeButton("Cancelar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id_dialog) {
+                        dialog.cancel();
+                    }
+                })
+            .setPositiveButton("Continuar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id_dialog) {
+                    // metodo que se debe implementar Sí
+                    //Recorremos el cursor
+                    int i = 0;
+                    for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+                        if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                            int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
+                            String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
+                            manager.eliminar_por_id(id);
+                            ConsultarLogs(getApplicationContext(), ListaLogs.this);
+                            break;
+                        }
+                        i++;
+                    }
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
@@ -447,12 +443,24 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         itemBuilder.setLayoutParams(new FrameLayout.LayoutParams(140, 140));
 
-        // Actualizar coche
+        // Añadir imagen
         ImageView itemIcon = new ImageView(this);
         itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_actualizarcoche));
         itemIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         SubActionButton addImageButton = itemBuilder.setContentView(itemIcon).build();
         addImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utilities.selectImage(ListaLogs.this);
+            }
+        });
+
+        // Actualizar coche
+        itemIcon = new ImageView(this);
+        itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_actualizarcoche));
+        itemIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        SubActionButton edytCarButton = itemBuilder.setContentView(itemIcon).build();
+        edytCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ListaLogs.this, MyActivity.class);
@@ -465,8 +473,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         itemIcon = new ImageView(this);
         itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_addcoche));
         itemIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        SubActionButton addCommentButton = itemBuilder.setContentView(itemIcon).build();
-        addCommentButton.setOnClickListener(new View.OnClickListener() {
+        SubActionButton addCarButton = itemBuilder.setContentView(itemIcon).build();
+        addCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ListaLogs.this, MyActivity.class);
@@ -481,8 +489,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         itemIcon = new ImageView(this);
         itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_addlog));
         itemIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        SubActionButton addRatingButton = itemBuilder.setContentView(itemIcon).build();
-        addRatingButton.setOnClickListener(new View.OnClickListener() {
+        SubActionButton addLogButton = itemBuilder.setContentView(itemIcon).build();
+        addLogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ListaLogs.this, AddLog.class);
@@ -492,9 +500,9 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         mFloatMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(addImageButton)
-                .addSubActionView(addCommentButton)
-                .addSubActionView(addRatingButton)
-//            .addSubActionView(clothesButton)
+                .addSubActionView(edytCarButton)
+                .addSubActionView(addCarButton)
+                .addSubActionView(addLogButton)
                 .attachTo(mFab)
                 .build();
     }
@@ -593,18 +601,22 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         ObservableScrollView(ListaLogs.this);
         c = dbcar.buscarCocheActivo();
 
+        int img_modelo_cambiada = DBCar.IMG_MODELO_NOCAMBIADA;
+        String img_modelo_personalizada = "";
         if (c.moveToFirst() == true) {
             matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
             marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
             modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+            img_modelo_cambiada = c.getInt(c.getColumnIndex(DBCar.CN_IMG_MODELO_CAMBIADA));
             int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
             int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
             int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
             int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
             int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+            img_modelo_personalizada = c.getString(c.getColumnIndex(DBCar.CN_IMG_MODELO_PERSONALIZADA));
         }
 
-        CambiarCocheActivo.CambiarImgLogs(context, ListaLogs.this, modelo);
+        CambiarCocheActivo.CambiarImgLogs(context, ListaLogs.this, img_modelo_personalizada, modelo, img_modelo_cambiada);
         ConsultarLogs(context, ListaLogs.this);
     }
 
@@ -857,14 +869,42 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             }
             case (PETICION_ACTIVITY_MODIFYITV) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    String itv_string = data.getExtras().getString("itv_string");
-                    System.out.println("itv stringgg2 "+itv_string);
                     ConsultarLogs(getApplicationContext(), ListaLogs.this);
                 }
                 break;
             }
+            case (Utilities.GALLERY_INTENT) : {
+                if (data == null)
+                    return;
+                Uri selectedPictureUri = data.getData();
+                if (selectedPictureUri == null)
+                    return;
+                try {
+                    Bitmap img_fondo = Utilities.getBitMapFromUri(this, selectedPictureUri);
+                    File chosenFile = new File(DocumentHelper.getPath(this, selectedPictureUri));
+
+                    DBCar dbc = new DBCar(getApplicationContext());
+                    Cursor c_act = dbc.buscarCocheActivo();
+                    if (c_act.moveToFirst() == true) {
+                        System.out.println("paso");
+                        String matricula = c_act.getString(c_act.getColumnIndex(DBCar.CN_MATRICULA));
+                        String uriEncoded = Uri.encode(DocumentHelper.getPath(this, selectedPictureUri), "UTF-8");
+                        dbc.ActualizarImgModelo(matricula, uriEncoded);
+                        ImageView img_listalogs = (ImageView) ListaLogs.this.findViewById(R.id.image);
+                        img_listalogs.setImageURI(selectedPictureUri);
+                    }
+                    //File chosenFile = new File(DocumentHelper.getPath(this, selectedPictureUri));
+                   // Utilities.changeImage(this, chosenFile, Utilities.getBitMapFromUri(this, selectedPictureUri), selectedPictureUri.getPath(), LoginMethods.getIdFacebook(this), mSendero.getServerId(), 0, 0, pd);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            case (Utilities.CAMERA_INTENT) : {
+              // Utilities.getCameraPictureAndUpload(this, mSendero.getServerId());
+            }
         }
     }
+
 
 
 

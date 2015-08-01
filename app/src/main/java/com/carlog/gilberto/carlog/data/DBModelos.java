@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
+
 /**
  * Created by Gilberto on 02/06/2015.
  */
@@ -66,6 +68,7 @@ public class DBModelos {
         return db.query(TABLE_NAME, columnas, CN_MODELO + "=?", new String[]{modelo}, null, null, null);
 
     }
+
 
 
 }

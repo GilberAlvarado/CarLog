@@ -1,7 +1,8 @@
 package com.carlog.gilberto.carlog.adapter;
-
         import android.content.Context;
         import android.database.Cursor;
+        import android.graphics.drawable.Drawable;
+        import android.net.Uri;
         import android.support.v7.widget.RecyclerView;
         import android.view.LayoutInflater;
         import android.view.View;
@@ -11,11 +12,13 @@ package com.carlog.gilberto.carlog.adapter;
 
         import com.balysv.materialripple.MaterialRippleLayout;
         import com.carlog.gilberto.carlog.R;
+        import com.carlog.gilberto.carlog.formats.Utilities;
         import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
         import com.carlog.gilberto.carlog.data.DBCar;
         import com.carlog.gilberto.carlog.data.DBMarcas;
         import com.carlog.gilberto.carlog.data.DBModelos;
 
+        import java.io.File;
         import java.util.ArrayList;
         import java.util.List;
 
@@ -23,9 +26,6 @@ package com.carlog.gilberto.carlog.adapter;
 /**
  * Created by Gilberto on 31/05/2015.
  */
-
-
-
 public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
 
     private View.OnClickListener listener;
@@ -41,9 +41,9 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
     private String marca;        //String Resource for header View Name
     private int img_marca;
     private int img_modelo;
+    private int img_modelo_cambiada;
+    String mUriImg;
     private String modelo;       //String Resource for header view email
-
-
 
 
     // Creating a ViewHolder which extends the RecyclerView View Holder
@@ -59,10 +59,8 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
         TextView Marca;
         TextView modelo;
 
-
         public ViewHolder(View itemView,int ViewType) {                 // Creating ViewHolder Constructor with View and viewType As a parameter
             super(itemView);
-
 
             // Here we set the appropriate view in accordance with the the view type as passed when the holder object is created
 
@@ -73,7 +71,6 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
             }
             else{
 
-
                 Marca = (TextView) itemView.findViewById(R.id.marca);         // Creating Text View object from header.xml for name
                 modelo = (TextView) itemView.findViewById(R.id.modelo);       // Creating Text View object from header.xml for email
                 img_marca = (ImageView) itemView.findViewById(R.id.circleView);// Creating Image view object from header.xml for profile pic
@@ -81,42 +78,27 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
                 Holderid = 0;                                                // Setting holder id = 0 as the object being populated are of type header view
             }
         }
-
-
-
     }
 
 
 
     public miAdaptadorCoches(Cursor c, Context context){ // MyAdapter Constructor with titles and icons parameter
-
-
-
         List<String> lista_matriculas = new ArrayList<String>();
         List<Integer> lista_iconos = new ArrayList<Integer>();
-        //Recorremos el cursor
-        int i = 0;
+        String img_modelo_personalizada = "";
+        img_modelo_cambiada = DBCar.IMG_MODELO_NOCAMBIADA;
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             String matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
             int profile = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
             if(profile == TipoCoche.PROFILE_ACTIVO) {
                 marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
                 modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+                img_modelo_cambiada = c.getInt(c.getColumnIndex(DBCar.CN_IMG_MODELO_CAMBIADA));
+                img_modelo_personalizada = c.getString(c.getColumnIndex(DBCar.CN_IMG_MODELO_PERSONALIZADA));
+                System.out.println("????1111 "+img_modelo_cambiada);
             }
-            /*
-            int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
-            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
-            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
-            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
-            year = String.valueOf(int_year);
-            kms = String.valueOf(int_kms);
-            itv = funciones.int_a_string(int_itv);
-            int_kms_anterior = int_kms;*/
-
             lista_matriculas.add(matricula);
             lista_iconos.add(R.drawable.ic_coche);
-
         }
 
 
@@ -133,19 +115,22 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
             DBMarcas dbmarcas = new DBMarcas(context);
             Cursor c_marca = dbmarcas.buscarMarcas(marca);
             if (c_marca.moveToFirst() == true) {
-
                 String mDrawableImg = c_marca.getString(c_marca.getColumnIndex(DBMarcas.CN_IMG));
                 int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
                 img_marca = resID;
             }
             DBModelos dbmodelos = new DBModelos(context);
             Cursor c_modelo = dbmodelos.buscarModelos(modelo);
-
             if (c_modelo.moveToFirst() == true) {
-
-                String mDrawableImg = c_modelo.getString(c_modelo.getColumnIndex(DBModelos.CN_IMG));
-                int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
-                img_modelo = resID;
+                if (img_modelo_cambiada == DBCar.IMG_MODELO_NOCAMBIADA) {
+                    String mDrawableImg = c_modelo.getString(c_modelo.getColumnIndex(DBModelos.CN_IMG));
+                    int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
+                    img_modelo = resID;
+                }
+                else {
+                    img_modelo_cambiada = DBCar.IMG_MODELO_REDIS_CAMBIADA;
+                    mUriImg = img_modelo_personalizada;
+                }
             }
 
 
@@ -171,9 +156,6 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
     //Created, In this method we inflate the item_row.xml layout if the viewType is Type_ITEM or else we inflate header.xml
     // if the viewType is TYPE_HEADER
     // and pass it to the view holder
-
-
-
     @Override
     public miAdaptadorCoches.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -200,17 +182,11 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
             //inflate your layout and pass it to view holder
 
         } else if (viewType == TYPE_HEADER) {
-
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header,parent,false); //Inflating the layout
-
             ViewHolder vhHeader = new ViewHolder(v,viewType); //Creating ViewHolder and passing the object of type view
-
             return vhHeader; //returning the object created
-
-
         }
         return null;
-
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
@@ -249,10 +225,20 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
             // position by 1 and pass it to the holder while setting the text and image
             holder.textView.setText(mNavMatriculas[position - 1]); // Setting the Text with the array of our Titles
             holder.imageView.setImageResource(mIcons[position -1]);// Settimg the image with array of our icons
-
         }
         else{
-            holder.img_modelo.setBackgroundResource(img_modelo);
+            if(img_modelo_cambiada != DBCar.IMG_MODELO_REDIS_CAMBIADA) {
+                holder.img_modelo.setBackgroundResource(img_modelo);
+            }
+            else {
+                Uri myUri = Uri.parse(mUriImg);
+                File imgFile = new  File(Utilities.getPathPictureFromUri(holder.img_modelo.getContext(), myUri));
+                if(imgFile.exists()) {
+                    Drawable d = Drawable.createFromPath(imgFile.getAbsolutePath());
+                    holder.img_modelo.setBackground(d);
+                    //holder.img_modelo.setImageURI(Uri.fromFile(imgFile));
+                }
+            }
             holder.img_marca.setImageResource(img_marca);           // Similarly we set the resources for header view
             holder.Marca.setText(marca);
             holder.modelo.setText(modelo);
@@ -271,12 +257,10 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
             return TYPE_HEADER;
-
         return TYPE_ITEM;
     }
 
     private boolean isPositionHeader(int position) {
         return position == 0;
     }
-
 }

@@ -151,7 +151,7 @@ public class DBLogs {
     }
 
 
-    public Cursor LogsTodosOrderByFechaString(String matricula) {  // todos los tipos pero solo los logs futuros y no realizados
+    public Cursor LogsTodosOrderByFechaString(String matricula) {  // todos los tipos
         String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, veces_aceite, contador_aceite, revgral, " +
                 "correa, bombaagua, fgasolina, faire, bujias, embrague, matricula, realizado, f_modificada, kms FROM "+TABLE_NAME + " WHERE "
               /*  + CN_FECHA + " > " + int_now + " AND " + CN_REALIZADO + " = " + NO_REALIZADO + " AND "*/ + CN_CAR + " = '" + matricula + "' ORDER BY "+ CN_FECHA;

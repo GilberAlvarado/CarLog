@@ -358,18 +358,18 @@ public class MyActivity extends ActionBarActivity {
                 if (comprobaciones(EditarCoche) && leidos) {
                     dbcar.ActualizarTodosCocheNOActivo(); // Nos aseguramos de que ponemos todos los coches a inactivos para marcar como activo el nuevo
                     if(!EditarCoche) { // Si no estamos editando es nuevo
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
                     } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
 

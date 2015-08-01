@@ -16,7 +16,7 @@ import com.carlog.gilberto.carlog.tiposClases.TipoLog;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "carlog.sqlite";
-    private static final int DB_SCHEME_VERSION = 76;
+    private static final int DB_SCHEME_VERSION = 84;
     public static final int MAX_TIPOS_REV = 14; // 15 pq cuenta el 0
 
     public DbHelper(Context context) {
@@ -25,23 +25,23 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-     //   sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBCar.CREATE_TABLE);
+     //   sqLiteDatabase.execSQL(DBLogs.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBRevGral.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBMarcas.CREATE_TABLE);
-      //  sqLiteDatabase.execSQL(DBModelos.CREATE_TABLE);
+        sqLiteDatabase.execSQL(DBModelos.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBTiposRevision.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBCorrea.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBBombaAgua.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBFiltroGasolina.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBFiltroAire.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBBujias.CREATE_TABLE);
-        sqLiteDatabase.execSQL(DBEmbrague.CREATE_TABLE);
+     //   sqLiteDatabase.execSQL(DBCorrea.CREATE_TABLE);
+     //   sqLiteDatabase.execSQL(DBBombaAgua.CREATE_TABLE);
+     //   sqLiteDatabase.execSQL(DBFiltroGasolina.CREATE_TABLE);
+     //   sqLiteDatabase.execSQL(DBFiltroAire.CREATE_TABLE);
+      //  sqLiteDatabase.execSQL(DBBujias.CREATE_TABLE);
+      //  sqLiteDatabase.execSQL(DBEmbrague.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBAceite.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBFiltroAceite.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(DBLogin.SQLCreateLogin);
 
-/*
+
         /// Inicializamos la tabla de modelos
         String[] lista_modelos = {"Modelo", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3",
                                   "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3",
@@ -81,7 +81,7 @@ public class DbHelper extends SQLiteOpenHelper {
             sqLiteDatabase.endTransaction();
         }
 
-
+/*
         /// Inicializamos la tabla de marcas
         String[] lista_marcas = {"Marca", "Abarth", "Alfa Romeo", "Alpina", "Alpine", "ARO", "Asia", "Aston Martin", "Audi", "Austin", "Autobianchi",
                 "Bedford", "Bentley", "Bertone", "BMW", "Buick", "Cadillac", "Caterham", "Chevrolet", "Chrysler", "Citroën", "Dacia", "Daewoo", "DAF",
@@ -165,7 +165,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 */
 
-        /// Inicializamos la tabla de tipos de revision general
+ /*       /// Inicializamos la tabla de tipos de revision general
         String[] lista_correa = {DBCorrea.TIPO_60K_KM, DBCorrea.TIPO_80K_KM, DBCorrea.TIPO_100K_KM, DBCorrea.TIPO_120K_KM};
         int[] lista_kms_correa =  {60000, 80000, 100000, 120000};
 
@@ -273,7 +273,7 @@ public class DbHelper extends SQLiteOpenHelper {
         } finally {
             sqLiteDatabase.endTransaction();
         }
-
+*/
 
         /// Inicializamos la tabla de tipos de aceite
   /*      String[] lista_aceite = {Aceite.TIPO_7K5_KM, Aceite.TIPO_10M_KM, Aceite.TIPO_15K_KM, Aceite.TIPO_20K_KM, Aceite.TIPO_30K_KM};
@@ -317,19 +317,19 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
-      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCar.TABLE_NAME);
+     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogs.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCar.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBMarcas.TABLE_NAME);
-     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBModelos.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBModelos.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBFiltroAceite.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBTiposRevision.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBAceite.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCorrea.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBBombaAgua.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBFiltroGasolina.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBFiltroAire.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBBujias.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBEmbrague.TABLE_NAME);
+     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBCorrea.TABLE_NAME);
+      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBBombaAgua.TABLE_NAME);
+     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBFiltroGasolina.TABLE_NAME);
+     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBFiltroAire.TABLE_NAME);
+     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBBujias.TABLE_NAME);
+     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBEmbrague.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBRevGral.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DBLogin.Table);
         onCreate(sqLiteDatabase);
