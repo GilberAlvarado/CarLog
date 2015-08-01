@@ -64,11 +64,12 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private static final boolean TOOLBAR_IS_STICKY = true;
-    
+
     public static DrawerLayout Drawer;
     public static ActionBarDrawerToggle mDrawerToggle;
     private static ObservableListView listView;
     private View mImageView;
+    private View mImageViewOnClick;
     private View mOverlayView;
     private View mListBackgroundView;
     private TextView mTitleView;
@@ -423,6 +424,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
 
         mImageView = findViewById(R.id.image);
+        mImageViewOnClick = findViewById(R.id.imageonclick);
         mOverlayView = findViewById(R.id.overlay);
         listView = (ObservableListView) findViewById(R.id.list);
         listView.setScrollViewCallbacks(this);
@@ -597,7 +599,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     }
 
     public void changeImgDrawerObservable() {
-        View iv = (View) findViewById(R.id.image);
+        View iv = (View) findViewById(R.id.imageonclick);
 
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -652,6 +654,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         int minOverlayTransitionY = mActionBarSize - mOverlayView.getHeight();
         ViewHelper.setTranslationY(mOverlayView, +ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
         ViewHelper.setTranslationY(mImageView, ScrollUtils.getFloat(-scrollY / 2, minOverlayTransitionY, 0));
+        ViewHelper.setTranslationY(mImageViewOnClick, ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
 
         // Translate list background
         ViewHelper.setTranslationY(mListBackgroundView, Math.max(0, -scrollY + mFlexibleSpaceImageHeight));

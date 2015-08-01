@@ -11,7 +11,7 @@
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/DrawerLayout"
         android:layout_width="match_parent"
-        android:elevation="4dp"
+        android:elevation="6dp"
         android:layout_height="match_parent">
 
 
@@ -21,15 +21,28 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:id="@+id/imageonclick"
+                android:elevation="3dp"
+                android:layout_height="@dimen/flexible_space_image_height"
+                android:background="@android:color/transparent" />
+
+
             <include
                 android:id="@+id/tool_bar"
                 layout="@layout/tool_bar">
             </include>
 
+
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:elevation="3dp"
+                android:elevation="4dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/com_facebook_profile_default_icon"
@@ -38,7 +51,7 @@
 
             <TextView
                 android:id="@+id/title"
-                android:elevation="3dp"
+                android:elevation="4dp"
                 android:paddingLeft="40dp"
                 android:layout_marginLeft="20dp"
                 android:layout_width="match_parent"
@@ -50,15 +63,17 @@
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
 
+
             <View
                 android:layout_width="match_parent"
+                android:id="@+id/flexiblespace"
                 android:elevation="3dp"
                 android:layout_height="@dimen/flexible_space_image_height"
                 android:background="@android:color/transparent" />
 
             <com.github.ksoichiro.android.observablescrollview.ObservableListView
                 android:id="@+id/list"
-                android:elevation="1dp"
+                android:elevation="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -82,7 +97,7 @@
             android:layout_width="320dp"
             android:layout_height="match_parent"
             android:layout_gravity="left"
-            android:elevation="4dp"
+            android:elevation="6dp"
             android:background="#ffffff"
             android:scrollbars="vertical">
 
@@ -97,6 +112,8 @@
         android:layout_height="@dimen/flexible_space_image_height"
         android:scaleType="centerCrop"
         android:src="@drawable/modelo_inicio" />
+
+
 
 
     <LinearLayout
