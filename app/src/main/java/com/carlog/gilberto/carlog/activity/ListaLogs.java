@@ -14,7 +14,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ContextMenu;
@@ -62,7 +64,9 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private static final boolean TOOLBAR_IS_STICKY = true;
-
+    
+    public static DrawerLayout Drawer;
+    public static ActionBarDrawerToggle mDrawerToggle;
     private static ObservableListView listView;
     private View mImageView;
     private View mOverlayView;
@@ -384,6 +388,24 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     private void ObservableScrollView(Activity activity) {
         toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
+        Drawer = (DrawerLayout) activity.findViewById(R.id.DrawerLayout);        // Drawer object Assigned to the view
+        mDrawerToggle = new ActionBarDrawerToggle(activity, Drawer, toolbar, R.string.open_drawer, R.string.close_drawer)
+        {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                // code here will execute once the drawer is opened( As I dont want anything happened whe drawer is
+                // open I am not going to put anything here)
+            }
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                // Code here will execute once drawer is closed
+            }
+        }; // Drawer Toggle Object Made
+        Drawer.setDrawerListener(mDrawerToggle); // Drawer Listener set to the Drawer toggle
+        mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
+
         setSupportActionBar(toolbar);
 
         imagenFB(activity);
@@ -443,20 +465,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         itemBuilder.setLayoutParams(new FrameLayout.LayoutParams(140, 140));
 
-        // Añadir imagen
-        ImageView itemIcon = new ImageView(this);
-        itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_actualizarcoche));
-        itemIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        SubActionButton addImageButton = itemBuilder.setContentView(itemIcon).build();
-        addImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utilities.selectImage(ListaLogs.this);
-            }
-        });
-
         // Actualizar coche
-        itemIcon = new ImageView(this);
+        ImageView itemIcon = new ImageView(this);
         itemIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_actualizarcoche));
         itemIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         SubActionButton edytCarButton = itemBuilder.setContentView(itemIcon).build();
@@ -499,7 +509,6 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         });
 
         mFloatMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(addImageButton)
                 .addSubActionView(edytCarButton)
                 .addSubActionView(addCarButton)
                 .addSubActionView(addLogButton)
@@ -587,6 +596,18 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             ConsultarLogs(context, ListaLogs.this); // para actualizar la fecha de revision modificada
     }
 
+    public void changeImgDrawerObservable() {
+        View iv = (View) findViewById(R.id.image);
+
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utilities.selectImage(ListaLogs.this);
+            }
+        });
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -600,6 +621,8 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         CambiarCocheActivo.CambiarCocheActivo(dbcar, c, ListaLogs.this, context);
         ObservableScrollView(ListaLogs.this);
         c = dbcar.buscarCocheActivo();
+
+        changeImgDrawerObservable();
 
         int img_modelo_cambiada = DBCar.IMG_MODELO_NOCAMBIADA;
         String img_modelo_personalizada = "";
@@ -779,6 +802,11 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
