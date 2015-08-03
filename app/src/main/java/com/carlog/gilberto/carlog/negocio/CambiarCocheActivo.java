@@ -3,31 +3,26 @@ package com.carlog.gilberto.carlog.negocio;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.activity.ListaLogs;
-import com.carlog.gilberto.carlog.activity.MyActivity;
+import com.carlog.gilberto.carlog.activity.listaLogs;
+import com.carlog.gilberto.carlog.activity.myActivity;
 import com.carlog.gilberto.carlog.adapter.miAdaptadorCoches;
-import com.carlog.gilberto.carlog.data.DBCar;
-import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.data.DBModelos;
-import com.carlog.gilberto.carlog.formats.DocumentHelper;
-import com.carlog.gilberto.carlog.formats.Utilities;
-import com.carlog.gilberto.carlog.formats.funciones;
+import com.carlog.gilberto.carlog.data.dbCar;
+import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.data.dbModelos;
+import com.carlog.gilberto.carlog.formats.utilities;
 
 import java.io.File;
 
@@ -36,7 +31,7 @@ import me.drakeet.materialdialog.MaterialDialog;
 /**
  * Created by Gilberto on 10/06/2015.
  */
-public class CambiarCocheActivo {
+public class cambiarCocheActivo {
     public static Toolbar toolbar;
     public static RecyclerView mRecyclerView;                           // Declaring RecyclerView
     public static miAdaptadorCoches mAdapter;
@@ -46,18 +41,18 @@ public class CambiarCocheActivo {
 
     public static void CambiarImgLogs(Context context, Activity act, String img_modelo_personalizada, String modelo, int img_modelo_cambiada) {
         ImageView img_listalogs = (ImageView) act.findViewById(R.id.image);
-        if(img_modelo_cambiada == DBCar.IMG_MODELO_NOCAMBIADA) {
-            DBModelos dbm = new DBModelos(context);
+        if(img_modelo_cambiada == dbCar.IMG_MODELO_NOCAMBIADA) {
+            dbModelos dbm = new dbModelos(context);
             Cursor c = dbm.buscarModelos(modelo);
             if (c.moveToFirst() == true) {
-                String mDrawableImg = c.getString(c.getColumnIndex(DBModelos.CN_IMG));
+                String mDrawableImg = c.getString(c.getColumnIndex(dbModelos.CN_IMG));
                 int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
                 img_listalogs.setImageResource(resID);
             }
         }
         else {
             Uri myUri = Uri.parse(img_modelo_personalizada);
-            File imgFile = new  File(Utilities.getPathPictureFromUri(context, myUri));
+            File imgFile = new  File(utilities.getPathPictureFromUri(context, myUri));
             if(imgFile.exists()) {
                 Drawable d = Drawable.createFromPath(imgFile.getAbsolutePath());
                 img_listalogs.setImageDrawable(d);
@@ -66,7 +61,7 @@ public class CambiarCocheActivo {
     }
 
     // Actualiza la lista de coches en el menu
-    public static void CambiarCocheActivo(final DBCar dbcar, Cursor c, final Activity act, final Context context) {
+    public static void CambiarCocheActivo(final dbCar dbcar, Cursor c, final Activity act, final Context context) {
         mRecyclerView = (RecyclerView) act.findViewById(R.id.RecyclerView); // Assigning the RecyclerView Object to the xml View
         mRecyclerView.setHasFixedSize(true);                            // Letting the system know that the list objects are of fixed size
         mAdapter = new miAdaptadorCoches(c, context);       // Creating the Adapter of MyAdapter class(which we are going to see in a bit)
@@ -77,19 +72,19 @@ public class CambiarCocheActivo {
                 String matricula_seleccionada = txtV_seleccionada.getText().toString();
                 String matricula_NoSeleccionada = "";
                 String modelo_Seleccionado = "";
-                int img_changed_seleccionado = DBCar.IMG_MODELO_NOCAMBIADA;
+                int img_changed_seleccionado = dbCar.IMG_MODELO_NOCAMBIADA;
                 Cursor c = dbcar.buscarCocheActivo();
                 if (c.moveToFirst() == true) {
-                    matricula_NoSeleccionada = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+                    matricula_NoSeleccionada = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
                 }
                 dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
                 dbcar.ActualizarCocheActivo(matricula_seleccionada);
                 c = dbcar.buscarCocheActivo();
                 String img_modelo_personalizada = "";
                 if(c.moveToFirst() == true) {
-                    modelo_Seleccionado = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
-                    img_changed_seleccionado = c.getInt(c.getColumnIndex(DBCar.CN_IMG_MODELO_CAMBIADA));
-                    img_modelo_personalizada = c.getString(c.getColumnIndex(DBCar.CN_IMG_MODELO_PERSONALIZADA));
+                    modelo_Seleccionado = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
+                    img_changed_seleccionado = c.getInt(c.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
+                    img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
                 }
                 CambiarImgLogs(context, act, img_modelo_personalizada, modelo_Seleccionado, img_changed_seleccionado);
                 ActualizarCochesDrawer(dbcar, act, context);
@@ -136,19 +131,19 @@ public class CambiarCocheActivo {
                         mMaterialDialog.dismiss();
                         TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
                         String matricula_seleccionada = txtV_seleccionada.getText().toString();
-                        DBCar dbcar = new DBCar(v.getContext());
+                        dbCar dbcar = new dbCar(v.getContext());
                         Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
                         int activo = 0;
                         if (c.moveToFirst() == true) {
-                            activo = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
+                            activo = c.getInt(c.getColumnIndex(dbCar.CN_PROFILE));
                         }
 
-                        DBLogs dbl = new DBLogs(context);
+                        dbLogs dbl = new dbLogs(context);
                         Cursor c_logs = dbl.LogsTodosOrderByFechaString(matricula_seleccionada);
                         dbcar.eliminarCoche(matricula_seleccionada);
                         // se borran todos los logs del coche (se debería de hacer en cascada)
                         for(c_logs.moveToFirst(); !c_logs.isAfterLast(); c_logs.moveToNext()) {
-                            int id_log = c_logs.getInt(c_logs.getColumnIndex(DBLogs.CN_ID));
+                            int id_log = c_logs.getInt(c_logs.getColumnIndex(dbLogs.CN_ID));
                             dbl.eliminar_por_id(id_log);
                         }
 
@@ -156,10 +151,10 @@ public class CambiarCocheActivo {
                         if (activo == 1) {
                             Cursor c_todos = dbcar.buscarCoches();
                             if (c_todos.moveToFirst() == true) { // desde que haya un coche lo ponemos activo
-                                matricula_seleccionada = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_MATRICULA));
-                                String img_modelo_personalizada = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_IMG_MODELO_PERSONALIZADA));
-                                int img_modelo_cambiada = c_todos.getInt(c_todos.getColumnIndex(DBCar.CN_IMG_MODELO_CAMBIADA));
-                                String modelo = c_todos.getString(c_todos.getColumnIndex(DBCar.CN_MODELO));
+                                matricula_seleccionada = c_todos.getString(c_todos.getColumnIndex(dbCar.CN_MATRICULA));
+                                String img_modelo_personalizada = c_todos.getString(c_todos.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
+                                int img_modelo_cambiada = c_todos.getInt(c_todos.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
+                                String modelo = c_todos.getString(c_todos.getColumnIndex(dbCar.CN_MODELO));
                                 dbcar.ActualizarCocheActivo(matricula_seleccionada);
                                 CambiarImgLogs(context, act, img_modelo_personalizada, modelo, img_modelo_cambiada);
                             } else {
@@ -169,7 +164,7 @@ public class CambiarCocheActivo {
                                 img_modelo.setBackgroundResource(R.drawable.modelo_inicio);
                                 img_marca.setImageResource(R.drawable.logo_inicio);
                                 //Al no tener coches vamos a la actividad inicial a pedir insertar coche
-                                Intent intent = new Intent(context, MyActivity.class);
+                                Intent intent = new Intent(context, myActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 context.startActivity(intent);
                                 act.finish();
@@ -193,7 +188,7 @@ public class CambiarCocheActivo {
         });
     }
 
-    public static void ActualizarCochesDrawer(DBCar dbcar, Activity act, Context context) {
+    public static void ActualizarCochesDrawer(dbCar dbcar, Activity act, Context context) {
         // Volvemos a actualizar los coches para mostrar el activo en la barra de navegacion
         Cursor cursor = dbcar.buscarCoches();
         CambiarCocheActivo(dbcar, cursor, act, context);
@@ -203,7 +198,7 @@ public class CambiarCocheActivo {
             // pero también hay que actualizar las variables globales al coche activo
             if (c_coche_activo.moveToFirst() == true) {
                 // RellenarPantalla();
-                ListaLogs ll = new ListaLogs();
+                listaLogs ll = new listaLogs();
                 ll.ConsultarLogs(context, act);
             } else {// no se da el caso pq si entra en el primer if ya existe minimo un coche y ya hemos forzado a q sea el activo
             }

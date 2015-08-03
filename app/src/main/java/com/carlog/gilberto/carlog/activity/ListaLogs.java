@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,16 +31,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.formats.DocumentHelper;
-import com.carlog.gilberto.carlog.formats.Utilities;
-import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
-import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
+import com.carlog.gilberto.carlog.data.dbCar;
+import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.formats.documentHelper;
+import com.carlog.gilberto.carlog.formats.utilities;
+import com.carlog.gilberto.carlog.negocio.cambiarCocheActivo;
+import com.carlog.gilberto.carlog.negocio.procesarTipos;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
 import com.carlog.gilberto.carlog.adapter.miAdaptadorLog;
-import com.carlog.gilberto.carlog.data.DBCar;
-import com.carlog.gilberto.carlog.data.DBLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -60,7 +61,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by Gilberto on 29/10/2014.
  */
-public class ListaLogs extends ActionBarActivity implements ObservableScrollViewCallbacks  {
+public class listaLogs extends ActionBarActivity implements ObservableScrollViewCallbacks  {
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
     private static final boolean TOOLBAR_IS_STICKY = true;
@@ -86,10 +87,10 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     private FloatingActionMenu mFloatMenu;
 
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
-    int int_year = MyActivity.NO_YEARS, int_kms = MyActivity.NO_KMS, int_itv = MyActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
+    int int_year = myActivity.NO_YEARS, int_kms = myActivity.NO_KMS, int_itv = myActivity.NO_ITV, int_kms_ini = 0, int_fecha_ini = 0;
 
-    private void borrarLogpulsado(final Cursor cursor, final DBLogs manager, final int posicion) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ListaLogs.this);
+    private void borrarLogpulsado(final Cursor cursor, final dbLogs manager, final int posicion) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(listaLogs.this);
         builder.setMessage("¿Está seguro de querer eliminar?")
             .setTitle("Borrar de la lista")
             .setCancelable(false)
@@ -107,10 +108,10 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                     int i = 0;
                     for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
                         if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
-                            int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
-                            String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
+                            int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
+                            String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
                             manager.eliminar_por_id(id);
-                            ConsultarLogs(getApplicationContext(), ListaLogs.this);
+                            ConsultarLogs(getApplicationContext(), listaLogs.this);
                             break;
                         }
                         i++;
@@ -129,56 +130,56 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         Intent intent = new Intent();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
-                int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
-                tipo = cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO));
-                if(tipo.equals(TipoLog.TIPO_ACEITE)) {
-                    intent = new Intent(context, ModificarAceite.class);
+                int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
+                tipo = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
+                if(tipo.equals(tipoLog.TIPO_ACEITE)) {
+                    intent = new Intent(context, modificarAceite.class);
                 }
-                if(tipo.equals(TipoLog.TIPO_REV_GENERAL)) {
-                    intent = new Intent(context, ModificarRevGral.class);
+                if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
+                    intent = new Intent(context, modificarRevGral.class);
                 }
-                if(tipo.equals(TipoLog.TIPO_CORREA)) {
-                    intent = new Intent(context, ModificarCorrea.class);
+                if(tipo.equals(tipoLog.TIPO_CORREA)) {
+                    intent = new Intent(context, modificarCorrea.class);
                 }
-                if(tipo.equals(TipoLog.TIPO_BOMBA_AGUA)) {
-                    intent = new Intent(context, ModificarBombaAgua.class);
+                if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
+                    intent = new Intent(context, modificarBombaAgua.class);
                 }
-                if(tipo.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
-                    intent = new Intent(context, ModificarFiltroGasolina.class);
+                if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
+                    intent = new Intent(context, modificarFiltroGasolina.class);
                 }
-                if(tipo.equals(TipoLog.TIPO_FILTRO_AIRE)) {
-                    intent = new Intent(context, ModificarFiltroAire.class);
+                if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
+                    intent = new Intent(context, modificarFiltroAire.class);
                 }
-                if(tipo.equals(TipoLog.TIPO_BUJIAS)) {
-                    intent = new Intent(context, ModificarBujias.class);
+                if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
+                    intent = new Intent(context, modificarBujias.class);
                 }
-                if(tipo.equals(TipoLog.TIPO_EMBRAGUE)) {
-                    intent = new Intent(context, ModificarEmbrague.class);
+                if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
+                    intent = new Intent(context, modificarEmbrague.class);
                 }
-                if(tipo.equals(TipoLog.TIPO_ITV)) {
-                    intent = new Intent(context, ModificarItv.class);
+                if(tipo.equals(tipoLog.TIPO_ITV)) {
+                    intent = new Intent(context, modificarItv.class);
                 }
-                if(tipo.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
-                    intent = new Intent(context, ModificarFiltroAceite.class);
+                if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
+                    intent = new Intent(context, modificarFiltroAceite.class);
                 }
                 //************************************************************************
 
 
                 String txt_fecha = cursor.getString(cursor.getColumnIndex("fecha_string"));
-                int aceite = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE));
-                int revgral = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL));
-                int correa = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_CORREA));
-                int bombaagua = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_BOMBAAGUA));
-                int fgasolina = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FGASOLINA));
-                int faire = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FAIRE));
-                int bujias = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_BUJIAS));
-                int embrague = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_EMBRAGUE));
-                String matricula = cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR));
-                int kms = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS));
-                int veces_filaceite = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
+                int aceite = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ACEITE));
+                int revgral = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_REVGRAL));
+                int correa = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_CORREA));
+                int bombaagua = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BOMBAAGUA));
+                int fgasolina = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FGASOLINA));
+                int faire = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FAIRE));
+                int bujias = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BUJIAS));
+                int embrague = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_EMBRAGUE));
+                String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
+                int kms = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_KMS));
+                int veces_filaceite = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_VECES_FIL_ACEITE));
 
 
-                TipoLog miTipo = new TipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, veces_filaceite, AddLog.NO_CONTADOR_FIL_ACEITE, revgral, correa, bombaagua, fgasolina, faire, bujias, embrague, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, kms);
+                tipoLog miTipo = new tipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, veces_filaceite, addLog.NO_CONTADOR_FIL_ACEITE, revgral, correa, bombaagua, fgasolina, faire, bujias, embrague, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, kms);
                 intent.putExtra("miTipo", miTipo);
                 intent.putExtra("idLog", id);
                 break;
@@ -186,34 +187,34 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             i++;
         }
 
-        if(tipo.equals(TipoLog.TIPO_ACEITE)) {
+        if(tipo.equals(tipoLog.TIPO_ACEITE)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(TipoLog.TIPO_REV_GENERAL)) {
+        if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(TipoLog.TIPO_ITV)) {
+        if(tipo.equals(tipoLog.TIPO_ITV)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(TipoLog.TIPO_CORREA)) {
+        if(tipo.equals(tipoLog.TIPO_CORREA)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(TipoLog.TIPO_BOMBA_AGUA)) {
+        if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
+        if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(TipoLog.TIPO_FILTRO_AIRE)) {
+        if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(TipoLog.TIPO_EMBRAGUE)) {
+        if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(TipoLog.TIPO_BUJIAS)) {
+        if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
             context.startActivityForResult(intent, PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
+        if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
             context.startActivity(intent); // No cambia la fecha solo cada cuantos cambios de aceite se hará
         }
         ///////////Todo ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
@@ -222,36 +223,36 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     }
 
-    private void realizadoLogpulsado(Cursor cursor, DBLogs manager, int posicion, boolean hoy) {
+    private void realizadoLogpulsado(Cursor cursor, dbLogs manager, int posicion, boolean hoy) {
         Date f_hoy = new Date();
         Date f_revision_por_fecha = new Date();
         //Recorremos el cursor
         int i = 0;
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
-                int id = cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ID));
-                String tipo_rev = cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO));
+                int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
+                String tipo_rev = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
                 String txtfecha_rev = cursor.getString(cursor.getColumnIndex("fecha_string"));
                 Date f_rev = funciones.string_a_date(txtfecha_rev);
-                if(tipo_rev.equals(TipoLog.TIPO_ITV)) {
-                    if(hoy) f_revision_por_fecha = funciones.fecha_mas_dias(f_hoy, ProcesarTipos.F_MAX_ITV);
-                    else f_revision_por_fecha = funciones.fecha_mas_dias(f_rev, ProcesarTipos.F_MAX_ITV);
-                    DBCar dbc = new DBCar(getApplicationContext());
+                if(tipo_rev.equals(tipoLog.TIPO_ITV)) {
+                    if(hoy) f_revision_por_fecha = funciones.fecha_mas_dias(f_hoy, procesarTipos.F_MAX_ITV);
+                    else f_revision_por_fecha = funciones.fecha_mas_dias(f_rev, procesarTipos.F_MAX_ITV);
+                    dbCar dbc = new dbCar(getApplicationContext());
                     long long_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
                     dbc.ActualizarITVCocheActivo(matricula, long_revision_por_fecha);
-                    TipoLog miTipoLog = new TipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, MyActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
+                    tipoLog miTipoLog = new tipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, myActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
                     manager.insertar(miTipoLog);
                 }
-                if(tipo_rev.equals(TipoLog.TIPO_ACEITE)) {
+                if(tipo_rev.equals(tipoLog.TIPO_ACEITE)) {
                     // Si tiene revisiones de filtro de aceite tenemos que leer cada cuantos cambios de aceite se cambia el filtro
-                    Cursor c_fil = manager.LogsTipoOrderByFechaString(matricula, TipoLog.TIPO_FILTRO_ACEITE);
+                    Cursor c_fil = manager.LogsTipoOrderByFechaString(matricula, tipoLog.TIPO_FILTRO_ACEITE);
                     if (c_fil.moveToFirst() == true) {
-                        int id_log_fil = c_fil.getInt(c_fil.getColumnIndex(DBLogs.CN_ID));
-                        int int_veces = c_fil.getInt(c_fil.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
+                        int id_log_fil = c_fil.getInt(c_fil.getColumnIndex(dbLogs.CN_ID));
+                        int int_veces = c_fil.getInt(c_fil.getColumnIndex(dbLogs.CN_VECES_FIL_ACEITE));
                         // tenemos que ver como va el contador y compararlo con los cambios defiltro que se han realizado
-                        Cursor c_ac_hist = manager.LogsHistoricoTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE);
+                        Cursor c_ac_hist = manager.LogsHistoricoTipoOrderByFechaString(matricula, tipoLog.TIPO_ACEITE);
                         if (c_ac_hist.moveToFirst() == true) {
-                            int int_contador = c_ac_hist.getInt(c_ac_hist.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE));
+                            int int_contador = c_ac_hist.getInt(c_ac_hist.getColumnIndex(dbLogs.CN_CONTADOR_FIL_ACEITE));
                             if (int_contador < int_veces) { // + 1 pq empieza en 0
                                 manager.ActualizarContadorFilAceite(id, int_contador + 1);
                             } else { // si se sobrepasa marcamos como realizado también el log del filtro y reseteamos el contador
@@ -271,11 +272,11 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                         }
                     }
                 }
-                if(tipo_rev.equals(TipoLog.TIPO_FILTRO_ACEITE)) {
+                if(tipo_rev.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
                     // Marcamos como realizado tambien el futuro de aceite y reseteamos el contador pq acabamos de hacer un cambio de filtro
-                    Cursor c_ac = manager.LogsTipoOrderByFechaString(matricula, TipoLog.TIPO_ACEITE);
+                    Cursor c_ac = manager.LogsTipoOrderByFechaString(matricula, tipoLog.TIPO_ACEITE);
                     if (c_ac.moveToFirst() == true) {
-                        int id_log_ac = c_ac.getInt(c_ac.getColumnIndex(DBLogs.CN_ID));
+                        int id_log_ac = c_ac.getInt(c_ac.getColumnIndex(dbLogs.CN_ID));
                         if(hoy) manager.marcarRealizadoLog(id_log_ac, funciones.date_a_long(f_hoy), int_kms); //hoy
                         else manager.marcarRealizadoLog(id_log_ac, funciones.date_a_long(f_rev), int_kms);
                         manager.ActualizarContadorFilAceite(id_log_ac, 1);
@@ -284,7 +285,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                 if(hoy) manager.marcarRealizadoLog(id, funciones.date_a_long(f_hoy), int_kms); //hoy
                 else manager.marcarRealizadoLog(id, funciones.date_a_long(f_rev), int_kms);
 
-                ConsultarLogs(getApplicationContext(), ListaLogs.this);
+                ConsultarLogs(getApplicationContext(), listaLogs.this);
                 break;
             }
             i++;
@@ -295,7 +296,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final DBLogs manager = new DBLogs(act.getApplicationContext());
+                final dbLogs manager = new dbLogs(act.getApplicationContext());
                 final Cursor cursor = manager.LogsFuturosOrderByFechaString(matricula);
                 modificarLogpulsado(cursor, position, act);
             }
@@ -303,24 +304,24 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     }
 
     public void ConsultarLogs(Context context, Activity act) {
-        DBCar dbc = new DBCar(context);
+        dbCar dbc = new dbCar(context);
         Cursor c_activo = dbc.buscarCocheActivo();
         if (c_activo.moveToFirst() == true) {
-            matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
+            matricula = c_activo.getString(c_activo.getColumnIndex(dbCar.CN_MATRICULA));
         }
-        final DBLogs manager = new DBLogs(context);
+        final dbLogs manager = new dbLogs(context);
         final Cursor cursor = manager.LogsFuturosOrderByFechaString(matricula);
 
-        List<TipoLog> listaLogs = new ArrayList<TipoLog>();
+        List<tipoLog> listaLogs = new ArrayList<tipoLog>();
         //Recorremos el cursor
         int k = 0;
         cursor.moveToFirst();
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            TipoLog miTipoLog = new TipoLog(cursor.getString(cursor.getColumnIndex(DBLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
-                    funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_CONTADOR_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REVGRAL))
-                    , cursor.getInt(cursor.getColumnIndex(DBLogs.CN_CORREA)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_BOMBAAGUA)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FGASOLINA)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FAIRE)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_BUJIAS)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_EMBRAGUE)), cursor.getString(cursor.getColumnIndex(DBLogs.CN_CAR)),
-                    cursor.getInt(cursor.getColumnIndex(DBLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_FMODIFICADA)), cursor.getInt(cursor.getColumnIndex(DBLogs.CN_KMS)));
+            tipoLog miTipoLog = new tipoLog(cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
+                    funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_VECES_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_CONTADOR_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_REVGRAL))
+                    , cursor.getInt(cursor.getColumnIndex(dbLogs.CN_CORREA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BOMBAAGUA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FGASOLINA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FAIRE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BUJIAS)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_EMBRAGUE)), cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR)),
+                    cursor.getInt(cursor.getColumnIndex(dbLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FMODIFICADA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_KMS)));
             listaLogs.add(miTipoLog);
 
             k++;
@@ -334,16 +335,16 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
     }
 
     private void imagenFB(final Activity activity) {
-        String idFB = Login.getIdFacebook(activity);
+        String idFB = login.getIdFacebook(activity);
         profileImg = (CircleImageView) findViewById(R.id.profilePicture);
         if (idFB != null) {
             try {
                 mTitleView = (TextView) findViewById(R.id.title);
                 //mTitleView.setText("Próximas revisiones");
-                mTitleView.setText(Login.getNameFacebook(activity));
+                mTitleView.setText(login.getNameFacebook(activity));
                 System.out.println("profileImg "+profileImg);
-                if (Login.getImgProfileFacebook(activity) != null) {
-                    profileImg.setImageBitmap(Login.getImgProfileFacebook(activity));
+                if (login.getImgProfileFacebook(activity) != null) {
+                    profileImg.setImageBitmap(login.getImgProfileFacebook(activity));
                 }
                 else {
                     Thread thread=  new Thread(){
@@ -351,12 +352,12 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                         public void run(){
                             try {
                                 synchronized(this){
-                                    while (Login.getImgProfileFacebook(activity) == null){
+                                    while (login.getImgProfileFacebook(activity) == null){
                                         wait(1000);
-                                        if (Login.getImgProfileFacebook(activity) != null) {
-                                            ListaLogs.this.runOnUiThread(new Runnable() {
+                                        if (login.getImgProfileFacebook(activity) != null) {
+                                            listaLogs.this.runOnUiThread(new Runnable() {
                                                 public void run() {
-                                                    profileImg.setImageBitmap(Login.getImgProfileFacebook(activity));
+                                                    profileImg.setImageBitmap(login.getImgProfileFacebook(activity));
                                                 }
                                             });
                                             break;
@@ -376,7 +377,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             }
         }
         else { //sesión iniciada por registro
-            Usuario usuario = new Usuario();
+            usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
             if(usuario.isUserLoggedIn(this)) {
                 System.out.println("Logueado");
                 usuario.readUser(this);
@@ -475,7 +476,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         edytCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ListaLogs.this, MyActivity.class);
+                Intent intent = new Intent(listaLogs.this, myActivity.class);
                 intent.putExtra("EditarCoche", true);
                 startActivity(intent);
             }
@@ -489,7 +490,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         addCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ListaLogs.this, MyActivity.class);
+                Intent intent = new Intent(listaLogs.this, myActivity.class);
                 intent.putExtra("CocheNuevo", true);
                 startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
                 // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
@@ -505,7 +506,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         addLogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ListaLogs.this, AddLog.class);
+                Intent intent = new Intent(listaLogs.this, addLog.class);
                 startActivityForResult(intent, PETICION_ACTIVITY_ADD_LOG);
             }
         });
@@ -595,7 +596,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         }
         if((modifyItv) || (modifyAceite) || (modifyRevGral) || (modifyCorrea) || (modifyBombaAgua) ||
                 (modifyFiltroGasolina) || (modifyFiltroAire) || (modifyBujias) || (modifyEmbrague))
-            ConsultarLogs(context, ListaLogs.this); // para actualizar la fecha de revision modificada
+            ConsultarLogs(context, listaLogs.this); // para actualizar la fecha de revision modificada
     }
 
     public void changeImgDrawerObservable() {
@@ -604,7 +605,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utilities.selectImage(ListaLogs.this);
+                utilities.selectImage(listaLogs.this);
             }
         });
     }
@@ -618,31 +619,31 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
         modificarFechasRevisiones(context);
 
-        DBCar dbcar = new DBCar(context);
+        dbCar dbcar = new dbCar(context);
         Cursor c = dbcar.buscarCoches();
-        CambiarCocheActivo.CambiarCocheActivo(dbcar, c, ListaLogs.this, context);
-        ObservableScrollView(ListaLogs.this);
+        cambiarCocheActivo.CambiarCocheActivo(dbcar, c, listaLogs.this, context);
+        ObservableScrollView(listaLogs.this);
         c = dbcar.buscarCocheActivo();
 
         changeImgDrawerObservable();
 
-        int img_modelo_cambiada = DBCar.IMG_MODELO_NOCAMBIADA;
+        int img_modelo_cambiada = dbCar.IMG_MODELO_NOCAMBIADA;
         String img_modelo_personalizada = "";
         if (c.moveToFirst() == true) {
-            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-            marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
-            modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
-            img_modelo_cambiada = c.getInt(c.getColumnIndex(DBCar.CN_IMG_MODELO_CAMBIADA));
-            int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
-            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-            int_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
-            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
-            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
-            img_modelo_personalizada = c.getString(c.getColumnIndex(DBCar.CN_IMG_MODELO_PERSONALIZADA));
+            matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
+            marca = c.getString(c.getColumnIndex(dbCar.CN_MARCA));
+            modelo = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
+            img_modelo_cambiada = c.getInt(c.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
+            int_year = c.getInt(c.getColumnIndex(dbCar.CN_YEAR));
+            int_kms = c.getInt(c.getColumnIndex(dbCar.CN_KMS));
+            int_itv = c.getInt(c.getColumnIndex(dbCar.CN_ITV));
+            int_kms_ini = c.getInt(c.getColumnIndex(dbCar.CN_KMS_INI));
+            int_fecha_ini = c.getInt(c.getColumnIndex(dbCar.CN_FECHA_INI));
+            img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
         }
 
-        CambiarCocheActivo.CambiarImgLogs(context, ListaLogs.this, img_modelo_personalizada, modelo, img_modelo_cambiada);
-        ConsultarLogs(context, ListaLogs.this);
+        cambiarCocheActivo.CambiarImgLogs(context, listaLogs.this, img_modelo_personalizada, modelo, img_modelo_cambiada);
+        ConsultarLogs(context, listaLogs.this);
     }
 
 
@@ -815,14 +816,14 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             return true;
         }
         if (id == R.id.action_logout) {
-            if (Login.getIdFacebook(this) == null){
-                Login.goToLoginScreen(this);
-                Usuario u = new Usuario();
-                u.logout(ListaLogs.this);
-                Intent intent = new Intent(ListaLogs.this, Login.class);
+            if (login.getIdFacebook(this) == null){
+                login.goToLoginScreen(this);
+                usuario u = new usuario();
+                u.logout(listaLogs.this);
+                Intent intent = new Intent(listaLogs.this, login.class);
                 startActivity(intent);
             } else {
-                Login.closeFacebookSession(this, Login.class);
+                login.closeFacebookSession(this, login.class);
             }
             finish();
         }
@@ -847,13 +848,13 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        final DBLogs manager = new DBLogs(this);
+        final dbLogs manager = new dbLogs(this);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        DBCar dbc = new DBCar(this);
+        dbCar dbc = new dbCar(this);
         Cursor c_activo = dbc.buscarCocheActivo();
         if (c_activo.moveToFirst() == true) {
-            matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
+            matricula = c_activo.getString(c_activo.getColumnIndex(dbCar.CN_MATRICULA));
         }
 
         final Cursor cursor = manager.LogsFuturosOrderByFechaString(matricula);
@@ -886,7 +887,7 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
         switch(requestCode) {
             case (PETICION_ACTIVITY_ADD_LOG) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    ConsultarLogs(this, ListaLogs.this);
+                    ConsultarLogs(this, listaLogs.this);
 
                 }
                 break;
@@ -900,30 +901,29 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
             }
             case (PETICION_ACTIVITY_MODIFYITV) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    ConsultarLogs(getApplicationContext(), ListaLogs.this);
+                    ConsultarLogs(getApplicationContext(), listaLogs.this);
                 }
                 break;
             }
-            case (Utilities.GALLERY_INTENT) : {
+            case (utilities.GALLERY_INTENT) : {
                 if (data == null)
                     return;
                 Uri selectedPictureUri = data.getData();
                 if (selectedPictureUri == null)
                     return;
                 try {
-                    Bitmap img_fondo = Utilities.getBitMapFromUri(this, selectedPictureUri);
-                    File chosenFile = new File(DocumentHelper.getPath(this, selectedPictureUri));
+                    Bitmap img_fondo = utilities.getBitMapFromUri(this, selectedPictureUri);
+                    File chosenFile = new File(documentHelper.getPath(this, selectedPictureUri));
 
-                    DBCar dbc = new DBCar(getApplicationContext());
+                    dbCar dbc = new dbCar(getApplicationContext());
                     Cursor c_act = dbc.buscarCocheActivo();
                     if (c_act.moveToFirst() == true) {
-                        System.out.println("paso");
-                        String matricula = c_act.getString(c_act.getColumnIndex(DBCar.CN_MATRICULA));
-                        String uriEncoded = Uri.encode(DocumentHelper.getPath(this, selectedPictureUri), "UTF-8");
+                        String matricula = c_act.getString(c_act.getColumnIndex(dbCar.CN_MATRICULA));
+                        String uriEncoded = Uri.encode(documentHelper.getPath(this, selectedPictureUri), "UTF-8");
                         dbc.ActualizarImgModelo(matricula, uriEncoded);
-                        ImageView img_listalogs = (ImageView) ListaLogs.this.findViewById(R.id.image);
+                        ImageView img_listalogs = (ImageView) listaLogs.this.findViewById(R.id.image);
                         img_listalogs.setImageURI(selectedPictureUri);
-                        CambiarCocheActivo.ActualizarCochesDrawer(dbc,ListaLogs.this, getApplicationContext());
+                        cambiarCocheActivo.ActualizarCochesDrawer(dbc, listaLogs.this, getApplicationContext());
                     }
                     //File chosenFile = new File(DocumentHelper.getPath(this, selectedPictureUri));
                    // Utilities.changeImage(this, chosenFile, Utilities.getBitMapFromUri(this, selectedPictureUri), selectedPictureUri.getPath(), LoginMethods.getIdFacebook(this), mSendero.getServerId(), 0, 0, pd);
@@ -931,8 +931,47 @@ public class ListaLogs extends ActionBarActivity implements ObservableScrollView
                     e.printStackTrace();
                 }
             }
-            case (Utilities.CAMERA_INTENT) : {
-              // Utilities.getCameraPictureAndUpload(this, mSendero.getServerId());
+            case (utilities.CAMERA_INTENT) : {
+                /*File f = new File(Environment.getExternalStorageDirectory().toString());
+                for (File temp : f.listFiles()) {
+                    if (temp.getName().equals(ListaLogs.this.getString(R.string.temp_picture))) {
+                        f = temp;
+                        break;
+                    }
+                }
+                try {
+                    BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
+                    //final Bitmap bm = BitmapFactory.decodeFile(f.getAbsolutePath(), btmapOptions);
+                    System.out.println("PATH_FOTO " + f.getAbsolutePath());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+                File f = new File(Environment.getExternalStorageDirectory().toString());
+                for (File temp : f.listFiles()) {
+                    if (temp.getName().equals(listaLogs.this.getString(R.string.temp_picture))) {
+                        f = temp;
+                        break;
+                    }
+                }
+                Uri.fromFile(f);
+System.out.println("uri from file " + Uri.fromFile(f));
+                try {
+                    dbCar dbc = new dbCar(getApplicationContext());
+                    Cursor c_act = dbc.buscarCocheActivo();
+                    if (c_act.moveToFirst() == true) {
+                        String matricula = c_act.getString(c_act.getColumnIndex(dbCar.CN_MATRICULA));
+                        String uriEncoded = Uri.encode(documentHelper.getPath(this, Uri.fromFile(f)), "UTF-8");
+                        dbc.ActualizarImgModelo(matricula, uriEncoded);
+                        ImageView img_listalogs = (ImageView) listaLogs.this.findViewById(R.id.image);
+                        img_listalogs.setImageURI(Uri.fromFile(f));
+                        cambiarCocheActivo.ActualizarCochesDrawer(dbc, listaLogs.this, getApplicationContext());
+                    }
+                    //File chosenFile = new File(DocumentHelper.getPath(this, selectedPictureUri));
+                    // Utilities.changeImage(this, chosenFile, Utilities.getBitMapFromUri(this, selectedPictureUri), selectedPictureUri.getPath(), LoginMethods.getIdFacebook(this), mSendero.getServerId(), 0, 0, pd);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
