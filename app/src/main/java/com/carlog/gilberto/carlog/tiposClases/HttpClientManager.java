@@ -21,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by Gilberto on 24/07/2015.
  */
-public class HttpClientManager {
+public class httpClientManager {
 
     private Activity activity;
     private ArrayList<NameValuePair> nameValuePairs;
@@ -46,7 +46,7 @@ public class HttpClientManager {
     public String getResponseBody(){return responseBody;}
     private void setResponseBody(String ResponseBody){responseBody = ResponseBody;}
 
-    public HttpClientManager(Activity activity){
+    public httpClientManager(Activity activity){
         this.activity = activity;
         nameValuePairs = new ArrayList<NameValuePair>();
     }

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * Created by Gilberto on 19/05/2015.
  */
-public class DBAceite {
+public class dbAceite {
     public static final String TABLE_NAME = "aceite";
 
     public static final String CN_ID = "_id";
@@ -21,11 +21,11 @@ public class DBAceite {
             + CN_KMS + " int not null);";
 
 
-    private DbHelper helper;
+    private dbHelper helper;
     private static SQLiteDatabase db;
 
-    public DBAceite(Context context) {
-        helper = new DbHelper(context);
+    public dbAceite(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
     }
 

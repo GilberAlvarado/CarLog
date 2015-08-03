@@ -19,14 +19,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBAceite;
-import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.data.DBRevGral;
+import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.data.dbRevGral;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
-import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.negocio.procesarTipos;
+import com.carlog.gilberto.carlog.tiposClases.tipoCoche;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ import java.util.Date;
 /**
  * Created by Gilberto on 19/05/2015.
  */
-public class RevGral extends ActionBarActivity {
+public class revGral extends ActionBarActivity {
 
     public final static String TIPO_30K_KM = "30 mil kms (Recomendada)";
     public final static String TIPO_5K_KM = "5 mil kms";
@@ -55,8 +54,8 @@ public class RevGral extends ActionBarActivity {
     private Toolbar toolbar;
     private Spinner spinner1;
 
-    private void RellenarTiposRevGral(DBRevGral managerRevGral) {
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipoLog");
+    private void RellenarTiposRevGral(dbRevGral managerRevGral) {
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipoLog");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_revgral);
         text.setText(txt_fecha);
@@ -77,7 +76,7 @@ public class RevGral extends ActionBarActivity {
         spinner1.setAdapter(adaptador);
     }
 
-    private void GuardarLog(final DBLogs managerLogs, final DBRevGral managerRevGral) {
+    private void GuardarLog(final dbLogs managerLogs, final dbRevGral managerRevGral) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_revgral);
 
@@ -87,9 +86,9 @@ public class RevGral extends ActionBarActivity {
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_revgral);
                 String tipo_revgral = spinner.getSelectedItem().toString();
 
-                Cursor c = DBRevGral.buscarTiposRevGral(tipo_revgral);
+                Cursor c = dbRevGral.buscarTiposRevGral(tipo_revgral);
 
-                int int_revgral = AddLog.NO_REVGRAL; // solo para inicializar
+                int int_revgral = addLog.NO_REVGRAL; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_revgral = c.getInt(c.getColumnIndex(managerRevGral.CN_ID));
@@ -101,23 +100,23 @@ public class RevGral extends ActionBarActivity {
                 Date fecha = funciones.string_a_date(datetxt);
                 long long_fecha = funciones.string_a_long(datetxt);
 
-                TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+                tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
                 System.out.println("SE inserta revgral id : "+int_revgral);
-                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, int_revgral, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+                tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
 
 
                 if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                     // Creamos el nuevo futuro log
                     // Se pone como REALIZADO!
-                    miTipoLog = new TipoLog(TipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, AddLog.NO_VECES_FIL_ACEITE, AddLog.NO_CONTADOR_FIL_ACEITE, int_revgral, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, DBLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+                    miTipoLog = new tipoLog(tipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
                 }
 
-                Intent intent = new Intent(RevGral.this, AddLog.class);
+                Intent intent = new Intent(revGral.this, addLog.class);
 
                 managerLogs.insertar(miTipoLog);
                 // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
-                ProcesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), TipoLog.TIPO_REV_GENERAL); // actualizamos fechas
+                procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_REV_GENERAL); // actualizamos fechas
 
                 setResult(Activity.RESULT_OK, intent);
 
@@ -138,8 +137,8 @@ public class RevGral extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Context contextNew = getApplicationContext();
-        DBRevGral managerRevGral = new DBRevGral(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
+        dbRevGral managerRevGral = new dbRevGral(contextNew);
+        dbLogs managerLog = new dbLogs(contextNew);
 
         RellenarTiposRevGral(managerRevGral);
         //SeleccionarTipo(managerTiposRevision);
@@ -163,10 +162,10 @@ public class RevGral extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(RevGral.this);
-            Login.closeFacebookSession(RevGral.this, Login.class);
-            Intent intent = new Intent(RevGral.this, Login.class);
+            usuario u = new usuario();
+            u.logout(revGral.this);
+            login.closeFacebookSession(revGral.this, login.class);
+            Intent intent = new Intent(revGral.this, login.class);
             startActivity(intent);
             finish();
         }

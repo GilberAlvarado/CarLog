@@ -5,13 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.carlog.gilberto.carlog.activity.MyActivity;
-import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
+import com.carlog.gilberto.carlog.activity.myActivity;
+import com.carlog.gilberto.carlog.tiposClases.tipoCoche;
 
 /**
  * Created by Gilberto on 19/05/2015.
  */
-public class DBCar {
+public class dbCar {
     public static final String TABLE_NAME = "cars";
     public static final int IMG_MODELO_CAMBIADA = 1;
     public static final int IMG_MODELO_NOCAMBIADA = 0;
@@ -43,25 +43,25 @@ public class DBCar {
             + CN_KMS_INI + " integer not null);";
 
 
-    private DbHelper helper;
+    private dbHelper helper;
     private static SQLiteDatabase db;
 
-    public DBCar(Context context) {
-        helper = new DbHelper(context);
+    public dbCar(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
     }
 
 
-    public ContentValues generarContentValues(TipoCoche miCoche) {
+    public ContentValues generarContentValues(tipoCoche miCoche) {
         ContentValues valores = new ContentValues();
         valores.put(CN_MATRICULA, miCoche.getMatricula(miCoche));
         valores.put(CN_MARCA, miCoche.getMarca(miCoche));
         valores.put(CN_MODELO, miCoche.getModelo(miCoche));
         valores.put(CN_IMG_MODELO_PERSONALIZADA, miCoche.getImgModeloPersonalizada(miCoche));
         valores.put(CN_IMG_MODELO_CAMBIADA, miCoche.getImgModeloCambiada(miCoche));
-        if (miCoche.getYear(miCoche) != MyActivity.NO_YEARS)
+        if (miCoche.getYear(miCoche) != myActivity.NO_YEARS)
             valores.put(CN_YEAR, miCoche.getYear(miCoche));
-        if (miCoche.getKms(miCoche) != MyActivity.NO_KMS)
+        if (miCoche.getKms(miCoche) != myActivity.NO_KMS)
             valores.put(CN_KMS, miCoche.getKms(miCoche));
         valores.put(CN_ITV, miCoche.getItv(miCoche));
         valores.put(CN_PROFILE, miCoche.getProfile(miCoche));
@@ -70,12 +70,12 @@ public class DBCar {
         return valores;
     }
 
-    public void insertar(TipoCoche coche) {
+    public void insertar(tipoCoche coche) {
         db.insert(TABLE_NAME, null, generarContentValues(coche));
     }
 
 
-    public static void insertinsertOrUpdate(TipoCoche coche) {
+    public static void insertinsertOrUpdate(tipoCoche coche) {
         System.out.println("modificando kms " + coche.getKms(coche));
         String sql = "INSERT OR REPLACE INTO "+ TABLE_NAME +" (" +CN_MATRICULA+ ", " +CN_MARCA+ ", " +CN_MODELO+ ", " +CN_IMG_MODELO_PERSONALIZADA+ ", " +CN_IMG_MODELO_CAMBIADA+ ", " +CN_YEAR+ ", " +CN_KMS+ ", " +CN_ITV+ ", " +CN_PROFILE+ ", " +CN_FECHA_INI+ ", " +CN_KMS_INI + ") "
         +" VALUES ('" +coche.getMatricula(coche)+ "', '" +coche.getMarca(coche)+ "', '" + coche.getModelo(coche)+ "', '" + coche.getImgModeloCambiada(coche)+ "', '" + coche.getImgModeloPersonalizada(coche)+ "', '"
@@ -93,32 +93,32 @@ public class DBCar {
 
     public Cursor buscarCocheActivo() {
         String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_IMG_MODELO_PERSONALIZADA, CN_IMG_MODELO_CAMBIADA, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
-        return db.query(TABLE_NAME, columnas, CN_PROFILE + "=?", new String[]{Integer.toString(TipoCoche.PROFILE_ACTIVO)}, null, null, null);
+        return db.query(TABLE_NAME, columnas, CN_PROFILE + "=?", new String[]{Integer.toString(tipoCoche.PROFILE_ACTIVO)}, null, null, null);
 
     }
     public Cursor buscarCochesNoActivos() {
         String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_IMG_MODELO_PERSONALIZADA, CN_IMG_MODELO_CAMBIADA, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};
-        return db.query(TABLE_NAME, columnas, CN_PROFILE + "=?", new String[]{Integer.toString(TipoCoche.PROFILE_INACTIVO)}, null, null, null);
+        return db.query(TABLE_NAME, columnas, CN_PROFILE + "=?", new String[]{Integer.toString(tipoCoche.PROFILE_INACTIVO)}, null, null, null);
 
     }
 
     public void ActualizarITVCocheActivo(String matricula, long itv) {
-        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_ITV + " = '" + itv + "' WHERE " + CN_PROFILE + " = '" + TipoCoche.PROFILE_ACTIVO + "' AND " +CN_MATRICULA + " = '" + matricula + "'";
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_ITV + " = '" + itv + "' WHERE " + CN_PROFILE + " = '" + tipoCoche.PROFILE_ACTIVO + "' AND " +CN_MATRICULA + " = '" + matricula + "'";
         db.execSQL(sql);
     }
 
     public void ActualizarCocheActivo(String matricula) {
-        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + TipoCoche.PROFILE_ACTIVO + "' WHERE " + CN_MATRICULA + " = '" + matricula + "'";
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + tipoCoche.PROFILE_ACTIVO + "' WHERE " + CN_MATRICULA + " = '" + matricula + "'";
         db.execSQL(sql);
     }
 
     public void ActualizarCocheNOActivo(String matricula) {
-        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + TipoCoche.PROFILE_INACTIVO + "' WHERE " + CN_MATRICULA + " = '" + matricula + "'";
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + tipoCoche.PROFILE_INACTIVO + "' WHERE " + CN_MATRICULA + " = '" + matricula + "'";
         db.execSQL(sql);
     }
 
     public void ActualizarTodosCocheNOActivo() {
-        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + TipoCoche.PROFILE_INACTIVO + "'";
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_PROFILE + " = '" + tipoCoche.PROFILE_INACTIVO + "'";
         db.execSQL(sql);
     }
 

@@ -898,6 +898,7 @@ public class listaLogs extends ActionBarActivity implements ObservableScrollView
                 if(resultCode == Activity.RESULT_OK) {
                     finish();
                 }
+                break;
             }
             case (PETICION_ACTIVITY_MODIFYITV) : {
                 if (resultCode == Activity.RESULT_OK) {
@@ -906,6 +907,7 @@ public class listaLogs extends ActionBarActivity implements ObservableScrollView
                 break;
             }
             case (utilities.GALLERY_INTENT) : {
+                System.out.println("desde galería");
                 if (data == null)
                     return;
                 Uri selectedPictureUri = data.getData();
@@ -930,23 +932,10 @@ public class listaLogs extends ActionBarActivity implements ObservableScrollView
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
             }
             case (utilities.CAMERA_INTENT) : {
-                /*File f = new File(Environment.getExternalStorageDirectory().toString());
-                for (File temp : f.listFiles()) {
-                    if (temp.getName().equals(ListaLogs.this.getString(R.string.temp_picture))) {
-                        f = temp;
-                        break;
-                    }
-                }
-                try {
-                    BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-                    //final Bitmap bm = BitmapFactory.decodeFile(f.getAbsolutePath(), btmapOptions);
-                    System.out.println("PATH_FOTO " + f.getAbsolutePath());
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
+                System.out.println("desde cámara");
                 File f = new File(Environment.getExternalStorageDirectory().toString());
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals(listaLogs.this.getString(R.string.temp_picture))) {
@@ -955,7 +944,6 @@ public class listaLogs extends ActionBarActivity implements ObservableScrollView
                     }
                 }
                 Uri.fromFile(f);
-System.out.println("uri from file " + Uri.fromFile(f));
                 try {
                     dbCar dbc = new dbCar(getApplicationContext());
                     Cursor c_act = dbc.buscarCocheActivo();
@@ -972,6 +960,7 @@ System.out.println("uri from file " + Uri.fromFile(f));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
             }
         }
     }

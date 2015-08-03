@@ -13,7 +13,7 @@ import android.provider.MediaStore;
 /**
  * Created by Gilberto on 31/07/2015.
  */
-public class DocumentHelper {
+public class documentHelper {
 
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access

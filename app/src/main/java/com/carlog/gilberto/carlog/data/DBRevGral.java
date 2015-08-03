@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * Created by Gilberto on 15/07/2015.
  */
-public class DBRevGral {
+public class dbRevGral {
     public static final String TABLE_NAME = "revgral";
 
     public static final String CN_ID = "_id";
@@ -21,11 +21,11 @@ public class DBRevGral {
             + CN_KMS + " int not null);";
 
 
-    private DbHelper helper;
+    private dbHelper helper;
     private static SQLiteDatabase db;
 
-    public DBRevGral(Context context) {
-        helper = new DbHelper(context);
+    public dbRevGral(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
 
 

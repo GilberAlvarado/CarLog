@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * Created by Gilberto on 30/07/2015.
  */
-public class DBEmbrague {
+public class dbEmbrague {
     public static final String TABLE_NAME = "embrague";
 
     public final static String TIPO_60K_KM = "60 mil kms (recomendada)";
@@ -27,11 +27,11 @@ public class DBEmbrague {
             + CN_KMS + " int not null);";
 
 
-    private DbHelper helper;
+    private dbHelper helper;
     private static SQLiteDatabase db;
 
-    public DBEmbrague(Context context) {
-        helper = new DbHelper(context);
+    public dbEmbrague(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
 
 

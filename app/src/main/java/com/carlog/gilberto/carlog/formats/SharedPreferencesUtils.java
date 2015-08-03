@@ -8,7 +8,7 @@ import com.carlog.gilberto.carlog.R;
 /**
  * Created by Gilberto on 25/07/2015.
  */
-public class SharedPreferencesUtils {
+public class sharedPreferencesUtils {
 
     public static void addString (Activity activity, String id, String value){
         SharedPreferences sharedPref = activity.getSharedPreferences(activity.getString(R.string.sp_sharedpreferences), 0);

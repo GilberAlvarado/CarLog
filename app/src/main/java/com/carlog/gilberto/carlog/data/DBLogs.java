@@ -5,13 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.carlog.gilberto.carlog.activity.AddLog;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
+import com.carlog.gilberto.carlog.activity.addLog;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
 
 /**
  * Created by Gilberto on 16/05/2015.
  */
-public class DBLogs {
+public class dbLogs {
     public static final int NO_REALIZADO = 0;
     public static final int REALIZADO = 1;
     public static final int NO_FMODIFICADA = 0;
@@ -55,59 +55,59 @@ public class DBLogs {
             + CN_REALIZADO + " integer not null,"
             + CN_FMODIFICADA + " integer not null,"
             + CN_KMS + " integer not null,"
-            + " FOREIGN KEY("+CN_ACEITE+") REFERENCES "+ DBAceite.TABLE_NAME+"("+DBAceite.CN_ID+"), "
-            + " FOREIGN KEY("+CN_REVGRAL+") REFERENCES "+ DBRevGral.TABLE_NAME+"("+DBRevGral.CN_ID+"), "
-            + " FOREIGN KEY("+CN_CORREA+") REFERENCES "+ DBRevGral.TABLE_NAME+"("+DBCorrea.CN_ID+"), "
-            + " FOREIGN KEY("+CN_BOMBAAGUA+") REFERENCES "+ DBRevGral.TABLE_NAME+"("+DBBombaAgua.CN_ID+"), "
-            + " FOREIGN KEY("+CN_FGASOLINA+") REFERENCES "+ DBRevGral.TABLE_NAME+"("+DBFiltroGasolina.CN_ID+"), "
-            + " FOREIGN KEY("+CN_FAIRE+") REFERENCES "+ DBRevGral.TABLE_NAME+"("+DBFiltroAire.CN_ID+"), "
-            + " FOREIGN KEY("+CN_BUJIAS+") REFERENCES "+ DBRevGral.TABLE_NAME+"("+DBBujias.CN_ID+"), "
-            + " FOREIGN KEY("+CN_EMBRAGUE+") REFERENCES "+ DBRevGral.TABLE_NAME+"("+DBEmbrague.CN_ID+"), "
-            + " FOREIGN KEY("+CN_TIPO+") REFERENCES "+ DBTiposRevision.TABLE_NAME+"("+DBTiposRevision.CN_TIPO+"), "
-            + " FOREIGN KEY("+CN_CAR+") REFERENCES "+ DBCar.TABLE_NAME+"("+DBCar.CN_MATRICULA+") ON DELETE CASCADE);";
+            + " FOREIGN KEY("+CN_ACEITE+") REFERENCES "+ dbAceite.TABLE_NAME+"("+ dbAceite.CN_ID+"), "
+            + " FOREIGN KEY("+CN_REVGRAL+") REFERENCES "+ dbRevGral.TABLE_NAME+"("+ dbRevGral.CN_ID+"), "
+            + " FOREIGN KEY("+CN_CORREA+") REFERENCES "+ dbRevGral.TABLE_NAME+"("+ dbCorrea.CN_ID+"), "
+            + " FOREIGN KEY("+CN_BOMBAAGUA+") REFERENCES "+ dbRevGral.TABLE_NAME+"("+ dbBombaAgua.CN_ID+"), "
+            + " FOREIGN KEY("+CN_FGASOLINA+") REFERENCES "+ dbRevGral.TABLE_NAME+"("+ dbFiltroGasolina.CN_ID+"), "
+            + " FOREIGN KEY("+CN_FAIRE+") REFERENCES "+ dbRevGral.TABLE_NAME+"("+ dbFiltroAire.CN_ID+"), "
+            + " FOREIGN KEY("+CN_BUJIAS+") REFERENCES "+ dbRevGral.TABLE_NAME+"("+ dbBujias.CN_ID+"), "
+            + " FOREIGN KEY("+CN_EMBRAGUE+") REFERENCES "+ dbRevGral.TABLE_NAME+"("+ dbEmbrague.CN_ID+"), "
+            + " FOREIGN KEY("+CN_TIPO+") REFERENCES "+ dbTiposRevision.TABLE_NAME+"("+ dbTiposRevision.CN_TIPO+"), "
+            + " FOREIGN KEY("+CN_CAR+") REFERENCES "+ dbCar.TABLE_NAME+"("+ dbCar.CN_MATRICULA+") ON DELETE CASCADE);";
 
-    private DbHelper helper;
+    private dbHelper helper;
     private SQLiteDatabase db;
 
-    public DBLogs(Context context) {
-        helper = new DbHelper(context);
+    public dbLogs(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
     }
 
 
-    public ContentValues generarContentValues(TipoLog milog) {
+    public ContentValues generarContentValues(tipoLog milog) {
         ContentValues valores = new ContentValues();
         valores.put(CN_TIPO, milog.getTipo(milog));
         valores.put(CN_FECHA, milog.getFechalong(milog));
-        if (milog.getAceite(milog) != AddLog.NO_ACEITE) {
+        if (milog.getAceite(milog) != addLog.NO_ACEITE) {
             valores.put(CN_ACEITE, milog.getAceite(milog));
         }
-        if (milog.getVecesFilAceite(milog) != AddLog.NO_VECES_FIL_ACEITE) {
+        if (milog.getVecesFilAceite(milog) != addLog.NO_VECES_FIL_ACEITE) {
             valores.put(CN_VECES_FIL_ACEITE, milog.getVecesFilAceite(milog));
         }
-        if (milog.getVecesFilAceite(milog) != AddLog.NO_CONTADOR_FIL_ACEITE) {
+        if (milog.getVecesFilAceite(milog) != addLog.NO_CONTADOR_FIL_ACEITE) {
             valores.put(CN_CONTADOR_FIL_ACEITE, milog.getVecesFilAceite(milog));
         }
         else valores.put(CN_CONTADOR_FIL_ACEITE, 0);
-        if (milog.getRevgral(milog) != AddLog.NO_REVGRAL) {
+        if (milog.getRevgral(milog) != addLog.NO_REVGRAL) {
             valores.put(CN_REVGRAL, milog.getRevgral(milog));
         }
-        if (milog.getCorrea(milog) != AddLog.NO_CORREA) {
+        if (milog.getCorrea(milog) != addLog.NO_CORREA) {
             valores.put(CN_CORREA, milog.getCorrea(milog));
         }
-        if (milog.getBombaagua(milog) != AddLog.NO_BOMBAAGUA) {
+        if (milog.getBombaagua(milog) != addLog.NO_BOMBAAGUA) {
             valores.put(CN_BOMBAAGUA, milog.getBombaagua(milog));
         }
-        if (milog.getFgasolina(milog) != AddLog.NO_FGASOLINA) {
+        if (milog.getFgasolina(milog) != addLog.NO_FGASOLINA) {
             valores.put(CN_FGASOLINA, milog.getFgasolina(milog));
         }
-        if (milog.getFaire(milog) != AddLog.NO_FAIRE) {
+        if (milog.getFaire(milog) != addLog.NO_FAIRE) {
             valores.put(CN_FAIRE, milog.getFaire(milog));
         }
-        if (milog.getBujias(milog) != AddLog.NO_BUJIAS) {
+        if (milog.getBujias(milog) != addLog.NO_BUJIAS) {
             valores.put(CN_BUJIAS, milog.getBujias(milog));
         }
-        if (milog.getEmbrague(milog) != AddLog.NO_EMBRAGUE) {
+        if (milog.getEmbrague(milog) != addLog.NO_EMBRAGUE) {
             valores.put(CN_EMBRAGUE, milog.getEmbrague(milog));
         }
         valores.put(CN_CAR, milog.getCoche(milog));
@@ -117,7 +117,7 @@ public class DBLogs {
         return valores;
     }
 
-    public void insertar(TipoLog milog) {
+    public void insertar(tipoLog milog) {
         db.insert(TABLE_NAME, null, generarContentValues(milog));
     }
 
@@ -126,7 +126,7 @@ public class DBLogs {
         db.delete(TABLE_NAME, CN_ID + "=?", new String[]{Integer.toString(id)});
     }
 
-    public void eliminar(TipoLog milog) {
+    public void eliminar(tipoLog milog) {
         db.delete(TABLE_NAME, CN_TIPO + "=?", new String[]{milog.getTipo(milog)});
     }
 

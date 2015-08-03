@@ -12,11 +12,11 @@ package com.carlog.gilberto.carlog.adapter;
 
         import com.balysv.materialripple.MaterialRippleLayout;
         import com.carlog.gilberto.carlog.R;
-        import com.carlog.gilberto.carlog.formats.Utilities;
-        import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
-        import com.carlog.gilberto.carlog.data.DBCar;
-        import com.carlog.gilberto.carlog.data.DBMarcas;
-        import com.carlog.gilberto.carlog.data.DBModelos;
+        import com.carlog.gilberto.carlog.formats.utilities;
+        import com.carlog.gilberto.carlog.tiposClases.tipoCoche;
+        import com.carlog.gilberto.carlog.data.dbCar;
+        import com.carlog.gilberto.carlog.data.dbMarcas;
+        import com.carlog.gilberto.carlog.data.dbModelos;
 
         import java.io.File;
         import java.util.ArrayList;
@@ -86,15 +86,15 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
         List<String> lista_matriculas = new ArrayList<String>();
         List<Integer> lista_iconos = new ArrayList<Integer>();
         String img_modelo_personalizada = "";
-        img_modelo_cambiada = DBCar.IMG_MODELO_NOCAMBIADA;
+        img_modelo_cambiada = dbCar.IMG_MODELO_NOCAMBIADA;
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            String matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-            int profile = c.getInt(c.getColumnIndex(DBCar.CN_PROFILE));
-            if(profile == TipoCoche.PROFILE_ACTIVO) {
-                marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
-                modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
-                img_modelo_cambiada = c.getInt(c.getColumnIndex(DBCar.CN_IMG_MODELO_CAMBIADA));
-                img_modelo_personalizada = c.getString(c.getColumnIndex(DBCar.CN_IMG_MODELO_PERSONALIZADA));
+            String matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
+            int profile = c.getInt(c.getColumnIndex(dbCar.CN_PROFILE));
+            if(profile == tipoCoche.PROFILE_ACTIVO) {
+                marca = c.getString(c.getColumnIndex(dbCar.CN_MARCA));
+                modelo = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
+                img_modelo_cambiada = c.getInt(c.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
+                img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
                 System.out.println("????1111 "+img_modelo_cambiada);
             }
             lista_matriculas.add(matricula);
@@ -112,23 +112,23 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
         }
 
         if (c.moveToFirst() == true) {
-            DBMarcas dbmarcas = new DBMarcas(context);
+            dbMarcas dbmarcas = new dbMarcas(context);
             Cursor c_marca = dbmarcas.buscarMarcas(marca);
             if (c_marca.moveToFirst() == true) {
-                String mDrawableImg = c_marca.getString(c_marca.getColumnIndex(DBMarcas.CN_IMG));
+                String mDrawableImg = c_marca.getString(c_marca.getColumnIndex(dbMarcas.CN_IMG));
                 int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
                 img_marca = resID;
             }
-            DBModelos dbmodelos = new DBModelos(context);
+            dbModelos dbmodelos = new dbModelos(context);
             Cursor c_modelo = dbmodelos.buscarModelos(modelo);
             if (c_modelo.moveToFirst() == true) {
-                if (img_modelo_cambiada == DBCar.IMG_MODELO_NOCAMBIADA) {
-                    String mDrawableImg = c_modelo.getString(c_modelo.getColumnIndex(DBModelos.CN_IMG));
+                if (img_modelo_cambiada == dbCar.IMG_MODELO_NOCAMBIADA) {
+                    String mDrawableImg = c_modelo.getString(c_modelo.getColumnIndex(dbModelos.CN_IMG));
                     int resID = context.getResources().getIdentifier(mDrawableImg, "drawable", context.getPackageName());
                     img_modelo = resID;
                 }
                 else {
-                    img_modelo_cambiada = DBCar.IMG_MODELO_REDIS_CAMBIADA;
+                    img_modelo_cambiada = dbCar.IMG_MODELO_REDIS_CAMBIADA;
                     mUriImg = img_modelo_personalizada;
                 }
             }
@@ -227,12 +227,12 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
             holder.imageView.setImageResource(mIcons[position -1]);// Settimg the image with array of our icons
         }
         else{
-            if(img_modelo_cambiada != DBCar.IMG_MODELO_REDIS_CAMBIADA) {
+            if(img_modelo_cambiada != dbCar.IMG_MODELO_REDIS_CAMBIADA) {
                 holder.img_modelo.setBackgroundResource(img_modelo);
             }
             else {
                 Uri myUri = Uri.parse(mUriImg);
-                File imgFile = new  File(Utilities.getPathPictureFromUri(holder.img_modelo.getContext(), myUri));
+                File imgFile = new  File(utilities.getPathPictureFromUri(holder.img_modelo.getContext(), myUri));
                 if(imgFile.exists()) {
                     Drawable d = Drawable.createFromPath(imgFile.getAbsolutePath());
                     holder.img_modelo.setBackground(d);

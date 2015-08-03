@@ -2,7 +2,6 @@ package com.carlog.gilberto.carlog.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,21 +20,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBCar;
-import com.carlog.gilberto.carlog.data.DbHelper;
-import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.data.DBTiposRevision;
+import com.carlog.gilberto.carlog.data.dbCar;
+import com.carlog.gilberto.carlog.data.dbHelper;
+import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.tiposClases.tipoCoche;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.data.dbTiposRevision;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 
-public class AddLog extends ActionBarActivity {
+public class addLog extends ActionBarActivity {
 
     public final static int NO_ACEITE = -1;
     public final static int NO_VECES_FIL_ACEITE = -1;
@@ -50,7 +49,7 @@ public class AddLog extends ActionBarActivity {
     private Spinner spinner1;
     private Toolbar toolbar;
 
-    private void RellenarTipos(DBTiposRevision managerTiposRevision) {
+    private void RellenarTipos(dbTiposRevision managerTiposRevision) {
         spinner1 = (Spinner) findViewById(R.id.cmb_tipos);
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos);
 
@@ -67,7 +66,7 @@ public class AddLog extends ActionBarActivity {
         spinner1.setAdapter(adaptador);
     }
 
-    private void SeleccionarTipo(final DBTiposRevision managerTiposRevision) {
+    private void SeleccionarTipo(final dbTiposRevision managerTiposRevision) {
         spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
@@ -114,16 +113,16 @@ public class AddLog extends ActionBarActivity {
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos);
                 String elimdata = spinner.getSelectedItem().toString();
                 //Solo podremos eliminar revisiones que no estén por defecto en la app
-                DBTiposRevision dbtr = new DBTiposRevision(getApplicationContext());
+                dbTiposRevision dbtr = new dbTiposRevision(getApplicationContext());
                 Cursor c_tr = dbtr.cargarCursorTiposRevision();
                 int i = 0;
                 String tipo = "";
                 for(c_tr.moveToFirst(); !c_tr.isAfterLast(); c_tr.moveToNext()){
-                    tipo = c_tr.getString(c_tr.getColumnIndex(DBTiposRevision.CN_TIPO));
+                    tipo = c_tr.getString(c_tr.getColumnIndex(dbTiposRevision.CN_TIPO));
                     if(tipo.equals(elimdata)) break;
                     i++;
                 }
-                if ((i > DbHelper.MAX_TIPOS_REV) && (elimdata.equals(tipo))) {
+                if ((i > dbHelper.MAX_TIPOS_REV) && (elimdata.equals(tipo))) {
                     managerTiposRevision.eliminar(elimdata);
                     RellenarTipos(managerTiposRevision);
                 }
@@ -135,24 +134,24 @@ public class AddLog extends ActionBarActivity {
     }
 
 
-    private void addlog(TipoLog miTipoLog, DBLogs managerLogs) {
+    private void addlog(tipoLog miTipoLog, dbLogs managerLogs) {
 
         Intent intent = null;
-        DBCar dbc = new DBCar(getApplicationContext());
+        dbCar dbc = new dbCar(getApplicationContext());
         Cursor c_activo = dbc.buscarCocheActivo();
         String matricula = "", marca = "", modelo = "";
         int int_year = 0, int_kms = 0, int_kms_ini = 0, int_itv = 0, int_fecha_ini = 0;
         if (c_activo.moveToFirst() == true) {
-            matricula = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MATRICULA));
-            marca = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MARCA));
-            modelo = c_activo.getString(c_activo.getColumnIndex(DBCar.CN_MODELO));
-            int_year = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_YEAR));
-            int_kms = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_KMS));
-            int_itv = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_ITV));
-            int_kms_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_KMS_INI));
-            int_fecha_ini = c_activo.getInt(c_activo.getColumnIndex(DBCar.CN_FECHA_INI));
+            matricula = c_activo.getString(c_activo.getColumnIndex(dbCar.CN_MATRICULA));
+            marca = c_activo.getString(c_activo.getColumnIndex(dbCar.CN_MARCA));
+            modelo = c_activo.getString(c_activo.getColumnIndex(dbCar.CN_MODELO));
+            int_year = c_activo.getInt(c_activo.getColumnIndex(dbCar.CN_YEAR));
+            int_kms = c_activo.getInt(c_activo.getColumnIndex(dbCar.CN_KMS));
+            int_itv = c_activo.getInt(c_activo.getColumnIndex(dbCar.CN_ITV));
+            int_kms_ini = c_activo.getInt(c_activo.getColumnIndex(dbCar.CN_KMS_INI));
+            int_fecha_ini = c_activo.getInt(c_activo.getColumnIndex(dbCar.CN_FECHA_INI));
         }
-        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, int_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, int_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
         long long_now = funciones.date_a_long(new Date());
         long ahora = funciones.date_a_long(new Date());
         boolean seguir_rellenando = false; // si insertamos un filtro de aceite sin tener aceite tenemos q poder seguir añadiendo
@@ -162,35 +161,35 @@ public class AddLog extends ActionBarActivity {
             if(miTipoLog.getFechalong(miTipoLog) >= ahora) {
                // Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + miTipoLog.getTipo(miTipoLog) + " hecha.", Toast.LENGTH_SHORT).show();
             }
-            if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ACEITE)) {
-                intent = new Intent(AddLog.this, Aceite.class);
+            if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_ACEITE)) {
+                intent = new Intent(addLog.this, aceite.class);
                 intent.putExtra("miTipoLog", miTipoLog);
                 intent.putExtra("miCoche", miCoche);
                 startActivity(intent);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_REV_GENERAL)) {
-                intent = new Intent(AddLog.this, RevGral.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_REV_GENERAL)) {
+                intent = new Intent(addLog.this, revGral.class);
                 intent.putExtra("miTipoLog", miTipoLog);
                 intent.putExtra("miCoche", miCoche);
                 startActivity(intent);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ITV)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_ITV)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_CORREA)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_CORREA)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_BOMBA_AGUA)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_BOMBA_AGUA)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FILTRO_ACEITE)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_FILTRO_ACEITE)) {
                 // Solo podemos agregar cambio de filtro de aceite si tenemos añadido el aceite
-                Cursor c_ac = managerLogs.buscarTipo(TipoLog.TIPO_ACEITE, matricula);
+                Cursor c_ac = managerLogs.buscarTipo(tipoLog.TIPO_ACEITE, matricula);
                 if (c_ac.moveToFirst() == true) {
-                    intent = new Intent(AddLog.this, FiltroAceite.class);
+                    intent = new Intent(addLog.this, filtroAceite.class);
                     intent.putExtra("miTipoLog", miTipoLog);
                     intent.putExtra("miCoche", miCoche);
                     startActivity(intent);
@@ -200,40 +199,40 @@ public class AddLog extends ActionBarActivity {
                     seguir_rellenando = true;
                 }
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FILTRO_GASOLINA)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FILTRO_AIRE)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_FILTRO_AIRE)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_BUJIAS)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_BUJIAS)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_FRENOS)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_FRENOS)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_LIQUIDO_FRENOS)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_LIQUIDO_FRENOS)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_LIMPIAPARABRISAS)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_LIMPIAPARABRISAS)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_LUCES)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_LUCES)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_RUEDAS)) {
-                intent = new Intent(AddLog.this, ListaLogs.class);
+            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_RUEDAS)) {
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
             else { // es un tipo agregado por el usuario
-                intent = new Intent(AddLog.this, ListaLogs.class);
+                intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
             if(!seguir_rellenando) {
@@ -243,7 +242,7 @@ public class AddLog extends ActionBarActivity {
         } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente una revisión de " + miTipoLog.getTipo(miTipoLog), Toast.LENGTH_SHORT).show();
     }
 
-    private void GuardarLog(final DBLogs managerLogs) {
+    private void GuardarLog(final dbLogs managerLogs) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -269,32 +268,32 @@ public class AddLog extends ActionBarActivity {
                 long long_fecha = funciones.string_a_long(txt_date_newlog);
                 Date fecha_newlog = funciones.string_a_date(txt_date_newlog);
 
-                DBCar dbcar = new DBCar(v.getContext());
+                dbCar dbcar = new dbCar(v.getContext());
                 Cursor c = dbcar.buscarCocheActivo();
 
                 String matricula = "";
                 int int_kms = 0;
                 if (c.moveToFirst() == true) {
-                    matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-                    int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
+                    matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
+                    int_kms = c.getInt(c.getColumnIndex(dbCar.CN_KMS));
                 }
 
                 if (long_fecha > funciones.date_a_long(new Date())) {
                     // con NO_REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, NO_CORREA, NO_BOMBAAGUA, NO_FGASOLINA, NO_FAIRE, NO_BUJIAS, NO_EMBRAGUE, matricula, DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, int_kms);
+                    final tipoLog miTipoLog = new tipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, NO_CORREA, NO_BOMBAAGUA, NO_FGASOLINA, NO_FAIRE, NO_BUJIAS, NO_EMBRAGUE, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     addlog(miTipoLog, managerLogs);
-                    if(tipo.equals(TipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
-                        DBCar dbc = new DBCar(getApplicationContext());
+                    if(tipo.equals(tipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
+                        dbCar dbc = new dbCar(getApplicationContext());
                         dbc.ActualizarITVCocheActivo(matricula, long_fecha);
 
                     }
                 }
                 else {
                     // con REALIZADO
-                    final TipoLog miTipoLog = new TipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, NO_CORREA, NO_BOMBAAGUA, NO_FGASOLINA, NO_FAIRE, NO_BUJIAS, NO_EMBRAGUE, matricula, DBLogs.REALIZADO, DBLogs.NO_FMODIFICADA, int_kms);
+                    final tipoLog miTipoLog = new tipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, NO_CORREA, NO_BOMBAAGUA, NO_FGASOLINA, NO_FAIRE, NO_BUJIAS, NO_EMBRAGUE, matricula, dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AddLog.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(addLog.this);
                     builder.setMessage("¿Quiere añadir la última revisión hecha de " + miTipoLog.getTipo(miTipoLog) + "?")
                             .setTitle("Historial")
                             .setCancelable(false)
@@ -309,8 +308,8 @@ public class AddLog extends ActionBarActivity {
                                         public void onClick(DialogInterface dialog, int id_dialog) {
                                             // metodo que se debe implementar Sí
                                             addlog(miTipoLog, managerLogs);
-                                            if(miTipoLog.getTipo(miTipoLog).equals(TipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
-                                                DBCar dbc = new DBCar(getApplicationContext());
+                                            if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
+                                                dbCar dbc = new dbCar(getApplicationContext());
                                                 dbc.ActualizarITVCocheActivo(miTipoLog.getCoche(miTipoLog), miTipoLog.getFechalong(miTipoLog));
                                             }
                                         }
@@ -336,8 +335,8 @@ public class AddLog extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DBLogs managerLogs = new DBLogs(this);
-        DBTiposRevision managerTiposRevision = new DBTiposRevision(this);
+        dbLogs managerLogs = new dbLogs(this);
+        dbTiposRevision managerTiposRevision = new dbTiposRevision(this);
         RellenarTipos(managerTiposRevision);
         SeleccionarTipo(managerTiposRevision);
         GuardarLog(managerLogs);
@@ -363,10 +362,10 @@ public class AddLog extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(AddLog.this);
-            Login.closeFacebookSession(AddLog.this, Login.class);
-            Intent intent = new Intent(AddLog.this, Login.class);
+            usuario u = new usuario();
+            u.logout(addLog.this);
+            login.closeFacebookSession(addLog.this, login.class);
+            Intent intent = new Intent(addLog.this, login.class);
             startActivity(intent);
             finish();
         }

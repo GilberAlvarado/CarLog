@@ -15,12 +15,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBBombaAgua;
-import com.carlog.gilberto.carlog.data.DBFiltroGasolina;
-import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.data.dbFiltroGasolina;
+import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -29,11 +28,11 @@ import java.util.ArrayList;
 /**
  * Created by Gilberto on 30/07/2015.
  */
-public class ModificarFiltroGasolina extends ActionBarActivity {
+public class modificarFiltroGasolina extends ActionBarActivity {
     private Spinner spinner1;
     private Toolbar toolbar;
 
-    private void RellenarTiposFiltroGasolina(DBFiltroGasolina managerFiltroGasolina, TipoLog miTipo) {
+    private void RellenarTiposFiltroGasolina(dbFiltroGasolina managerFiltroGasolina, tipoLog miTipo) {
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_fgasolina);
         text.setText(txt_fecha);
@@ -60,14 +59,14 @@ public class ModificarFiltroGasolina extends ActionBarActivity {
         btn_modificarFFiltroGasolina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ModificarFiltroGasolina.this, AddItv.class);
+                Intent intent = new Intent(modificarFiltroGasolina.this, addItv.class);
                 intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
                 startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_FGASOLINA);
             }
         });
     }
 
-    private void ModificarLog(final DBLogs managerLogs, final DBFiltroGasolina managerFiltroGasolina) {
+    private void ModificarLog(final dbLogs managerLogs, final dbFiltroGasolina managerFiltroGasolina) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_fgasolina);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -76,9 +75,9 @@ public class ModificarFiltroGasolina extends ActionBarActivity {
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fgasolina);
                 String tipo_fgasolina = spinner.getSelectedItem().toString();
 
-                Cursor c = DBFiltroGasolina.buscarFiltroGasolina(tipo_fgasolina);
+                Cursor c = dbFiltroGasolina.buscarFiltroGasolina(tipo_fgasolina);
 
-                int int_fgasolina = AddLog.NO_FGASOLINA; // solo para inicializar
+                int int_fgasolina = addLog.NO_FGASOLINA; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_fgasolina = c.getInt(c.getColumnIndex(managerFiltroGasolina.CN_ID));
@@ -87,7 +86,7 @@ public class ModificarFiltroGasolina extends ActionBarActivity {
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fgasolina);
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(ModificarFiltroGasolina.this, ListaLogs.class);
+                Intent intent = new Intent(modificarFiltroGasolina.this, listaLogs.class);
                 Cursor c_log = managerLogs.buscarLogID(idLog);
                 if (c_log.moveToFirst() == true) {
                     long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
@@ -121,9 +120,9 @@ public class ModificarFiltroGasolina extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DBFiltroGasolina managerFiltroGasolina = new DBFiltroGasolina(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+        dbFiltroGasolina managerFiltroGasolina = new dbFiltroGasolina(contextNew);
+        dbLogs managerLog = new dbLogs(contextNew);
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipo");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         RellenarTiposFiltroGasolina(managerFiltroGasolina, miTipo);
         ChangeFFiltroGasolina(txt_fecha);
@@ -147,10 +146,10 @@ public class ModificarFiltroGasolina extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(ModificarFiltroGasolina.this);
-            Login.closeFacebookSession(ModificarFiltroGasolina.this, Login.class);
-            Intent intent = new Intent(ModificarFiltroGasolina.this, Login.class);
+            usuario u = new usuario();
+            u.logout(modificarFiltroGasolina.this);
+            login.closeFacebookSession(modificarFiltroGasolina.this, login.class);
+            Intent intent = new Intent(modificarFiltroGasolina.this, login.class);
             startActivity(intent);
             finish();
         }

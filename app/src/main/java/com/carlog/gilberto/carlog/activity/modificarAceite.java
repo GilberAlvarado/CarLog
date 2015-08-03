@@ -19,26 +19,25 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBAceite;
-import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.data.dbAceite;
+import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Gilberto on 26/05/2015.
  */
-public class ModificarAceite extends ActionBarActivity {
+public class modificarAceite extends ActionBarActivity {
 
     private Spinner spinner1;
     private Toolbar toolbar;
 
-    private void RellenarTiposAceite(DBAceite managerAceite, TipoLog miTipo) {
+    private void RellenarTiposAceite(dbAceite managerAceite, tipoLog miTipo) {
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_aceite);
         text.setText(txt_fecha);
@@ -65,14 +64,14 @@ public class ModificarAceite extends ActionBarActivity {
         btn_modificarFItv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ModificarAceite.this, AddItv.class);
+                Intent intent = new Intent(modificarAceite.this, addItv.class);
                 intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
                 startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_ACEITE);
             }
         });
     }
 
-    private void ModificarLog(final DBLogs managerLogs, final DBAceite managerAceite) {
+    private void ModificarLog(final dbLogs managerLogs, final dbAceite managerAceite) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_aceite);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -81,9 +80,9 @@ public class ModificarAceite extends ActionBarActivity {
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_aceite);
                 String tipo_aceite = spinner.getSelectedItem().toString();
 
-                Cursor c = DBAceite.buscarTiposAceite(tipo_aceite);
+                Cursor c = dbAceite.buscarTiposAceite(tipo_aceite);
 
-                int int_aceite = AddLog.NO_ACEITE; // solo para inicializar
+                int int_aceite = addLog.NO_ACEITE; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_aceite = c.getInt(c.getColumnIndex(managerAceite.CN_ID));
@@ -93,7 +92,7 @@ public class ModificarAceite extends ActionBarActivity {
                 String datetxt = txtTexto.getText().toString();
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(ModificarAceite.this, ListaLogs.class);
+                Intent intent = new Intent(modificarAceite.this, listaLogs.class);
                 Cursor c_log = managerLogs.buscarLogID(idLog);
                 if (c_log.moveToFirst() == true) {
                     long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
@@ -126,9 +125,9 @@ public class ModificarAceite extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DBAceite managerAceite = new DBAceite(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+        dbAceite managerAceite = new dbAceite(contextNew);
+        dbLogs managerLog = new dbLogs(contextNew);
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipo");
         String txt_fecha = miTipo.getFechatxt(miTipo);
 
         RellenarTiposAceite(managerAceite, miTipo);
@@ -153,10 +152,10 @@ public class ModificarAceite extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(ModificarAceite.this);
-            Login.closeFacebookSession(ModificarAceite.this, Login.class);
-            Intent intent = new Intent(ModificarAceite.this, Login.class);
+            usuario u = new usuario();
+            u.logout(modificarAceite.this);
+            login.closeFacebookSession(modificarAceite.this, login.class);
+            Intent intent = new Intent(modificarAceite.this, login.class);
             startActivity(intent);
             finish();
         }

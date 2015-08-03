@@ -12,35 +12,34 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.activity.MyActivity;
 
 
 /**
  * Created by Gilberto on 20/06/2015.
  */
-public class SimpleDataView extends RelativeLayout {
+public class simpleDataView extends RelativeLayout {
     private String mTitle;
     private String mValue;
     private String mEdit;
     private Drawable mImage;
 
-    public SimpleDataView(Context context) {
+    public simpleDataView(Context context) {
         super(context);
     }
 
-    public SimpleDataView(Context context, AttributeSet attrs) {
+    public simpleDataView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         //get the attributes specified in attrs.xml using the name we included
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SimpleDataView,
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.simpleDataView,
                 0, 0);
 
         try {
             //get the text and colors specified using the names in attrs.xml
-            mTitle = a.getString(R.styleable.SimpleDataView_mytitle);
-            mValue = a.getString(R.styleable.SimpleDataView_myvalue);
-            mEdit = a.getString(R.styleable.SimpleDataView_myEdit);
-            mImage = a.getDrawable(R.styleable.SimpleDataView_image);
+            mTitle = a.getString(R.styleable.simpleDataView_mytitle);
+            mValue = a.getString(R.styleable.simpleDataView_myvalue);
+            mEdit = a.getString(R.styleable.simpleDataView_myEdit);
+            mImage = a.getDrawable(R.styleable.simpleDataView_image);
         } finally {
             a.recycle();
         }
@@ -62,7 +61,7 @@ public class SimpleDataView extends RelativeLayout {
         ((ImageView)this.findViewById(R.id.view_image)).setImageDrawable(mImage);
     }
 
-    public SimpleDataView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public simpleDataView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

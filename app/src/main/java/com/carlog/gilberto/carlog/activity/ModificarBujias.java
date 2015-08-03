@@ -15,12 +15,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBBujias;
-import com.carlog.gilberto.carlog.data.DBFiltroGasolina;
-import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.data.dbBujias;
+import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -29,11 +28,11 @@ import java.util.ArrayList;
 /**
  * Created by Gilberto on 30/07/2015.
  */
-public class ModificarBujias extends ActionBarActivity{
+public class modificarBujias extends ActionBarActivity{
     private Spinner spinner1;
     private Toolbar toolbar;
 
-    private void RellenarTiposBujias(DBBujias managerBujias, TipoLog miTipo) {
+    private void RellenarTiposBujias(dbBujias managerBujias, tipoLog miTipo) {
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_bujias);
         text.setText(txt_fecha);
@@ -60,14 +59,14 @@ public class ModificarBujias extends ActionBarActivity{
         btn_modificarFBujias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ModificarBujias.this, AddItv.class);
+                Intent intent = new Intent(modificarBujias.this, addItv.class);
                 intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
                 startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_BUJIAS);
             }
         });
     }
 
-    private void ModificarLog(final DBLogs managerLogs, final DBBujias managerBujias) {
+    private void ModificarLog(final dbLogs managerLogs, final dbBujias managerBujias) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_bujias);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -76,9 +75,9 @@ public class ModificarBujias extends ActionBarActivity{
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_bujias);
                 String tipo_bujias = spinner.getSelectedItem().toString();
 
-                Cursor c = DBBujias.buscarTiposBujias(tipo_bujias);
+                Cursor c = dbBujias.buscarTiposBujias(tipo_bujias);
 
-                int int_bujias = AddLog.NO_BUJIAS; // solo para inicializar
+                int int_bujias = addLog.NO_BUJIAS; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_bujias = c.getInt(c.getColumnIndex(managerBujias.CN_ID));
@@ -87,7 +86,7 @@ public class ModificarBujias extends ActionBarActivity{
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_bujias);
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(ModificarBujias.this, ListaLogs.class);
+                Intent intent = new Intent(modificarBujias.this, listaLogs.class);
                 Cursor c_log = managerLogs.buscarLogID(idLog);
                 if (c_log.moveToFirst() == true) {
                     long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
@@ -121,9 +120,9 @@ public class ModificarBujias extends ActionBarActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DBBujias managerBujias = new DBBujias(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+        dbBujias managerBujias = new dbBujias(contextNew);
+        dbLogs managerLog = new dbLogs(contextNew);
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipo");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         RellenarTiposBujias(managerBujias, miTipo);
         ChangeFBujias(txt_fecha);
@@ -147,10 +146,10 @@ public class ModificarBujias extends ActionBarActivity{
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(ModificarBujias.this);
-            Login.closeFacebookSession(ModificarBujias.this, Login.class);
-            Intent intent = new Intent(ModificarBujias.this, Login.class);
+            usuario u = new usuario();
+            u.logout(modificarBujias.this);
+            login.closeFacebookSession(modificarBujias.this, login.class);
+            Intent intent = new Intent(modificarBujias.this, login.class);
             startActivity(intent);
             finish();
         }

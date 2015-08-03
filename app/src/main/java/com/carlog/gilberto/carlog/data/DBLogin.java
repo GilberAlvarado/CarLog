@@ -4,14 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.HashMap;
 
 /**
  * Created by Gilberto on 24/07/2015.
  */
-public class DBLogin {
+public class dbLogin {
 
     public static String Table = "login";
 
@@ -21,11 +20,11 @@ public class DBLogin {
     private static final String KEY_UID = "uid";
     private static final String KEY_CREATED_AT = "created_at";
 
-    private DbHelper helper;
+    private dbHelper helper;
     private static SQLiteDatabase db;
 
-    public DBLogin(Context context) {
-        helper = new DbHelper(context);
+    public dbLogin(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
     }
 

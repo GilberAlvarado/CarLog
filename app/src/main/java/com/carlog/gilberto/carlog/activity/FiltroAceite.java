@@ -15,15 +15,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBAceite;
-import com.carlog.gilberto.carlog.data.DBCar;
-import com.carlog.gilberto.carlog.data.DBFiltroAceite;
-import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.data.dbFiltroAceite;
+import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
-import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.negocio.procesarTipos;
+import com.carlog.gilberto.carlog.tiposClases.tipoCoche;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ import java.util.Date;
 /**
  * Created by Gilberto on 22/07/2015.
  */
-public class FiltroAceite extends ActionBarActivity {
+public class filtroAceite extends ActionBarActivity {
 
     public final static String TIPO_1 = "Siempre que cambie el aceite (recomendada)";
     public final static String TIPO_2 = "Cada 2 cambios de aceite";
@@ -41,8 +39,8 @@ public class FiltroAceite extends ActionBarActivity {
     private Toolbar toolbar;
     private Spinner spinner1;
 
-    private void RellenarTiposFiltroAceite(DBFiltroAceite managerFiltroAceite) {
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipoLog");
+    private void RellenarTiposFiltroAceite(dbFiltroAceite managerFiltroAceite) {
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipoLog");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_fil_aceite);
         text.setText(txt_fecha);
@@ -62,7 +60,7 @@ public class FiltroAceite extends ActionBarActivity {
         spinner1.setAdapter(adaptador);
     }
 
-    private void GuardarLog(final Context context, final DBLogs managerLogs, final DBFiltroAceite managerFiltroAceite) {
+    private void GuardarLog(final Context context, final dbLogs managerLogs, final dbFiltroAceite managerFiltroAceite) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_fil_aceite);
 
@@ -72,9 +70,9 @@ public class FiltroAceite extends ActionBarActivity {
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fil_aceite);
                 String tipo_fil_aceite = spinner.getSelectedItem().toString();
 
-                Cursor c = DBFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
+                Cursor c = dbFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
 
-                int int_veces = AddLog.NO_VECES_FIL_ACEITE; // solo para inicializar
+                int int_veces = addLog.NO_VECES_FIL_ACEITE; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
@@ -84,26 +82,26 @@ public class FiltroAceite extends ActionBarActivity {
                 String datetxt = txtTexto.getText().toString();
 
                 //Date fecha = funciones.string_a_date(datetxt);
-                Date fecha = funciones.fecha_mas_dias(new Date(), ProcesarTipos.F_MAX_REV_ACEITE); // da igual la fecha siempre va a poner un año y cuando toque el contador la misma fecha del aceite
+                Date fecha = funciones.fecha_mas_dias(new Date(), procesarTipos.F_MAX_REV_ACEITE); // da igual la fecha siempre va a poner un año y cuando toque el contador la misma fecha del aceite
                 //long long_fecha = funciones.string_a_long(datetxt);
                 long long_fecha = funciones.date_a_long(fecha);
 
-                TipoCoche miCoche = (TipoCoche)getIntent().getExtras().getSerializable("miCoche");
+                tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
-                TipoLog miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), DBLogs.NO_REALIZADO, DBLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+                tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, addLog.NO_ACEITE, int_veces, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
 
 
                 if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                     // Creamos el nuevo futuro log
                     // Se pone como REALIZADO!
-                    miTipoLog = new TipoLog(TipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, AddLog.NO_ACEITE, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, AddLog.NO_REVGRAL, AddLog.NO_CORREA, AddLog.NO_BOMBAAGUA, AddLog.NO_FGASOLINA, AddLog.NO_FAIRE, AddLog.NO_BUJIAS, AddLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), DBLogs.REALIZADO, DBLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+                    miTipoLog = new tipoLog(tipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, addLog.NO_ACEITE, int_veces, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
                 }
 
-                Intent intent = new Intent(FiltroAceite.this, AddLog.class);
+                Intent intent = new Intent(filtroAceite.this, addLog.class);
 
                 managerLogs.insertar(miTipoLog);
                 // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
-                ProcesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), TipoLog.TIPO_ACEITE); // actualizamos fechas
+                procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_ACEITE); // actualizamos fechas
 
                 setResult(Activity.RESULT_OK, intent);
 
@@ -124,8 +122,8 @@ public class FiltroAceite extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Context contextNew = getApplicationContext();
-        DBFiltroAceite managerFiltroAceite = new DBFiltroAceite(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
+        dbFiltroAceite managerFiltroAceite = new dbFiltroAceite(contextNew);
+        dbLogs managerLog = new dbLogs(contextNew);
 
         RellenarTiposFiltroAceite(managerFiltroAceite);
         GuardarLog(contextNew, managerLog, managerFiltroAceite);
@@ -148,10 +146,10 @@ public class FiltroAceite extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(FiltroAceite.this);
-            Login.closeFacebookSession(FiltroAceite.this, Login.class);
-            Intent intent = new Intent(FiltroAceite.this, Login.class);
+            usuario u = new usuario();
+            u.logout(filtroAceite.this);
+            login.closeFacebookSession(filtroAceite.this, login.class);
+            Intent intent = new Intent(filtroAceite.this, login.class);
             startActivity(intent);
             finish();
         }

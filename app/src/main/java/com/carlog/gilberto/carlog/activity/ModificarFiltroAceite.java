@@ -1,6 +1,5 @@
 package com.carlog.gilberto.carlog.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,27 +14,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBFiltroAceite;
-import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
-import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.data.dbFiltroAceite;
+import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Gilberto on 30/07/2015.
  */
-public class ModificarFiltroAceite extends ActionBarActivity {
+public class modificarFiltroAceite extends ActionBarActivity {
     private Toolbar toolbar;
     private Spinner spinner1;
 
-    private void RellenarTiposFiltroAceite(DBFiltroAceite managerFiltroAceite) {
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+    private void RellenarTiposFiltroAceite(dbFiltroAceite managerFiltroAceite) {
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipo");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_fil_aceite);
         text.setText(txt_fecha);
@@ -59,7 +54,7 @@ public class ModificarFiltroAceite extends ActionBarActivity {
         spinner1.setSelection(miTipo.getVecesFilAceite(miTipo)-1);
     }
 
-    private void ModificarLog(final DBLogs managerLogs, final DBFiltroAceite managerFiltroAceite) {
+    private void ModificarLog(final dbLogs managerLogs, final dbFiltroAceite managerFiltroAceite) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_fil_aceite);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -69,9 +64,9 @@ public class ModificarFiltroAceite extends ActionBarActivity {
             String tipo_fil_aceite = spinner.getSelectedItem().toString();
 
             System.out.println("TipoFiltroVeces " + tipo_fil_aceite);
-            Cursor c = DBFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
+            Cursor c = dbFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
 
-            int int_veces = AddLog.NO_ACEITE; // solo para inicializar
+            int int_veces = addLog.NO_ACEITE; // solo para inicializar
 
             if (c.moveToFirst() == true) {
                 int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
@@ -81,7 +76,7 @@ public class ModificarFiltroAceite extends ActionBarActivity {
             String datetxt = txtTexto.getText().toString();
 
             Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-            Intent intent = new Intent(ModificarFiltroAceite.this, ListaLogs.class);
+            Intent intent = new Intent(modificarFiltroAceite.this, listaLogs.class);
             System.out.println("Modificamos el Log con id " + idLog + " por filtro aceite " + int_veces);
             managerLogs.modificarFechaFiltroAceite(idLog, int_veces);
 
@@ -102,8 +97,8 @@ public class ModificarFiltroAceite extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Context contextNew = getApplicationContext();
-        DBFiltroAceite managerFiltroAceite = new DBFiltroAceite(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
+        dbFiltroAceite managerFiltroAceite = new dbFiltroAceite(contextNew);
+        dbLogs managerLog = new dbLogs(contextNew);
 
         RellenarTiposFiltroAceite(managerFiltroAceite);
         ModificarLog(managerLog, managerFiltroAceite);
@@ -126,10 +121,10 @@ public class ModificarFiltroAceite extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(ModificarFiltroAceite.this);
-            Login.closeFacebookSession(ModificarFiltroAceite.this, Login.class);
-            Intent intent = new Intent(ModificarFiltroAceite.this, Login.class);
+            usuario u = new usuario();
+            u.logout(modificarFiltroAceite.this);
+            login.closeFacebookSession(modificarFiltroAceite.this, login.class);
+            Intent intent = new Intent(modificarFiltroAceite.this, login.class);
             startActivity(intent);
             finish();
         }

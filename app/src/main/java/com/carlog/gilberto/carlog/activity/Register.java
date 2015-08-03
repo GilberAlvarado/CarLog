@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 
 import org.json.JSONObject;
@@ -16,7 +16,7 @@ import org.json.JSONObject;
 /**
  * Created by Gilberto on 24/07/2015.
  */
-public class Register extends Activity {
+public class register extends Activity {
 
     private TextView lblGotoLogin;
     private ButtonRectangle btnRegister;
@@ -42,13 +42,13 @@ public class Register extends Activity {
                 String name = inputFullName.getText().toString();
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
-                Usuario usuario = new Usuario();
-                usuario.setOnRegisterUsuario(new Usuario.OnRegisterUsuario() {
+                usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
+                usuario.setOnRegisterUsuario(new com.carlog.gilberto.carlog.tiposClases.usuario.OnRegisterUsuario() {
                     @Override
                     public void onRegisterFinish(JSONObject json, String msg) {
                         registerErrorMsg.setText("");
-                        Intent itemintent = new Intent(Register.this, MyActivity.class);
-                        Register.this.startActivity(itemintent);
+                        Intent itemintent = new Intent(register.this, myActivity.class);
+                        register.this.startActivity(itemintent);
                         finish();
                     }
 
@@ -62,7 +62,7 @@ public class Register extends Activity {
                         registerErrorMsg.setText(msg);
                     }
                 });
-                usuario.register(Register.this, name, email, password, false);
+                usuario.register(register.this, name, email, password, false);
             }
         });
 
@@ -70,8 +70,8 @@ public class Register extends Activity {
         lblGotoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent itemintent = new Intent(Register.this, Login.class);
-                Register.this.startActivity(itemintent);
+                Intent itemintent = new Intent(register.this, login.class);
+                register.this.startActivity(itemintent);
             }
         });
 

@@ -15,12 +15,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBCorrea;
-import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.data.DBRevGral;
+import com.carlog.gilberto.carlog.data.dbCorrea;
+import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -29,11 +28,11 @@ import java.util.ArrayList;
 /**
  * Created by Gilberto on 29/07/2015.
  */
-public class ModificarCorrea extends ActionBarActivity {
+public class modificarCorrea extends ActionBarActivity {
     private Spinner spinner1;
     private Toolbar toolbar;
 
-    private void RellenarTiposCorrea(DBCorrea managerCorrea, TipoLog miTipo) {
+    private void RellenarTiposCorrea(dbCorrea managerCorrea, tipoLog miTipo) {
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_correa);
         text.setText(txt_fecha);
@@ -60,14 +59,14 @@ public class ModificarCorrea extends ActionBarActivity {
         btn_modificarFItv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ModificarCorrea.this, AddItv.class);
+                Intent intent = new Intent(modificarCorrea.this, addItv.class);
                 intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
                 startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_CORREA);
             }
         });
     }
 
-    private void ModificarLog(final DBLogs managerLogs, final DBCorrea managerCorrea) {
+    private void ModificarLog(final dbLogs managerLogs, final dbCorrea managerCorrea) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_correa);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -76,9 +75,9 @@ public class ModificarCorrea extends ActionBarActivity {
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_correa);
                 String tipo_correa = spinner.getSelectedItem().toString();
 
-                Cursor c = DBCorrea.buscarTiposCorrea(tipo_correa);
+                Cursor c = dbCorrea.buscarTiposCorrea(tipo_correa);
 
-                int int_correa = AddLog.NO_CORREA; // solo para inicializar
+                int int_correa = addLog.NO_CORREA; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_correa = c.getInt(c.getColumnIndex(managerCorrea.CN_ID));
@@ -87,7 +86,7 @@ public class ModificarCorrea extends ActionBarActivity {
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_correa);
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(ModificarCorrea.this, ListaLogs.class);
+                Intent intent = new Intent(modificarCorrea.this, listaLogs.class);
                 Cursor c_log = managerLogs.buscarLogID(idLog);
                 if (c_log.moveToFirst() == true) {
                     long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
@@ -121,9 +120,9 @@ public class ModificarCorrea extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DBCorrea managerCorrea = new DBCorrea(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+        dbCorrea managerCorrea = new dbCorrea(contextNew);
+        dbLogs managerLog = new dbLogs(contextNew);
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipo");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         RellenarTiposCorrea(managerCorrea, miTipo);
         ChangeFCorrea(txt_fecha);
@@ -147,10 +146,10 @@ public class ModificarCorrea extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(ModificarCorrea.this);
-            Login.closeFacebookSession(ModificarCorrea.this, Login.class);
-            Intent intent = new Intent(ModificarCorrea.this, Login.class);
+            usuario u = new usuario();
+            u.logout(modificarCorrea.this);
+            login.closeFacebookSession(modificarCorrea.this, login.class);
+            Intent intent = new Intent(modificarCorrea.this, login.class);
             startActivity(intent);
             finish();
         }

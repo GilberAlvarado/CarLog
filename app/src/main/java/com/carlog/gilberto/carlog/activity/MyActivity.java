@@ -2,8 +2,6 @@ package com.carlog.gilberto.carlog.activity;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +9,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-import com.carlog.gilberto.carlog.negocio.CambiarCocheActivo;
-
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -24,24 +19,22 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.carlog.gilberto.carlog.negocio.Notificaciones;
-import com.carlog.gilberto.carlog.negocio.ProcesarTipos;
-import com.carlog.gilberto.carlog.tiposClases.CocheEsNuevo;
+import com.carlog.gilberto.carlog.data.dbCar;
+import com.carlog.gilberto.carlog.data.dbMarcas;
+import com.carlog.gilberto.carlog.negocio.notificaciones;
+import com.carlog.gilberto.carlog.negocio.procesarTipos;
+import com.carlog.gilberto.carlog.tiposClases.cocheEsNuevo;
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
-import com.carlog.gilberto.carlog.data.DBCar;
-import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.data.DBMarcas;
-import com.carlog.gilberto.carlog.data.DBModelos;
+import com.carlog.gilberto.carlog.tiposClases.tipoCoche;
+import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.data.dbModelos;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
-import com.carlog.gilberto.carlog.view.SimpleDataView;
-import com.facebook.LoginActivity;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
+import com.carlog.gilberto.carlog.view.simpleDataView;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -52,7 +45,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class MyActivity extends ActionBarActivity {
+public class myActivity extends ActionBarActivity {
 
     public final static String INICIAL_MARCA = "Marca";
     public final static String INICIAL_YEAR = "Año";
@@ -84,12 +77,12 @@ public class MyActivity extends ActionBarActivity {
         lista_marcas = new ArrayList<String>();
         spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
 
-        DBMarcas dbmarcas = new DBMarcas(getApplicationContext());
+        dbMarcas dbmarcas = new dbMarcas(getApplicationContext());
         Cursor cursor = dbmarcas.buscarMarcas();
 
         int i = 0;
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            String marca = cursor.getString(cursor.getColumnIndex(DBMarcas.CN_MARCA));
+            String marca = cursor.getString(cursor.getColumnIndex(dbMarcas.CN_MARCA));
             lista_marcas.add(marca);
         }
 
@@ -99,11 +92,11 @@ public class MyActivity extends ActionBarActivity {
         spinner_marcas.setAdapter(adaptador);
 
         if (c.moveToFirst() == true) {
-            marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
+            marca = c.getString(c.getColumnIndex(dbCar.CN_MARCA));
             int spinnerPostion = adaptador.getPosition(marca);
             spinner_marcas.setSelection(spinnerPostion);
 
-            SimpleDataView sdv = (SimpleDataView) findViewById(R.id.marca_view);
+            simpleDataView sdv = (simpleDataView) findViewById(R.id.marca_view);
             sdv.setTitle("Marca");
             sdv.setValue(adaptador.getItem(spinnerPostion));
             sdv.setEditInvisible();
@@ -120,24 +113,24 @@ public class MyActivity extends ActionBarActivity {
                 lista_modelos = new ArrayList<String>(); // para borrar los anteriores y no añadir al final
 
                 String marca_seleccionada = spinner_marcas.getSelectedItem().toString();
-                DBMarcas dbmarcas = new DBMarcas(getApplicationContext());
+                dbMarcas dbmarcas = new dbMarcas(getApplicationContext());
                 Cursor c_marcas = dbmarcas.buscarMarcas(marca_seleccionada);
 
                 System.out.println("marca_seleccionada "+marca_seleccionada);
 
                 int id_marca = 0;
                 for (c_marcas.moveToFirst(); !c_marcas.isAfterLast(); c_marcas.moveToNext()) {
-                    id_marca = c_marcas.getInt(c_marcas.getColumnIndex(DBMarcas.CN_ID));
+                    id_marca = c_marcas.getInt(c_marcas.getColumnIndex(dbMarcas.CN_ID));
                 }
 
                 if(id_marca != 0) {
-                    DBModelos dbmodelos = new DBModelos(getApplicationContext());
+                    dbModelos dbmodelos = new dbModelos(getApplicationContext());
                     Cursor cursor = dbmodelos.buscarModelosDeMarca(id_marca);
 
                     lista_modelos.add(INICIAL_MODELO);
                     if (id_marca > 0) { // No es inicial_marca
                         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                            String modelo = cursor.getString(cursor.getColumnIndex(DBModelos.CN_MODELO));
+                            String modelo = cursor.getString(cursor.getColumnIndex(dbModelos.CN_MODELO));
                             lista_modelos.add(modelo);
                         }
                     }
@@ -161,24 +154,24 @@ public class MyActivity extends ActionBarActivity {
         spinner_modelos = (Spinner) findViewById(R.id.cmb_modelo);
 
         String marca_seleccionada = spinner_marcas.getSelectedItem().toString();
-        DBMarcas dbmarcas = new DBMarcas(getApplicationContext());
+        dbMarcas dbmarcas = new dbMarcas(getApplicationContext());
         Cursor c_marcas = dbmarcas.buscarMarcas(marca_seleccionada);
 
         int id_marca = 0;
         for (c_marcas.moveToFirst(); !c_marcas.isAfterLast(); c_marcas.moveToNext()) {
-            id_marca = c_marcas.getInt(c_marcas.getColumnIndex(DBMarcas.CN_ID));
+            id_marca = c_marcas.getInt(c_marcas.getColumnIndex(dbMarcas.CN_ID));
         }
 
         if(marca_seleccionada.equals(INICIAL_MARCA) || marca_seleccionada.isEmpty()) {
             lista_modelos.add(INICIAL_MODELO);
         }
         else {
-            DBModelos dbmodelos = new DBModelos(getApplicationContext());
+            dbModelos dbmodelos = new dbModelos(getApplicationContext());
             Cursor cursor = dbmodelos.buscarModelosDeMarca(id_marca);
 
             lista_modelos.add(INICIAL_MODELO);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                String modelo = cursor.getString(cursor.getColumnIndex(DBModelos.CN_MODELO));
+                String modelo = cursor.getString(cursor.getColumnIndex(dbModelos.CN_MODELO));
                 lista_modelos.add(modelo);
             }
         }
@@ -188,11 +181,11 @@ public class MyActivity extends ActionBarActivity {
         spinner_modelos.setAdapter(adaptador);
 
         if (c.moveToFirst() == true) {
-            modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
+            modelo = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
             int spinnerPostion = adaptador.getPosition(modelo);
             spinner_modelos.setSelection(spinnerPostion);
 
-            SimpleDataView sdv = (SimpleDataView) findViewById(R.id.modelo_view);
+            simpleDataView sdv = (simpleDataView) findViewById(R.id.modelo_view);
             sdv.setTitle("Modelo");
             sdv.setValue(adaptador.getItem(spinnerPostion));
             sdv.setImage(getResources().getDrawable(R.drawable.ic_modelo));
@@ -216,12 +209,12 @@ public class MyActivity extends ActionBarActivity {
         spinner_years.setAdapter(adaptador);
 
         if (c.moveToFirst() == true) {
-            year = String.valueOf(c.getInt(c.getColumnIndex(DBCar.CN_YEAR)));
+            year = String.valueOf(c.getInt(c.getColumnIndex(dbCar.CN_YEAR)));
             int spinnerPostion = adaptador.getPosition(year);
             spinner_years.setSelection(spinnerPostion);
 
-            SimpleDataView sdv = (SimpleDataView) findViewById(R.id.year_view);
-            if(c.getInt(c.getColumnIndex(DBCar.CN_YEAR)) != MyActivity.NO_YEARS) {
+            simpleDataView sdv = (simpleDataView) findViewById(R.id.year_view);
+            if(c.getInt(c.getColumnIndex(dbCar.CN_YEAR)) != myActivity.NO_YEARS) {
                 sdv.setTitle("Año");
                 sdv.setValue(adaptador.getItem(spinnerPostion));
                 sdv.setImage(getResources().getDrawable(R.drawable.ic_year));
@@ -243,24 +236,24 @@ public class MyActivity extends ActionBarActivity {
         RellenarYears(c);
 
         if (c.moveToFirst() == true) {
-            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-            long_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
-            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
-            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+            matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
+            int_kms = c.getInt(c.getColumnIndex(dbCar.CN_KMS));
+            long_itv = c.getInt(c.getColumnIndex(dbCar.CN_ITV));
+            int_kms_ini = c.getInt(c.getColumnIndex(dbCar.CN_KMS_INI));
+            int_fecha_ini = c.getInt(c.getColumnIndex(dbCar.CN_FECHA_INI));
             kms = String.valueOf(int_kms);
             int_kms_anterior = int_kms;
             itv = funciones.long_a_string(long_itv);
         }
 
-        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.matricula_view);
+        simpleDataView sdv = (simpleDataView) findViewById(R.id.matricula_view);
         sdv.setTitle("Matrícula");
         sdv.setValue(matricula);
         sdv.setEdit(matricula);
         sdv.setEditInvisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_matricula));
 
-        sdv = (SimpleDataView) findViewById(R.id.kms_view);
+        sdv = (simpleDataView) findViewById(R.id.kms_view);
         sdv.setTitle("Nº kms");
         sdv.setValue(kms);
         sdv.setEdit(kms);
@@ -268,7 +261,7 @@ public class MyActivity extends ActionBarActivity {
         sdv.setImage(getResources().getDrawable(R.drawable.ic_kms));
 
         fechaITV = funciones.string_a_date(itv);
-        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+        sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
         sdv.setTitle("Fecha ITV");
         sdv.setValue(itv);
         FloatingActionButton button_addItv = (FloatingActionButton) findViewById(R.id.button_additv);
@@ -284,58 +277,58 @@ public class MyActivity extends ActionBarActivity {
     }
 
 
-    public void procesado_revisiones(DBLogs dbLogs, Context context) {
+    public void procesado_revisiones(dbLogs dbLogs, Context context) {
         /////////////////// PROCESAR ACEITE
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ACEITE);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ACEITE);
         /////////////////// PROCESAR FILTRO ACEITE
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_ACEITE);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_ACEITE);
         /////////////////// PROCESAR REV. GRAL.
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_REV_GENERAL);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_REV_GENERAL);
         /////////////////// PROCESAR CORREA DIST.
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_CORREA);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_CORREA);
         /////////////////// PROCESAR BOMBA AGUA
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BOMBA_AGUA);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BOMBA_AGUA);
         /////////////////// PROCESAR ITV
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_ITV);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ITV);
         /////////////////// PROCESAR FILTRO GASOLINA
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_GASOLINA);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_GASOLINA);
         /////////////////// PROCESAR FILTRO AIRE
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FILTRO_AIRE);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_AIRE);
         /////////////////// PROCESAR BUJIAS
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_BUJIAS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BUJIAS);
         /////////////////// PROCESAR LIMPIAPARABRISAS
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIMPIAPARABRISAS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIMPIAPARABRISAS);
         /////////////////// PROCESAR LÍQUIDO DE FRENOS
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LIQUIDO_FRENOS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIQUIDO_FRENOS);
         /////////////////// PROCESAR LÍQUIDO FRENOS
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_FRENOS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FRENOS);
         /////////////////// PROCESAR RUEDAS
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_RUEDAS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_RUEDAS);
         /////////////////// PROCESAR LUCES
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_LUCES);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LUCES);
         /////////////////// PROCESAR EMBRAGUE
-        ProcesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, TipoLog.TIPO_EMBRAGUE);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_EMBRAGUE);
         // De momento las tipo personalizadas no se procesan,  sólo se avisa en su fecha
 
     }
 
     private void procesar(Context context) {
-        DBCar dbcar = new DBCar(context);
+        dbCar dbcar = new dbCar(context);
         Cursor c = dbcar.buscarCocheActivo();
 
         if (c.moveToFirst() == true) {
-            matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-            marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
-            modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
-            int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
-            int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-            long_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
-            int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
-            int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+            matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
+            marca = c.getString(c.getColumnIndex(dbCar.CN_MARCA));
+            modelo = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
+            int_year = c.getInt(c.getColumnIndex(dbCar.CN_YEAR));
+            int_kms = c.getInt(c.getColumnIndex(dbCar.CN_KMS));
+            long_itv = c.getInt(c.getColumnIndex(dbCar.CN_ITV));
+            int_kms_ini = c.getInt(c.getColumnIndex(dbCar.CN_KMS_INI));
+            int_fecha_ini = c.getInt(c.getColumnIndex(dbCar.CN_FECHA_INI));
         }
 
         // Aunque no hagamos cambios se procesa siempre porque podemos haber eliminado logs o editado o marcados como realizados y se deben recalcular al mostrar
-        DBLogs dbLogs= new DBLogs(context);
+        dbLogs dbLogs= new com.carlog.gilberto.carlog.data.dbLogs(context);
 
         procesado_revisiones(dbLogs, context);
     }
@@ -351,26 +344,26 @@ public class MyActivity extends ActionBarActivity {
         btn_siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyActivity.this, ListaLogs.class);
+                Intent intent = new Intent(myActivity.this, listaLogs.class);
 
                 boolean leidos = LeerDatosPantalla();
-                DBCar dbcar = new DBCar(context);
+                dbCar dbcar = new dbCar(context);
 
                 if (comprobaciones(EditarCoche) && leidos) {
                     dbcar.ActualizarTodosCocheNOActivo(); // Nos aseguramos de que ponemos todos los coches a inactivos para marcar como activo el nuevo
                     if(!EditarCoche) { // Si no estamos editando es nuevo
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
+                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
                     } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
+                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
-                        TipoCoche miCoche = new TipoCoche(matricula, marca, modelo, DBCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, TipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                     }
 
@@ -395,35 +388,35 @@ public class MyActivity extends ActionBarActivity {
     }
 
     public void VaciarPantalla() {
-        CocheEsNuevo.getInstance().coche_es_nuevo = 1;
+        cocheEsNuevo.getInstance().coche_es_nuevo = 1;
 
-        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.matricula_view);
-        sdv.setTitle(MyActivity.INICIAL_MATRICULA);
+        simpleDataView sdv = (simpleDataView) findViewById(R.id.matricula_view);
+        sdv.setTitle(myActivity.INICIAL_MATRICULA);
         sdv.setValue("");
         sdv.setEdit("");
-        sdv.setEditHint(MyActivity.INICIAL_MATRICULA);
+        sdv.setEditHint(myActivity.INICIAL_MATRICULA);
         sdv.setEditVisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_matricula));
 
-        sdv = (SimpleDataView) findViewById(R.id.kms_view);
-        sdv.setTitle(MyActivity.INICIAL_KMS);
+        sdv = (simpleDataView) findViewById(R.id.kms_view);
+        sdv.setTitle(myActivity.INICIAL_KMS);
         sdv.setValue("");
         sdv.setEdit("");
-        sdv.setEditHint(MyActivity.INICIAL_KMS);
+        sdv.setEditHint(myActivity.INICIAL_KMS);
         sdv.setEditVisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_kms));
 
-        sdv = (SimpleDataView) findViewById(R.id.year_view);
+        sdv = (simpleDataView) findViewById(R.id.year_view);
         sdv.setVisibility(View.GONE);
 
-        sdv = (SimpleDataView) findViewById(R.id.marca_view);
+        sdv = (simpleDataView) findViewById(R.id.marca_view);
         sdv.setVisibility(View.GONE);
 
-        sdv = (SimpleDataView) findViewById(R.id.modelo_view);
+        sdv = (simpleDataView) findViewById(R.id.modelo_view);
         sdv.setVisibility(View.GONE);
 
-        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
-        sdv.setTitle(MyActivity.INICIAL_ITV);
+        sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
+        sdv.setTitle(myActivity.INICIAL_ITV);
         sdv.setValue("");
         sdv.setEdit("");
         sdv.setLos2Invisible();
@@ -452,7 +445,7 @@ public class MyActivity extends ActionBarActivity {
         modelo = spinner_modelo.getSelectedItem().toString();
         System.out.println(modelo);
 
-        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.matricula_view);
+        simpleDataView sdv = (simpleDataView) findViewById(R.id.matricula_view);
         EditText et = sdv.getTextEditLeerPantalla();
         matricula = et.getText().toString().toUpperCase();
         System.out.println(matricula);
@@ -463,7 +456,7 @@ public class MyActivity extends ActionBarActivity {
         if(year.equals(INICIAL_YEAR)) int_year = NO_YEARS;
         else int_year = Integer.parseInt(year);
 
-        sdv = (SimpleDataView) findViewById(R.id.kms_view);
+        sdv = (simpleDataView) findViewById(R.id.kms_view);
         et = sdv.getTextEditLeerPantalla();
         kms = et.getText().toString();
         if(kms.isEmpty() || kms.equals(INICIAL_KMS)) int_kms = NO_KMS;
@@ -471,7 +464,7 @@ public class MyActivity extends ActionBarActivity {
             try {
                 int_kms = Integer.parseInt(kms);
             } catch(NumberFormatException nfe) {
-                Toast.makeText(MyActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
                 ok = false;
                 return ok;
             }
@@ -480,7 +473,7 @@ public class MyActivity extends ActionBarActivity {
 
         System.out.println(kms);
 
-        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+        sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
         itv = sdv.getValue();
         if(!itv.isEmpty()) {
             fechaITV = funciones.string_a_date(itv);
@@ -488,7 +481,7 @@ public class MyActivity extends ActionBarActivity {
         }
         else {
             fechaITV = new Date(0);
-            long_itv = MyActivity.NO_ITV;
+            long_itv = myActivity.NO_ITV;
         }
         return ok;
     }
@@ -508,7 +501,7 @@ public class MyActivity extends ActionBarActivity {
         iv.setVisibility(View.GONE);
 
         // Los no obligatorios debemos comprobar que se hayan añadido (luego no se van a poder modificar)
-        if (int_year != MyActivity.NO_KMS) {
+        if (int_year != myActivity.NO_KMS) {
             spinner_years.setVisibility(View.GONE);
             iv = (ImageView) findViewById(R.id.view_image_cmb_year);
             iv.setVisibility(View.GONE);
@@ -523,11 +516,11 @@ public class MyActivity extends ActionBarActivity {
             try {
                 Integer mykms = Integer.parseInt(kms);
                 if (mykms < int_kms_anterior) {
-                    Toast.makeText(MyActivity.this, "Ha introducido un número de kms menor que el anterior.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(myActivity.this, "Ha introducido un número de kms menor que el anterior.", Toast.LENGTH_LONG).show();
                     ok = false;
                 }
             } catch (NumberFormatException nfe) {
-                Toast.makeText(MyActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
                 ok = false;
             }
         }
@@ -537,11 +530,11 @@ public class MyActivity extends ActionBarActivity {
                 Calendar calen = Calendar.getInstance();
                 Integer hoy = calen.get(Calendar.YEAR);
                 if (myyear < 1900 || (myyear > hoy)) {
-                    Toast.makeText(MyActivity.this, "Ha de introducir un año válido.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(myActivity.this, "Ha de introducir un año válido.", Toast.LENGTH_LONG).show();
                     ok = false;
                 }
             } catch (NumberFormatException nfe) {
-                Toast.makeText(MyActivity.this, "Ha de introducir un año válido.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, "Ha de introducir un año válido.", Toast.LENGTH_LONG).show();
                 ok = false;
             }
         }
@@ -550,13 +543,13 @@ public class MyActivity extends ActionBarActivity {
         if(ok) {
             // Los campos marca, modelo y nº de kilometros deben de ser obligatorios
             if (TextUtils.isEmpty(matricula) || matricula.equals(INICIAL_MATRICULA)) {
-                Toast.makeText(MyActivity.this, "Ha de introducir la matrícula.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, "Ha de introducir la matrícula.", Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(marca) || marca.equals(INICIAL_MARCA)) {
-                Toast.makeText(MyActivity.this, "Ha de introducir la marca.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, "Ha de introducir la marca.", Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(modelo) || modelo.equals(INICIAL_MODELO)) {
-                Toast.makeText(MyActivity.this, "Ha de introducir el modelo.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, "Ha de introducir el modelo.", Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(kms)) {
-                Toast.makeText(MyActivity.this, "Ha de introducir el nº de kilómetros.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, "Ha de introducir el nº de kilómetros.", Toast.LENGTH_LONG).show();
             } else {
                 return true;
             }
@@ -569,7 +562,7 @@ public class MyActivity extends ActionBarActivity {
         btn_addItv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyActivity.this, AddItv.class);
+                Intent intent = new Intent(myActivity.this, addItv.class);
                 intent.putExtra("fechaITV", fechaITV);
                 startActivityForResult(intent, PETICION_ACTIVITY_ADDITV);
             }
@@ -579,7 +572,7 @@ public class MyActivity extends ActionBarActivity {
     private void addCarOrShowLogs() {
         Context context = getApplicationContext();
 
-        DBCar dbcar = new DBCar(context);
+        dbCar dbcar = new dbCar(context);
         Cursor c = dbcar.buscarCocheActivo();
 
         Boolean CocheNuevo = false;
@@ -616,14 +609,14 @@ public class MyActivity extends ActionBarActivity {
             }
 
             if (c.moveToFirst() == true) {
-                matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
-                marca = c.getString(c.getColumnIndex(DBCar.CN_MARCA));
-                modelo = c.getString(c.getColumnIndex(DBCar.CN_MODELO));
-                int_year = c.getInt(c.getColumnIndex(DBCar.CN_YEAR));
-                int_kms = c.getInt(c.getColumnIndex(DBCar.CN_KMS));
-                long_itv = c.getInt(c.getColumnIndex(DBCar.CN_ITV));
-                int_kms_ini = c.getInt(c.getColumnIndex(DBCar.CN_KMS_INI));
-                int_fecha_ini = c.getInt(c.getColumnIndex(DBCar.CN_FECHA_INI));
+                matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
+                marca = c.getString(c.getColumnIndex(dbCar.CN_MARCA));
+                modelo = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
+                int_year = c.getInt(c.getColumnIndex(dbCar.CN_YEAR));
+                int_kms = c.getInt(c.getColumnIndex(dbCar.CN_KMS));
+                long_itv = c.getInt(c.getColumnIndex(dbCar.CN_ITV));
+                int_kms_ini = c.getInt(c.getColumnIndex(dbCar.CN_KMS_INI));
+                int_fecha_ini = c.getInt(c.getColumnIndex(dbCar.CN_FECHA_INI));
             }
 
             RellenarMarcas(c);
@@ -640,7 +633,7 @@ public class MyActivity extends ActionBarActivity {
             addItv();
         }
         else {
-            Intent intent = new Intent(MyActivity.this, ListaLogs.class);
+            Intent intent = new Intent(myActivity.this, listaLogs.class);
             procesar(context);
             startActivity(intent);
             finish();
@@ -652,8 +645,8 @@ public class MyActivity extends ActionBarActivity {
     private void comprobarNotificaciones() {
         int comprobacionIntervaloSegundos = 10;
         PendingIntent pendingIntent;
-        Intent myIntent = new Intent(MyActivity.this, Notificaciones.class);
-        pendingIntent = PendingIntent.getService(MyActivity.this, 0, myIntent, 0);
+        Intent myIntent = new Intent(myActivity.this, notificaciones.class);
+        pendingIntent = PendingIntent.getService(myActivity.this, 0, myIntent, 0);
         AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -668,8 +661,8 @@ public class MyActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String getIdFacebook = Login.getIdFacebook(this);
-        Usuario usuario = new Usuario();
+        String getIdFacebook = login.getIdFacebook(this);
+        usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
         System.out.println("MyACTIVITY "+ usuario.isUserLoggedIn(this) + " " + getIdFacebook);
         if(usuario.isUserLoggedIn(this) || (getIdFacebook != null)) {
             System.out.println("Logueado");
@@ -681,7 +674,7 @@ public class MyActivity extends ActionBarActivity {
         }
         else {
             System.out.println("No Logueado");
-            Intent intent = new Intent(MyActivity.this, Login.class);
+            Intent intent = new Intent(myActivity.this, login.class);
             startActivity(intent);
             finish();
         }
@@ -691,11 +684,11 @@ public class MyActivity extends ActionBarActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
-        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.kms_view);
+        simpleDataView sdv = (simpleDataView) findViewById(R.id.kms_view);
         outState.putString("EditKms", sdv.getmEdit());
-        sdv = (SimpleDataView) findViewById(R.id.matricula_view);
+        sdv = (simpleDataView) findViewById(R.id.matricula_view);
         outState.putString("EditMatricula", sdv.getmEdit());
-        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+        sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
         outState.putString("NoEditItv", sdv.getValue());
     }
 
@@ -703,11 +696,11 @@ public class MyActivity extends ActionBarActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState){
         super.onRestoreInstanceState(savedInstanceState);
 
-        SimpleDataView sdv = (SimpleDataView) findViewById(R.id.kms_view);
+        simpleDataView sdv = (simpleDataView) findViewById(R.id.kms_view);
         String kms_restore = savedInstanceState.getString("EditKms");
         sdv.setEdit(kms_restore);
 
-        sdv = (SimpleDataView) findViewById(R.id.matricula_view);
+        sdv = (simpleDataView) findViewById(R.id.matricula_view);
         String matricula_restore = savedInstanceState.getString("EditMatricula");
         sdv.setEdit(matricula_restore);
 
@@ -718,7 +711,7 @@ public class MyActivity extends ActionBarActivity {
             sdv.setEditHint("Nº Kms");
         }*/
         String itv_restore = savedInstanceState.getString("NoEditItv");
-        sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+        sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
         sdv.setValue(itv_restore);
     }
 
@@ -742,14 +735,14 @@ public class MyActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            if (Login.getIdFacebook(this) == null){
-                Login.goToLoginScreen(this);
-                Usuario u = new Usuario();
-                u.logout(MyActivity.this);
-                Intent intent = new Intent(MyActivity.this, Login.class);
+            if (login.getIdFacebook(this) == null){
+                login.goToLoginScreen(this);
+                usuario u = new usuario();
+                u.logout(myActivity.this);
+                Intent intent = new Intent(myActivity.this, login.class);
                 startActivity(intent);
             } else {
-                Login.closeFacebookSession(this, Login.class);
+                login.closeFacebookSession(this, login.class);
             }
             finish();
         }
@@ -767,7 +760,7 @@ public class MyActivity extends ActionBarActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     String itv_string = data.getExtras().getString("itv_string");
                     System.out.println("itv stringgg "+itv_string);
-                    SimpleDataView sdv = (SimpleDataView) findViewById(R.id.fechaitv_view);
+                    simpleDataView sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
                     sdv.setTitle("Fecha ITV");
                     sdv.setValue(itv_string);
                     sdv.setEditInvisible();

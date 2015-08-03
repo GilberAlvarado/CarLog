@@ -15,26 +15,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBAceite;
-import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.data.DBRevGral;
+import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.data.dbRevGral;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Gilberto on 16/07/2015.
  */
-public class ModificarRevGral extends ActionBarActivity {
+public class modificarRevGral extends ActionBarActivity {
     private Spinner spinner1;
     private Toolbar toolbar;
 
-    private void RellenarTiposRevGral(DBRevGral managerRevGral, TipoLog miTipo) {
+    private void RellenarTiposRevGral(dbRevGral managerRevGral, tipoLog miTipo) {
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_revgral);
         text.setText(txt_fecha);
@@ -61,14 +59,14 @@ public class ModificarRevGral extends ActionBarActivity {
         btn_modificarFItv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ModificarRevGral.this, AddItv.class);
+                Intent intent = new Intent(modificarRevGral.this, addItv.class);
                 intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
                 startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_REVGRAL);
             }
         });
     }
 
-    private void ModificarLog(final DBLogs managerLogs, final DBRevGral managerRevGral) {
+    private void ModificarLog(final dbLogs managerLogs, final dbRevGral managerRevGral) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_revgral);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -77,9 +75,9 @@ public class ModificarRevGral extends ActionBarActivity {
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_revgral);
                 String tipo_revgral = spinner.getSelectedItem().toString();
 
-                Cursor c = DBRevGral.buscarTiposRevGral(tipo_revgral);
+                Cursor c = dbRevGral.buscarTiposRevGral(tipo_revgral);
 
-                int int_revgral = AddLog.NO_REVGRAL; // solo para inicializar
+                int int_revgral = addLog.NO_REVGRAL; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_revgral = c.getInt(c.getColumnIndex(managerRevGral.CN_ID));
@@ -88,7 +86,7 @@ public class ModificarRevGral extends ActionBarActivity {
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_revgral);
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(ModificarRevGral.this, ListaLogs.class);
+                Intent intent = new Intent(modificarRevGral.this, listaLogs.class);
                 Cursor c_log = managerLogs.buscarLogID(idLog);
                 if (c_log.moveToFirst() == true) {
                     long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
@@ -122,9 +120,9 @@ public class ModificarRevGral extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DBRevGral managerRevGral = new DBRevGral(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+        dbRevGral managerRevGral = new dbRevGral(contextNew);
+        dbLogs managerLog = new dbLogs(contextNew);
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipo");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         RellenarTiposRevGral(managerRevGral, miTipo);
         ChangeFRevGral(txt_fecha);
@@ -148,10 +146,10 @@ public class ModificarRevGral extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(ModificarRevGral.this);
-            Login.closeFacebookSession(ModificarRevGral.this, Login.class);
-            Intent intent = new Intent(ModificarRevGral.this, Login.class);
+            usuario u = new usuario();
+            u.logout(modificarRevGral.this);
+            login.closeFacebookSession(modificarRevGral.this, login.class);
+            Intent intent = new Intent(modificarRevGral.this, login.class);
             startActivity(intent);
             finish();
         }

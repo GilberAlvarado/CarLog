@@ -2,7 +2,6 @@ package com.carlog.gilberto.carlog.formats;
 
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,14 +10,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.activity.Login;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -27,7 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-public class Utilities {
+public class utilities {
 
     public static final int GALLERY_INTENT=415;
     public static final int CAMERA_INTENT=416;
@@ -50,7 +47,7 @@ public class Utilities {
     }
 
     public static void selectImage (final Activity activity){
-        final CharSequence[] items = { activity.getString(R.string.take_picture), activity.getString(R.string.gallery_picture), activity.getString(R.string.cancel)};
+        final CharSequence[] items = { activity.getString(R.string.gallery_picture), activity.getString(R.string.take_picture), activity.getString(R.string.cancel)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(activity.getString(R.string.select_picture));

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * Created by Gilberto on 29/07/2015.
  */
-public class DBCorrea {
+public class dbCorrea {
     public static final String TABLE_NAME = "correa";
 
     public final static String TIPO_80K_KM = "80 mil kms (recomendada)";
@@ -26,11 +26,11 @@ public class DBCorrea {
             + CN_KMS + " int not null);";
 
 
-    private DbHelper helper;
+    private dbHelper helper;
     private static SQLiteDatabase db;
 
-    public DBCorrea(Context context) {
-        helper = new DbHelper(context);
+    public dbCorrea(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
 
 

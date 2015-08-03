@@ -18,10 +18,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.negocio.Notificaciones;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.data.DBTiposRevision;
+import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.negocio.notificaciones;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.data.dbTiposRevision;
 import com.carlog.gilberto.carlog.formats.funciones;
 
 import java.util.Date;
@@ -120,23 +120,23 @@ public class miAdaptadorLog extends ArrayAdapter {
 
         // Transfer the stock data from the data object
         // to the view objects
-        TipoLog miLog = (TipoLog) datos.get(position);
-        String tipo_log = miLog.getTipo((TipoLog) datos.get(position));
+        tipoLog miLog = (tipoLog) datos.get(position);
+        String tipo_log = miLog.getTipo((tipoLog) datos.get(position));
 
-        DBTiposRevision dbtr = new DBTiposRevision(getContext());
+        dbTiposRevision dbtr = new dbTiposRevision(getContext());
         Cursor c_img = dbtr.buscarTipo(tipo_log);
         String img = "";
         if (c_img.moveToFirst() == true) {
-            img = c_img.getString(c_img.getColumnIndex(DBTiposRevision.CN_IMG));
+            img = c_img.getString(c_img.getColumnIndex(dbTiposRevision.CN_IMG));
         }
         int resID = getContext().getResources().getIdentifier(img, "drawable", getContext().getPackageName());
 
-        sqView.tipo.setText(miLog.getTipo((TipoLog) datos.get(position)));
-        sqView.fecha.setText(miLog.getFechatxt((TipoLog) datos.get(position)));
+        sqView.tipo.setText(miLog.getTipo((tipoLog) datos.get(position)));
+        sqView.fecha.setText(miLog.getFechatxt((tipoLog) datos.get(position)));
         sqView.img_tipo_log.setImageBitmap(getRoundedShape(decodeFile(getContext(), resID), 200));
 
-        if(miLog.getRealizado((TipoLog) datos.get(position)) == DBLogs.NO_REALIZADO) {
-            if (miLog.getFechalong((TipoLog) datos.get(position)) <= funciones.date_a_long(funciones.fecha_mas_dias(new Date(), Notificaciones.DIAS_SEMANA))) {
+        if(miLog.getRealizado((tipoLog) datos.get(position)) == dbLogs.NO_REALIZADO) {
+            if (miLog.getFechalong((tipoLog) datos.get(position)) <= funciones.date_a_long(funciones.fecha_mas_dias(new Date(), notificaciones.DIAS_SEMANA))) {
                 sqView.tipo.setTextColor(Color.RED);
                 sqView.fecha.setTextColor(Color.RED);
                 sqView.tipo.setTypeface(null, Typeface.BOLD);
@@ -149,7 +149,7 @@ public class miAdaptadorLog extends ArrayAdapter {
                 sqView.fecha.setTypeface(null, Typeface.NORMAL);
             }
         }
-        else if(miLog.getRealizado((TipoLog) datos.get(position)) == DBLogs.REALIZADO) {
+        else if(miLog.getRealizado((tipoLog) datos.get(position)) == dbLogs.REALIZADO) {
             sqView.tipo.setTextColor(Color.GREEN);
             sqView.fecha.setTextColor(Color.GREEN);
             sqView.tipo.setTypeface(null, Typeface.BOLD);

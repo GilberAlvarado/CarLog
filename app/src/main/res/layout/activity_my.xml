@@ -36,7 +36,7 @@
                         android:orientation="horizontal"
                         android:layout_margin="8sp">
 
-                        <com.carlog.gilberto.carlog.view.SimpleDataView
+                        <com.carlog.gilberto.carlog.view.simpleDataView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/matricula_view"
@@ -46,7 +46,7 @@
                             android:padding="4sp"
                             android:layout_weight="2"/>
 
-                        <com.carlog.gilberto.carlog.view.SimpleDataView
+                        <com.carlog.gilberto.carlog.view.simpleDataView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/kms_view"
@@ -68,7 +68,7 @@
                         android:layout_margin="8sp">
 
 
-                        <com.carlog.gilberto.carlog.view.SimpleDataView
+                        <com.carlog.gilberto.carlog.view.simpleDataView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/marca_view"
@@ -78,7 +78,7 @@
                             android:padding="4sp"
                             android:layout_weight="2"/>
 
-                        <com.carlog.gilberto.carlog.view.SimpleDataView
+                        <com.carlog.gilberto.carlog.view.simpleDataView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/modelo_view"
@@ -173,7 +173,7 @@
                             android:elevation="3dp"/>
 
 
-                        <com.carlog.gilberto.carlog.view.SimpleDataView
+                        <com.carlog.gilberto.carlog.view.simpleDataView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/year_view"
@@ -183,7 +183,7 @@
                             android:padding="4sp"
                             android:layout_weight="5"/>
 
-                        <com.carlog.gilberto.carlog.view.SimpleDataView
+                        <com.carlog.gilberto.carlog.view.simpleDataView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/fechaitv_view"

@@ -17,9 +17,9 @@
         android:theme="@style/AppTheme" >
         <meta-data android:value="@string/facebook_app_id" android:name="com.facebook.sdk.ApplicationId"/>
         <activity
-            android:name=".activity.MyActivity"
+            android:name=".activity.myActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -30,154 +30,154 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ListaLogs"
+            android:name=".activity.listaLogs"
             android:label="ListaLogs" >
         </activity>
         <activity
-            android:name=".activity.Login"
+            android:name=".activity.login"
             android:label="Login" >
         </activity>
         <activity
-            android:name=".activity.Register"
+            android:name=".activity.register"
             android:label="Register" >
         </activity>
         <activity
-            android:name=".activity.AddLog"
+            android:name=".activity.addLog"
             android:label="@string/title_activity_add_log"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.Aceite"
+            android:name=".activity.aceite"
             android:label="@string/title_activity_aceite"
-            android:parentActivityName=".activity.AddLog" >
+            android:parentActivityName=".activity.addLog" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.AddLog" />
         </activity>
         <activity
-            android:name=".activity.FiltroAceite"
+            android:name=".activity.filtroAceite"
             android:label="@string/title_activity_fil_aceite"
-            android:parentActivityName=".activity.AddLog" >
+            android:parentActivityName=".activity.addLog" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.AddLog" />
         </activity>
         <activity
-            android:name=".activity.RevGral"
+            android:name=".activity.revGral"
             android:label="@string/title_activity_revgral"
-            android:parentActivityName=".activity.AddLog" >
+            android:parentActivityName=".activity.addLog" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.AddLog" />
         </activity>
         <activity
-            android:name=".activity.ModificarAceite"
+            android:name=".activity.modificarAceite"
             android:label="@string/title_activity_modificaraceite"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.ModificarRevGral"
+            android:name=".activity.modificarRevGral"
             android:label="@string/title_activity_modificarrevgral"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.ModificarItv"
+            android:name=".activity.modificarItv"
             android:label="@string/title_activity_modificaritv"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.ModificarCorrea"
+            android:name=".activity.modificarCorrea"
             android:label="@string/title_activity_modificarcorrea"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.ModificarBombaAgua"
+            android:name=".activity.modificarBombaAgua"
             android:label="@string/title_activity_modificarbombaagua"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.ModificarFiltroGasolina"
+            android:name=".activity.modificarFiltroGasolina"
             android:label="@string/title_activity_modificarfgasolina"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.ModificarFiltroAire"
+            android:name=".activity.modificarFiltroAire"
             android:label="@string/title_activity_modificarfaire"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.ModificarBujias"
+            android:name=".activity.modificarBujias"
             android:label="@string/title_activity_modificarbujias"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.ModificarEmbrague"
+            android:name=".activity.modificarEmbrague"
             android:label="@string/title_activity_modificarEmbrague"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.ModificarFiltroAceite"
+            android:name=".activity.modificarFiltroAceite"
             android:label="@string/title_activity_modificarEmbrague"
-            android:parentActivityName=".activity.ListaLogs" >
+            android:parentActivityName=".activity.listaLogs" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
-            android:name=".activity.AddItv"
+            android:name=".activity.addItv"
             android:label="@string/title_activity_additv"
-            android:parentActivityName=".activity.MyActivity" >
+            android:parentActivityName=".activity.myActivity" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MyActivity" />
         </activity>
         <activity android:name="com.facebook.LoginActivity" />
-        <service android:name=".negocio.Notificaciones" />
+        <service android:name=".negocio.notificaciones" />
     </application>
 
 </manifest>

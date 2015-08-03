@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * Created by Gilberto on 02/06/2015.
  */
-public class DBMarcas {
+public class dbMarcas {
     public static final String TABLE_NAME = "marcas";
 
     public static final String CN_ID = "_id";
@@ -22,11 +22,11 @@ public class DBMarcas {
             + CN_IMG + " text not null);";
 
 
-    private DbHelper helper;
+    private dbHelper helper;
     private static SQLiteDatabase db;
 
-    public DBMarcas(Context context) {
-        helper = new DbHelper(context);
+    public dbMarcas(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
 
 

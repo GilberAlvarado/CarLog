@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * Created by Gilberto on 16/05/2015.
  */
-public class DBTiposRevision {
+public class dbTiposRevision {
     public static final String TABLE_NAME = "tiposrevision";
 
     public static final String CN_TIPO = "tipo";
@@ -18,11 +18,11 @@ public class DBTiposRevision {
             + CN_TIPO + " text primary key,"
             + CN_IMG + " text not null);";
 
-    private DbHelper helper;
+    private dbHelper helper;
     private SQLiteDatabase db;
 
-    public DBTiposRevision(Context context) {
-        helper = new DbHelper(context);
+    public dbTiposRevision(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
 
 

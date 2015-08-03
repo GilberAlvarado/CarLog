@@ -10,32 +10,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBCar;
-import com.carlog.gilberto.carlog.data.DBLogs;
-import com.carlog.gilberto.carlog.data.DBRevGral;
+import com.carlog.gilberto.carlog.data.dbCar;
+import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
-import com.carlog.gilberto.carlog.view.SimpleDataView;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
-
-import java.util.ArrayList;
 
 /**
  * Created by Gilberto on 16/07/2015.
  */
-public class ModificarItv extends ActionBarActivity {
+public class modificarItv extends ActionBarActivity {
     private Toolbar toolbar;
 
 
-    private void ModificarLog(final DBLogs managerLogs) {
+    private void ModificarLog(final dbLogs managerLogs) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.btn_guardar_itv);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -44,15 +37,15 @@ public class ModificarItv extends ActionBarActivity {
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_itv);
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(ModificarItv.this, ListaLogs.class);
+                Intent intent = new Intent(modificarItv.this, listaLogs.class);
 
                 System.out.println("actualizando id " + idLog + " con fecha " + funciones.string_a_long(txtTexto.getText().toString()));
                 managerLogs.ActualizarFModificadaLogFuturo(idLog, funciones.string_a_long(txtTexto.getText().toString()));
                 //Hay que modificar la fecha itv también en el coche
-                DBCar dbc = new DBCar(getApplicationContext());
+                dbCar dbc = new dbCar(getApplicationContext());
                 Cursor c = dbc.buscarCocheActivo();
                 if (c.moveToFirst() == true) {
-                    String matricula = c.getString(c.getColumnIndex(DBCar.CN_MATRICULA));
+                    String matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
                     dbc.ActualizarITVCocheActivo(matricula, funciones.string_a_long(txtTexto.getText().toString()));
                 }
 
@@ -76,7 +69,7 @@ public class ModificarItv extends ActionBarActivity {
         btn_modificarFItv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ModificarItv.this, AddItv.class);
+                Intent intent = new Intent(modificarItv.this, addItv.class);
                 intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
                 startActivityForResult(intent, PETICION_ACTIVITY_ADDITV);
             }
@@ -94,8 +87,8 @@ public class ModificarItv extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DBLogs managerLog = new DBLogs(contextNew);
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+        dbLogs managerLog = new dbLogs(contextNew);
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipo");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_itv);
         text.setText(txt_fecha);
@@ -121,10 +114,10 @@ public class ModificarItv extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(ModificarItv.this);
-            Login.closeFacebookSession(ModificarItv.this, Login.class);
-            Intent intent = new Intent(ModificarItv.this, Login.class);
+            usuario u = new usuario();
+            u.logout(modificarItv.this);
+            login.closeFacebookSession(modificarItv.this, login.class);
+            Intent intent = new Intent(modificarItv.this, login.class);
             startActivity(intent);
             finish();
         }

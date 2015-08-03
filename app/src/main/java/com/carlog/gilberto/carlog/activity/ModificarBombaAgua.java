@@ -15,12 +15,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.data.DBBombaAgua;
-import com.carlog.gilberto.carlog.data.DBCorrea;
-import com.carlog.gilberto.carlog.data.DBLogs;
+import com.carlog.gilberto.carlog.data.dbBombaAgua;
+import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
-import com.carlog.gilberto.carlog.tiposClases.TipoLog;
-import com.carlog.gilberto.carlog.tiposClases.Usuario;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -29,11 +28,11 @@ import java.util.ArrayList;
 /**
  * Created by Gilberto on 30/07/2015.
  */
-public class ModificarBombaAgua extends ActionBarActivity {
+public class modificarBombaAgua extends ActionBarActivity {
     private Spinner spinner1;
     private Toolbar toolbar;
 
-    private void RellenarTiposBombaAgua(DBBombaAgua managerBombaAgua, TipoLog miTipo) {
+    private void RellenarTiposBombaAgua(dbBombaAgua managerBombaAgua, tipoLog miTipo) {
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_bombaagua);
         text.setText(txt_fecha);
@@ -60,14 +59,14 @@ public class ModificarBombaAgua extends ActionBarActivity {
         btn_modificarFbombaagua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ModificarBombaAgua.this, AddItv.class);
+                Intent intent = new Intent(modificarBombaAgua.this, addItv.class);
                 intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
                 startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_BOMBAAGUA);
             }
         });
     }
 
-    private void ModificarLog(final DBLogs managerLogs, final DBBombaAgua managerBombaAgua) {
+    private void ModificarLog(final dbLogs managerLogs, final dbBombaAgua managerBombaAgua) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_bombaagua);
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -76,9 +75,9 @@ public class ModificarBombaAgua extends ActionBarActivity {
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_bombaagua);
                 String tipo_bombaagua = spinner.getSelectedItem().toString();
 
-                Cursor c = DBBombaAgua.buscarTiposBombaAgua(tipo_bombaagua);
+                Cursor c = dbBombaAgua.buscarTiposBombaAgua(tipo_bombaagua);
 
-                int int_bombaagua = AddLog.NO_BOMBAAGUA; // solo para inicializar
+                int int_bombaagua = addLog.NO_BOMBAAGUA; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_bombaagua = c.getInt(c.getColumnIndex(managerBombaAgua.CN_ID));
@@ -87,7 +86,7 @@ public class ModificarBombaAgua extends ActionBarActivity {
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_bombaagua);
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(ModificarBombaAgua.this, ListaLogs.class);
+                Intent intent = new Intent(modificarBombaAgua.this, listaLogs.class);
                 Cursor c_log = managerLogs.buscarLogID(idLog);
                 if (c_log.moveToFirst() == true) {
                     long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
@@ -121,9 +120,9 @@ public class ModificarBombaAgua extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        DBBombaAgua managerBombaAgua = new DBBombaAgua(contextNew);
-        DBLogs managerLog = new DBLogs(contextNew);
-        TipoLog miTipo = (TipoLog)getIntent().getExtras().getSerializable("miTipo");
+        dbBombaAgua managerBombaAgua = new dbBombaAgua(contextNew);
+        dbLogs managerLog = new dbLogs(contextNew);
+        tipoLog miTipo = (tipoLog)getIntent().getExtras().getSerializable("miTipo");
         String txt_fecha = miTipo.getFechatxt(miTipo);
         RellenarTiposBombaAgua(managerBombaAgua, miTipo);
         ChangeFBombaAgua(txt_fecha);
@@ -147,10 +146,10 @@ public class ModificarBombaAgua extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_logout) {
-            Usuario u = new Usuario();
-            u.logout(ModificarBombaAgua.this);
-            Login.closeFacebookSession(ModificarBombaAgua.this, Login.class);
-            Intent intent = new Intent(ModificarBombaAgua.this, Login.class);
+            usuario u = new usuario();
+            u.logout(modificarBombaAgua.this);
+            login.closeFacebookSession(modificarBombaAgua.this, login.class);
+            Intent intent = new Intent(modificarBombaAgua.this, login.class);
             startActivity(intent);
             finish();
         }

@@ -3,7 +3,7 @@ package com.carlog.gilberto.carlog.tiposClases;
 import android.app.Activity;
 import android.database.Cursor;
 
-import com.carlog.gilberto.carlog.data.DBLogin;
+import com.carlog.gilberto.carlog.data.dbLogin;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +11,7 @@ import org.json.JSONObject;
 /**
  * Created by Gilberto on 24/07/2015.
  */
-public class Usuario {
+public class usuario {
 
     private String Name = "";
     private String Email = "";
@@ -36,19 +36,19 @@ public class Usuario {
 
     public void login(Activity activity, String email, String password, final boolean desdeFB){
         this.activity = activity;
-        final HttpClientManager httpclient = new HttpClientManager(activity);
+        final httpClientManager httpclient = new httpClientManager(activity);
         httpclient.addNameValue("tag", login_tag);
         httpclient.addNameValue("email", email);
         httpclient.addNameValue("password", password);
 
-        httpclient.setOnExecuteHttpPostAsyncListener(new HttpClientManager.OnExecuteHttpPostAsyncListener() {
+        httpclient.setOnExecuteHttpPostAsyncListener(new httpClientManager.OnExecuteHttpPostAsyncListener() {
             @Override
             public void onExecuteHttpPostAsyncListener(String ResponseBody) {
                 try {
                     JSONObject json = new JSONObject(ResponseBody);
                     if (json.getString(KEY_SUCCESS) != null) {
                         if((Integer.parseInt(json.getString(KEY_SUCCESS)) == 1)){
-                            if(Usuario.this.saveLogin(Usuario.this.activity, json)) {
+                            if(usuario.this.saveLogin(usuario.this.activity, json)) {
                                 System.out.println("Login correcto");
                                 if (!desdeFB) ListenerLoginUsuario.onLoginCorrect(json, "Login correcto");
                             }
@@ -78,20 +78,20 @@ public class Usuario {
 
     public void register(Activity activity, String username, String email, String password, final boolean desdeFB){
         this.activity = activity;
-        HttpClientManager httpclient = new HttpClientManager(activity);
+        httpClientManager httpclient = new httpClientManager(activity);
         httpclient.addNameValue("tag", register_tag);
         httpclient.addNameValue("name", username);
         httpclient.addNameValue("email", email);
         httpclient.addNameValue("password", password);
 
-        httpclient.setOnExecuteHttpPostAsyncListener(new HttpClientManager.OnExecuteHttpPostAsyncListener() {
+        httpclient.setOnExecuteHttpPostAsyncListener(new httpClientManager.OnExecuteHttpPostAsyncListener() {
             @Override
             public void onExecuteHttpPostAsyncListener(String ResponseBody) {
                 try {
                     JSONObject json = new JSONObject(ResponseBody);
                     if (json.getString(KEY_SUCCESS) != null) {
                         if((Integer.parseInt(json.getString(KEY_SUCCESS)) == 1)){
-                            if(Usuario.this.saveLogin(Usuario.this.activity, json))
+                            if(usuario.this.saveLogin(usuario.this.activity, json))
                                 if (!desdeFB) ListenerRegisterUsuario.onRegisterFinish(json, "Registro correcto");
                             else
                                 if (!desdeFB) ListenerRegisterUsuario.onRegisterFail("Estás registrado pero no puedes loguearte ahora");
@@ -117,7 +117,7 @@ public class Usuario {
         this.logout(activity);
         try {
             JSONObject user = json.getJSONObject(KEY_USER);
-            DBLogin dblogin = new DBLogin(activity.getApplicationContext());
+            dbLogin dblogin = new dbLogin(activity.getApplicationContext());
             dblogin.addUser(user.getString(KEY_NAME), user.getString(KEY_EMAIL), json.getString(KEY_UID), user.getString(KEY_CREATED_AT));
             save = true;
         } catch (JSONException e) {}
@@ -126,13 +126,13 @@ public class Usuario {
 
 
     public void logout(Activity activity){
-        DBLogin dblogin = new DBLogin(activity.getApplicationContext());
+        dbLogin dblogin = new dbLogin(activity.getApplicationContext());
         dblogin.resetTables();
     }
 
 
     public boolean isUserLoggedIn(Activity activity){
-        DBLogin db = new DBLogin(activity.getApplicationContext());
+        dbLogin db = new dbLogin(activity.getApplicationContext());
         int count = db.getRowCount();
         if(count > 0){
             // user logged in
@@ -142,7 +142,7 @@ public class Usuario {
     }
 
     public void readUser(Activity activity){
-        DBLogin dblogin = new DBLogin(activity.getApplicationContext());
+        dbLogin dblogin = new dbLogin(activity.getApplicationContext());
         Cursor cursor = dblogin.getCursorUsuario();
         if(cursor.moveToNext()){
             this.setName(cursor.getString(0));

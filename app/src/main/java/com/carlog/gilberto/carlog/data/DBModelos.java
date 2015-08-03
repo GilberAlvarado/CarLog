@@ -5,12 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.carlog.gilberto.carlog.tiposClases.TipoCoche;
-
 /**
  * Created by Gilberto on 02/06/2015.
  */
-public class DBModelos {
+public class dbModelos {
     public static final String TABLE_NAME = "modelos";
 
     public static final String CN_ID = "_id";
@@ -24,14 +22,14 @@ public class DBModelos {
             + CN_MODELO + " text not null,"
             + CN_IMG + " text not null,"
             + CN_MARCA + " integer not null,"
-            + " FOREIGN KEY("+CN_MARCA+") REFERENCES "+ DBMarcas.TABLE_NAME+"("+DBMarcas.CN_ID+"));";
+            + " FOREIGN KEY("+CN_MARCA+") REFERENCES "+ dbMarcas.TABLE_NAME+"("+ dbMarcas.CN_ID+"));";
 
 
-    private DbHelper helper;
+    private dbHelper helper;
     private static SQLiteDatabase db;
 
-    public DBModelos(Context context) {
-        helper = new DbHelper(context);
+    public dbModelos(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
 
 

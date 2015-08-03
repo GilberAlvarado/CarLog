@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * Created by Gilberto on 30/07/2015.
  */
-public class DBFiltroAire {
+public class dbFiltroAire {
     public static final String TABLE_NAME = "faire";
 
     public final static String TIPO_30K_KM = "30 mil kms (recomendada)";
@@ -27,11 +27,11 @@ public class DBFiltroAire {
             + CN_KMS + " int not null);";
 
 
-    private DbHelper helper;
+    private dbHelper helper;
     private static SQLiteDatabase db;
 
-    public DBFiltroAire(Context context) {
-        helper = new DbHelper(context);
+    public dbFiltroAire(Context context) {
+        helper = new dbHelper(context);
         db = helper.getWritableDatabase();
 
 
