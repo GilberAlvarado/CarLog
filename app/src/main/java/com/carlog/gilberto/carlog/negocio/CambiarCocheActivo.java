@@ -23,6 +23,7 @@ import com.carlog.gilberto.carlog.data.dbCar;
 import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.data.dbModelos;
 import com.carlog.gilberto.carlog.formats.utilities;
+import com.carlog.gilberto.carlog.fragments.fragmentLogs;
 
 import java.io.File;
 
@@ -198,8 +199,8 @@ public class cambiarCocheActivo {
             // pero también hay que actualizar las variables globales al coche activo
             if (c_coche_activo.moveToFirst() == true) {
                 // RellenarPantalla();
-                listaLogs ll = new listaLogs();
-                ll.ConsultarLogs(context, act);
+                fragmentLogs fl = new fragmentLogs();
+                fl.ConsultarLogs(context, act);
             } else {// no se da el caso pq si entra en el primer if ya existe minimo un coche y ya hemos forzado a q sea el activo
             }
         }
