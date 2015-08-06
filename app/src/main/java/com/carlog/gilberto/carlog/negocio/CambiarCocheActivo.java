@@ -25,9 +25,11 @@ import com.carlog.gilberto.carlog.data.dbCar;
 import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.data.dbModelos;
 import com.carlog.gilberto.carlog.formats.utilities;
+import com.carlog.gilberto.carlog.fragments.fragmentHistorial;
 import com.carlog.gilberto.carlog.fragments.fragmentLogs;
 
 import java.io.File;
+import java.util.List;
 
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -35,6 +37,8 @@ import me.drakeet.materialdialog.MaterialDialog;
  * Created by Gilberto on 10/06/2015.
  */
 public class cambiarCocheActivo {
+    public static int ID_FRAGMENT_LOGS_FUTUROS = 2131230878;
+
     public static Toolbar toolbar;
     public static RecyclerView mRecyclerView;                           // Declaring RecyclerView
     public static miAdaptadorCoches mAdapter;
@@ -202,9 +206,38 @@ public class cambiarCocheActivo {
             if (c_coche_activo.moveToFirst() == true) {
                 // RellenarPantalla();
 
+
                 listaLogs a = (listaLogs) act;
-                fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
-                fl.ConsultarLogs(context, act);
+                List<Fragment> list_frag = a.getCurrentFragment().getFragmentManager().getFragments();
+                for(int i = 0; i < list_frag.size(); i++) {
+                    try{
+                        fragmentLogs fl = (fragmentLogs)list_frag.get(i);
+                        fl.ConsultarLogs(context, act);
+                    }
+                    catch (ClassCastException e) {
+                        try {
+                            fragmentHistorial fh = (fragmentHistorial) list_frag.get(i);
+                            fh.ConsultarLogsHistoricos(context, act);
+                        } catch (ClassCastException e2) {
+
+                        }
+                    }
+                }
+                //fragmentLogs fl = (fragmentLogs) a.getSupportFragmentManager().findFragmentById(ID_FRAGMENT_LOGS_FUTUROS);
+                //  fl.ConsultarLogs(context, act);
+                /*try{
+                    fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
+                    fl.ConsultarLogs(context, act);
+                }
+                catch (ClassCastException e){
+                    try {
+                        fragmentHistorial fh = (fragmentHistorial) a.getCurrentFragment();
+                        fh.ConsultarLogsHistoricos(context, act);
+                    }
+                    catch (ClassCastException e2) {
+
+                    }
+                }*/
             } else {// no se da el caso pq si entra en el primer if ya existe minimo un coche y ya hemos forzado a q sea el activo
             }
         }

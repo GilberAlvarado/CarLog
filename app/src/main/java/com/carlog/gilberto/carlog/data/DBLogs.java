@@ -168,6 +168,14 @@ public class dbLogs {
         return c;
     }
 
+    public Cursor LogsHistoricosOrderByFechaString(String matricula) {  // todos los tipos pero solo los logs historicos y realizados
+        String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, veces_aceite, contador_aceite, revgral, " +
+                "correa, bombaagua, fgasolina, faire, bujias, embrague, matricula, realizado, f_modificada, kms FROM "+TABLE_NAME + " WHERE "
+              /*  + CN_FECHA + " > " + int_now + " AND " */+ CN_REALIZADO + " = " + REALIZADO + " AND " + CN_CAR + " = '" + matricula + "' ORDER BY "+ CN_FECHA + " DESC";
+        Cursor c = db.rawQuery(sql, null);
+        return c;
+    }
+
     public Cursor LogsHistoricoTipoOrderByFechaString(String matricula, String tipo_rev) { // Los de tipo aceite del histórico para elegir el más reciente
         String sql = "SELECT _id, tipo, strftime('%d-%m-%Y',"+CN_FECHA+",'unixepoch') as fecha_string, aceite, veces_aceite, contador_aceite, revgral, " +
                 "correa, bombaagua, fgasolina, faire, bujias, embrague, matricula, realizado, f_modificada, kms FROM "+TABLE_NAME + " WHERE "

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.dbFiltroGasolina;
@@ -24,6 +25,7 @@ import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Gilberto on 30/07/2015.
@@ -87,25 +89,37 @@ public class modificarFiltroGasolina extends ActionBarActivity {
 
                 Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
                 Intent intent = new Intent(modificarFiltroGasolina.this, listaLogs.class);
-                Cursor c_log = managerLogs.buscarLogID(idLog);
-                if (c_log.moveToFirst() == true) {
-                    long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
-                    String txt_fecha_log = funciones.long_a_string(fecha_log);
-                    System.out.println("Modificamos el Log con id " + idLog + " por filtro gasolina " + int_fgasolina);
-                    if (txt_fecha_log.equals(txtTexto.getText().toString())) managerLogs.modificarTipoFiltroAireLog(idLog, int_fgasolina);
-                    else
-                        managerLogs.modificarFechaFiltroGasolinaLog(idLog, int_fgasolina, funciones.string_a_long(txtTexto.getText().toString()));
+                Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
+
+                Boolean ok = true;
+                if(es_historico) {
+                    if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
+                        Toast.makeText(modificarFiltroGasolina.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
+                        ok = false;
+                    }
                 }
+                if(ok) {
+                    Cursor c_log = managerLogs.buscarLogID(idLog);
+                    if (c_log.moveToFirst() == true) {
+                        long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
+                        String txt_fecha_log = funciones.long_a_string(fecha_log);
+                        System.out.println("Modificamos el Log con id " + idLog + " por filtro gasolina " + int_fgasolina);
+                        if (txt_fecha_log.equals(txtTexto.getText().toString()))
+                            managerLogs.modificarTipoFiltroAireLog(idLog, int_fgasolina);
+                        else
+                            managerLogs.modificarFechaFiltroGasolinaLog(idLog, int_fgasolina, funciones.string_a_long(txtTexto.getText().toString()));
+                    }
 
                 /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
                 TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
                 procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
                 */
 
-                intent.putExtra("modifyFiltroGasolina", true);
-                setResult(Activity.RESULT_OK, intent);
+                    intent.putExtra("modifyFiltroGasolina", true);
+                    setResult(Activity.RESULT_OK, intent);
 
-                finish();
+                    finish();
+                }
             }
         });
     };

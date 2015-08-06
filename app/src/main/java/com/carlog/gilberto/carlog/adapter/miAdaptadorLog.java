@@ -2,14 +2,17 @@ package com.carlog.gilberto.carlog.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.support.annotation.ColorInt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,8 +153,8 @@ public class miAdaptadorLog extends ArrayAdapter {
             }
         }
         else if(miLog.getRealizado((tipoLog) datos.get(position)) == dbLogs.REALIZADO) {
-            sqView.tipo.setTextColor(Color.GREEN);
-            sqView.fecha.setTextColor(Color.GREEN);
+            sqView.tipo.setTextColor(Color.parseColor("#2196F3"));
+            sqView.fecha.setTextColor(Color.GRAY);
             sqView.tipo.setTypeface(null, Typeface.BOLD);
             sqView.fecha.setTypeface(null, Typeface.NORMAL);
         }

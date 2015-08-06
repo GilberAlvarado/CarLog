@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.dbCar;
@@ -20,6 +21,8 @@ import com.carlog.gilberto.carlog.tiposClases.tipoLog;
 import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
+
+import java.util.Date;
 
 /**
  * Created by Gilberto on 16/07/2015.
@@ -36,29 +39,38 @@ public class modificarItv extends ActionBarActivity {
             public void onClick(View v) {
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_itv);
 
-                Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
                 Intent intent = new Intent(modificarItv.this, listaLogs.class);
+                Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
+                Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
 
-                System.out.println("actualizando id " + idLog + " con fecha " + funciones.string_a_long(txtTexto.getText().toString()));
-                managerLogs.ActualizarFModificadaLogFuturo(idLog, funciones.string_a_long(txtTexto.getText().toString()));
-                //Hay que modificar la fecha itv también en el coche
-                dbCar dbc = new dbCar(getApplicationContext());
-                Cursor c = dbc.buscarCocheActivo();
-                if (c.moveToFirst() == true) {
-                    String matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
-                    dbc.ActualizarITVCocheActivo(matricula, funciones.string_a_long(txtTexto.getText().toString()));
+                Boolean ok = true;
+                if(es_historico) {
+                    if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
+                        Toast.makeText(modificarItv.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
+                        ok = false;
+                    }
                 }
+                if(ok) {
+                    managerLogs.ActualizarFModificadaLogFuturo(idLog, funciones.string_a_long(txtTexto.getText().toString()));
+                    //Hay que modificar la fecha itv también en el coche
+                    dbCar dbc = new dbCar(getApplicationContext());
+                    Cursor c = dbc.buscarCocheActivo();
+                    if (c.moveToFirst() == true) {
+                        String matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
+                        dbc.ActualizarITVCocheActivo(matricula, funciones.string_a_long(txtTexto.getText().toString()));
+                    }
 
-                /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
-                TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
-                procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
-                */
+                    /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
+                    TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
+                    procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
+                    */
 
-                intent.putExtra("itv_string", txtTexto.getText().toString());
-                intent.putExtra("modifyItv", true);
-                setResult(Activity.RESULT_OK, intent);
+                    intent.putExtra("itv_string", txtTexto.getText().toString());
+                    intent.putExtra("modifyItv", true);
+                    setResult(Activity.RESULT_OK, intent);
 
-                finish();
+                    finish();
+                }
             }
         });
     };

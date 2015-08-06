@@ -60,27 +60,27 @@ public class modificarFiltroAceite extends ActionBarActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fil_aceite);
-            String tipo_fil_aceite = spinner.getSelectedItem().toString();
+                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fil_aceite);
+                String tipo_fil_aceite = spinner.getSelectedItem().toString();
 
-            System.out.println("TipoFiltroVeces " + tipo_fil_aceite);
-            Cursor c = dbFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
+                System.out.println("TipoFiltroVeces " + tipo_fil_aceite);
+                Cursor c = dbFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
 
-            int int_veces = addLog.NO_ACEITE; // solo para inicializar
+                int int_veces = addLog.NO_ACEITE; // solo para inicializar
 
-            if (c.moveToFirst() == true) {
-                int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
-            }
+                if (c.moveToFirst() == true) {
+                    int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
+                }
 
-            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fil_aceite);
-            String datetxt = txtTexto.getText().toString();
+                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fil_aceite);
+                String datetxt = txtTexto.getText().toString();
 
-            Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-            Intent intent = new Intent(modificarFiltroAceite.this, listaLogs.class);
-            System.out.println("Modificamos el Log con id " + idLog + " por filtro aceite " + int_veces);
-            managerLogs.modificarFechaFiltroAceite(idLog, int_veces);
+                Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
+                Intent intent = new Intent(modificarFiltroAceite.this, listaLogs.class);
+                System.out.println("Modificamos el Log con id " + idLog + " por filtro aceite " + int_veces);
+                managerLogs.modificarFechaFiltroAceite(idLog, int_veces);
 
-            finish();
+                finish();
             }
         });
     };

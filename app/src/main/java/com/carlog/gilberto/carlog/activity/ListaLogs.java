@@ -459,9 +459,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
         setContentView(R.layout.activity_listalogs);
         Context context = this;
 
-
         ObservableScrollView(listaLogs.this);
-
 
         modificarFechasRevisiones(context);
 
@@ -500,103 +498,6 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
 
         fragment.ConsultarLogs(context, listaLogs.this);*/
     }
-
-
-
-
-
-
-
-  /*  @Override
-    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-        // Translate overlay and image
-        float flexibleRange = mFlexibleSpaceImageHeight - mActionBarSize;
-        int minOverlayTransitionY = mActionBarSize - mOverlayView.getHeight();
-        ViewHelper.setTranslationY(mOverlayView, +ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
-        ViewHelper.setTranslationY(mImageView, ScrollUtils.getFloat(-scrollY / 2, minOverlayTransitionY, 0));
-        ViewHelper.setTranslationY(mImageViewOnClick, ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
-        ViewHelper.setTranslationY(tabHost, ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
-        ViewHelper.setTranslationY(pager, ScrollUtils.getFloat(-scrollY, minOverlayTransitionY, 0));
-
-
-
-        // Translate list background
-        //ViewHelper.setTranslationY(mListBackgroundView, Math.max(0, -scrollY + mFlexibleSpaceImageHeight));
-
-        // Change alpha of overlay
-        ViewHelper.setAlpha(mOverlayView, ScrollUtils.getFloat((float) scrollY / flexibleRange, 0, 1));
-
-        // Scale title text
-        float scale = 1 + ScrollUtils.getFloat((flexibleRange - scrollY) / flexibleRange, 0, MAX_TEXT_SCALE_DELTA);
-        ViewHelper.setPivotX(mTitleView, 0);
-        ViewHelper.setPivotY(mTitleView, 0);
-        ViewHelper.setScaleX(mTitleView, scale);
-        ViewHelper.setScaleY(mTitleView, scale);
-        // Scale image fb
-        ViewHelper.setPivotX(profileImg, 0);
-        ViewHelper.setPivotY(profileImg, 0);
-        ViewHelper.setScaleX(profileImg, scale);
-        ViewHelper.setScaleY(profileImg, scale);
-
-        // Translate title text
-        int maxTitleTranslationY = (int) (mFlexibleSpaceImageHeight - mTitleView.getHeight() * scale);
-        int titleTranslationY = maxTitleTranslationY - scrollY;
-        if (TOOLBAR_IS_STICKY) {
-            titleTranslationY = Math.max(0, titleTranslationY);
-        }
-        ViewHelper.setTranslationY(mTitleView, titleTranslationY);
-        ViewHelper.setTranslationX(mTitleView, 90);
-        // Translate fb image
-        ViewHelper.setTranslationY(profileImg, titleTranslationY);
-        ViewHelper.setTranslationX(profileImg, 90);
-        // Translate tabs
-        ViewHelper.setTranslationY(tabHost, titleTranslationY);
-        ViewHelper.setTranslationX(tabHost, 90);
-        // Translate pager
-        ViewHelper.setTranslationY(pager, titleTranslationY);
-        ViewHelper.setTranslationX(pager, 90);
-
-
-        // Translate FAB
-        int maxFabTranslationY = mFlexibleSpaceImageHeight - mFab.getHeight() / 3;
-        float fabTranslationY = ScrollUtils.getFloat(
-                -scrollY + mFlexibleSpaceImageHeight - mFab.getHeight() / 3,
-                mActionBarSize - mFab.getHeight() / 3,
-                maxFabTranslationY);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            // On pre-honeycomb, ViewHelper.setTranslationX/Y does not set margin,
-            // which causes FAB's OnClickListener not working.
-            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mFab.getLayoutParams();
-            lp.leftMargin = mOverlayView.getWidth() - mFabMargin - mFab.getWidth();
-            lp.topMargin = (int) fabTranslationY;
-            mFab.requestLayout();
-        } else {
-            ViewHelper.setTranslationX(mFab, mOverlayView.getWidth() - mFabMargin - mFab.getWidth());
-            ViewHelper.setTranslationY(mFab, fabTranslationY);
-        }
-
-        // Show/hide FAB
-        if (fabTranslationY < mFlexibleSpaceShowFabOffset) {
-            hideFab();
-        } else {
-            showFab();
-        }
-        if (TOOLBAR_IS_STICKY) {
-            // Change alpha of toolbar background
-            if (-scrollY + mFlexibleSpaceImageHeight <= mActionBarSize) {
-                mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(1, mToolbarColor));
-            } else {
-                mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, mToolbarColor));
-            }
-        } else {
-            // Translate Toolbar
-            if (scrollY < mFlexibleSpaceImageHeight) {
-                ViewHelper.setTranslationY(mToolbar, 0);
-            } else {
-                ViewHelper.setTranslationY(mToolbar, -scrollY);
-            }
-        }
-    }*/
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
@@ -832,48 +733,6 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
 
 
 
-   /* private void showFab() {
-        if (!mFabIsShown) {
-            mFab.setVisibility(View.VISIBLE);
-            ViewPropertyAnimator.animate(mFab).cancel();
-            ViewPropertyAnimator.animate(mFab).scaleX(1).scaleY(1).setDuration(200).start();
-            mFabIsShown = true;
-        }
-    }
-
-    private void hideFab() {
-        if (mFabIsShown) {
-            ViewPropertyAnimator.animate(mFab).cancel();
-            ViewPropertyAnimator.animate(mFab).scaleX(0).scaleY(0).setDuration(200).start();
-
-            ViewPropertyAnimator.animate(mFab).setListener(new Animator.AnimatorListener() {
-
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    mFloatMenu.close(true);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    if (!mFabIsShown) {
-                        mFab.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
-
-            mFabIsShown = false;
-        }
-    }*/
 
 
     @Override
@@ -918,9 +777,22 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
     {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, 0, 0, "Marcar como Realizado hoy");
-        menu.add(1, 1, 1, "Marcar como Realizado en su fecha");
-        menu.add(2, 2, 2, "Eliminar");
+        try {
+            fragmentLogs fl = (fragmentLogs) getCurrentFragment();
+            menu.add(0, 0, 0, "Marcar como Realizado hoy");
+            menu.add(1, 1, 1, "Marcar como Realizado en su fecha");
+            menu.add(2, 2, 2, "Eliminar");
+        }
+        catch (Exception e) {
+            try {
+                fragmentHistorial fh = (fragmentHistorial) getCurrentFragment();
+                menu.add(3, 3, 3, "Eliminar");
+            }
+            catch (Exception e2) {
+
+            }
+        }
+
      //   MenuInflater inflater = getMenuInflater();
 //        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
  //       inflater.inflate(R.menu.modificar_log, menu);
@@ -941,6 +813,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
         }
 
         final Cursor cursor = manager.LogsFuturosOrderByFechaString(matricula);
+        final Cursor cursor_hist = manager.LogsHistoricosOrderByFechaString(matricula);
 
         switch (item.getItemId()) {
             //case R.id.menu_realizadoLog:
@@ -953,6 +826,9 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
             //case R.id.menu_eliminarLog:
             case 2:
                 fragmentLogs.borrarLogpulsado(cursor, manager, info.position, getApplicationContext(), listaLogs.this);
+                return true;
+            case 3:
+                fragmentHistorial.borrarLogpulsado(cursor_hist, manager, info.position, getApplicationContext(), listaLogs.this);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -986,8 +862,13 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
             }
             case (PETICION_ACTIVITY_MODIFYITV) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    fragmentLogs fl = (fragmentLogs) getCurrentFragment();
-                    fl.ConsultarLogs(getApplicationContext(), listaLogs.this);
+                    try {
+                        fragmentLogs fl = (fragmentLogs) getCurrentFragment();
+                        fl.ConsultarLogs(getApplicationContext(), listaLogs.this);
+                    } catch (Exception e) {
+                        fragmentHistorial fh = (fragmentHistorial) getCurrentFragment();
+                        fh.ConsultarLogsHistoricos(getApplicationContext(),listaLogs.this);
+                    }
                 }
                 break;
             }

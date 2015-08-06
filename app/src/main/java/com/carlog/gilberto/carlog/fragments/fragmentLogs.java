@@ -2,20 +2,14 @@ package com.carlog.gilberto.carlog.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 
 
@@ -56,36 +50,36 @@ public class fragmentLogs extends BaseFragment {
 
 
     public static void borrarLogpulsado(final Cursor cursor, final dbLogs manager, final int posicion, final Context context, final Activity act) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(act);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(act);
         builder.setMessage("¿Está seguro de querer eliminar?")
-                .setTitle("Borrar de la lista")
-                .setCancelable(false)
-                .setNegativeButton("Cancelar",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id_dialog) {
-                                dialog.cancel();
+            .setTitle("Borrar de la lista")
+            .setCancelable(false)
+            .setNegativeButton("Cancelar",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id_dialog) {
+                            dialog.cancel();
+                        }
+                    })
+            .setPositiveButton("Continuar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id_dialog) {
+                        // metodo que se debe implementar Sí
+                        //Recorremos el cursor
+                        int i = 0;
+                        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+                            if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                                int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
+                                String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
+                                manager.eliminar_por_id(id);
+                                listaLogs a = (listaLogs) act;
+                                fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
+                                fl.ConsultarLogs(context, act);
+                                break;
                             }
-                        })
-                .setPositiveButton("Continuar",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id_dialog) {
-                                // metodo que se debe implementar Sí
-                                //Recorremos el cursor
-                                int i = 0;
-                                for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-                                    if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
-                                        int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
-                                        String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
-                                        manager.eliminar_por_id(id);
-                                        listaLogs a = (listaLogs) act;
-                                        fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
-                                        fl.ConsultarLogs(context, act);
-                                        break;
-                                    }
-                                    i++;
-                                }
-                            }
-                        });
+                            i++;
+                        }
+                    }
+                });
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -151,6 +145,7 @@ public class fragmentLogs extends BaseFragment {
                 tipoLog miTipo = new tipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, veces_filaceite, addLog.NO_CONTADOR_FIL_ACEITE, revgral, correa, bombaagua, fgasolina, faire, bujias, embrague, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, kms);
                 intent.putExtra("miTipo", miTipo);
                 intent.putExtra("idLog", id);
+                intent.putExtra("Historial", false);
                 break;
             }
             i++;
@@ -186,8 +181,7 @@ public class fragmentLogs extends BaseFragment {
         if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
             context.startActivity(intent); // No cambia la fecha solo cada cuantos cambios de aceite se hará
         }
-        ///////////Todo ELSE PARA LOS DEMAS TIPOS QUE SE PUEDAN MODIFICAR CREAR ACTIVITIES
-        //************************************************************************
+
 
 
     }
@@ -272,7 +266,7 @@ public class fragmentLogs extends BaseFragment {
         }
     }
 
-    private void modificarLogPulsando(final Activity act, final String matricula) {
+    public void modificarLogPulsando(final Activity act, final String matricula) {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -310,10 +304,6 @@ public class fragmentLogs extends BaseFragment {
 
         miAdaptadorLog adapter = new miAdaptadorLog(act, listaLogs);
 
-        System.out.println("adapter " + adapter);
-        System.out.println("tam "+ adapter.getCount());
-
-        System.out.println("list "+ listView);
         listView.setAdapter(adapter);
         modificarLogPulsando(act, matricula);
         //Asociamos el menú contextual a los controles para las opciones en longClick
@@ -323,7 +313,6 @@ public class fragmentLogs extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        System.out.println("creando inflando1111111");
         rootView = inflater.inflate(R.layout.fragment_logs, container, false);
         Activity parentActivity = getActivity();
         listView = (ObservableListView) rootView.findViewById(R.id.list);
