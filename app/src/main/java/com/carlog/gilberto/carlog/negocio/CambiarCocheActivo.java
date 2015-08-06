@@ -1,11 +1,13 @@
 package com.carlog.gilberto.carlog.negocio;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -199,7 +201,9 @@ public class cambiarCocheActivo {
             // pero también hay que actualizar las variables globales al coche activo
             if (c_coche_activo.moveToFirst() == true) {
                 // RellenarPantalla();
-                fragmentLogs fl = new fragmentLogs();
+
+                listaLogs a = (listaLogs) act;
+                fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
                 fl.ConsultarLogs(context, act);
             } else {// no se da el caso pq si entra en el primer if ya existe minimo un coche y ya hemos forzado a q sea el activo
             }

@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -397,7 +398,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
         }
         if((modifyItv) || (modifyAceite) || (modifyRevGral) || (modifyCorrea) || (modifyBombaAgua) ||
                 (modifyFiltroGasolina) || (modifyFiltroAire) || (modifyBujias) || (modifyEmbrague)) {
-            fragmentLogs fl = new fragmentLogs();
+            fragmentLogs fl = (fragmentLogs) getCurrentFragment();
             fl.ConsultarLogs(context, listaLogs.this); // para actualizar la fecha de revision modificada
         }
     }
@@ -492,15 +493,12 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
         cambiarCocheActivo.CambiarImgLogs(context, listaLogs.this, img_modelo_personalizada, modelo, img_modelo_cambiada);
 
 
-       /* fragmentLogs fragment = new fragmentLogs();
+    /*    fragmentLogs fragment = new fragmentLogs();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.pager_wrapper, fragment)
                 .commit();
-        fragment.ConsultarLogs(context, listaLogs.this);
-        */
 
-    /*    fragmentLogs f = (fragmentLogs) getSupportFragmentManager().findFragmentById(R.id.pager_wrapper);
-        f.ConsultarLogs(context, listaLogs.this);*/
+        fragment.ConsultarLogs(context, listaLogs.this);*/
     }
 
 
@@ -815,9 +813,11 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
 
     }
 
-    private Fragment getCurrentFragment() {
+    public Fragment getCurrentFragment() {
         return mPagerAdapter.getItemAt(mPager.getCurrentItem());
     }
+
+
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void setPivotXToTitle() {
@@ -970,7 +970,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
         switch(requestCode) {
             case (PETICION_ACTIVITY_ADD_LOG) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    fragmentLogs fl = new fragmentLogs();
+                    fragmentLogs fl = (fragmentLogs) getCurrentFragment();
                     fl.ConsultarLogs(this, listaLogs.this);
 
                 }
@@ -986,7 +986,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
             }
             case (PETICION_ACTIVITY_MODIFYITV) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    fragmentLogs fl = new fragmentLogs();
+                    fragmentLogs fl = (fragmentLogs) getCurrentFragment();
                     fl.ConsultarLogs(getApplicationContext(), listaLogs.this);
                 }
                 break;

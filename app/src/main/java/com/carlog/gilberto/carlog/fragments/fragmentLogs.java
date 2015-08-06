@@ -73,11 +73,12 @@ public class fragmentLogs extends BaseFragment {
                                 //Recorremos el cursor
                                 int i = 0;
                                 for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-                                    if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                                    if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
                                         int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
                                         String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
                                         manager.eliminar_por_id(id);
-                                        fragmentLogs fl = new fragmentLogs();
+                                        listaLogs a = (listaLogs) act;
+                                        fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
                                         fl.ConsultarLogs(context, act);
                                         break;
                                     }
@@ -197,7 +198,7 @@ public class fragmentLogs extends BaseFragment {
         //Recorremos el cursor
         int i = 0;
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
+            if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
                 int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
                 String tipo_rev = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
                 String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
@@ -262,7 +263,8 @@ public class fragmentLogs extends BaseFragment {
                 if(hoy) manager.marcarRealizadoLog(id, funciones.date_a_long(f_hoy), int_kms); //hoy
                 else manager.marcarRealizadoLog(id, funciones.date_a_long(f_rev), int_kms);
 
-                fragmentLogs fl = new fragmentLogs();
+                listaLogs a = (listaLogs) act;
+                fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
                 fl.ConsultarLogs(context, act);
                 break;
             }
