@@ -2,15 +2,20 @@ package com.carlog.gilberto.carlog.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 
 
@@ -91,7 +96,8 @@ public class fragmentLogs extends BaseFragment {
         String tipo = "";
         Intent intent = new Intent();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            if (i == posicion-1) { // la posicion del cursor coincide con la del que pulsamos en la lista
+            if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                System.out.println("pos " + (posicion) + " i "+ i);
                 int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
                 tipo = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
                 if(tipo.equals(tipoLog.TIPO_ACEITE)) {
@@ -329,4 +335,7 @@ public class fragmentLogs extends BaseFragment {
         }
         return rootView;
     }
+
+
+
 }

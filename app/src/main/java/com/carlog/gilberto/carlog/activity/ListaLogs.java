@@ -23,6 +23,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -85,8 +86,8 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
     private int mActionBarSize;
     private int mFlexibleSpaceShowFabOffset;
   //  private int mFlexibleSpaceImageHeight;
-    private int mFabMargin;
-    private boolean mFabIsShown;
+  //  private int mFabMargin;
+  //  private boolean mFabIsShown;
     private int mToolbarColor;
     private View mToolbar;
     private Toolbar toolbar;
@@ -202,8 +203,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
         //mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         findViewById(R.id.pager_wrapper).setPadding(0, mFlexibleSpaceHeight + mTabHeight, 0, 0);
-
-        mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
+    //    mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
         mActionBarSize = getActionBarSize();
         mToolbarColor = getResources().getColor(R.color.ColorPrimary);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -253,9 +253,9 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
         mTitleView = (TextView) findViewById(R.id.title);
         setTitle(null);
         mFab = findViewById(R.id.fab);
-        mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
-        ViewHelper.setScaleX(mFab, 0);
-        ViewHelper.setScaleY(mFab, 0);
+    //    mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
+    //    ViewHelper.setScaleX(mFab, 0);
+    //    ViewHelper.setScaleY(mFab, 0);
 
 
 
@@ -491,11 +491,16 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
         System.out.println("pers " + img_modelo_personalizada + " cambiada " + img_modelo_cambiada);
         cambiarCocheActivo.CambiarImgLogs(context, listaLogs.this, img_modelo_personalizada, modelo, img_modelo_cambiada);
 
-        fragmentLogs fl = new fragmentLogs();
+
+       /* fragmentLogs fragment = new fragmentLogs();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.pager_wrapper, fl)
+                .add(R.id.pager_wrapper, fragment)
                 .commit();
-        fl.ConsultarLogs(context, listaLogs.this);
+        fragment.ConsultarLogs(context, listaLogs.this);
+        */
+
+    /*    fragmentLogs f = (fragmentLogs) getSupportFragmentManager().findFragmentById(R.id.pager_wrapper);
+        f.ConsultarLogs(context, listaLogs.this);*/
     }
 
 
@@ -597,7 +602,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-        // Translate FAB
+     /*   // Translate FAB
         int maxFabTranslationY = mFlexibleSpaceHeight - mFab.getHeight() / 3;
         float fabTranslationY = ScrollUtils.getFloat(
                 -scrollY + mFlexibleSpaceHeight - mFab.getHeight() / 3,
@@ -636,6 +641,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
                 ViewHelper.setTranslationY(mToolbar, -scrollY);
             }
         }*/
+
     }
 
     @Override
@@ -826,7 +832,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
 
 
 
-    private void showFab() {
+   /* private void showFab() {
         if (!mFabIsShown) {
             mFab.setVisibility(View.VISIBLE);
             ViewPropertyAnimator.animate(mFab).cancel();
@@ -867,7 +873,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
 
             mFabIsShown = false;
         }
-    }
+    }*/
 
 
     @Override
