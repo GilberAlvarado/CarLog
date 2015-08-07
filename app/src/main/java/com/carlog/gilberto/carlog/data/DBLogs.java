@@ -314,4 +314,9 @@ public class dbLogs {
         db.execSQL(sql);
     }
 
+    public void modificarMatriculaLogs(String matricula, String matricula_anterior) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_CAR  + " = '" + matricula + "' WHERE " + CN_CAR + " = '" + matricula_anterior + "'";
+        db.execSQL(sql);
+    }
+
 }

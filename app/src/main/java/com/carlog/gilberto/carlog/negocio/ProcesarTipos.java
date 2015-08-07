@@ -19,6 +19,7 @@ import com.carlog.gilberto.carlog.data.dbRevGral;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -70,6 +71,7 @@ public class procesarTipos {
         ///////CORREA tiene id pq tiene su propia tabla
         if(tipo_rev.equals(tipoLog.TIPO_CORREA)) {
             dbCorrea dbCorrea = new com.carlog.gilberto.carlog.data.dbCorrea(context);
+            if(id_correa_ultimo_log_hist == 0) id_correa_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_correa = dbCorrea.buscarTiposCorrea(id_correa_ultimo_log_hist);
 
             if (c_correa.moveToFirst() == true) {
@@ -79,8 +81,8 @@ public class procesarTipos {
         ///////Bomba Agua tiene id pq tiene su propia tabla
         if(tipo_rev.equals(tipoLog.TIPO_BOMBA_AGUA)) {
             dbBombaAgua dbBombaagua = new dbBombaAgua(context);
+            if(id_bombaagua_ultimo_log_hist == 0) id_bombaagua_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_bombaagua = dbBombaagua.buscarTiposBombaAgua(id_bombaagua_ultimo_log_hist);
-
             if (c_bombaagua.moveToFirst() == true) {
                 kms_tipo_ultimo_log_hist = c_bombaagua.getInt(c_bombaagua.getColumnIndex(dbBombaAgua.CN_KMS));
             }
@@ -88,6 +90,7 @@ public class procesarTipos {
         ///////Filtro Gasolina tiene id pq tiene su propia tabla
         if(tipo_rev.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
             dbFiltroGasolina dbFG = new dbFiltroGasolina(context);
+            if(id_fgasolina_ultimo_log_hist == 0) id_fgasolina_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_fg = dbFG.buscarTiposFiltroGasolina(id_fgasolina_ultimo_log_hist);
 
             if (c_fg.moveToFirst() == true) {
@@ -97,6 +100,7 @@ public class procesarTipos {
         ///////Filtro Aire tiene id pq tiene su propia tabla
         if(tipo_rev.equals(tipoLog.TIPO_FILTRO_AIRE)) {
             dbFiltroAire dbFa = new dbFiltroAire(context);
+            if(id_faire_ultimo_log_hist == 0) id_faire_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_fa = dbFa.buscarTiposFiltroAire(id_faire_ultimo_log_hist);
 
             if (c_fa.moveToFirst() == true) {
@@ -106,6 +110,7 @@ public class procesarTipos {
         ///////Bujias tiene id pq tiene su propia tabla
         if(tipo_rev.equals(tipoLog.TIPO_BUJIAS)) {
             dbBujias dbBujias = new com.carlog.gilberto.carlog.data.dbBujias(context);
+            if(id_bujias_ultimo_log_hist == 0) id_bujias_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_bujias = dbBujias.buscarTiposBujias(id_bujias_ultimo_log_hist);
 
             if (c_bujias.moveToFirst() == true) {
@@ -115,6 +120,7 @@ public class procesarTipos {
         ///////Embrague tiene id pq tiene su propia tabla
         if(tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) {
             dbEmbrague dbEmbrague = new com.carlog.gilberto.carlog.data.dbEmbrague(context);
+            if(id_embrague_ultimo_log_hist == 0) id_embrague_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_embrague = dbEmbrague.buscarTiposEmbrague(id_bombaagua_ultimo_log_hist);
 
             if (c_embrague.moveToFirst() == true) {
@@ -241,18 +247,35 @@ public class procesarTipos {
     }
 
 
-    private static int calcular_media(long long_fecha_ini, int int_kms, int int_kms_ini) {
-        int dias_coche = (int) funciones.dias_entre_2_fechas(funciones.long_a_date(long_fecha_ini), new Date());
+
+    private static int calcular_media(long long_fecha_ini, int int_kms, int int_kms_ini, int car_year) {
+        int dias_coche_app = (int) funciones.dias_entre_2_fechas(funciones.long_a_date(long_fecha_ini), new Date());
+System.out.println("car_year " + car_year + dias_coche_app);
         int int_media = 0;
-        if(dias_coche == 0) { // se creó hoy el coche
-            int_media = int_kms - int_kms_ini;
+        if(dias_coche_app == 0) { // se creó hoy el coche (la media es la completa del coche)
+            if(car_year != myActivity.NO_KMS) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.clear();
+                calendar.set(Calendar.DAY_OF_MONTH, 15);
+                calendar.set(Calendar.MONTH, 06);
+                calendar.set(Calendar.YEAR, car_year);
+                Date car_year_date = calendar.getTime();
+
+                int dias_coche_todos = (int) funciones.dias_entre_2_fechas(car_year_date, new Date());
+
+                int_media = int_kms  / dias_coche_todos;
+System.out.println("media " + int_media + " " + dias_coche_todos);
+            }
+            else {
+                int_media = 0;
+            }
         }
-        else int_media = int_kms - int_kms_ini / dias_coche;
+        else int_media = int_kms - int_kms_ini / dias_coche_app; //(la media será la q se calcule durante la app, cada vez mas exacta)
         return int_media;
     }
 
-    public static void procesar(dbLogs dbLogs, Context context, int int_kms, long long_fecha_ini, int int_kms_ini, String matricula, String tipo_rev) {
-        int int_media = calcular_media(long_fecha_ini, int_kms, int_kms_ini);
+    public static void procesar(dbLogs dbLogs, Context context, int int_kms, long long_fecha_ini, int int_kms_ini, String matricula, String tipo_rev, int year) {
+        int int_media = calcular_media(long_fecha_ini, int_kms, int_kms_ini, year);
 
         Cursor c_historico_tipo = dbLogs.LogsHistoricoTipoOrderByFechaString(matricula, tipo_rev);
         Cursor c_logs_tipo = dbLogs.LogsTipoOrderByFechaString(matricula, tipo_rev);
@@ -294,7 +317,7 @@ public class procesarTipos {
 
                     Date fecha_log_futuro_recalculada = new Date();
                     if (!tipo_rev.equals(tipoLog.TIPO_ITV)) {
-                        if ((int_kms - kms_ultimo_log_hist) < kms_tipo_ultimo_log_hist) { // Actualizamos la fecha de la futura revisión de tipo
+                        if ((int_kms - kms_ultimo_log_hist) <= kms_tipo_ultimo_log_hist) { // Actualizamos la fecha de la futura revisión de tipo
                             int dias_en_hacer_kms_x_hacer = 0;
                             if (int_media != 0)
                                 dias_en_hacer_kms_x_hacer = kms_que_faltan_x_hacer / int_media; // regla de 3 si en 1 día hago 5000kms, en cuantos haré X?

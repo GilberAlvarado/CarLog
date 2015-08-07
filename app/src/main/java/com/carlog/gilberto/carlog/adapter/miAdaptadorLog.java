@@ -141,9 +141,9 @@ public class miAdaptadorLog extends ArrayAdapter {
         if(miLog.getRealizado((tipoLog) datos.get(position)) == dbLogs.NO_REALIZADO) {
             if (miLog.getFechalong((tipoLog) datos.get(position)) <= funciones.date_a_long(funciones.fecha_mas_dias(new Date(), notificaciones.DIAS_SEMANA))) {
                 sqView.tipo.setTextColor(Color.RED);
-                sqView.fecha.setTextColor(Color.RED);
+                sqView.fecha.setTextColor(Color.GRAY);
                 sqView.tipo.setTypeface(null, Typeface.BOLD);
-                sqView.fecha.setTypeface(null, Typeface.BOLD);
+                sqView.fecha.setTypeface(null, Typeface.NORMAL);
             }
             else {
                 sqView.tipo.setTextColor(Color.BLACK);

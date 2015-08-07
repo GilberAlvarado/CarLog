@@ -9,15 +9,9 @@
         android:title="@string/action_logout"
         android:orderInCategory="100"></item>
     <item
-        android:id="@+id/action_search"
-        android:orderInCategory="200"
-        android:title="Search"
-        android:icon="@drawable/ic_search"
-        app:showAsAction="ifRoom"></item>
-    <item
-        android:id="@+id/action_user"
+        android:id="@+id/action_info"
         android:orderInCategory="300"
         android:title="User"
-        android:icon="@drawable/ic_user"
+        android:icon="@drawable/ic_info"
         app:showAsAction="ifRoom"></item>
 </menu>

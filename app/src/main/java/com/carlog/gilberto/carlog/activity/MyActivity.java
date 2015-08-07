@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -237,6 +239,7 @@ public class myActivity extends ActionBarActivity {
 
         if (c.moveToFirst() == true) {
             matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
+            matricula_anterior = matricula;
             int_kms = c.getInt(c.getColumnIndex(dbCar.CN_KMS));
             long_itv = c.getInt(c.getColumnIndex(dbCar.CN_ITV));
             int_kms_ini = c.getInt(c.getColumnIndex(dbCar.CN_KMS_INI));
@@ -250,7 +253,7 @@ public class myActivity extends ActionBarActivity {
         sdv.setTitle("Matrícula");
         sdv.setValue(matricula);
         sdv.setEdit(matricula);
-        sdv.setEditInvisible();
+        sdv.setEditVisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_matricula));
 
         sdv = (simpleDataView) findViewById(R.id.kms_view);
@@ -279,35 +282,35 @@ public class myActivity extends ActionBarActivity {
 
     public void procesado_revisiones(dbLogs dbLogs, Context context) {
         /////////////////// PROCESAR ACEITE
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ACEITE);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ACEITE, int_year);
         /////////////////// PROCESAR FILTRO ACEITE
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_ACEITE);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_ACEITE, int_year);
         /////////////////// PROCESAR REV. GRAL.
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_REV_GENERAL);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_REV_GENERAL, int_year);
         /////////////////// PROCESAR CORREA DIST.
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_CORREA);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_CORREA, int_year);
         /////////////////// PROCESAR BOMBA AGUA
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BOMBA_AGUA);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BOMBA_AGUA, int_year);
         /////////////////// PROCESAR ITV
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ITV);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ITV, int_year);
         /////////////////// PROCESAR FILTRO GASOLINA
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_GASOLINA);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_GASOLINA, int_year);
         /////////////////// PROCESAR FILTRO AIRE
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_AIRE);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_AIRE, int_year);
         /////////////////// PROCESAR BUJIAS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BUJIAS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BUJIAS, int_year);
         /////////////////// PROCESAR LIMPIAPARABRISAS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIMPIAPARABRISAS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIMPIAPARABRISAS, int_year);
         /////////////////// PROCESAR LÍQUIDO DE FRENOS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIQUIDO_FRENOS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIQUIDO_FRENOS, int_year);
         /////////////////// PROCESAR LÍQUIDO FRENOS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FRENOS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FRENOS, int_year);
         /////////////////// PROCESAR RUEDAS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_RUEDAS);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_RUEDAS, int_year);
         /////////////////// PROCESAR LUCES
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LUCES);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LUCES, int_year);
         /////////////////// PROCESAR EMBRAGUE
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_EMBRAGUE);
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_EMBRAGUE, int_year);
         // De momento las tipo personalizadas no se procesan,  sólo se avisa en su fecha
 
     }
@@ -357,14 +360,29 @@ public class myActivity extends ActionBarActivity {
                     } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
                         tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
+                        if(!matricula.equals(matricula_anterior)) {
+                            dbLogs dbl = new dbLogs(context);
+                            dbl.modificarMatriculaLogs(matricula, matricula_anterior);
+                            dbcar.eliminarCoche(matricula_anterior);
+                        }
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
                         tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
+                        if(!matricula.equals(matricula_anterior)) {
+                            dbLogs dbl = new dbLogs(context);
+                            dbl.modificarMatriculaLogs(matricula, matricula_anterior);
+                            dbcar.eliminarCoche(matricula_anterior);
+                        }
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
                         tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
+                        if(!matricula.equals(matricula_anterior)) {
+                            dbLogs dbl = new dbLogs(context);
+                            dbl.modificarMatriculaLogs(matricula, matricula_anterior);
+                            dbcar.eliminarCoche(matricula_anterior);
+                        }
                     }
 
                 /*    Cursor c = dbcar.buscarCoches();
@@ -486,7 +504,7 @@ public class myActivity extends ActionBarActivity {
         return ok;
     }
 
-    String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "";
+    String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "", matricula_anterior = "";
     Date fechaITV = new Date();
     int int_year, int_kms, int_kms_anterior = 0, int_kms_ini = 0, int_fecha_ini = 0;
     long long_itv = 0;

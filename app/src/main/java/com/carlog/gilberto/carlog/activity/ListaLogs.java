@@ -280,7 +280,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
             public void onClick(View v) {
                 Intent intent = new Intent(listaLogs.this, myActivity.class);
                 intent.putExtra("EditarCoche", true);
-                startActivity(intent);
+                startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
             }
         });
 
