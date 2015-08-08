@@ -23,6 +23,7 @@ public class tipoLog implements Serializable {
     public final static String TIPO_LUCES = "Luces";
     public final static String TIPO_RUEDAS = "Ruedas";
     public final static String TIPO_EMBRAGUE = "Embrague";
+    public final static String TIPO_TALLER = "Taller";
 
 
     private String tipo;

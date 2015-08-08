@@ -5,14 +5,16 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+
 /**
  * Created by Gilberto on 16/05/2015.
  */
 public class dbHelper extends SQLiteOpenHelper {
 
     private static final String db_NAME = "carlog.sqlite";
-    private static final int db_SCHEME_VERSION = 84;
-    public static final int MAX_TIPOS_REV = 14; // 15 pq cuenta el 0
+    private static final int db_SCHEME_VERSION = 85;
+    public static final int MAX_TIPOS_REV = 15; // 16 pq cuenta el 0
 
     public dbHelper(Context context) {
         super(context, db_NAME, null, db_SCHEME_VERSION);
@@ -20,12 +22,12 @@ public class dbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(dbCar.CREATE_TABLE);
+      //  sqLiteDatabase.execSQL(dbCar.CREATE_TABLE);
      //   sqLiteDatabase.execSQL(dbLogs.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(dbRevGral.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(dbMarcas.CREATE_TABLE);
-        sqLiteDatabase.execSQL(dbModelos.CREATE_TABLE);
-      //  sqLiteDatabase.execSQL(dbTiposRevision.CREATE_TABLE);
+       // sqLiteDatabase.execSQL(dbModelos.CREATE_TABLE);
+        sqLiteDatabase.execSQL(dbTiposRevision.CREATE_TABLE);
      //   sqLiteDatabase.execSQL(dbCorrea.CREATE_TABLE);
      //   sqLiteDatabase.execSQL(dbBombaAgua.CREATE_TABLE);
      //   sqLiteDatabase.execSQL(dbFiltroGasolina.CREATE_TABLE);
@@ -37,7 +39,7 @@ public class dbHelper extends SQLiteOpenHelper {
       //  sqLiteDatabase.execSQL(dbLogin.SQLCreateLogin);
 
 
-        /// Inicializamos la tabla de modelos
+  /*      /// Inicializamos la tabla de modelos
         String[] lista_modelos = {"Modelo", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3",
                                   "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3",
                                   "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3", "TT", "Z3",
@@ -117,14 +119,14 @@ public class dbHelper extends SQLiteOpenHelper {
 
         /// Inicializamos la tabla de tipos de revisión
         ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV  para poder borrar los personalizados*************************//////
-  /*      String[] lista_tipo = {TipoLog.TIPO_ACEITE, TipoLog.TIPO_BOMBA_AGUA, TipoLog.TIPO_BUJIAS, TipoLog.TIPO_CORREA, TipoLog.TIPO_EMBRAGUE,
-                TipoLog.TIPO_FILTRO_ACEITE, TipoLog.TIPO_FILTRO_AIRE,
-                TipoLog.TIPO_FILTRO_GASOLINA, TipoLog.TIPO_FRENOS, TipoLog.TIPO_ITV, TipoLog.TIPO_LIMPIAPARABRISAS, TipoLog.TIPO_LIQUIDO_FRENOS,
-                TipoLog.TIPO_LUCES, TipoLog.TIPO_REV_GENERAL, TipoLog.TIPO_RUEDAS};
+        String[] lista_tipo = {tipoLog.TIPO_ACEITE, tipoLog.TIPO_BOMBA_AGUA, tipoLog.TIPO_BUJIAS, tipoLog.TIPO_CORREA, tipoLog.TIPO_EMBRAGUE,
+                tipoLog.TIPO_FILTRO_ACEITE, tipoLog.TIPO_FILTRO_AIRE,
+                tipoLog.TIPO_FILTRO_GASOLINA, tipoLog.TIPO_FRENOS, tipoLog.TIPO_ITV, tipoLog.TIPO_LIMPIAPARABRISAS, tipoLog.TIPO_LIQUIDO_FRENOS,
+                tipoLog.TIPO_LUCES, tipoLog.TIPO_REV_GENERAL, tipoLog.TIPO_RUEDAS, tipoLog.TIPO_TALLER};
         String[] lista_img = {"ic_aceite", "ic_bomba_agua", "ic_bujias", "ic_correa", "ic_embrague", "ic_fil_aceite", "ic_fil_aire", "ic_fil_gasolina", "ic_frenos", "ic_itv_rev",
-                "ic_limpiaparabrisas", "ic_liquido_frenos", "ic_luces", "ic_revgen", "ic_ruedas"};
+                "ic_limpiaparabrisas", "ic_liquido_frenos", "ic_luces", "ic_revgen", "ic_ruedas", "ic_taller"};
         ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV para poder borrar los personalizados *************************//////
-/*
+
         sqLiteDatabase.beginTransaction();
         try {
             ContentValues values = new ContentValues();
@@ -137,7 +139,7 @@ public class dbHelper extends SQLiteOpenHelper {
         } finally {
             sqLiteDatabase.endTransaction();
         }
-*/
+
 
 
  /*       /// Inicializamos la tabla de tipos de revision general
@@ -313,11 +315,11 @@ public class dbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbLogs.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbCar.TABLE_NAME);
+      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbCar.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbMarcas.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbModelos.TABLE_NAME);
+      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbModelos.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbFiltroAceite.TABLE_NAME);
-      //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbTiposRevision.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbTiposRevision.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbAceite.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbCorrea.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbBombaAgua.TABLE_NAME);

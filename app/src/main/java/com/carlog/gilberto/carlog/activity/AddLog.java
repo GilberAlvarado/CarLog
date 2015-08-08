@@ -97,8 +97,8 @@ public class addLog extends ActionBarActivity {
                     if (c.moveToFirst() == false) {
                         managerTiposRevision.insertar(nuevoDato, "ic_launcher"); // los personalizados van a tener el logo de la app
                         RellenarTipos(managerTiposRevision);
-                        edttxt.setVisibility(View.INVISIBLE);
-                        tv_nt.setVisibility(View.INVISIBLE);
+                        edttxt.setVisibility(View.GONE);
+                        tv_nt.setVisibility(View.GONE);
                         edttxt.setText("");
                     }
                     else Toast.makeText(getApplicationContext(), "El tipo ya existe", Toast.LENGTH_SHORT).show();
