@@ -274,6 +274,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 Intent intent = new Intent(listaLogs.this, myActivity.class);
                 intent.putExtra("EditarCoche", true);
                 startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
+                mFab.performClick();
             }
         });
 
@@ -288,6 +289,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 Intent intent = new Intent(listaLogs.this, myActivity.class);
                 intent.putExtra("CocheNuevo", true);
                 startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
+                mFab.performClick();
                 // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
                 // Si no queremos agregar nuevo coche y pulsamos hacia atras regresamos a la lista de logs anterior
             }
@@ -303,6 +305,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
             public void onClick(View v) {
                 Intent intent = new Intent(listaLogs.this, addLog.class);
                 startActivityForResult(intent, PETICION_ACTIVITY_ADD_LOG);
+                mFab.performClick();
             }
         });
 
