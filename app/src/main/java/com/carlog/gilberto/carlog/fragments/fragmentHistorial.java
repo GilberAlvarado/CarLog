@@ -31,7 +31,6 @@ import com.carlog.gilberto.carlog.data.dbCar;
 import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
-import com.carlog.gilberto.carlog.view.BaseFragment;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 
@@ -41,7 +40,7 @@ import java.util.List;
 /**
  * Created by Gilberto on 03/08/2015.
  */
-public class fragmentHistorial extends BaseFragment {
+public class fragmentHistorial extends baseFragment {
     private View rootView;
     ObservableListView listView;
 

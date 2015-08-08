@@ -107,7 +107,7 @@
                         android:id="@+id/difuminado_layout">
                     </LinearLayout>
 
-                    <com.carlog.gilberto.carlog.view.SlidingTabLayout
+                    <com.carlog.gilberto.carlog.view.slidingTabLayout
                         android:id="@+id/sliding_tabs"
                         android:elevation="3dp"
                         android:layout_width="match_parent"

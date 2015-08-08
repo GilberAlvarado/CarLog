@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
@@ -26,6 +27,8 @@ import android.widget.Toast;
 
 import com.carlog.gilberto.carlog.data.dbCar;
 import com.carlog.gilberto.carlog.data.dbMarcas;
+import com.carlog.gilberto.carlog.formats.documentHelper;
+import com.carlog.gilberto.carlog.formats.utilities;
 import com.carlog.gilberto.carlog.negocio.notificaciones;
 import com.carlog.gilberto.carlog.negocio.procesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.cocheEsNuevo;
@@ -360,25 +363,34 @@ public class myActivity extends ActionBarActivity {
                     } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
                         tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
-                        if(!matricula.equals(matricula_anterior)) {
+System.out.println("00000000000222222 ");
+                        // Si el coche no existía no se va a dar el caso pq la matricula es la clave de la tabla entonces no modificamos
+                        /*if(!matricula.equals(matricula_anterior)) {
                             dbLogs dbl = new dbLogs(context);
                             dbl.modificarMatriculaLogs(matricula, matricula_anterior);
                             dbcar.eliminarCoche(matricula_anterior);
-                        }
+                        }*/
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
-                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        Uri myUri = Uri.parse(img_modelo_personalizada);
+                        String uriEncoded = Uri.encode(utilities.getPathPictureFromUri(context, myUri), "UTF-8");
+System.out.println("222222 "+ matricula + " " + marca);
+                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, img_modelo_cambiada, uriEncoded, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                         if(!matricula.equals(matricula_anterior)) {
+System.out.println("222222 "+ img_modelo_cambiada+" "+ img_modelo_personalizada+ " "+ int_profile+ " "+uriEncoded);
                             dbLogs dbl = new dbLogs(context);
                             dbl.modificarMatriculaLogs(matricula, matricula_anterior);
                             dbcar.eliminarCoche(matricula_anterior);
                         }
                     }
                     else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
-                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                        Uri myUri = Uri.parse(img_modelo_personalizada);
+                        String uriEncoded = Uri.encode(utilities.getPathPictureFromUri(context, myUri), "UTF-8");
+                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, img_modelo_cambiada, uriEncoded, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                         if(!matricula.equals(matricula_anterior)) {
+System.out.println("3333333 "+ img_modelo_cambiada+" "+ img_modelo_personalizada+ " "+ int_profile);
                             dbLogs dbl = new dbLogs(context);
                             dbl.modificarMatriculaLogs(matricula, matricula_anterior);
                             dbcar.eliminarCoche(matricula_anterior);
@@ -504,9 +516,9 @@ public class myActivity extends ActionBarActivity {
         return ok;
     }
 
-    String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "", matricula_anterior = "";
+    String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "", matricula_anterior = "", img_modelo_personalizada = "";
     Date fechaITV = new Date();
-    int int_year, int_kms, int_kms_anterior = 0, int_kms_ini = 0, int_fecha_ini = 0;
+    int int_year, int_kms, int_kms_anterior = 0, int_kms_ini = 0, int_fecha_ini = 0, img_modelo_cambiada = dbCar.IMG_MODELO_NOCAMBIADA, int_profile = 0;
     long long_itv = 0;
 
     private void ocultar_campos() { //
@@ -635,6 +647,9 @@ public class myActivity extends ActionBarActivity {
                 long_itv = c.getInt(c.getColumnIndex(dbCar.CN_ITV));
                 int_kms_ini = c.getInt(c.getColumnIndex(dbCar.CN_KMS_INI));
                 int_fecha_ini = c.getInt(c.getColumnIndex(dbCar.CN_FECHA_INI));
+                img_modelo_cambiada = c.getInt(c.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
+                img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
+                int_profile = c.getInt(c.getColumnIndex(dbCar.CN_PROFILE));
             }
 
             RellenarMarcas(c);

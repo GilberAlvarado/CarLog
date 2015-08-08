@@ -320,7 +320,7 @@ System.out.println("media " + int_media + " " + dias_coche_todos);
                         if ((int_kms - kms_ultimo_log_hist) <= kms_tipo_ultimo_log_hist) { // Actualizamos la fecha de la futura revisión de tipo
                             int dias_en_hacer_kms_x_hacer = 0;
                             if (int_media != 0)
-                                dias_en_hacer_kms_x_hacer = kms_que_faltan_x_hacer / int_media; // regla de 3 si en 1 día hago 5000kms, en cuantos haré X?
+                                dias_en_hacer_kms_x_hacer = (int) kms_que_faltan_x_hacer / int_media; // regla de 3 si en 1 día hago 5000kms, en cuantos haré X?
                             else dias_en_hacer_kms_x_hacer = kms_que_faltan_x_hacer;
 
                             if (dias_en_hacer_kms_x_hacer == 0) { // La media es mucho más grande que los kms que quedan o se llega al día que toca
@@ -334,6 +334,7 @@ System.out.println("media " + int_media + " " + dias_coche_todos);
                             Date f_revision_por_fecha = procesarPorFecha(tipo_rev, fecha_ultimo_log_hist);
 
                             long long_f_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
+
                             if ((long_fecha_log_futuro_recalculada > long_f_revision_por_fecha) &&
                                     ((!tipo_rev.equals(tipoLog.TIPO_RUEDAS)) && (!tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) && (!tipo_rev.equals(tipoLog.TIPO_LUCES)))) { // el cambio sería por fecha y no por kms (menos revisiones de solo por kms)
                                 long_fecha_log_futuro_recalculada = long_f_revision_por_fecha;
@@ -388,8 +389,15 @@ System.out.println("media " + int_media + " " + dias_coche_todos);
                                         dbLogs.eliminar_por_id(int_id_log);
                                         dbLogs.insertar(miTipoLog);
                                     }
+                                } else {
+                                    tipoLog miTipoLog = new tipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, id_correa_ultimo_log_hist, id_bombaagua_ultimo_log_hist, id_fgasolina_ultimo_log_hist, id_faire_ultimo_log_hist, id_bujias_ultimo_log_hist, id_embrague_ultimo_log_hist, txt_matricula_ultimo_log_hist, com.carlog.gilberto.carlog.data.dbLogs.NO_REALIZADO, com.carlog.gilberto.carlog.data.dbLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
+                                    Cursor c_sobreescribir = dbLogs.LogsTipoOrderByFechaString(matricula, tipo_rev);
+                                    if(c_sobreescribir.moveToFirst() == true) {
+                                        int int_id = c_sobreescribir.getInt(c_sobreescribir.getColumnIndex(dbLogs.CN_ID));
+                                        dbLogs.eliminar_por_id(int_id);
+                                    }
+                                    dbLogs.insertar(miTipoLog);
                                 }
-
                             } else {
                                 // Creamos el nuevo log futuro estimado a partir del ultimo log histórico
                                 // Se pone por defecto el tipo de aceite del ultimo log historico, si se desea poner otro se deberá editar el log y cambiarlo de forma manual

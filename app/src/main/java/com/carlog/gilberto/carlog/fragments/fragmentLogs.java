@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,6 @@ import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.procesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
-import com.carlog.gilberto.carlog.view.BaseFragment;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 
@@ -44,7 +44,7 @@ import java.util.List;
 /**
  * Created by Gilberto on 03/08/2015.
  */
-public class fragmentLogs extends BaseFragment {
+public class fragmentLogs extends baseFragment {
     private View rootView;
     ObservableListView listView;
 
@@ -257,10 +257,22 @@ public class fragmentLogs extends BaseFragment {
                 if(hoy) manager.marcarRealizadoLog(id, funciones.date_a_long(f_hoy), int_kms); //hoy
                 else manager.marcarRealizadoLog(id, funciones.date_a_long(f_rev), int_kms);
 
-                listaLogs a = (listaLogs) act;
-                fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
-                fl.ConsultarLogs(context, act);
-                break;
+                listaLogs ll = (listaLogs) act;
+                List<Fragment> list_frag = ll.getCurrentFragment().getFragmentManager().getFragments();
+                for(int j = 0; j < list_frag.size(); j++) {
+                    try{
+                        fragmentLogs fl = (fragmentLogs)list_frag.get(j);
+                        fl.ConsultarLogs(context, act);
+                    }
+                    catch (ClassCastException e) {
+                        try {
+                            fragmentHistorial fh = (fragmentHistorial) list_frag.get(j);
+                            fh.ConsultarLogsHistoricos(context, act);
+                        } catch (ClassCastException e2) {
+
+                        }
+                    }
+                }
             }
             i++;
         }

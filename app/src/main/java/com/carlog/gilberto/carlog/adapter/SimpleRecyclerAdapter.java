@@ -12,11 +12,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAdapter.ViewHolder> {
+public class simpleRecyclerAdapter extends RecyclerView.Adapter<simpleRecyclerAdapter.ViewHolder> {
     private LayoutInflater mInflater;
     private ArrayList<String> mItems;
 
-    public SimpleRecyclerAdapter(Context context, ArrayList<String> items) {
+    public simpleRecyclerAdapter(Context context, ArrayList<String> items) {
         mInflater = LayoutInflater.from(context);
         mItems = items;
     }

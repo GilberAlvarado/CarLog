@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog.view;
+package com.carlog.gilberto.carlog.activity;
 
 /**
  * Created by Gilberto on 04/08/2015.
@@ -14,12 +14,12 @@ import android.widget.GridView;
 import android.widget.ListView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.adapter.SimpleHeaderRecyclerAdapter;
-import com.carlog.gilberto.carlog.adapter.SimpleRecyclerAdapter;
+import com.carlog.gilberto.carlog.adapter.simpleHeaderRecyclerAdapter;
+import com.carlog.gilberto.carlog.adapter.simpleRecyclerAdapter;
 
 import java.util.ArrayList;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class baseActivity extends AppCompatActivity {
     private static final int NUM_OF_ITEMS = 100;
     private static final int NUM_OF_ITEMS_FEW = 3;
 
@@ -92,7 +92,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void setDummyData(RecyclerView recyclerView, int num) {
-        recyclerView.setAdapter(new SimpleRecyclerAdapter(this, getDummyData(num)));
+        recyclerView.setAdapter(new simpleRecyclerAdapter(this, getDummyData(num)));
     }
 
     protected void setDummyDataWithHeader(RecyclerView recyclerView, int headerHeight) {
@@ -105,6 +105,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void setDummyDataWithHeader(RecyclerView recyclerView, View headerView) {
-        recyclerView.setAdapter(new SimpleHeaderRecyclerAdapter(this, getDummyData(), headerView));
+        recyclerView.setAdapter(new simpleHeaderRecyclerAdapter(this, getDummyData(), headerView));
     }
 }

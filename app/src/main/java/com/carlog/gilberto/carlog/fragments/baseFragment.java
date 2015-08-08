@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog.view;
+package com.carlog.gilberto.carlog.fragments;
 
 /**
  * Created by Gilberto on 04/08/2015.
@@ -14,15 +14,15 @@ import android.widget.GridView;
 import android.widget.ListView;
 
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.adapter.SimpleHeaderRecyclerAdapter;
-import com.carlog.gilberto.carlog.adapter.SimpleRecyclerAdapter;
-import com.github.ksoichiro.android.observablescrollview.ObservableGridView;
+import com.carlog.gilberto.carlog.activity.baseActivity;
+import com.carlog.gilberto.carlog.adapter.simpleHeaderRecyclerAdapter;
+import com.carlog.gilberto.carlog.adapter.simpleRecyclerAdapter;
 
 import java.util.ArrayList;
 
-public abstract class BaseFragment extends Fragment {
+public abstract class baseFragment extends Fragment {
     public static ArrayList<String> getDummyData() {
-        return BaseActivity.getDummyData();
+        return baseActivity.getDummyData();
     }
 
     protected int getActionBarSize() {
@@ -66,10 +66,10 @@ public abstract class BaseFragment extends Fragment {
     }*/
 
     protected void setDummyData(RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleRecyclerAdapter(getActivity(), getDummyData()));
+        recyclerView.setAdapter(new simpleRecyclerAdapter(getActivity(), getDummyData()));
     }
 
     protected void setDummyDataWithHeader(RecyclerView recyclerView, View headerView) {
-        recyclerView.setAdapter(new SimpleHeaderRecyclerAdapter(getActivity(), getDummyData(), headerView));
+        recyclerView.setAdapter(new simpleHeaderRecyclerAdapter(getActivity(), getDummyData(), headerView));
     }
 }

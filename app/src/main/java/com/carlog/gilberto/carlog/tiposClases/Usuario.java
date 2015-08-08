@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.database.Cursor;
 
 import com.carlog.gilberto.carlog.data.dbLogin;
+import com.carlog.gilberto.carlog.formats.httpClientManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;

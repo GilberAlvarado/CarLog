@@ -1,4 +1,4 @@
-package com.carlog.gilberto.carlog.tiposClases;
+package com.carlog.gilberto.carlog.formats;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

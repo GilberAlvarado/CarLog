@@ -49,6 +49,7 @@ public class cambiarCocheActivo {
     public static void CambiarImgLogs(Context context, Activity act, String img_modelo_personalizada, String modelo, int img_modelo_cambiada) {
         ImageView img_listalogs = (ImageView) act.findViewById(R.id.image);
         if(img_modelo_cambiada == dbCar.IMG_MODELO_NOCAMBIADA) {
+System.out.println("NOOOOO perfecto "+ img_modelo_personalizada);
             dbModelos dbm = new dbModelos(context);
             Cursor c = dbm.buscarModelos(modelo);
             if (c.moveToFirst() == true) {
@@ -58,6 +59,7 @@ public class cambiarCocheActivo {
             }
         }
         else {
+System.out.println("sIIIIIIIIIIIII perfecto "+ img_modelo_personalizada);
             Uri myUri = Uri.parse(img_modelo_personalizada);
             File imgFile = new  File(utilities.getPathPictureFromUri(context, myUri));
             if(imgFile.exists()) {
@@ -207,8 +209,8 @@ public class cambiarCocheActivo {
                 // RellenarPantalla();
 
 
-                listaLogs a = (listaLogs) act;
-                List<Fragment> list_frag = a.getCurrentFragment().getFragmentManager().getFragments();
+                listaLogs ll = (listaLogs) act;
+                List<Fragment> list_frag = ll.getCurrentFragment().getFragmentManager().getFragments();
                 for(int i = 0; i < list_frag.size(); i++) {
                     try{
                         fragmentLogs fl = (fragmentLogs)list_frag.get(i);
@@ -223,21 +225,7 @@ public class cambiarCocheActivo {
                         }
                     }
                 }
-                //fragmentLogs fl = (fragmentLogs) a.getSupportFragmentManager().findFragmentById(ID_FRAGMENT_LOGS_FUTUROS);
-                //  fl.ConsultarLogs(context, act);
-                /*try{
-                    fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
-                    fl.ConsultarLogs(context, act);
-                }
-                catch (ClassCastException e){
-                    try {
-                        fragmentHistorial fh = (fragmentHistorial) a.getCurrentFragment();
-                        fh.ConsultarLogsHistoricos(context, act);
-                    }
-                    catch (ClassCastException e2) {
 
-                    }
-                }*/
             } else {// no se da el caso pq si entra en el primer if ya existe minimo un coche y ya hemos forzado a q sea el activo
             }
         }

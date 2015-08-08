@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,15 +15,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -47,16 +43,13 @@ import com.carlog.gilberto.carlog.fragments.fragmentHistorial;
 import com.carlog.gilberto.carlog.fragments.fragmentLogs;
 import com.carlog.gilberto.carlog.negocio.cambiarCocheActivo;
 import com.carlog.gilberto.carlog.tiposClases.usuario;
-import com.carlog.gilberto.carlog.view.BaseActivity;
-import com.carlog.gilberto.carlog.view.SlidingTabLayout;
+import com.carlog.gilberto.carlog.view.slidingTabLayout;
 import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePagerAdapter;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
-import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.view.ViewHelper;
-import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import java.io.File;
@@ -69,7 +62,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by Gilberto on 29/10/2014.
  */
-public class listaLogs extends BaseActivity implements ObservableScrollViewCallbacks  {
+public class listaLogs extends baseActivity implements ObservableScrollViewCallbacks  {
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
    // private static final boolean TOOLBAR_IS_STICKY = true;
@@ -219,7 +212,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
         mImageViewOnClick = findViewById(R.id.imageonclick);
         mOverlayView = findViewById(R.id.overlay);
 
-        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+        slidingTabLayout slidingTabLayout = (slidingTabLayout) findViewById(R.id.sliding_tabs);
         slidingTabLayout.setCustomTabView(R.layout.tab_indicator, android.R.id.text1);
         slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.accent));
         slidingTabLayout.setDistributeEvenly(true);
@@ -487,7 +480,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
             img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
         }
 
-        System.out.println("pers " + img_modelo_personalizada + " cambiada " + img_modelo_cambiada);
+        System.out.println("personalizada " + img_modelo_personalizada + " cambiada " + img_modelo_cambiada);
         cambiarCocheActivo.CambiarImgLogs(context, listaLogs.this, img_modelo_personalizada, modelo, img_modelo_cambiada);
 
 
@@ -602,7 +595,7 @@ public class listaLogs extends BaseActivity implements ObservableScrollViewCallb
 
         @Override
         public void onMoveMotionEvent(MotionEvent ev, float diffX, float diffY) {
-            int flexibleSpace = mFlexibleSpaceHeight - mTabHeight;
+            int flexibleSpace = mFlexibleSpaceHeight + mTabHeight;
             float translationY = ScrollUtils.getFloat(ViewHelper.getTranslationY(mInterceptionLayout) + diffY, -flexibleSpace, 0);
             MotionEvent e = MotionEvent.obtainNoHistory(ev);
             e.offsetLocation(0, translationY - mBaseTranslationY);
