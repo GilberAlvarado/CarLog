@@ -49,7 +49,6 @@ public class cambiarCocheActivo {
     public static void CambiarImgLogs(Context context, Activity act, String img_modelo_personalizada, String modelo, int img_modelo_cambiada) {
         ImageView img_listalogs = (ImageView) act.findViewById(R.id.image);
         if(img_modelo_cambiada == dbCar.IMG_MODELO_NOCAMBIADA) {
-System.out.println("NOOOOO perfecto "+ img_modelo_personalizada);
             dbModelos dbm = new dbModelos(context);
             Cursor c = dbm.buscarModelos(modelo);
             if (c.moveToFirst() == true) {
@@ -59,7 +58,6 @@ System.out.println("NOOOOO perfecto "+ img_modelo_personalizada);
             }
         }
         else {
-System.out.println("sIIIIIIIIIIIII perfecto "+ img_modelo_personalizada);
             Uri myUri = Uri.parse(img_modelo_personalizada);
             File imgFile = new  File(utilities.getPathPictureFromUri(context, myUri));
             if(imgFile.exists()) {

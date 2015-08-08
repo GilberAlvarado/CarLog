@@ -363,7 +363,6 @@ public class myActivity extends ActionBarActivity {
                     } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
                         tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
                         dbcar.insertinsertOrUpdate(miCoche);
-System.out.println("00000000000222222 ");
                         // Si el coche no existía no se va a dar el caso pq la matricula es la clave de la tabla entonces no modificamos
                         /*if(!matricula.equals(matricula_anterior)) {
                             dbLogs dbl = new dbLogs(context);
@@ -374,11 +373,9 @@ System.out.println("00000000000222222 ");
                     else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
                         Uri myUri = Uri.parse(img_modelo_personalizada);
                         String uriEncoded = Uri.encode(utilities.getPathPictureFromUri(context, myUri), "UTF-8");
-System.out.println("222222 "+ matricula + " " + marca);
                         tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, img_modelo_cambiada, uriEncoded, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                         if(!matricula.equals(matricula_anterior)) {
-System.out.println("222222 "+ img_modelo_cambiada+" "+ img_modelo_personalizada+ " "+ int_profile+ " "+uriEncoded);
                             dbLogs dbl = new dbLogs(context);
                             dbl.modificarMatriculaLogs(matricula, matricula_anterior);
                             dbcar.eliminarCoche(matricula_anterior);
@@ -390,21 +387,13 @@ System.out.println("222222 "+ img_modelo_cambiada+" "+ img_modelo_personalizada+
                         tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, img_modelo_cambiada, uriEncoded, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
                         dbcar.insertinsertOrUpdate(miCoche);
                         if(!matricula.equals(matricula_anterior)) {
-System.out.println("3333333 "+ img_modelo_cambiada+" "+ img_modelo_personalizada+ " "+ int_profile);
                             dbLogs dbl = new dbLogs(context);
                             dbl.modificarMatriculaLogs(matricula, matricula_anterior);
                             dbcar.eliminarCoche(matricula_anterior);
                         }
                     }
 
-                /*    Cursor c = dbcar.buscarCoches();
-
-                    CambiarCocheActivo.CambiarCocheActivo(dbcar, c, MyActivity.this, context);  //actualizamos los coches en el navigation bar por si se crea uno nuevo
-*/
-
-
                     procesar(context);
-
 
                     startActivity(intent);
                     // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
@@ -505,7 +494,7 @@ System.out.println("3333333 "+ img_modelo_cambiada+" "+ img_modelo_personalizada
 
         sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
         itv = sdv.getValue();
-        if(!itv.isEmpty()) {
+        if(!itv.isEmpty() && (funciones.string_a_long(itv) > FIRST_DATE)) {
             fechaITV = funciones.string_a_date(itv);
             long_itv = funciones.string_a_long(itv);
         }
@@ -518,8 +507,8 @@ System.out.println("3333333 "+ img_modelo_cambiada+" "+ img_modelo_personalizada
 
     String matricula = "", marca = "", modelo = "", year = "", kms = "", itv = "", matricula_anterior = "", img_modelo_personalizada = "";
     Date fechaITV = new Date();
-    int int_year, int_kms, int_kms_anterior = 0, int_kms_ini = 0, int_fecha_ini = 0, img_modelo_cambiada = dbCar.IMG_MODELO_NOCAMBIADA, int_profile = 0;
-    long long_itv = 0;
+    int int_year, int_kms, int_kms_anterior = 0, int_kms_ini = 0, int_fecha_ini = 0, img_modelo_cambiada = dbCar.IMG_MODELO_NOCAMBIADA, int_profile = tipoCoche.PROFILE_INACTIVO;
+    long long_itv = NO_ITV;
 
     private void ocultar_campos() { //
         // Se ocultan todos los campos obligatorios porque ya han sido agregados

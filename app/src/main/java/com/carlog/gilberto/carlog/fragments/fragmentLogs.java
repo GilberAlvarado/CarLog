@@ -70,6 +70,14 @@ public class fragmentLogs extends baseFragment {
                             if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
                                 int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
                                 String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
+                                String tipo_rev = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
+                                if(tipo_rev.equals(tipoLog.TIPO_ITV)) {
+                                    Cursor c_hist_itv = manager.LogsHistoricoTipoOrderByFechaString(matricula, tipo_rev);
+                                    if(c_hist_itv.moveToFirst() == false) {
+                                        dbCar dbc = new dbCar(context);
+                                        dbc.ActualizarITVCocheActivo(matricula, myActivity.NO_ITV);
+                                    }
+                                }
                                 manager.eliminar_por_id(id);
                                 listaLogs a = (listaLogs) act;
                                 fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();

@@ -250,7 +250,6 @@ public class procesarTipos {
 
     private static int calcular_media(long long_fecha_ini, int int_kms, int int_kms_ini, int car_year) {
         int dias_coche_app = (int) funciones.dias_entre_2_fechas(funciones.long_a_date(long_fecha_ini), new Date());
-System.out.println("car_year " + car_year + dias_coche_app);
         int int_media = 0;
         if(dias_coche_app == 0) { // se creó hoy el coche (la media es la completa del coche)
             if(car_year != myActivity.NO_KMS) {
@@ -264,7 +263,6 @@ System.out.println("car_year " + car_year + dias_coche_app);
                 int dias_coche_todos = (int) funciones.dias_entre_2_fechas(car_year_date, new Date());
 
                 int_media = int_kms  / dias_coche_todos;
-System.out.println("media " + int_media + " " + dias_coche_todos);
             }
             else {
                 int_media = 0;
@@ -389,7 +387,7 @@ System.out.println("media " + int_media + " " + dias_coche_todos);
                                         dbLogs.eliminar_por_id(int_id_log);
                                         dbLogs.insertar(miTipoLog);
                                     }
-                                } else {
+                                } else { // para el resto
                                     tipoLog miTipoLog = new tipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, id_correa_ultimo_log_hist, id_bombaagua_ultimo_log_hist, id_fgasolina_ultimo_log_hist, id_faire_ultimo_log_hist, id_bujias_ultimo_log_hist, id_embrague_ultimo_log_hist, txt_matricula_ultimo_log_hist, com.carlog.gilberto.carlog.data.dbLogs.NO_REALIZADO, com.carlog.gilberto.carlog.data.dbLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
                                     Cursor c_sobreescribir = dbLogs.LogsTipoOrderByFechaString(matricula, tipo_rev);
                                     if(c_sobreescribir.moveToFirst() == true) {
