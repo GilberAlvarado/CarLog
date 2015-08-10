@@ -314,6 +314,12 @@ public class myActivity extends ActionBarActivity {
         procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LUCES, int_year);
         /////////////////// PROCESAR EMBRAGUE
         procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_EMBRAGUE, int_year);
+        /////////////////// PROCESAR AMORTIGUADORES
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_AMORTIGUADORES, int_year);
+        /////////////////// PROCESAR ANTICONGELANTE
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ANTICONGELANTE, int_year);
+        /////////////////// PROCESAR BATERIA
+        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BATERIA, int_year);
         // De momento las tipo personalizadas no se procesan,  sólo se avisa en su fecha
 
     }

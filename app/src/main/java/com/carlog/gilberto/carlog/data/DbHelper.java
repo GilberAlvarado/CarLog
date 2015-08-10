@@ -13,8 +13,8 @@ import com.carlog.gilberto.carlog.tiposClases.tipoLog;
 public class dbHelper extends SQLiteOpenHelper {
 
     private static final String db_NAME = "carlog.sqlite";
-    private static final int db_SCHEME_VERSION = 85;
-    public static final int MAX_TIPOS_REV = 15; // 16 pq cuenta el 0
+    private static final int db_SCHEME_VERSION = 87;
+    public static final int MAX_TIPOS_REV = 18; // 19 pq cuenta el 0
 
     public dbHelper(Context context) {
         super(context, db_NAME, null, db_SCHEME_VERSION);
@@ -23,7 +23,7 @@ public class dbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
       //  sqLiteDatabase.execSQL(dbCar.CREATE_TABLE);
-     //   sqLiteDatabase.execSQL(dbLogs.CREATE_TABLE);
+        sqLiteDatabase.execSQL(dbLogs.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(dbRevGral.CREATE_TABLE);
       //  sqLiteDatabase.execSQL(dbMarcas.CREATE_TABLE);
        // sqLiteDatabase.execSQL(dbModelos.CREATE_TABLE);
@@ -119,11 +119,11 @@ public class dbHelper extends SQLiteOpenHelper {
 
         /// Inicializamos la tabla de tipos de revisión
         ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV  para poder borrar los personalizados*************************//////
-        String[] lista_tipo = {tipoLog.TIPO_ACEITE, tipoLog.TIPO_BOMBA_AGUA, tipoLog.TIPO_BUJIAS, tipoLog.TIPO_CORREA, tipoLog.TIPO_EMBRAGUE,
+        String[] lista_tipo = {tipoLog.TIPO_ACEITE, tipoLog.TIPO_AMORTIGUADORES, tipoLog.TIPO_ANTICONGELANTE, tipoLog.TIPO_BATERIA, tipoLog.TIPO_BOMBA_AGUA, tipoLog.TIPO_BUJIAS, tipoLog.TIPO_CORREA, tipoLog.TIPO_EMBRAGUE,
                 tipoLog.TIPO_FILTRO_ACEITE, tipoLog.TIPO_FILTRO_AIRE,
                 tipoLog.TIPO_FILTRO_GASOLINA, tipoLog.TIPO_FRENOS, tipoLog.TIPO_ITV, tipoLog.TIPO_LIMPIAPARABRISAS, tipoLog.TIPO_LIQUIDO_FRENOS,
                 tipoLog.TIPO_LUCES, tipoLog.TIPO_REV_GENERAL, tipoLog.TIPO_RUEDAS, tipoLog.TIPO_TALLER};
-        String[] lista_img = {"ic_aceite", "ic_bomba_agua", "ic_bujias", "ic_correa", "ic_embrague", "ic_fil_aceite", "ic_fil_aire", "ic_fil_gasolina", "ic_frenos", "ic_itv_rev",
+        String[] lista_img = {"ic_aceite", "ic_amortiguadores", "ic_anticongelante", "ic_bateria", "ic_bomba_agua", "ic_bujias", "ic_correa", "ic_embrague", "ic_fil_aceite", "ic_fil_aire", "ic_fil_gasolina", "ic_frenos", "ic_itv_rev",
                 "ic_limpiaparabrisas", "ic_liquido_frenos", "ic_luces", "ic_revgen", "ic_ruedas", "ic_taller"};
         ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV para poder borrar los personalizados *************************//////
 
@@ -314,7 +314,7 @@ public class dbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
-     //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbLogs.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbLogs.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbCar.TABLE_NAME);
      //   sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbMarcas.TABLE_NAME);
       //  sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbModelos.TABLE_NAME);

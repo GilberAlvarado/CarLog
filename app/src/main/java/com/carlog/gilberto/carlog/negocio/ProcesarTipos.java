@@ -34,9 +34,11 @@ public class procesarTipos {
     public final static int F_MAX_ITV = 365;
     public final static int F_MAX_FIL_GASOLINA = 365 * 3;
     public final static int F_MAX_FIL_AIRE = 365 * 3;
-    public final static int F_MAX_BUJIAS = 365 * 6;
+    public final static int F_MAX_BUJIAS = 365 * 2;
     public final static int F_MAX_LIQUIDO_FRENOS = 365 * 2;
     public final static int F_MAX_LIMPIAPARABRISAS = 365;
+    public final static int F_MAX_ANTICONGELANTE = 365 * 2;
+    public final static int F_MAX_BATERIA = 365 * 5;
     // aceite y revgral no tienen kms pq se inician al valor q inserte el usuario y no automaticamente
     //public final static int KMS_CORREA = 100000;
     //public final static int KMS_BOMBA_AGUA = 100000;
@@ -44,8 +46,13 @@ public class procesarTipos {
     //public final static int KMS_FIL_AIRE = 30000;
     //public final static int KMS_BUJIAS = 60000;
     //public final static int KMS_EMBRAGUE = 60000;
+    public final static int KMS_FRENOS = 15000;
+    public final static int KMS_AMORTIGUADORES = 80000;
+    public final static int KMS_LIQUIDO_FRENOS = 15000;
     public final static int KMS_LUCES = 30000;
     public final static int KMS_RUEDAS = 15000;
+
+
 
 
     private static int procesarPorKms(Context context, String tipo_rev, int id_aceite_ultimo_log_hist, int id_revgral_ultimo_log_hist, int id_correa_ultimo_log_hist, int id_bombaagua_ultimo_log_hist, int id_fgasolina_ultimo_log_hist, int id_faire_ultimo_log_hist, int id_bujias_ultimo_log_hist, int id_embrague_ultimo_log_hist, String matricula, Cursor c_historico_tipo) {
@@ -131,9 +138,21 @@ public class procesarTipos {
         if(tipo_rev.equals(tipoLog.TIPO_RUEDAS)) {
             kms_tipo_ultimo_log_hist = KMS_RUEDAS;
         }
-        // ruedas no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        // luces no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
         if(tipo_rev.equals(tipoLog.TIPO_LUCES)) {
             kms_tipo_ultimo_log_hist = KMS_LUCES;
+        }
+        // liquido frenos no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        if(tipo_rev.equals(tipoLog.TIPO_LIQUIDO_FRENOS)) {
+            kms_tipo_ultimo_log_hist = KMS_LIQUIDO_FRENOS;
+        }
+        // frenos no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        if(tipo_rev.equals(tipoLog.TIPO_FRENOS)) {
+            kms_tipo_ultimo_log_hist = KMS_FRENOS;
+        }
+        // amortiguadores no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
+        if(tipo_rev.equals(tipoLog.TIPO_AMORTIGUADORES)) {
+            kms_tipo_ultimo_log_hist = KMS_AMORTIGUADORES;
         }
         // filtro aceite
         if(tipo_rev.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
@@ -194,6 +213,12 @@ public class procesarTipos {
         if (tipo_rev.equals(tipoLog.TIPO_LIQUIDO_FRENOS)) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_LIQUIDO_FRENOS);
         }
+        if (tipo_rev.equals(tipoLog.TIPO_ANTICONGELANTE)) {
+            f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_ANTICONGELANTE);
+        }
+        if (tipo_rev.equals(tipoLog.TIPO_BATERIA)) {
+            f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_BATERIA);
+        }
         // la itv solo se procesa al marcar el log como realizado pq no depende de los kms ni de fecha sino cuando la realice
 
         return f_revision_por_fecha;
@@ -243,6 +268,15 @@ public class procesarTipos {
         }
         if (tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) {
             Toast.makeText(context, "Debería cambiar el embrague cuanto antes.", Toast.LENGTH_LONG).show();
+        }
+        if (tipo_rev.equals(tipoLog.TIPO_ANTICONGELANTE)) {
+            Toast.makeText(context, "Debería cambiar el líquido anticongelante cuanto antes.", Toast.LENGTH_LONG).show();
+        }
+        if (tipo_rev.equals(tipoLog.TIPO_BATERIA)) {
+            Toast.makeText(context, "La batería puede empezar a fallar.", Toast.LENGTH_LONG).show();
+        }
+        if (tipo_rev.equals(tipoLog.TIPO_AMORTIGUADORES)) {
+            Toast.makeText(context, "Debería revisar los amortiguadores cuanto antes.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -297,7 +331,7 @@ public class procesarTipos {
                 int id_revgral_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(com.carlog.gilberto.carlog.data.dbLogs.CN_REVGRAL));
 
                 // Los tipo de revisión que se procesan unicamente por fecha y no por kms
-                if ((tipo_rev.equals(tipoLog.TIPO_LIMPIAPARABRISAS)) || (tipo_rev.equals(tipoLog.TIPO_LIQUIDO_FRENOS))) {
+                if ((tipo_rev.equals(tipoLog.TIPO_LIMPIAPARABRISAS)) || (tipo_rev.equals(tipoLog.TIPO_ANTICONGELANTE)) || (tipo_rev.equals(tipoLog.TIPO_BATERIA))) {
                     if (c_logs_tipo.moveToFirst() == false) { // Si existen no se tienen que procesar pq se procesan unicamente al actualizar el nº de kms excepto los especiales aceite y filtro de aceite
                         Date f_revision_por_fecha = procesarPorFecha(tipo_rev, fecha_ultimo_log_hist);
                         long long_f_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
@@ -334,7 +368,8 @@ public class procesarTipos {
                             long long_f_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
 
                             if ((long_fecha_log_futuro_recalculada > long_f_revision_por_fecha) &&
-                                    ((!tipo_rev.equals(tipoLog.TIPO_RUEDAS)) && (!tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) && (!tipo_rev.equals(tipoLog.TIPO_LUCES)))) { // el cambio sería por fecha y no por kms (menos revisiones de solo por kms)
+                                    ((!tipo_rev.equals(tipoLog.TIPO_RUEDAS)) && (!tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) && (!tipo_rev.equals(tipoLog.TIPO_LUCES))
+                                    && (!tipo_rev.equals(tipoLog.TIPO_AMORTIGUADORES)) && (!tipo_rev.equals(tipoLog.TIPO_FRENOS)))) { // el cambio sería por fecha y no por kms (menos revisiones de solo por kms)
                                 long_fecha_log_futuro_recalculada = long_f_revision_por_fecha;
                                 System.out.println("EL cambio es por fecha: fecha calculada " + fecha_log_futuro_recalculada + " y por fecha " + f_revision_por_fecha);
                             }
