@@ -66,7 +66,7 @@ public class notificaciones extends IntentService {
         }
     }
 
-    private void displayNotifications(List<String> l_texto, int contador) {
+    private void displayNotifications(/*List<String> l_texto, */int contador) {
         int notificationID = contador;
 
         Intent intent = new Intent(this, listaLogs.class);
@@ -77,10 +77,11 @@ public class notificaciones extends IntentService {
 
         CharSequence ticker ="Tiene " + contador + " revisiones cercanas";
         CharSequence contentTitle = "En menos de una semana";
-        CharSequence contentText = "";
-        for (int i = 0; i < l_texto.size(); i++) {
+        CharSequence contentText = "Consulte las " + contador + " revisiones que necesita su vehículo.";
+       /* for (int i = 0; i < l_texto.size(); i++) {
             contentText = contentText+l_texto.get(i).toString();
         }
+        contentText = contentText+l_texto.get(i).toString();*/
         Notification noti = new NotificationCompat.Builder(this)
                 .setContentIntent(pendingIntent)
                 .setTicker(ticker)
@@ -107,15 +108,15 @@ public class notificaciones extends IntentService {
                 String txt_date = c_log.getString(c_log.getColumnIndex("fecha_string"));
                 Date f_semana = funciones.fecha_mas_dias(new Date(), DIAS_SEMANA);
                 if (funciones.string_a_long(txt_date) < funciones.date_a_long(f_semana)) {
-                    String matricula = c_log.getString(c_log.getColumnIndex(dbLogs.CN_CAR));
-                    String tipo_rev = c_log.getString(c_log.getColumnIndex(dbLogs.CN_TIPO));
+                    //String matricula = c_log.getString(c_log.getColumnIndex(dbLogs.CN_CAR));
+                    //String tipo_rev = c_log.getString(c_log.getColumnIndex(dbLogs.CN_TIPO));
                     contador_alarmas++;
-                    l_texto.add("Coche: " + matricula + " " + tipo_rev + " -> " + txt_date);
+                    //l_texto.add("Coche: " + matricula + " " + tipo_rev + " -> " + txt_date);
                 }
             }
         }
         Toast.makeText(notificaciones.this, "Tiene " + contador_alarmas + " revisiones en menos de una semana.", Toast.LENGTH_LONG).show();
-        displayNotifications(l_texto, contador_alarmas);
+        displayNotifications(/*l_texto, */contador_alarmas);
 
 
     }
