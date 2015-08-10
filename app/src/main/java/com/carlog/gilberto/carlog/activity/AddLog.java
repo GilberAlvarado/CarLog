@@ -157,7 +157,7 @@ public class addLog extends ActionBarActivity {
         boolean seguir_rellenando = false; // si insertamos un filtro de aceite sin tener aceite tenemos q poder seguir añadiendo
         // Antes de hacer nada miramos si ya existe algun tipo igual pues no debemos tener más de uno
         Cursor c = managerLogs.buscarTipo(miTipoLog.getTipo(miTipoLog), miCoche.getMatricula(miCoche));
-        if (c.moveToFirst() == false) { // Si no hay logs (ni futuros ni históricos)
+        if ((c.moveToFirst() == false) || (tipoLog.es_tipo_personalizado(miTipoLog.getTipo(miTipoLog))) || (miTipoLog.getTipo(miTipoLog).equals(miTipoLog.TIPO_TALLER))) { // Si no hay logs (ni futuros ni históricos)
             if(miTipoLog.getFechalong(miTipoLog) >= ahora) {
                // Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + miTipoLog.getTipo(miTipoLog) + " hecha.", Toast.LENGTH_SHORT).show();
             }

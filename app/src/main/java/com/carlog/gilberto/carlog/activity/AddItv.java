@@ -84,6 +84,8 @@ public class addItv extends ActionBarActivity {
                 intent.putExtra("faire_string", itv_string);
                 intent.putExtra("bujias_string", itv_string);
                 intent.putExtra("embrague_string", itv_string);
+                intent.putExtra("taller_string", itv_string);
+                intent.putExtra("personalizado_string", itv_string);
                 intent.putExtra("addItv", true);
                 setResult(Activity.RESULT_OK, intent);
 

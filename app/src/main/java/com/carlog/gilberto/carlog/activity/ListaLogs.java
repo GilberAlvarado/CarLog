@@ -392,8 +392,22 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         catch (Exception e) {
             System.out.println("No se ha modificado fecha embrague");
         }
+        Boolean modifyPersonalizado = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyPersonalizado = getIntent().getExtras().getBoolean("modifyPersonalizado");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha personalizada");
+        }
+        Boolean modifyTaller = false;
+        try { // Solo si añadimos un coche desde la activity ListaLogs
+            modifyTaller = getIntent().getExtras().getBoolean("modifyTaller");
+        }
+        catch (Exception e) {
+            System.out.println("No se ha modificado fecha taller");
+        }
         if((modifyItv) || (modifyAceite) || (modifyRevGral) || (modifyCorrea) || (modifyBombaAgua) ||
-                (modifyFiltroGasolina) || (modifyFiltroAire) || (modifyBujias) || (modifyEmbrague)) {
+                (modifyFiltroGasolina) || (modifyFiltroAire) || (modifyBujias) || (modifyEmbrague) || (modifyPersonalizado) || (modifyTaller)) {
             fragmentLogs fl = (fragmentLogs) getCurrentFragment();
             fl.ConsultarLogs(context, listaLogs.this); // para actualizar la fecha de revision modificada
         }
@@ -598,7 +612,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
 
         @Override
         public void onMoveMotionEvent(MotionEvent ev, float diffX, float diffY) {
-            int flexibleSpace = mFlexibleSpaceHeight + mTabHeight;
+            int flexibleSpace = mFlexibleSpaceHeight - mTabHeight;
             float translationY = ScrollUtils.getFloat(ViewHelper.getTranslationY(mInterceptionLayout) + diffY, -flexibleSpace, 0);
             MotionEvent e = MotionEvent.obtainNoHistory(ev);
             e.offsetLocation(0, translationY - mBaseTranslationY);
@@ -609,7 +623,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         @Override
         public void onUpOrCancelMotionEvent(MotionEvent ev) {
             mScrolled = false;
-            mVelocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
+            mVelocityTracker.computeCurrentVelocity(2000, mMaximumVelocity);
             int velocityY = (int) mVelocityTracker.getYVelocity(mActivePointerId);
             mActivePointerId = INVALID_POINTER;
             mScroller.forceFinished(true);

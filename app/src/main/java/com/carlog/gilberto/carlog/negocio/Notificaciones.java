@@ -15,8 +15,10 @@ import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.data.dbTiposRevision;
 import com.carlog.gilberto.carlog.formats.funciones;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Gilberto on 23/07/2015.
@@ -64,18 +66,21 @@ public class notificaciones extends IntentService {
         }
     }
 
-    private void displayNotifications(String matricula, String tipo_rev, String fecha, int contador) {
+    private void displayNotifications(List<String> l_texto, int contador) {
         int notificationID = contador;
 
-        Intent i = new Intent(this, listaLogs.class);
-        i.putExtra("notificationID", notificationID);
+        Intent intent = new Intent(this, listaLogs.class);
+        intent.putExtra("notificationID", notificationID);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, i, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
         CharSequence ticker ="Tiene " + contador + " revisiones cercanas";
-        CharSequence contentTitle = tipo_rev + " -> " +fecha;
-        CharSequence contentText = "Coche: " + matricula;
+        CharSequence contentTitle = "En menos de una semana";
+        CharSequence contentText = "";
+        for (int i = 0; i < l_texto.size(); i++) {
+            contentText = contentText+l_texto.get(i).toString();
+        }
         Notification noti = new NotificationCompat.Builder(this)
                 .setContentIntent(pendingIntent)
                 .setTicker(ticker)
@@ -94,6 +99,7 @@ public class notificaciones extends IntentService {
         dbTiposRevision dbtr = new dbTiposRevision(getApplicationContext()); // necesitamos notificaciones para todos los tiprev incluidas las personalizadas por el usuario
         Cursor c_tr = dbtr.cargarCursorTiposRevision();
         int contador_alarmas = 0;
+        List<String> l_texto = new ArrayList<String>();
         for(c_tr.moveToFirst(); !c_tr.isAfterLast(); c_tr.moveToNext()) {
             String tipo = c_tr.getString(c_tr.getColumnIndex(dbTiposRevision.CN_TIPO));
             Cursor c_log = dbl.LogsTipoTodosCochesOrderByFechaString(tipo);
@@ -104,11 +110,12 @@ public class notificaciones extends IntentService {
                     String matricula = c_log.getString(c_log.getColumnIndex(dbLogs.CN_CAR));
                     String tipo_rev = c_log.getString(c_log.getColumnIndex(dbLogs.CN_TIPO));
                     contador_alarmas++;
-                    Toast.makeText(notificaciones.this, "Tiene " + contador_alarmas + " revisiones en menos de una semana.", Toast.LENGTH_LONG).show();
-                    displayNotifications(matricula, tipo_rev, txt_date, contador_alarmas);
+                    l_texto.add("Coche: " + matricula + " " + tipo_rev + " -> " + txt_date);
                 }
             }
         }
+        Toast.makeText(notificaciones.this, "Tiene " + contador_alarmas + " revisiones en menos de una semana.", Toast.LENGTH_LONG).show();
+        displayNotifications(l_texto, contador_alarmas);
 
 
     }

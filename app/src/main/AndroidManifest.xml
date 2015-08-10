@@ -105,6 +105,24 @@
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
+            android:name=".activity.modificarTaller"
+            android:label="@string/title_activity_modificartaller"
+            android:parentActivityName=".activity.listaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
+            android:name=".activity.modificarPersonalizado"
+            android:label="@string/title_activity_modificarpersonalizada"
+            android:parentActivityName=".activity.listaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
             android:name=".activity.modificarCorrea"
             android:label="@string/title_activity_modificarcorrea"
             android:parentActivityName=".activity.listaLogs" >

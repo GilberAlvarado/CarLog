@@ -26,7 +26,9 @@ import com.carlog.gilberto.carlog.activity.modificarFiltroAceite;
 import com.carlog.gilberto.carlog.activity.modificarFiltroAire;
 import com.carlog.gilberto.carlog.activity.modificarFiltroGasolina;
 import com.carlog.gilberto.carlog.activity.modificarItv;
+import com.carlog.gilberto.carlog.activity.modificarPersonalizado;
 import com.carlog.gilberto.carlog.activity.modificarRevGral;
+import com.carlog.gilberto.carlog.activity.modificarTaller;
 import com.carlog.gilberto.carlog.activity.myActivity;
 import com.carlog.gilberto.carlog.adapter.miAdaptadorLog;
 import com.carlog.gilberto.carlog.data.dbCar;
@@ -106,32 +108,38 @@ public class fragmentLogs extends baseFragment {
                 if(tipo.equals(tipoLog.TIPO_ACEITE)) {
                     intent = new Intent(context, modificarAceite.class);
                 }
-                if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
+                else if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
                     intent = new Intent(context, modificarRevGral.class);
                 }
-                if(tipo.equals(tipoLog.TIPO_CORREA)) {
+                else if(tipo.equals(tipoLog.TIPO_CORREA)) {
                     intent = new Intent(context, modificarCorrea.class);
                 }
-                if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
+                else if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
                     intent = new Intent(context, modificarBombaAgua.class);
                 }
-                if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
+                else if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
                     intent = new Intent(context, modificarFiltroGasolina.class);
                 }
-                if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
+                else if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
                     intent = new Intent(context, modificarFiltroAire.class);
                 }
-                if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
+                else if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
                     intent = new Intent(context, modificarBujias.class);
                 }
-                if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
+                else if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
                     intent = new Intent(context, modificarEmbrague.class);
                 }
-                if(tipo.equals(tipoLog.TIPO_ITV)) {
+                else if(tipo.equals(tipoLog.TIPO_ITV)) {
                     intent = new Intent(context, modificarItv.class);
                 }
-                if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
+                else if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
                     intent = new Intent(context, modificarFiltroAceite.class);
+                }
+                else if(tipo.equals(tipoLog.TIPO_TALLER)) {
+                    intent = new Intent(context, modificarTaller.class);
+                }
+                else { //personalizados
+                    intent = new Intent(context, modificarPersonalizado.class);
                 }
                 //************************************************************************
 
@@ -162,32 +170,38 @@ public class fragmentLogs extends baseFragment {
         if(tipo.equals(tipoLog.TIPO_ACEITE)) {
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
+        else if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(tipoLog.TIPO_ITV)) {
+        else if(tipo.equals(tipoLog.TIPO_ITV)) {
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(tipoLog.TIPO_CORREA)) {
+        else if(tipo.equals(tipoLog.TIPO_CORREA)) {
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
+        else if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
+        else if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
+        else if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
+        else if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
+        else if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
+        else if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
             context.startActivity(intent); // No cambia la fecha solo cada cuantos cambios de aceite se hará
+        }
+        else if(tipo.equals(tipoLog.TIPO_TALLER)) {
+            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        }
+        else { //personalizados
+            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
 
 

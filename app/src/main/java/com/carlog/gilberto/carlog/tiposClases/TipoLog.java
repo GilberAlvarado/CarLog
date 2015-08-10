@@ -24,6 +24,7 @@ public class tipoLog implements Serializable {
     public final static String TIPO_RUEDAS = "Ruedas";
     public final static String TIPO_EMBRAGUE = "Embrague";
     public final static String TIPO_TALLER = "Taller";
+    public final static String TIPO_PERSONALIZADO = "Personalizado";
 
 
     private String tipo;
@@ -44,6 +45,18 @@ public class tipoLog implements Serializable {
     private int realizado;
     private int fmodificada;
     private int kms;
+
+
+    public static Boolean es_tipo_personalizado(String tipo) {
+        if((!tipo.equals(TIPO_ACEITE)) && (!tipo.equals(TIPO_REV_GENERAL)) && (!tipo.equals(TIPO_CORREA)) && (!tipo.equals(TIPO_BOMBA_AGUA)) &&
+                (!tipo.equals(TIPO_FILTRO_ACEITE)) && (!tipo.equals(TIPO_FILTRO_GASOLINA)) && (!tipo.equals(TIPO_ITV)) && (!tipo.equals(TIPO_BUJIAS)) &&
+                (!tipo.equals(TIPO_FILTRO_AIRE)) && (!tipo.equals(TIPO_FRENOS)) && (!tipo.equals(TIPO_LIQUIDO_FRENOS)) && (!tipo.equals(TIPO_LIMPIAPARABRISAS)) &&
+                (!tipo.equals(TIPO_LUCES)) && (!tipo.equals(TIPO_RUEDAS)) && (!tipo.equals(TIPO_EMBRAGUE)) && (!tipo.equals(TIPO_TALLER))) {
+            return true;
+        }
+        else return false;
+    }
+
 
     public tipoLog(String tipo, Date fecha, String datetxt, long long_fecha, int aceite, int veces_fil_aceite, int contador_fil_aceite, int revgral,
                    int correa, int bombaagua, int fgasolina, int faire, int bujias, int embrague, String matricula, int realizado, int fmodificada, int kms) {
