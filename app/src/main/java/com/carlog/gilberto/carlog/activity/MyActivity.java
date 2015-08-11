@@ -771,7 +771,10 @@ public class myActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_info) {
-            return true;
+            if (id == R.id.action_info) {
+                Intent i = new Intent(myActivity.this, info.class);
+                myActivity.this.startActivity(i);
+            }
         }
         if (id == R.id.action_logout) {
             if (login.getIdFacebook(this) == null){

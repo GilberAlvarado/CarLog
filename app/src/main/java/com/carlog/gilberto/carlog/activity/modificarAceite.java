@@ -167,6 +167,10 @@ public class modificarAceite extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(modificarAceite.this, info.class);
+            modificarAceite.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarAceite.this);

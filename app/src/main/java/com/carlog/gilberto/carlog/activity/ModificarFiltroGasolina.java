@@ -159,6 +159,10 @@ public class modificarFiltroGasolina extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(modificarFiltroGasolina.this, info.class);
+            modificarFiltroGasolina.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarFiltroGasolina.this);

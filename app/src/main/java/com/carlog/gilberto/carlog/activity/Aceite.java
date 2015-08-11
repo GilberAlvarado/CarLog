@@ -147,6 +147,10 @@ public class aceite extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(aceite.this, info.class);
+            aceite.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(aceite.this);

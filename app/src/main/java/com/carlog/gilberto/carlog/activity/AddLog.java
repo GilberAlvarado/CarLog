@@ -361,6 +361,10 @@ public class addLog extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(addLog.this, info.class);
+            addLog.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(addLog.this);

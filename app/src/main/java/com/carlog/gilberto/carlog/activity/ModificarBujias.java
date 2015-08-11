@@ -160,6 +160,10 @@ public class modificarBujias extends ActionBarActivity{
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(modificarBujias.this, info.class);
+            modificarBujias.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarBujias.this);

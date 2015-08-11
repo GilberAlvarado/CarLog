@@ -160,6 +160,10 @@ public class modificarBombaAgua extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(modificarBombaAgua.this, info.class);
+            modificarBombaAgua.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarBombaAgua.this);

@@ -160,6 +160,10 @@ public class modificarCorrea extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(modificarCorrea.this, info.class);
+            modificarCorrea.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarCorrea.this);

@@ -145,6 +145,10 @@ public class filtroAceite extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(filtroAceite.this, info.class);
+            filtroAceite.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(filtroAceite.this);

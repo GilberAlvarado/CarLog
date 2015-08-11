@@ -118,6 +118,10 @@ public class modificarTaller extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(modificarTaller.this, info.class);
+            modificarTaller.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarTaller.this);

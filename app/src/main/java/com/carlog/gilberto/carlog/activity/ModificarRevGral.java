@@ -159,6 +159,10 @@ public class modificarRevGral extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(modificarRevGral.this, info.class);
+            modificarRevGral.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarRevGral.this);

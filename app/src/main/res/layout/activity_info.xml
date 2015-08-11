@@ -151,7 +151,7 @@
                 android:background="#58FA58"
                 android:textColor="@android:color/white"
                 android:padding="25dp"
-                android:textSize="55sp"
+                android:textSize="45sp"
                 android:gravity="center"
                 android:fontFamily="serif"
                 android:text="Lo realmente importante..." />
