@@ -162,6 +162,7 @@ public class modificarFiltroGasolina extends ActionBarActivity {
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarFiltroGasolina.this);
+            login.deleteParamsAnonimo(modificarFiltroGasolina.this);
             login.closeFacebookSession(modificarFiltroGasolina.this, login.class);
             Intent intent = new Intent(modificarFiltroGasolina.this, login.class);
             startActivity(intent);

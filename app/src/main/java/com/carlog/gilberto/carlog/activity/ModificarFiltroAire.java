@@ -162,6 +162,7 @@ public class modificarFiltroAire extends ActionBarActivity {
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarFiltroAire.this);
+            login.deleteParamsAnonimo(modificarFiltroAire.this);
             login.closeFacebookSession(modificarFiltroAire.this, login.class);
             Intent intent = new Intent(modificarFiltroAire.this, login.class);
             startActivity(intent);

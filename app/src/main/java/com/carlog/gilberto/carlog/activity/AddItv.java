@@ -113,6 +113,7 @@ public class addItv extends ActionBarActivity {
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(addItv.this);
+            login.deleteParamsAnonimo(addItv.this);
             login.closeFacebookSession(addItv.this, login.class);
             Intent intent = new Intent(addItv.this, login.class);
             startActivity(intent);

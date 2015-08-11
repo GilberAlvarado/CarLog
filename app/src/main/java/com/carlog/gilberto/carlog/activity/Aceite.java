@@ -151,6 +151,7 @@ public class aceite extends ActionBarActivity {
             usuario u = new usuario();
             u.logout(aceite.this);
             login.closeFacebookSession(aceite.this, login.class);
+            login.deleteParamsAnonimo(aceite.this);
             Intent intent = new Intent(aceite.this, login.class);
             startActivity(intent);
             finish();

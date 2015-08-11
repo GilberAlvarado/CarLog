@@ -146,7 +146,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 e.printStackTrace();
             }
         }
-        else { //sesión iniciada por registro
+        /*else { //sesión iniciada por registro
             usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
             if(usuario.isUserLoggedIn(this)) {
                 System.out.println("Logueado");
@@ -155,6 +155,10 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 mTitleView = (TextView) findViewById(R.id.title);
                 mTitleView.setText(nombre);
             }
+        }*/
+        else { //sesión iniciada en modo anónimo
+            mTitleView = (TextView) findViewById(R.id.title);
+            mTitleView.setText("Anónimo");
         }
     }
 
@@ -771,6 +775,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 login.goToLoginScreen(this);
                 usuario u = new usuario();
                 u.logout(listaLogs.this);
+                login.deleteParamsAnonimo(listaLogs.this);
                 Intent intent = new Intent(listaLogs.this, login.class);
                 startActivity(intent);
             } else {

@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
@@ -66,7 +67,7 @@ public class notificaciones extends IntentService {
         }
     }
 
-    private void displayNotifications(/*List<String> l_texto, */int contador) {
+    private void displayNotifications(String matricula, String tipo_rev, String fecha, int contador) {
         int notificationID = contador;
 
         Intent intent = new Intent(this, listaLogs.class);
@@ -76,8 +77,8 @@ public class notificaciones extends IntentService {
         NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
         CharSequence ticker ="Tiene " + contador + " revisiones cercanas";
-        CharSequence contentTitle = "En menos de una semana";
-        CharSequence contentText = "Consulte las " + contador + " revisiones que necesita su vehículo.";
+        CharSequence contentTitle = "Coche: " + matricula + " " + tipo_rev + " -> " + fecha;
+        CharSequence contentText = "Y " + (contador + 1) + " revisiones más...";
        /* for (int i = 0; i < l_texto.size(); i++) {
             contentText = contentText+l_texto.get(i).toString();
         }
@@ -89,9 +90,13 @@ public class notificaciones extends IntentService {
                 .setContentText(contentText)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .addAction(R.drawable.ic_launcher, ticker, pendingIntent)
+                .setAutoCancel(true)
+                .setLights(Color.BLUE, 500, 500)
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .build();
         nm.notify(notificationID, noti);
+
+        noti.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
     }
 
     // procedimiento que se ejecuta cada día a las 10:00 para comprobar si hay alarmas
@@ -100,24 +105,27 @@ public class notificaciones extends IntentService {
         dbTiposRevision dbtr = new dbTiposRevision(getApplicationContext()); // necesitamos notificaciones para todos los tiprev incluidas las personalizadas por el usuario
         Cursor c_tr = dbtr.cargarCursorTiposRevision();
         int contador_alarmas = 0;
-        List<String> l_texto = new ArrayList<String>();
+        String matricula = "";
+        String tipo_rev = "";
+        String txt_date = "";
+        //List<String> l_texto = new ArrayList<String>();
         for(c_tr.moveToFirst(); !c_tr.isAfterLast(); c_tr.moveToNext()) {
             String tipo = c_tr.getString(c_tr.getColumnIndex(dbTiposRevision.CN_TIPO));
             Cursor c_log = dbl.LogsTipoTodosCochesOrderByFechaString(tipo);
             for(c_log.moveToFirst(); !c_log.isAfterLast(); c_log.moveToNext()) {
-                String txt_date = c_log.getString(c_log.getColumnIndex("fecha_string"));
+                txt_date = c_log.getString(c_log.getColumnIndex("fecha_string"));
                 Date f_semana = funciones.fecha_mas_dias(new Date(), DIAS_SEMANA);
                 if (funciones.string_a_long(txt_date) < funciones.date_a_long(f_semana)) {
-                    //String matricula = c_log.getString(c_log.getColumnIndex(dbLogs.CN_CAR));
-                    //String tipo_rev = c_log.getString(c_log.getColumnIndex(dbLogs.CN_TIPO));
+                    matricula = c_log.getString(c_log.getColumnIndex(dbLogs.CN_CAR));
+                    tipo_rev = c_log.getString(c_log.getColumnIndex(dbLogs.CN_TIPO));
                     contador_alarmas++;
                     //l_texto.add("Coche: " + matricula + " " + tipo_rev + " -> " + txt_date);
                 }
             }
         }
-        Toast.makeText(notificaciones.this, "Tiene " + contador_alarmas + " revisiones en menos de una semana.", Toast.LENGTH_LONG).show();
-        displayNotifications(/*l_texto, */contador_alarmas);
-
+        if(contador_alarmas > 0) {
+            displayNotifications(matricula, tipo_rev, txt_date, contador_alarmas);
+        }
 
     }
 }

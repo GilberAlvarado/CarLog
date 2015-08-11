@@ -123,6 +123,7 @@ public class modificarFiltroAceite extends ActionBarActivity {
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarFiltroAceite.this);
+            login.deleteParamsAnonimo(modificarFiltroAceite.this);
             login.closeFacebookSession(modificarFiltroAceite.this, login.class);
             Intent intent = new Intent(modificarFiltroAceite.this, login.class);
             startActivity(intent);

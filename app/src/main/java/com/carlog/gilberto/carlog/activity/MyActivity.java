@@ -684,6 +684,14 @@ public class myActivity extends ActionBarActivity {
 
 
 
+    private Boolean es_anonimo() {
+        Boolean anonimo = false;
+        String txt = login.getNameAnonimo(this);
+        if(txt != null) {
+            if(txt.equals("Anonimo")) return true;
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -691,8 +699,8 @@ public class myActivity extends ActionBarActivity {
 
         String getIdFacebook = login.getIdFacebook(this);
         usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
-        System.out.println("MyACTIVITY "+ usuario.isUserLoggedIn(this) + " " + getIdFacebook);
-        if(usuario.isUserLoggedIn(this) || (getIdFacebook != null)) {
+        System.out.println("MyACTIVITY "+ usuario.isUserLoggedIn(this) + " " + getIdFacebook + " " + es_anonimo());
+        if(usuario.isUserLoggedIn(this) || (getIdFacebook != null) || es_anonimo()) {
             System.out.println("Logueado");
             usuario.readUser(this);
             // aqui tenemos toda la info del usuario
@@ -767,6 +775,7 @@ public class myActivity extends ActionBarActivity {
                 login.goToLoginScreen(this);
                 usuario u = new usuario();
                 u.logout(myActivity.this);
+                login.deleteParamsAnonimo(myActivity.this);
                 Intent intent = new Intent(myActivity.this, login.class);
                 startActivity(intent);
             } else {
@@ -779,6 +788,7 @@ public class myActivity extends ActionBarActivity {
     }
 
     public static final int PETICION_ACTIVITY_ADDITV = 1;
+    public static final int PETICION_ACTIVITY_ANONIMO = 2;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

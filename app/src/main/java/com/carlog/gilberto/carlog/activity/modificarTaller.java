@@ -121,6 +121,7 @@ public class modificarTaller extends ActionBarActivity {
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarTaller.this);
+            login.deleteParamsAnonimo(modificarTaller.this);
             login.closeFacebookSession(modificarTaller.this, login.class);
             Intent intent = new Intent(modificarTaller.this, login.class);
             startActivity(intent);

@@ -163,6 +163,7 @@ public class modificarBujias extends ActionBarActivity{
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarBujias.this);
+            login.deleteParamsAnonimo(modificarBujias.this);
             login.closeFacebookSession(modificarBujias.this, login.class);
             Intent intent = new Intent(modificarBujias.this, login.class);
             startActivity(intent);

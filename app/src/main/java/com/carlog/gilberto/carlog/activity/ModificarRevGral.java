@@ -162,6 +162,7 @@ public class modificarRevGral extends ActionBarActivity {
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarRevGral.this);
+            login.deleteParamsAnonimo(modificarRevGral.this);
             login.closeFacebookSession(modificarRevGral.this, login.class);
             Intent intent = new Intent(modificarRevGral.this, login.class);
             startActivity(intent);

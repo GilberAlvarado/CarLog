@@ -163,6 +163,7 @@ public class modificarCorrea extends ActionBarActivity {
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarCorrea.this);
+            login.deleteParamsAnonimo(modificarCorrea.this);
             login.closeFacebookSession(modificarCorrea.this, login.class);
             Intent intent = new Intent(modificarCorrea.this, login.class);
             startActivity(intent);

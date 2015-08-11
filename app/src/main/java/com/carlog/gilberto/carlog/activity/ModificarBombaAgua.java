@@ -163,6 +163,7 @@ public class modificarBombaAgua extends ActionBarActivity {
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarBombaAgua.this);
+            login.deleteParamsAnonimo(modificarBombaAgua.this);
             login.closeFacebookSession(modificarBombaAgua.this, login.class);
             Intent intent = new Intent(modificarBombaAgua.this, login.class);
             startActivity(intent);

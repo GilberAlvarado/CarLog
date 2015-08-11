@@ -121,6 +121,7 @@ public class modificarPersonalizado extends ActionBarActivity {
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarPersonalizado.this);
+            login.deleteParamsAnonimo(modificarPersonalizado.this);
             login.closeFacebookSession(modificarPersonalizado.this, login.class);
             Intent intent = new Intent(modificarPersonalizado.this, login.class);
             startActivity(intent);

@@ -128,11 +128,24 @@ public class login extends Activity {
         thread.start();
     }
 
+    public static void saveParamsAnonimo (final Activity activity){
+        sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_id), "a@a.es");
+        sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_name), "Anonimo");
+    }
+
     public static void deleteParamsFacebook (Activity activity){
         sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_id), null);
         sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_name), null);
         sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_img_profile), null);
+    }
 
+    public static void deleteParamsAnonimo (Activity activity){
+        sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_id), null);
+        sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_name), null);
+    }
+
+    public static String getNameAnonimo (Activity activity){
+        return sharedPreferencesUtils.getString(activity, activity.getString(R.string.sp_fb_name));
     }
 
     public static String getIdFacebook (Activity activity){
@@ -226,11 +239,29 @@ public class login extends Activity {
 
     }
 
-    public void loginUsuario() {
+    public void loginAnonimo() {
+        ButtonRectangle loginBtn = (ButtonRectangle) findViewById(R.id.btnLoginAnonimo);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveParamsAnonimo(login.this);
+                usuario u = new usuario();
+                u.login(login.this, "a@a.es", "PASS_IGNORE_FB", true);
+                Intent i = new Intent(login.this, myActivity.class);
+                i.putExtra("anonimo", true);
+                login.this.startActivity(i);
+                finish();
+                //registerUsuarioFacebook("Anonimo", "a@a.es");
+            }
+        });
+
+    }
+
+  /*  public void loginUsuario() {
         inputEmail = (EditText) findViewById(R.id.txtEmail);
         inputPassword = (EditText) findViewById(R.id.txtPass);
-        btnLogin = (ButtonRectangle) findViewById(R.id.btnLogin);
-        loginErrorMsg = (TextView) findViewById(R.id.login_error);
+      //  btnLogin = (ButtonRectangle) findViewById(R.id.btnLogin);
+      //  loginErrorMsg = (TextView) findViewById(R.id.login_error);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
@@ -263,7 +294,7 @@ public class login extends Activity {
                 login.this.startActivity(itemintent);
             }
         });
-    }
+    }*/
 
 
 
@@ -284,7 +315,8 @@ public class login extends Activity {
         setContentView(R.layout.activity_login);
 
         loginfacebook();
-        loginUsuario();
+        loginAnonimo();
+       // loginUsuario();
 
     }
 

@@ -162,6 +162,7 @@ public class modificarEmbrague extends ActionBarActivity{
         if (id == R.id.action_logout) {
             usuario u = new usuario();
             u.logout(modificarEmbrague.this);
+            login.deleteParamsAnonimo(modificarEmbrague.this);
             login.closeFacebookSession(modificarEmbrague.this, login.class);
             Intent intent = new Intent(modificarEmbrague.this, login.class);
             startActivity(intent);
