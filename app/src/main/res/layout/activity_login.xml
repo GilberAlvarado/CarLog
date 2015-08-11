@@ -7,7 +7,7 @@
         android:layout_height="225px"
         android:background="@drawable/ic_login" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/fondo_gris"
@@ -71,11 +71,11 @@
             android:text="Entrar en modo Anónimo"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:paddingBottom="30dp"
+            android:layout_marginBottom="60dp"
             android:paddingTop="10dp"
             android:layout_alignParentBottom="true"
             android:background="#1E88E5"
             android:layout_gravity="center_horizontal" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
