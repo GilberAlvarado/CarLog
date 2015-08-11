@@ -770,6 +770,9 @@ public class myActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            return true;
+        }
         if (id == R.id.action_logout) {
             if (login.getIdFacebook(this) == null){
                 login.goToLoginScreen(this);

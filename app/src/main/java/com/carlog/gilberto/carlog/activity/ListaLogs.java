@@ -770,6 +770,10 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_info) {
+            Intent i = new Intent(listaLogs.this, info.class);
+            listaLogs.this.startActivity(i);
+        }
         if (id == R.id.action_logout) {
             if (login.getIdFacebook(this) == null){
                 login.goToLoginScreen(this);

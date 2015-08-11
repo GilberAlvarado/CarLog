@@ -51,6 +51,15 @@
                 android:value=".activity.ListaLogs" />
         </activity>
         <activity
+            android:name=".activity.info"
+            android:label="@string/title_activity_info"
+            android:parentActivityName=".activity.listaLogs" >
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ListaLogs" />
+        </activity>
+        <activity
             android:name=".activity.aceite"
             android:label="@string/title_activity_aceite"
             android:parentActivityName=".activity.addLog" >

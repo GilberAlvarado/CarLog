@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar">
+    </include>
+
+    <com.flavienlaurent.discrollview.lib.DiscrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:discrollve="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.flavienlaurent.discrollview.lib.DiscrollViewContent
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:background="#B404AE"
+                android:textColor="@android:color/white"
+                android:padding="25dp"
+                android:textSize="55sp"
+                android:gravity="center"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_threshold="0.3"
+                android:fontFamily="serif"
+                android:text="¿Necesita ayuda para comenzar? :)" />
+
+          <!--  <View
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#007788"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_threshold="0.3" />-->
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_itv_rev" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_revgen" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_taller" />
+
+            <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:text="Una vez haya añadido los datos de su coche, podrá agregar todas las revisiones que desee pulsando el siguiente icono."
+            android:textSize="18sp"
+            discrollve:discrollve_alpha="true"
+            discrollve:discrollve_translation="fromBottom" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_addlog"
+                discrollve:discrollve_translation="fromRight" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="Se podrá añadir únicamente una revisión de cada tipo (salvo las personalizadas o de tipo taller) y el resto lo haremos por usted :)"
+                android:textSize="18sp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromBottom" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_aceite"
+                discrollve:discrollve_translation="fromRight" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_bujias"
+                discrollve:discrollve_translation="fromRight" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_correa"
+                discrollve:discrollve_translation="fromRight" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="Despreocúpese de cambiar las fechas de las revisiones. Únicamente es necesario cuando se acerque la fecha y decida coger cita para realizarla. (Si mofifica la fecha de una revisión deja de recalcularse automáticamente)."
+                android:textSize="18sp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromBottom" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_bateria" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_bomba_agua" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_embrague" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:background="#58FA58"
+                android:textColor="@android:color/white"
+                android:padding="25dp"
+                android:textSize="55sp"
+                android:gravity="center"
+                android:fontFamily="serif"
+                android:text="Lo realmente importante..." />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="No necesita cambiar datos ni hacer cálculos innecesarios. Nosotros lo hacemos todo por usted (siempre es personalizable). Sólo debe actualizar el número de kilómetros de su coche cuando lo desee aunque de no hacerlo se predicirán de manera inteligente. Para tener el número de kilómetros al día deberá pulsar el siguiente boton y cambiarlo."
+                android:textSize="18sp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromBottom" />
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_actualizarcoche"
+                discrollve:discrollve_translation="fromRight" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_amortiguadores" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_anticongelante" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_fil_gasolina" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:background="#FF8000"
+                android:textColor="@android:color/white"
+                android:padding="25dp"
+                android:textSize="35sp"
+                android:gravity="center"
+                android:fontFamily="serif"
+                android:text="¿Desea llevar el mantenimiento de varios coches? :)" />
+
+
+
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="left"
+                android:src="@drawable/ic_addcoche"
+                discrollve:discrollve_translation="fromLeft" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="Podrá agregar todos los coches que desee y llevar el mantenimiento de coches de familiares y amigos pulsando el botón de arriba. Luego podrá cambiar de coche mediante la barra de navegación."
+                android:textSize="18sp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromBottom" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_frenos" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_limpiaparabrisas" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                discrollve:discrollve_alpha="true"
+                discrollve:discrollve_translation="fromLeft|fromBottom"
+                android:src="@drawable/ic_luces" />
+
+            <ImageView
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_margin="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_launcher"
+                discrollve:discrollve_scaleX="true"
+                discrollve:discrollve_scaleY="true"  />
+
+        </com.flavienlaurent.discrollview.lib.DiscrollViewContent>
+    </com.flavienlaurent.discrollview.lib.DiscrollView>
+
+</RelativeLayout>

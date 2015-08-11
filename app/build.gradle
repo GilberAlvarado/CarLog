@@ -47,4 +47,6 @@ dependencies {
     //compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.facebook.android:facebook-android-sdk:3.21.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+
+    compile 'com.github.flavienlaurent.discrollview:library:0.0.2@aar'
 }
