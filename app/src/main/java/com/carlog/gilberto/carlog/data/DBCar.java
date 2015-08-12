@@ -127,7 +127,10 @@ public class dbCar {
         db.execSQL(sql);
     }
 
-
+    public void ActualizarCambiadaModelo(String matricula) {
+        String sql = "UPDATE " + TABLE_NAME + " SET " + CN_IMG_MODELO_CAMBIADA + " = " + IMG_MODELO_NOCAMBIADA + " WHERE " + CN_MATRICULA + " = '" + matricula + "'";
+        db.execSQL(sql);
+    }
 
     public Cursor buscarCoche(String matricula) {
         String[] columnas = new String[]{CN_MATRICULA, CN_MARCA, CN_MODELO, CN_IMG_MODELO_PERSONALIZADA, CN_IMG_MODELO_CAMBIADA, CN_YEAR, CN_KMS, CN_ITV, CN_PROFILE, CN_FECHA_INI, CN_KMS_INI};

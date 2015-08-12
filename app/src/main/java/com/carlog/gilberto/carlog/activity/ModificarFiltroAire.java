@@ -157,7 +157,8 @@ public class modificarFiltroAire extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(modificarFiltroAire.this, settings.class);
+            modificarFiltroAire.this.startActivity(i);
         }
         if (id == R.id.action_info) {
             Intent i = new Intent(modificarFiltroAire.this, info.class);

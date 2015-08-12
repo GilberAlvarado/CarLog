@@ -52,7 +52,8 @@ public class info extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(info.this, settings.class);
+            info.this.startActivity(i);
         }
         if (id == R.id.action_logout) {
             usuario u = new usuario();

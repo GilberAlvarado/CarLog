@@ -3,10 +3,11 @@
 
     <string name="app_name">CarLog</string>
     <string name="adios">Adios</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configuración</string>
     <string name="action_logout">Cerrar sesión</string>
     <string name="btn1">Siguiente</string>
     <string name="title_activity_add_log">Añadir Revisión</string>
+    <string name="title_activity_settings">Configuración</string>
     <string name="title_activity_info">Información</string>
     <string name="title_activity_aceite">Aceite</string>
     <string name="title_activity_fil_aceite">Filtro de aceite</string>
@@ -57,6 +58,7 @@
     <string name="procesando">Procesando...</string>
     <string name="take_picture">Sacar Foto</string>
     <string name="gallery_picture">Elegir de la Galería</string>
+    <string name="reset_picture">Imagen predeterminada</string>
     <string name="cancel">Cancelar</string>
     <string name="login">Login</string>
     <string name="login_required">Login is required</string>

@@ -21,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -278,7 +279,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 Intent intent = new Intent(listaLogs.this, myActivity.class);
                 intent.putExtra("EditarCoche", true);
                 startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
-                mFab.performClick();
+                mFloatMenu.close(true);
             }
         });
 
@@ -293,7 +294,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 Intent intent = new Intent(listaLogs.this, myActivity.class);
                 intent.putExtra("CocheNuevo", true);
                 startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
-                mFab.performClick();
+                mFloatMenu.close(true);
                 // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
                 // Si no queremos agregar nuevo coche y pulsamos hacia atras regresamos a la lista de logs anterior
             }
@@ -309,7 +310,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
             public void onClick(View v) {
                 Intent intent = new Intent(listaLogs.this, addLog.class);
                 startActivityForResult(intent, PETICION_ACTIVITY_ADD_LOG);
-                mFab.performClick();
+                mFloatMenu.close(true);
             }
         });
 
@@ -768,7 +769,8 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
 
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(listaLogs.this, settings.class);
+            listaLogs.this.startActivity(i);
         }
         if (id == R.id.action_info) {
             Intent i = new Intent(listaLogs.this, info.class);
@@ -951,5 +953,20 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
     }
 
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if(mFloatMenu.isOpen()) {
+                mFloatMenu.close(true);
+                return true;
+            }
+            else {
+                return super.onKeyDown(keyCode, event);
+            }
+
+        }
+//para las demas cosas, se reenvia el evento al listener habitual
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

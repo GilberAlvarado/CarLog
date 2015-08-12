@@ -768,7 +768,8 @@ public class myActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent i = new Intent(myActivity.this, settings.class);
+            myActivity.this.startActivity(i);
         }
         if (id == R.id.action_info) {
             if (id == R.id.action_info) {

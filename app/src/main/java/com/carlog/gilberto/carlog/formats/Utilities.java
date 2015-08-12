@@ -14,8 +14,12 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
+import android.widget.ImageView;
 
 import com.carlog.gilberto.carlog.R;
+import com.carlog.gilberto.carlog.data.dbCar;
+import com.carlog.gilberto.carlog.data.dbModelos;
+import com.carlog.gilberto.carlog.negocio.cambiarCocheActivo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -47,7 +51,7 @@ public class utilities {
     }
 
     public static void selectImage (final Activity activity){
-        final CharSequence[] items = { activity.getString(R.string.gallery_picture), activity.getString(R.string.take_picture), activity.getString(R.string.cancel)};
+        final CharSequence[] items = { activity.getString(R.string.gallery_picture), activity.getString(R.string.take_picture), activity.getString(R.string.reset_picture), activity.getString(R.string.cancel)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(activity.getString(R.string.select_picture));
@@ -58,12 +62,33 @@ public class utilities {
                     selectImageCamera(activity);
                 } else if (items[item].equals(activity.getString(R.string.gallery_picture))) {
                     selectImageGallery(activity);
+                } else if (items[item].equals(activity.getString(R.string.reset_picture))) {
+                    selectResetImage(activity);
                 } else if (items[item].equals(activity.getString(R.string.cancel))) {
                     dialog.dismiss();
                 }
             }
         });
         builder.show();
+    }
+
+    public static void selectResetImage (Activity activity){
+        dbCar dbc = new dbCar(activity.getApplicationContext());
+        Cursor c_act = dbc.buscarCocheActivo();
+        if (c_act.moveToFirst() == true) {
+            String matricula = c_act.getString(c_act.getColumnIndex(dbCar.CN_MATRICULA));
+            String modelo = c_act.getString(c_act.getColumnIndex(dbCar.CN_MODELO));
+            dbc.ActualizarCambiadaModelo(matricula);
+            dbModelos dbm = new dbModelos(activity.getApplicationContext());
+            Cursor c = dbm.buscarModelos(modelo);
+            if (c.moveToFirst() == true) {
+                String mDrawableImg = c.getString(c.getColumnIndex(dbModelos.CN_IMG));
+                int resID = activity.getApplicationContext().getResources().getIdentifier(mDrawableImg, "drawable", activity.getApplicationContext().getPackageName());
+                ImageView img_listalogs = (ImageView) activity.findViewById(R.id.image);
+                img_listalogs.setImageResource(resID);
+            }
+            cambiarCocheActivo.ActualizarCochesDrawer(dbc, activity, activity.getApplicationContext());
+        }
     }
 
     public static void selectImageCamera (Activity activity){
