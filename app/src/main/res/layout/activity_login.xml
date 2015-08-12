@@ -61,7 +61,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_above="@+id/btnLoginAnonimo"
-            android:background="#1E88E5"
+            android:background="@color/ColorPrimary"
             android:layout_gravity="center_horizontal" />
 
         <com.gc.materialdesign.views.ButtonRectangle
@@ -74,7 +74,7 @@
             android:layout_marginBottom="60dp"
             android:paddingTop="10dp"
             android:layout_alignParentBottom="true"
-            android:background="#1E88E5"
+            android:background="@color/accent"
             android:layout_gravity="center_horizontal" />
 
     </RelativeLayout>

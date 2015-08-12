@@ -48,9 +48,10 @@ public class miAdaptadorSettings extends ArrayAdapter<String> {
 
         if(rowView == null)
         {
+System.out.println("iferrr");
             // Get a new instance of the row layout view
             LayoutInflater inflater = activity.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.activity_settings, null);
+            rowView = inflater.inflate(R.layout.list_settings, null);
 
             // Hold the view objects in an object,
             // so they don't need to be re-fetched
@@ -62,8 +63,12 @@ public class miAdaptadorSettings extends ArrayAdapter<String> {
             // so they can be re-accessed later
             rowView.setTag(sqView);
         } else {
+System.out.println("elseerrr");
             sqView = (LogView) rowView.getTag();
         }
+
+        System.out.println("juasjuajsuajusjUAS "+ sqView);
+        System.out.println("juasjuajsuajusjUAS "+ sqView.tipo_settings);
 
         // Transfer the stock data from the data object
         // to the view objects

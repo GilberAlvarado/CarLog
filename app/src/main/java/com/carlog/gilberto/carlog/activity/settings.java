@@ -34,10 +34,6 @@ public class settings extends ActionBarActivity {
         final ListView listview = (ListView) findViewById(R.id.listview_settings);
         String[] values = new String[] { "Notificaciones", "Ayuda" /*,"Perfil"*/};
 
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
-        }
         final miAdaptadorSettings adapter = new miAdaptadorSettings(settings.this, values);
         listview.setAdapter(adapter);
 

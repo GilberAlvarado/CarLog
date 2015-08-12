@@ -478,6 +478,8 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
 
         modificarFechasRevisiones(context);
 
+
+
         dbCar dbcar = new dbCar(context);
         Cursor c = dbcar.buscarCoches();
         cambiarCocheActivo.CambiarCocheActivo(dbcar, c, listaLogs.this, context);
