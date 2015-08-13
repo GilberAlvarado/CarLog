@@ -239,7 +239,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 // because it causes lagging.
                 // See #87: https://github.com/ksoichiro/Android-ObservableScrollView/issues/87
                 FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
-                lp.height = getScreenHeight() + mFlexibleSpaceHeight;
+                lp.height = getScreenHeight() + mFlexibleSpaceHeight - mTabHeight;
                 mInterceptionLayout.requestLayout();
 
                 updateFlexibleSpace();

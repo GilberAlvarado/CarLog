@@ -721,11 +721,14 @@ public class myActivity extends ActionBarActivity {
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
         simpleDataView sdv = (simpleDataView) findViewById(R.id.kms_view);
-        outState.putString("EditKms", sdv.getmEdit());
+        String edit_kms = (String) sdv.getTextEditLeerPantalla().getText().toString();
+        outState.putString("EditKms", edit_kms);
         sdv = (simpleDataView) findViewById(R.id.matricula_view);
-        outState.putString("EditMatricula", sdv.getmEdit());
+        String edit_matricula = (String) sdv.getTextEditLeerPantalla().getText().toString();
+        outState.putString("EditMatricula", edit_matricula);
         sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
-        outState.putString("NoEditItv", sdv.getValue());
+        String edit_itv = sdv.getValue().toString();
+        outState.putString("NoEditItv", edit_itv);
     }
 
     @Override
@@ -740,15 +743,12 @@ public class myActivity extends ActionBarActivity {
         String matricula_restore = savedInstanceState.getString("EditMatricula");
         sdv.setEdit(matricula_restore);
 
-      /*  if (!kms.equals(INICIAL_KMS)) {
-            sdv.setEdit(kms);
-        }
-        else {
-            sdv.setEditHint("Nº Kms");
-        }*/
-        String itv_restore = savedInstanceState.getString("NoEditItv");
+        String itv_restore = savedInstanceState.getString("NoEditItv").toString();
         sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
         sdv.setValue(itv_restore);
+        sdv.setEditInvisible();
+        sdv.setEdit(itv_restore);
+        sdv.setEditHint(itv_restore);
     }
 
 
