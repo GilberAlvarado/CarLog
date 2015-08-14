@@ -19,10 +19,13 @@ import android.widget.TextView;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.data.dbSettings;
 import com.carlog.gilberto.carlog.data.dbTiposRevision;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.notificaciones;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.tipoSettings;
+import com.gc.materialdesign.views.CheckBox;
 
 import java.util.Date;
 import java.util.List;
@@ -48,7 +51,6 @@ public class miAdaptadorSettings extends ArrayAdapter<String> {
 
         if(rowView == null)
         {
-System.out.println("iferrr");
             // Get a new instance of the row layout view
             LayoutInflater inflater = activity.getLayoutInflater();
             rowView = inflater.inflate(R.layout.list_settings, null);
@@ -58,35 +60,150 @@ System.out.println("iferrr");
             sqView = new LogView();
             sqView.tipo_settings = (TextView) rowView.findViewById(R.id.Lbl_tipo_settings);
             sqView.img_settings = (ImageView) rowView.findViewById(R.id.img_settings);
+            sqView.chbx_settings = (CheckBox) rowView.findViewById(R.id.chbx_settings);
 
             // Cache the view objects in the tag,
             // so they can be re-accessed later
             rowView.setTag(sqView);
         } else {
-System.out.println("elseerrr");
             sqView = (LogView) rowView.getTag();
         }
 
-        System.out.println("juasjuajsuajusjUAS "+ sqView);
-        System.out.println("juasjuajsuajusjUAS "+ sqView.tipo_settings);
-
         // Transfer the stock data from the data object
         // to the view objects
-        String img = "logo_audi";
-        int resID = getContext().getResources().getIdentifier(img, "drawable", getContext().getPackageName());
+        int resID = 0;
 
         sqView.tipo_settings.setText(values[position]);
+
+        if(sqView.tipo_settings.getText().toString().equals("Ayuda")) {
+            resID = getContext().getResources().getIdentifier("ic_ayuda", "drawable", getContext().getPackageName());
+        }
+        else if(sqView.tipo_settings.getText().toString().equals("Notificaciones")) {
+            resID = getContext().getResources().getIdentifier("ic_notificaciones", "drawable", getContext().getPackageName());
+        }
+        else {
+            resID = getContext().getResources().getIdentifier("ic_revisiones_settings", "drawable", getContext().getPackageName());
+        }
+
+
         sqView.img_settings.setImageResource(resID);
 
+        if(sqView.tipo_settings.getText().toString().equals("Ayuda")) sqView.chbx_settings.setVisibility(View.GONE);
+        else sqView.chbx_settings.setVisibility(View.VISIBLE);
 
-        sqView.tipo_settings.setTextColor(Color.GRAY);
-        sqView.tipo_settings.setTypeface(null, Typeface.NORMAL);
+        dbSettings manager = new dbSettings(getContext());
+        Cursor c = manager.getSettings();
+        int activo;
+System.out.println("sizeee "+c.getCount());
+        if(c.moveToFirst() == true) {
+            if(sqView.tipo_settings.getText().toString().equals("Notificaciones")) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_NOTIFICACIONES));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_ACEITE)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_ACEITE));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_ANTICONGELANTE)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_ANTICONGELANTE));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_AMORTIGUADORES)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_AMORTIGUADORES));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_BATERIA)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_BATERIA));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_BOMBA_AGUA)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_BOMBAAGUA));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_BUJIAS)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_BUJIAS));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_CORREA)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_CORREA));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_EMBRAGUE)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_EMBRAGUE));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_FRENOS)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_FRENOS));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_FILTRO_AIRE)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILAIRE));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_FILTRO_ACEITE)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILACEITE));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_FILTRO_GASOLINA)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILGASOLINA));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_LUCES)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_LUCES));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_LIQUIDO_FRENOS)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_LIQFRENOS));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_LIMPIAPARABRISAS)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_LIMPIAPARABRISAS));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_RUEDAS)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_RUEDAS));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_REV_GENERAL)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_REVGEN));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+            else if(sqView.tipo_settings.getText().toString().equals("Predecir " +  tipoLog.TIPO_ITV)) {
+                activo = c.getInt(c.getColumnIndex(dbSettings.CN_ITV));
+                if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
+                else sqView.chbx_settings.setChecked(false);
+            }
+else {
+System.out.println("????????????????????" + sqView.tipo_settings.getText().toString());
+}
+        }
+
 
         return rowView;
     }
 
+
     protected static class LogView {
         protected TextView tipo_settings;
         protected ImageView img_settings;
+        protected CheckBox chbx_settings;
     }
 }

@@ -90,13 +90,12 @@ public class notificaciones extends IntentService {
                 .setContentText(contentText)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .addAction(R.drawable.ic_launcher, ticker, pendingIntent)
-                .setAutoCancel(true)
                 .setLights(Color.BLUE, 500, 500)
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .build();
         nm.notify(notificationID, noti);
 
-        noti.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        noti.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
     }
 
     // procedimiento que se ejecuta cada día a las 10:00 para comprobar si hay alarmas

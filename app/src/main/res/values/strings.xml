@@ -8,6 +8,7 @@
     <string name="btn1">Siguiente</string>
     <string name="title_activity_add_log">Añadir Revisión</string>
     <string name="title_activity_settings">Configuración</string>
+    <string name="title_activity_ayuda">Ayuda</string>
     <string name="title_activity_info">Información</string>
     <string name="title_activity_aceite">Aceite</string>
     <string name="title_activity_fil_aceite">Filtro de aceite</string>

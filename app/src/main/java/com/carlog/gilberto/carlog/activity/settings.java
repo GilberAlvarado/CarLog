@@ -1,17 +1,26 @@
 package com.carlog.gilberto.carlog.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.adapter.miAdaptadorSettings;
+import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.data.dbSettings;
+import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.tipoSettings;
 import com.carlog.gilberto.carlog.tiposClases.usuario;
+import com.gc.materialdesign.views.CheckBox;
 
 import java.util.ArrayList;
 
@@ -32,28 +41,215 @@ public class settings extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         final ListView listview = (ListView) findViewById(R.id.listview_settings);
-        String[] values = new String[] { "Notificaciones", "Ayuda" /*,"Perfil"*/};
+        String[] values = new String[] { "Ayuda", "Notificaciones", "Predecir " +  tipoLog.TIPO_ACEITE, "Predecir " +  tipoLog.TIPO_AMORTIGUADORES, "Predecir " +  tipoLog.TIPO_ANTICONGELANTE, "Predecir " +  tipoLog.TIPO_BATERIA
+                , "Predecir " +  tipoLog.TIPO_BOMBA_AGUA, "Predecir " +  tipoLog.TIPO_BUJIAS, "Predecir " +  tipoLog.TIPO_CORREA, "Predecir " +  tipoLog.TIPO_EMBRAGUE, "Predecir " +  tipoLog.TIPO_FILTRO_ACEITE
+                , "Predecir " +  tipoLog.TIPO_FILTRO_AIRE, "Predecir " +  tipoLog.TIPO_FILTRO_GASOLINA, "Predecir " +  tipoLog.TIPO_FRENOS, "Predecir " +  tipoLog.TIPO_ITV, "Predecir " +  tipoLog.TIPO_LIMPIAPARABRISAS
+                , "Predecir " +  tipoLog.TIPO_LIQUIDO_FRENOS, "Predecir " +  tipoLog.TIPO_LUCES, "Predecir " +  tipoLog.TIPO_REV_GENERAL, "Predecir " +  tipoLog.TIPO_RUEDAS/*,"Perfil"*/};
 
         final miAdaptadorSettings adapter = new miAdaptadorSettings(settings.this, values);
         listview.setAdapter(adapter);
 
-      /*  listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        modificarSettingPulsando(settings.this, listview);
+    }
 
+    public void modificarSettingPulsando(final Activity act, final ListView list) {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(2000).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                        });
-            }*/
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            final dbSettings manager = new dbSettings(act.getApplicationContext());
+            Cursor c = manager.getSettings();
+            int activo = tipoSettings.ACTIVO;
 
+            for (int i = 0; i < list.getCount(); i++) {
+                if(i == position) {
+                    if(i == 0) {
+                        Intent intent = new Intent(settings.this, ayuda.class);
+                        startActivity(intent);
+                    }
+                    //View v = list.getChildAt(i+1);
+                   // CheckBox chbx_settings = (CheckBox)v.findViewById(R.id.chbx_settings);
+                    if(i == 1) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_NOTIFICACIONES));
+                            if (activo == tipoSettings.ACTIVO) {
+                                activo = tipoSettings.INACTIVO;
+                             //   chbx_settings.setChecked(false);
+                            }
+                            else {
+                                activo = tipoSettings.ACTIVO;
+                              //  chbx_settings.setChecked(true);
+                            }
+                        }
+                        manager.actualizarNotificaciones(activo);
+                        break;
+                    }
+                    else if(i == 2) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_ACEITE));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarAceite(activo);
+                        break;
+                    }
+                    else if(i == 2) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_AMORTIGUADORES));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarAmortiguadores(activo);
+                        break;
+                    }
+                    else if(i == 3) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_ANTICONGELANTE));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarAnticongelante(activo);
+                        break;
+                    }
+                    else if(i == 4) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_BATERIA));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarBateria(activo);
+                        break;
+                    }
+                    else if(i == 5) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_BOMBAAGUA));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarBombaagua(activo);
+                        break;
+                    }
+                    else if(i == 6) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_BUJIAS));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarBujias(activo);
+                        break;
+                    }
+                    else if(i == 7) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_CORREA));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarCorrea(activo);
+                        break;
+                    }
+                    else if(i == 8) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_EMBRAGUE));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarEmbrague(activo);
+                        break;
+                    }
+                    else if(i == 9) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILACEITE));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarFilaceite(activo);
+                        break;
+                    }
+                    else if(i == 10) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILAIRE));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarFilaire(activo);
+                        break;
+                    }
+                    else if(i == 11) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILGASOLINA));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarFilgasolina(activo);
+                        break;
+                    }
+                    else if(i == 12) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_FRENOS));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarFrenos(activo);
+                        break;
+                    }
+                    else if(i == 13) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_ITV));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarItv(activo);
+                        break;
+                    }
+                    else if(i == 14) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_LIMPIAPARABRISAS));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarLimpiaparabrisas(activo);
+                        break;
+                    }
+                    else if(i == 15) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_LIQFRENOS));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarLiqfrenos(activo);
+                        break;
+                    }
+                    else if(i == 16) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_LUCES));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarLuces(activo);
+                        break;
+                    }
+                    else if(i == 17) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_REVGEN));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarRevgen(activo);
+                        break;
+                    }
+                    else if(i == 18) {
+                        if(c.moveToFirst() == true) {
+                            activo = c.getInt(c.getColumnIndex(dbSettings.CN_RUEDAS));
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
+                        }
+                        manager.actualizarRuedas(activo);
+                        break;
+                    }
+                    break;
+                }
+            }
+            }
+        });
     }
 
     @Override

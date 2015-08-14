@@ -163,7 +163,7 @@
                 android:padding="20dp"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="No necesita cambiar datos ni hacer cálculos innecesarios. Nosotros lo hacemos todo por usted (siempre es personalizable). Sólo debe actualizar el número de kilómetros de su coche cuando lo desee aunque de no hacerlo se predicirán de manera inteligente. Para tener el número de kilómetros al día deberá pulsar el siguiente boton y cambiarlo."
+                android:text="No necesita cambiar datos ni hacer cálculos innecesarios. Nosotros lo hacemos todo por usted (siempre es personalizable). Sólo debe actualizar el número de kilómetros de su coche cuando lo desee aunque de no hacerlo se predecirán de manera inteligente. Para tener el número de kilómetros al día deberá pulsar el siguiente boton y cambiarlo."
                 android:textSize="18sp"
                 discrollve:discrollve_alpha="true"
                 discrollve:discrollve_translation="fromBottom" />

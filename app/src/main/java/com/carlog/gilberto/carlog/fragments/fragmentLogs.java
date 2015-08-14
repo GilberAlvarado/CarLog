@@ -57,39 +57,39 @@ public class fragmentLogs extends baseFragment {
             .setTitle("Borrar de la lista")
             .setCancelable(false)
             .setNegativeButton("Cancelar",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id_dialog) {
-                            dialog.cancel();
-                        }
-                    })
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id_dialog) {
+                        dialog.cancel();
+                    }
+                })
             .setPositiveButton("Continuar",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id_dialog) {
-                        // metodo que se debe implementar Sí
-                        //Recorremos el cursor
-                        int i = 0;
-                        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-                            if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
-                                int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
-                                String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
-                                String tipo_rev = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
-                                if(tipo_rev.equals(tipoLog.TIPO_ITV)) {
-                                    Cursor c_hist_itv = manager.LogsHistoricoTipoOrderByFechaString(matricula, tipo_rev);
-                                    if(c_hist_itv.moveToFirst() == false) {
-                                        dbCar dbc = new dbCar(context);
-                                        dbc.ActualizarITVCocheActivo(matricula, myActivity.NO_ITV);
-                                    }
-                                }
-                                manager.eliminar_por_id(id);
-                                listaLogs a = (listaLogs) act;
-                                fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
-                                fl.ConsultarLogs(context, act);
-                                break;
+                // metodo que se debe implementar Sí
+                //Recorremos el cursor
+                int i = 0;
+                for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+                    if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                        int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
+                        String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
+                        String tipo_rev = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
+                        if(tipo_rev.equals(tipoLog.TIPO_ITV)) {
+                            Cursor c_hist_itv = manager.LogsHistoricoTipoOrderByFechaString(matricula, tipo_rev);
+                            if(c_hist_itv.moveToFirst() == false) {
+                                dbCar dbc = new dbCar(context);
+                                dbc.ActualizarITVCocheActivo(matricula, myActivity.NO_ITV);
                             }
-                            i++;
                         }
+                        manager.eliminar_por_id(id);
+                        listaLogs a = (listaLogs) act;
+                        fragmentLogs fl = (fragmentLogs) a.getCurrentFragment();
+                        fl.ConsultarLogs(context, act);
+                        break;
                     }
-                });
+                    i++;
+                }
+                    }
+            });
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -328,9 +328,9 @@ public class fragmentLogs extends baseFragment {
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             tipoLog miTipoLog = new tipoLog(cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO)),funciones.string_a_date(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getString(cursor.getColumnIndex("fecha_string")),
-                    funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_VECES_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_CONTADOR_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_REVGRAL))
-                    , cursor.getInt(cursor.getColumnIndex(dbLogs.CN_CORREA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BOMBAAGUA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FGASOLINA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FAIRE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BUJIAS)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_EMBRAGUE)), cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR)),
-                    cursor.getInt(cursor.getColumnIndex(dbLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FMODIFICADA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_KMS)));
+                funciones.string_a_long(cursor.getString(cursor.getColumnIndex("fecha_string"))), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ACEITE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_VECES_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_CONTADOR_FIL_ACEITE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_REVGRAL))
+                , cursor.getInt(cursor.getColumnIndex(dbLogs.CN_CORREA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BOMBAAGUA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FGASOLINA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FAIRE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BUJIAS)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_EMBRAGUE)), cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR)),
+                cursor.getInt(cursor.getColumnIndex(dbLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FMODIFICADA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_KMS)));
             listaLogs.add(miTipoLog);
 
             k++;
