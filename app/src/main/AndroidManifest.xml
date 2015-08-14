@@ -62,11 +62,11 @@
         <activity
             android:name=".activity.ayuda"
             android:label="@string/title_activity_ayuda"
-            android:parentActivityName=".activity.listaLogs" >
+            android:parentActivityName=".activity.settings" >
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ListaLogs" />
+                android:value=".activity.settings" />
         </activity>
         <activity
             android:name=".activity.info"
