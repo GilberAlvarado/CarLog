@@ -77,7 +77,7 @@ public class notificaciones extends IntentService {
         NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
         CharSequence ticker ="Tiene " + contador + " revisiones cercanas";
-        CharSequence contentTitle = matricula + " " + tipo_rev + " -> " + fecha;
+        CharSequence contentTitle = "" + matricula + " " + tipo_rev + " -> " + fecha;
         CharSequence contentText = "Y " + (contador - 1) + " revisiones más...";
        /* for (int i = 0; i < l_texto.size(); i++) {
             contentText = contentText+l_texto.get(i).toString();
@@ -93,8 +93,8 @@ public class notificaciones extends IntentService {
                 .setLights(Color.BLUE, 500, 500)
                 .setVibrate(new long[] {100, 250, 100, 500})
                 .build();
-        //noti.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-        noti.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+        noti.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+        //noti.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
         nm.notify(notificationID, noti);
 
 

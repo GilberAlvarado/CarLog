@@ -85,7 +85,6 @@ public class myActivity extends ActionBarActivity {
         dbMarcas dbmarcas = new dbMarcas(getApplicationContext());
         Cursor cursor = dbmarcas.buscarMarcas();
 
-        int i = 0;
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             String marca = cursor.getString(cursor.getColumnIndex(dbMarcas.CN_MARCA));
             lista_marcas.add(marca);

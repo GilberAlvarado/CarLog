@@ -25,7 +25,12 @@
         <item name="android:headerBackground">@color/ColorPrimary</item>
         <!-- al pulsar fila de obervablelist -->
         <item name="colorAccent">@color/ColorPrimary</item>
+
+        <item name="android:spinnerStyle">@style/SpinnerAppTheme</item>
+
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemAppTheme</item>
     </style>
+
 
 
 
