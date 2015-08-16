@@ -346,6 +346,61 @@ public class myActivity extends ActionBarActivity {
     }
 
 
+    private void procesando(Context context, boolean EditarCoche) {
+        Intent intent = new Intent(myActivity.this, listaLogs.class);
+
+        boolean leidos = LeerDatosPantalla();
+        dbCar dbcar = new dbCar(context);
+
+        if (comprobaciones(EditarCoche) && leidos) {
+            dbcar.ActualizarTodosCocheNOActivo(); // Nos aseguramos de que ponemos todos los coches a inactivos para marcar como activo el nuevo
+            if(!EditarCoche) { // Si no estamos editando es nuevo
+                tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
+                dbcar.insertinsertOrUpdate(miCoche);
+            } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
+                tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
+                dbcar.insertinsertOrUpdate(miCoche);
+                // Si el coche no existía no se va a dar el caso pq la matricula es la clave de la tabla entonces no modificamos
+                        /*if(!matricula.equals(matricula_anterior)) {
+                            dbLogs dbl = new dbLogs(context);
+                            dbl.modificarMatriculaLogs(matricula, matricula_anterior);
+                            dbcar.eliminarCoche(matricula_anterior);
+                        }*/
+            }
+            else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
+                Uri myUri = Uri.parse(img_modelo_personalizada);
+                String uriEncoded = Uri.encode(utilities.getPathPictureFromUri(context, myUri), "UTF-8");
+                tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, img_modelo_cambiada, uriEncoded, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                dbcar.insertinsertOrUpdate(miCoche);
+                if(!matricula.equals(matricula_anterior)) {
+                    dbLogs dbl = new dbLogs(context);
+                    dbl.modificarMatriculaLogs(matricula, matricula_anterior);
+                    dbcar.eliminarCoche(matricula_anterior);
+                }
+            }
+            else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
+                Uri myUri = Uri.parse(img_modelo_personalizada);
+                String uriEncoded = Uri.encode(utilities.getPathPictureFromUri(context, myUri), "UTF-8");
+                tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, img_modelo_cambiada, uriEncoded, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
+                dbcar.insertinsertOrUpdate(miCoche);
+                if(!matricula.equals(matricula_anterior)) {
+                    dbLogs dbl = new dbLogs(context);
+                    dbl.modificarMatriculaLogs(matricula, matricula_anterior);
+                    dbcar.eliminarCoche(matricula_anterior);
+                }
+            }
+
+            procesar(context);
+
+            startActivity(intent);
+            // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
+            // Si no queremos agregar nuevo coche y pulsamos hacia atras regresamos a la lista de logs anterior
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
+    }
+
+
     private void Siguiente(final Context context, final boolean EditarCoche) {
         ButtonRectangle btn_siguiente = (ButtonRectangle) findViewById(R.id.button_siguiente);
         if(EditarCoche)
@@ -356,56 +411,41 @@ public class myActivity extends ActionBarActivity {
         btn_siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(myActivity.this, listaLogs.class);
-
-                boolean leidos = LeerDatosPantalla();
-                dbCar dbcar = new dbCar(context);
-
-                if (comprobaciones(EditarCoche) && leidos) {
-                    dbcar.ActualizarTodosCocheNOActivo(); // Nos aseguramos de que ponemos todos los coches a inactivos para marcar como activo el nuevo
-                    if(!EditarCoche) { // Si no estamos editando es nuevo
-                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
-                        dbcar.insertinsertOrUpdate(miCoche);
-                    } else if(int_kms_ini == 0) { // si el coche no existía (no es devuelto en cursor, no tiene históricos)  se inicializa
-                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, dbCar.IMG_MODELO_NOCAMBIADA, null, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, funciones.date_a_long(new Date()), int_kms);
-                        dbcar.insertinsertOrUpdate(miCoche);
-                        // Si el coche no existía no se va a dar el caso pq la matricula es la clave de la tabla entonces no modificamos
-                        /*if(!matricula.equals(matricula_anterior)) {
-                            dbLogs dbl = new dbLogs(context);
-                            dbl.modificarMatriculaLogs(matricula, matricula_anterior);
-                            dbcar.eliminarCoche(matricula_anterior);
-                        }*/
-                    }
-                    else if((int_kms_ini != 0) && (int_kms_anterior == int_kms)) { // si el coche existía y no actualizamos el nº de kms -> no necesitamos actualizar lasfechas de futuros logs (Todos los tipos)
-                        Uri myUri = Uri.parse(img_modelo_personalizada);
-                        String uriEncoded = Uri.encode(utilities.getPathPictureFromUri(context, myUri), "UTF-8");
-                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, img_modelo_cambiada, uriEncoded, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
-                        dbcar.insertinsertOrUpdate(miCoche);
-                        if(!matricula.equals(matricula_anterior)) {
-                            dbLogs dbl = new dbLogs(context);
-                            dbl.modificarMatriculaLogs(matricula, matricula_anterior);
-                            dbcar.eliminarCoche(matricula_anterior);
+                if(EditarCoche) {
+                    try {
+                        LeerDatosPantalla();
+                        Integer mykms = Integer.parseInt(kms);
+                        if (mykms < int_kms_anterior) {
+                            Toast.makeText(myActivity.this, "", Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(myActivity.this);
+                            builder.setMessage("Ha introducido un número de kms menor que el anterior. Se recomienda sólo en caso de equivocación. ¿Continuar?")
+                                .setTitle("Cambiar Nº kilómetros")
+                                .setCancelable(false)
+                                .setNegativeButton("Cancelar",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id_dialog) {
+                                            dialog.cancel();
+                                        }
+                                    })
+                                .setPositiveButton("Continuar",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id_dialog) {
+                                            // metodo que se debe implementar Sí
+                                            procesando(myActivity.this.getApplicationContext(), EditarCoche);
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
                         }
-                    }
-                    else if((int_kms_ini != 0) && (int_kms_anterior != int_kms)) { // si el coche existía y actualizamos el nº de kms -> necesitamos actualizar las fechas de futuros logs (Todos los tipos)
-                        Uri myUri = Uri.parse(img_modelo_personalizada);
-                        String uriEncoded = Uri.encode(utilities.getPathPictureFromUri(context, myUri), "UTF-8");
-                        tipoCoche miCoche = new tipoCoche(matricula, marca, modelo, img_modelo_cambiada, uriEncoded, int_year, int_kms, long_itv, tipoCoche.PROFILE_ACTIVO, int_fecha_ini, int_kms_ini);
-                        dbcar.insertinsertOrUpdate(miCoche);
-                        if(!matricula.equals(matricula_anterior)) {
-                            dbLogs dbl = new dbLogs(context);
-                            dbl.modificarMatriculaLogs(matricula, matricula_anterior);
-                            dbcar.eliminarCoche(matricula_anterior);
+                        else {
+                            procesando(context, EditarCoche);
                         }
+                    } catch (NumberFormatException nfe) {
+                        Toast.makeText(myActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
                     }
-
-                    procesar(context);
-
-                    startActivity(intent);
-                    // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
-                    // Si no queremos agregar nuevo coche y pulsamos hacia atras regresamos a la lista de logs anterior
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();
+                }
+                else {
+                    procesando(context, EditarCoche);
                 }
 
             }
@@ -535,20 +575,18 @@ public class myActivity extends ActionBarActivity {
 
     //comprobaciones
     private boolean comprobaciones(boolean EditarCoche) {
-        System.out.println("editar cocheee" + EditarCoche + " " +kms + " " +int_kms_anterior);
         boolean ok = true;
-        if(EditarCoche) {
-            try {
-                Integer mykms = Integer.parseInt(kms);
-                if (mykms < int_kms_anterior) {
-                    Toast.makeText(myActivity.this, "Ha introducido un número de kms menor que el anterior.", Toast.LENGTH_LONG).show();
-                    ok = false;
-                }
-            } catch (NumberFormatException nfe) {
-                Toast.makeText(myActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
+
+        try {
+            Integer mykms = Integer.parseInt(kms);
+            if (mykms < 0) {
+                Toast.makeText(myActivity.this, "El número de kilómetros debe ser mayor que 0.", Toast.LENGTH_LONG).show();
                 ok = false;
             }
+        } catch (NumberFormatException nfe) {
+            Toast.makeText(myActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
         }
+
         if (!TextUtils.isEmpty(year) && !year.equals(INICIAL_YEAR)) { // el año no es obligatorio
             try {
                 Integer myyear = Integer.parseInt(year);

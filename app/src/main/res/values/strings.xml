@@ -27,7 +27,7 @@
     <string name="title_activity_modificarFiltroAceite">Modificar Filtro de Aceite</string>
     <string name="title_activity_additv">Fecha de revisión</string>
     <string name="title_activity_actualizarcoche">Actualizar Coche</string>
-    <string name="txt_itv">Introduzca Fecha ITV</string>
+    <string name="txt_itv">Introduzca Fecha:</string>
 
     <string name="facebook_app_id">663858277047070</string>
 
