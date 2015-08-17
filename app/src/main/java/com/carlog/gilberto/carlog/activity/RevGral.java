@@ -21,10 +21,12 @@ import android.widget.TextView;
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.data.dbRevGral;
+import com.carlog.gilberto.carlog.data.dbSettings;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.procesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.tipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.tipoSettings;
 import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
 
@@ -116,7 +118,12 @@ public class revGral extends ActionBarActivity {
 
                 managerLogs.insertar(miTipoLog);
                 // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
-                procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_REV_GENERAL, miCoche.getKms(miCoche)); // actualizamos fechas
+                dbSettings dbs = new dbSettings(revGral.this.getApplicationContext());
+                Cursor c_sett = dbs.getSettings();
+                if(c_sett.moveToFirst() == true) {
+                    if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_REVGEN)) == tipoSettings.ACTIVO)
+                        procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_REV_GENERAL, miCoche.getKms(miCoche)); // actualizamos fechas
+                }
 
                 setResult(Activity.RESULT_OK, intent);
 

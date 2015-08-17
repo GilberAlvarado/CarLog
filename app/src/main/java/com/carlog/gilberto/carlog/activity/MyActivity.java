@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.carlog.gilberto.carlog.data.dbCar;
 import com.carlog.gilberto.carlog.data.dbMarcas;
+import com.carlog.gilberto.carlog.data.dbSettings;
 import com.carlog.gilberto.carlog.formats.documentHelper;
 import com.carlog.gilberto.carlog.formats.utilities;
 import com.carlog.gilberto.carlog.negocio.notificaciones;
@@ -38,6 +39,7 @@ import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.data.dbModelos;
 import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
+import com.carlog.gilberto.carlog.tiposClases.tipoSettings;
 import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.carlog.gilberto.carlog.view.simpleDataView;
 import com.gc.materialdesign.views.ButtonRectangle;
@@ -283,43 +285,47 @@ public class myActivity extends ActionBarActivity {
 
 
     public void procesado_revisiones(dbLogs dbLogs, Context context) {
-        /////////////////// PROCESAR ACEITE
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ACEITE, int_year);
-        /////////////////// PROCESAR FILTRO ACEITE
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_ACEITE, int_year);
-        /////////////////// PROCESAR REV. GRAL.
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_REV_GENERAL, int_year);
-        /////////////////// PROCESAR CORREA DIST.
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_CORREA, int_year);
-        /////////////////// PROCESAR BOMBA AGUA
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BOMBA_AGUA, int_year);
-        /////////////////// PROCESAR ITV
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ITV, int_year);
-        /////////////////// PROCESAR FILTRO GASOLINA
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_GASOLINA, int_year);
-        /////////////////// PROCESAR FILTRO AIRE
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_AIRE, int_year);
-        /////////////////// PROCESAR BUJIAS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BUJIAS, int_year);
-        /////////////////// PROCESAR LIMPIAPARABRISAS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIMPIAPARABRISAS, int_year);
-        /////////////////// PROCESAR LÍQUIDO DE FRENOS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIQUIDO_FRENOS, int_year);
-        /////////////////// PROCESAR LÍQUIDO FRENOS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FRENOS, int_year);
-        /////////////////// PROCESAR RUEDAS
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_RUEDAS, int_year);
-        /////////////////// PROCESAR LUCES
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LUCES, int_year);
-        /////////////////// PROCESAR EMBRAGUE
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_EMBRAGUE, int_year);
-        /////////////////// PROCESAR AMORTIGUADORES
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_AMORTIGUADORES, int_year);
-        /////////////////// PROCESAR ANTICONGELANTE
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ANTICONGELANTE, int_year);
-        /////////////////// PROCESAR BATERIA
-        procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BATERIA, int_year);
-        // De momento las tipo personalizadas no se procesan,  sólo se avisa en su fecha
+        dbSettings dbs = new dbSettings(context);
+        Cursor c_sett = dbs.getSettings();
+        if(c_sett.moveToFirst() == true) {
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ACEITE)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ACEITE, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FILACEITE)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_ACEITE, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_REVGEN)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_REV_GENERAL, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_CORREA)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_CORREA, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_BOMBAAGUA)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BOMBA_AGUA, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ITV)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ITV, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FILGASOLINA)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_GASOLINA, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FILAIRE)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_AIRE, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_BUJIAS)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BUJIAS, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_LIMPIAPARABRISAS)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIMPIAPARABRISAS, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_LIQFRENOS)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIQUIDO_FRENOS, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FRENOS)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FRENOS, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_RUEDAS)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_RUEDAS, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_LUCES)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LUCES, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_EMBRAGUE)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_EMBRAGUE, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_AMORTIGUADORES)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_AMORTIGUADORES, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ANTICONGELANTE)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ANTICONGELANTE, int_year);
+            if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_BATERIA)) == tipoSettings.ACTIVO)
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BATERIA, int_year);
+        }
+        // Las tipo personalizadas no se procesan,  sólo se avisa en su fecha
 
     }
 
@@ -743,7 +749,12 @@ public class myActivity extends ActionBarActivity {
             // aqui tenemos toda la info del usuario
 
             addCarOrShowLogs();
-            comprobarNotificaciones();
+            dbSettings dbs = new dbSettings(myActivity.this.getApplicationContext());
+            Cursor c_sett = dbs.getSettings();
+            if(c_sett.moveToFirst() == true) {
+                if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_NOTIFICACIONES)) == tipoSettings.ACTIVO)
+                    comprobarNotificaciones();
+            }
         }
         else {
             System.out.println("No Logueado");
