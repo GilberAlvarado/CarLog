@@ -10,19 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.adapter.miAdaptadorSettings;
-import com.carlog.gilberto.carlog.data.dbLogs;
 import com.carlog.gilberto.carlog.data.dbSettings;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
 import com.carlog.gilberto.carlog.tiposClases.tipoSettings;
 import com.carlog.gilberto.carlog.tiposClases.usuario;
-import com.gc.materialdesign.views.CheckBox;
-
-import java.util.ArrayList;
 
 /**
  * Created by Gilberto on 12/08/2015.
@@ -46,15 +41,9 @@ public class settings extends ActionBarActivity {
                 , "Predecir " +  tipoLog.TIPO_FILTRO_AIRE, "Predecir " +  tipoLog.TIPO_FILTRO_GASOLINA, "Predecir " +  tipoLog.TIPO_FRENOS, "Predecir " +  tipoLog.TIPO_ITV, "Predecir " +  tipoLog.TIPO_LIMPIAPARABRISAS
                 , "Predecir " +  tipoLog.TIPO_LIQUIDO_FRENOS, "Predecir " +  tipoLog.TIPO_LUCES, "Predecir " +  tipoLog.TIPO_REV_GENERAL, "Predecir " +  tipoLog.TIPO_RUEDAS/*,"Perfil"*/};
 
-
-
         final miAdaptadorSettings adapter = new miAdaptadorSettings(settings.this, values);
         listview.setAdapter(adapter);
-
         modificarSettingPulsando(settings.this, listview, adapter);
-
-
-
     }
 
 
@@ -248,24 +237,19 @@ public class settings extends ActionBarActivity {
                     break;
                 }
             }
-                adapter.notifyDataSetChanged();
-
+            adapter.notifyDataSetChanged();
             }
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
@@ -284,6 +268,5 @@ public class settings extends ActionBarActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-
     }
 }

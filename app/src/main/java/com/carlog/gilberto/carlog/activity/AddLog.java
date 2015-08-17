@@ -54,7 +54,6 @@ public class addLog extends ActionBarActivity {
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos);
 
         Cursor cursor = managerTiposRevision.cargarCursorTiposRevision();
-        //Recorremos el cursor
         ArrayList<String> tipos = new ArrayList<String>();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             String tipo = cursor.getString(cursor.getColumnIndex(managerTiposRevision.CN_TIPO));
@@ -85,7 +84,6 @@ public class addLog extends ActionBarActivity {
         btm_agregar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View arg0) {
-
                 edttxt.setVisibility(View.VISIBLE);
                 tv_nt.setVisibility(View.VISIBLE);
 
@@ -135,7 +133,6 @@ public class addLog extends ActionBarActivity {
 
 
     private void addlog(tipoLog miTipoLog, dbLogs managerLogs) {
-
         Intent intent = null;
         dbCar dbc = new dbCar(getApplicationContext());
         Cursor c_activo = dbc.buscarCocheActivo();
@@ -243,12 +240,10 @@ public class addLog extends ActionBarActivity {
     }
 
     private void GuardarLog(final dbLogs managerLogs) {
-        //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos);
                 String tipo = spinner.getSelectedItem().toString();
                 DatePicker datePicker = (DatePicker) findViewById(R.id.date_newlog);
@@ -263,11 +258,8 @@ public class addLog extends ActionBarActivity {
                 } else
                     txt_date_newlog = datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear();
 
-                System.out.println("FECHA NEW LOG " + datePicker.getDayOfMonth() + "-" + (datePicker.getMonth() + 1) + "-" + datePicker.getYear());
-
                 long long_fecha = funciones.string_a_long(txt_date_newlog);
                 Date fecha_newlog = funciones.string_a_date(txt_date_newlog);
-
                 dbCar dbcar = new dbCar(v.getContext());
                 Cursor c = dbcar.buscarCocheActivo();
 
@@ -277,7 +269,6 @@ public class addLog extends ActionBarActivity {
                     matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
                     int_kms = c.getInt(c.getColumnIndex(dbCar.CN_KMS));
                 }
-
                 if (long_fecha > funciones.date_a_long(new Date())) {
                     // con NO_REALIZADO
                     final tipoLog miTipoLog = new tipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, NO_CORREA, NO_BOMBAAGUA, NO_FGASOLINA, NO_FAIRE, NO_BUJIAS, NO_EMBRAGUE, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, int_kms);
@@ -295,32 +286,28 @@ public class addLog extends ActionBarActivity {
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     AlertDialog.Builder builder = new AlertDialog.Builder(addLog.this);
                     builder.setMessage("¿Quiere añadir la última revisión hecha de " + miTipoLog.getTipo(miTipoLog) + "?")
-                            .setTitle("Historial")
-                            .setCancelable(false)
-                            .setNegativeButton("Cancelar",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id_dialog) {
-                                            dialog.cancel();
-                                        }
-                                    })
-                            .setPositiveButton("Continuar",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id_dialog) {
-                                            // metodo que se debe implementar Sí
-                                            addlog(miTipoLog, managerLogs);
-                                            if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
-                                                dbCar dbc = new dbCar(getApplicationContext());
-                                                dbc.ActualizarITVCocheActivo(miTipoLog.getCoche(miTipoLog), miTipoLog.getFechalong(miTipoLog));
-                                            }
-                                        }
-                                    });
+                        .setTitle("Historial")
+                        .setCancelable(false)
+                        .setNegativeButton("Cancelar",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id_dialog) {
+                                    dialog.cancel();
+                                }
+                            })
+                        .setPositiveButton("Continuar",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id_dialog) {
+                                // metodo que se debe implementar Sí
+                                addlog(miTipoLog, managerLogs);
+                                if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
+                                    dbCar dbc = new dbCar(getApplicationContext());
+                                    dbc.ActualizarITVCocheActivo(miTipoLog.getCoche(miTipoLog), miTipoLog.getFechalong(miTipoLog));
+                                }
+                                }
+                            });
                     AlertDialog alert = builder.create();
                     alert.show();
-
-
                 }
-
-
             }
         });
     };
@@ -343,20 +330,14 @@ public class addLog extends ActionBarActivity {
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(addLog.this, settings.class);
@@ -376,7 +357,5 @@ public class addLog extends ActionBarActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-
     }
-
 }

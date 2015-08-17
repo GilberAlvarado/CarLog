@@ -85,39 +85,30 @@ public class tipoLog implements Serializable {
     public String getTipo(tipoLog miTipo) {
         return(miTipo.tipo);
     }
-
     public Date getFecha(tipoLog miTipo) {
         return(miTipo.fecha);
     }
-
     public String getFechatxt(tipoLog miTipo) {
         return(miTipo.datetxt);
     }
-
     public long getFechalong(tipoLog miTipo) {
         return(miTipo.long_fecha);
     }
-
     public String getCoche(tipoLog miTipo) {
         return(miTipo.matricula);
     }
-
     public int getAceite(tipoLog miTipo) {
         return(miTipo.aceite);
     }
-
     public int getVecesFilAceite(tipoLog miTipo) {
         return(miTipo.veces_fil_aceite);
     }
-
     public int getContadorFilAceite(tipoLog miTipo) {
         return(miTipo.contador_fil_aceite);
     }
-
     public int getRevgral(tipoLog miTipo) {
         return(miTipo.revgral);
     }
-
     public int getCorrea(tipoLog miTipo) {
         return(miTipo.correa);
     }
@@ -136,25 +127,17 @@ public class tipoLog implements Serializable {
     public int getEmbrague(tipoLog miTipo) {
         return(miTipo.embrague);
     }
-
     public int getKms(tipoLog miTipo) {
         return(miTipo.kms);
     }
-
     public int getRealizado(tipoLog miTipo) {
         return(miTipo.realizado);
     }
-
     public int getFmodificada(tipoLog miTipo) {
         return(miTipo.fmodificada);
     }
-
     public void setAceite(tipoLog miTipo, int aceite) {  miTipo.aceite = aceite;    }
-
     public void setVecesFiAceite(tipoLog miTipo, int veces_fil_aceite) {  miTipo.veces_fil_aceite = veces_fil_aceite;    }
-
     public void setContadorFiAceite(tipoLog miTipo, int contador_fil_aceite) {  miTipo.contador_fil_aceite = contador_fil_aceite;    }
-
     public void setRevgral(tipoLog miTipo, int revgral) {  miTipo.revgral = revgral;    }
-
 }

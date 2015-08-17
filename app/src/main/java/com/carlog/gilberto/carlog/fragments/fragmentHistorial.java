@@ -52,31 +52,31 @@ public class fragmentHistorial extends baseFragment {
             .setTitle("Borrar de la lista")
             .setCancelable(false)
             .setNegativeButton("Cancelar",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id_dialog) {
-                            dialog.cancel();
-                        }
-                    })
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id_dialog) {
+                        dialog.cancel();
+                    }
+                })
             .setPositiveButton("Continuar",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id_dialog) {
-                            // metodo que se debe implementar Sí
-                            //Recorremos el cursor
-                            int i = 0;
-                            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                                if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
-                                    int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
-                                    String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
-                                    manager.eliminar_por_id(id);
-                                    listaLogs a = (listaLogs) act;
-                                    fragmentHistorial fh = (fragmentHistorial) a.getCurrentFragment();
-                                    fh.ConsultarLogsHistoricos(context, act);
-                                    break;
-                                }
-                                i++;
-                            }
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id_dialog) {
+                    // metodo que se debe implementar Sí
+                    //Recorremos el cursor
+                    int i = 0;
+                    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                        if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
+                            int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
+                            String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
+                            manager.eliminar_por_id(id);
+                            listaLogs a = (listaLogs) act;
+                            fragmentHistorial fh = (fragmentHistorial) a.getCurrentFragment();
+                            fh.ConsultarLogsHistoricos(context, act);
+                            break;
                         }
-                    });
+                        i++;
+                    }
+                    }
+                });
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -127,8 +127,6 @@ public class fragmentHistorial extends baseFragment {
                 else { //personalizados
                     intent = new Intent(context, modificarPersonalizado.class);
                 }
-                //************************************************************************
-
 
                 String txt_fecha = cursor.getString(cursor.getColumnIndex("fecha_string"));
                 int aceite = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ACEITE));
@@ -142,7 +140,6 @@ public class fragmentHistorial extends baseFragment {
                 String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
                 int kms = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_KMS));
                 int veces_filaceite = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_VECES_FIL_ACEITE));
-
 
                 tipoLog miTipo = new tipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, veces_filaceite, addLog.NO_CONTADOR_FIL_ACEITE, revgral, correa, bombaagua, fgasolina, faire, bujias, embrague, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, kms);
                 intent.putExtra("miTipo", miTipo);
@@ -195,9 +192,9 @@ public class fragmentHistorial extends baseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final dbLogs manager = new dbLogs(act.getApplicationContext());
-                final Cursor cursor = manager.LogsHistoricosOrderByFechaString(matricula);
-                modificarLogpulsado(cursor, position, act);
+            final dbLogs manager = new dbLogs(act.getApplicationContext());
+            final Cursor cursor = manager.LogsHistoricosOrderByFechaString(matricula);
+            modificarLogpulsado(cursor, position, act);
             }
         });
     }
@@ -229,7 +226,6 @@ public class fragmentHistorial extends baseFragment {
         }
 
         miAdaptadorLog adapter = new miAdaptadorLog(act, listaLogs);
-
         listView.setAdapter(adapter);
         modificarLogPulsando(act, matricula);
         //Asociamos el menú contextual a los controles para las opciones en longClick

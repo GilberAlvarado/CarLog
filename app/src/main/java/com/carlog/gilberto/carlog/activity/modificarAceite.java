@@ -56,9 +56,7 @@ public class modificarAceite extends ActionBarActivity {
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adaptador);
-
         spinner1.setSelection(miTipo.getAceite(miTipo)-1);
-
     }
 
     private void ChangeFAceite(final String txt_fecha) {
@@ -79,53 +77,47 @@ public class modificarAceite extends ActionBarActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_aceite);
-                String tipo_aceite = spinner.getSelectedItem().toString();
+            Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_aceite);
+            String tipo_aceite = spinner.getSelectedItem().toString();
+            Cursor c = dbAceite.buscarTiposAceite(tipo_aceite);
+            int int_aceite = addLog.NO_ACEITE; // solo para inicializar
 
-                Cursor c = dbAceite.buscarTiposAceite(tipo_aceite);
+            if (c.moveToFirst() == true) {
+                int_aceite = c.getInt(c.getColumnIndex(managerAceite.CN_ID));
+            }
+            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_aceite);
+            String datetxt = txtTexto.getText().toString();
 
-                int int_aceite = addLog.NO_ACEITE; // solo para inicializar
-
-                if (c.moveToFirst() == true) {
-                    int_aceite = c.getInt(c.getColumnIndex(managerAceite.CN_ID));
+            Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
+            Intent intent = new Intent(modificarAceite.this, listaLogs.class);
+            Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
+            Boolean ok = true;
+            if(es_historico) {
+                if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
+                    Toast.makeText(modificarAceite.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
+                    ok = false;
+                }
+            }
+            if(ok) {
+                Cursor c_log = managerLogs.buscarLogID(idLog);
+                if (c_log.moveToFirst() == true) {
+                    long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
+                    String txt_fecha_log = funciones.long_a_string(fecha_log);
+                    if (txt_fecha_log.equals(datetxt))
+                        managerLogs.modificarTipoAceiteLog(idLog, int_aceite);
+                    else
+                        managerLogs.modificarFechaAceiteLog(idLog, int_aceite, funciones.string_a_long(datetxt));
                 }
 
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_aceite);
-                String datetxt = txtTexto.getText().toString();
-
-                Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(modificarAceite.this, listaLogs.class);
-
-                Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
-
-                Boolean ok = true;
-                if(es_historico) {
-                    if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
-                        Toast.makeText(modificarAceite.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
-                        ok = false;
-                    }
-                }
-                if(ok) {
-                    Cursor c_log = managerLogs.buscarLogID(idLog);
-                    if (c_log.moveToFirst() == true) {
-                        long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
-                        String txt_fecha_log = funciones.long_a_string(fecha_log);
-                        System.out.println("Modificamos el Log con id " + idLog + " por aceite " + int_aceite);
-                        if (txt_fecha_log.equals(datetxt))
-                            managerLogs.modificarTipoAceiteLog(idLog, int_aceite);
-                        else
-                            managerLogs.modificarFechaAceiteLog(idLog, int_aceite, funciones.string_a_long(datetxt));
-                    }
-
-    /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
+                /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
                     TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
                     procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
-    */
-                    intent.putExtra("modifyAceite", true);
-                    setResult(Activity.RESULT_OK, intent);
+                */
+                intent.putExtra("modifyAceite", true);
+                setResult(Activity.RESULT_OK, intent);
 
-                    finish();
-                }
+                finish();
+            }
             }
         });
     };
@@ -153,16 +145,12 @@ public class modificarAceite extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(modificarAceite.this, settings.class);

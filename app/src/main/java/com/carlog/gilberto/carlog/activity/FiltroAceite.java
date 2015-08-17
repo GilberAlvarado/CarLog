@@ -50,7 +50,6 @@ public class filtroAceite extends ActionBarActivity {
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_fil_aceite);
 
         Cursor cursor = managerFiltroAceite.buscarTiposFiltroAceite();
-        //Recorremos el cursor
         ArrayList<String> tipos = new ArrayList<String>();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
             String tipo_aceite = cursor.getString(cursor.getColumnIndex(managerFiltroAceite.CN_TIPO));
@@ -63,7 +62,6 @@ public class filtroAceite extends ActionBarActivity {
     }
 
     private void GuardarLog(final Context context, final dbLogs managerLogs, final dbFiltroAceite managerFiltroAceite) {
-        //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_fil_aceite);
 
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -73,25 +71,18 @@ public class filtroAceite extends ActionBarActivity {
                 String tipo_fil_aceite = spinner.getSelectedItem().toString();
 
                 Cursor c = dbFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
-
                 int int_veces = addLog.NO_VECES_FIL_ACEITE; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
                     int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
                 }
-
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fil_aceite);
                 String datetxt = txtTexto.getText().toString();
 
-                //Date fecha = funciones.string_a_date(datetxt);
                 Date fecha = funciones.fecha_mas_dias(new Date(), procesarTipos.F_MAX_REV_ACEITE); // da igual la fecha siempre va a poner un año y cuando toque el contador la misma fecha del aceite
-                //long long_fecha = funciones.string_a_long(datetxt);
                 long long_fecha = funciones.date_a_long(fecha);
-
                 tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
-
                 tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, addLog.NO_ACEITE, int_veces, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
-
 
                 if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                     // Creamos el nuevo futuro log
@@ -100,7 +91,6 @@ public class filtroAceite extends ActionBarActivity {
                 }
 
                 Intent intent = new Intent(filtroAceite.this, addLog.class);
-
                 managerLogs.insertar(miTipoLog);
                 // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
                 dbSettings dbs = new dbSettings(context);
@@ -109,9 +99,7 @@ public class filtroAceite extends ActionBarActivity {
                     if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FILACEITE)) == tipoSettings.ACTIVO)
                         procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_ACEITE, miCoche.getYear(miCoche)); // actualizamos fechas
                 }
-
                 setResult(Activity.RESULT_OK, intent);
-
                 finish();
             }
         });
@@ -138,16 +126,12 @@ public class filtroAceite extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(filtroAceite.this, settings.class);
@@ -167,7 +151,5 @@ public class filtroAceite extends ActionBarActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-
     }
-
 }

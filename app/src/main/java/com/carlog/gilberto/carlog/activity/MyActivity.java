@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.carlog.gilberto.carlog.data.dbCar;
 import com.carlog.gilberto.carlog.data.dbMarcas;
 import com.carlog.gilberto.carlog.data.dbSettings;
-import com.carlog.gilberto.carlog.formats.documentHelper;
 import com.carlog.gilberto.carlog.formats.utilities;
 import com.carlog.gilberto.carlog.negocio.notificaciones;
 import com.carlog.gilberto.carlog.negocio.procesarTipos;
@@ -742,12 +741,9 @@ public class myActivity extends ActionBarActivity {
 
         String getIdFacebook = login.getIdFacebook(this);
         usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
-        System.out.println("MyACTIVITY "+ usuario.isUserLoggedIn(this) + " " + getIdFacebook + " " + es_anonimo());
         if(usuario.isUserLoggedIn(this) || (getIdFacebook != null) || es_anonimo()) {
-            System.out.println("Logueado");
             usuario.readUser(this);
             // aqui tenemos toda la info del usuario
-
             addCarOrShowLogs();
             dbSettings dbs = new dbSettings(myActivity.this.getApplicationContext());
             Cursor c_sett = dbs.getSettings();
@@ -757,7 +753,6 @@ public class myActivity extends ActionBarActivity {
             }
         }
         else {
-            System.out.println("No Logueado");
             Intent intent = new Intent(myActivity.this, login.class);
             startActivity(intent);
             finish();
@@ -802,7 +797,6 @@ public class myActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
@@ -811,9 +805,6 @@ public class myActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(myActivity.this, settings.class);
@@ -844,20 +835,16 @@ public class myActivity extends ActionBarActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-
     }
 
     public static final int PETICION_ACTIVITY_ADDITV = 1;
-    public static final int PETICION_ACTIVITY_ANONIMO = 2;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("requestCoderequestCode "+ requestCode);
         switch(requestCode) {
             case (PETICION_ACTIVITY_ADDITV) : {
                 if (resultCode == Activity.RESULT_OK) {
                     String itv_string = data.getExtras().getString("itv_string");
-                    System.out.println("itv stringgg "+itv_string);
                     simpleDataView sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
                     sdv.setTitle("Fecha ITV");
                     sdv.setValue(itv_string);

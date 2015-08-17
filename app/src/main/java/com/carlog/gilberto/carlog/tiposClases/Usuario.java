@@ -24,16 +24,11 @@ public class usuario {
     private static String KEY_EMAIL = "email";
     private static String KEY_CREATED_AT = "created_at";
     private static String KEY_USER = "user";
-
     private static String loginURL = "http://gilberdesign.com/Carlogserver/index.php";
     private static String registerURL = "http://gilberdesign.com/Carlogserver/index.php";
-
     private static String login_tag = "login";
     private static String register_tag = "register";
-
     private Activity activity;
-
-
 
     public void login(Activity activity, String email, String password, final boolean desdeFB){
         this.activity = activity;

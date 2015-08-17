@@ -37,33 +37,29 @@ public class modificarPersonalizado extends ActionBarActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_personalizada);
+            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_personalizada);
+            Intent intent = new Intent(modificarPersonalizado.this, listaLogs.class);
+            Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
+            Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
 
-                Intent intent = new Intent(modificarPersonalizado.this, listaLogs.class);
-                Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
-
-                Boolean ok = true;
-                if(es_historico) {
-                    if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
-                        Toast.makeText(modificarPersonalizado.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
-                        ok = false;
-                    }
+            Boolean ok = true;
+            if(es_historico) {
+                if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
+                    Toast.makeText(modificarPersonalizado.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
+                    ok = false;
                 }
-                if(ok) {
-                    managerLogs.ActualizarFModificadaLogFuturo(idLog, funciones.string_a_long(txtTexto.getText().toString()));
-
-                    /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
-                    TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
-                    procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
-                    */
-
-                    intent.putExtra("itv_string", txtTexto.getText().toString());
-                    intent.putExtra("modifyPersonalizado", true);
-                    setResult(Activity.RESULT_OK, intent);
-
-                    finish();
-                }
+            }
+            if(ok) {
+                managerLogs.ActualizarFModificadaLogFuturo(idLog, funciones.string_a_long(txtTexto.getText().toString()));
+                /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
+                TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
+                procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
+                */
+                intent.putExtra("itv_string", txtTexto.getText().toString());
+                intent.putExtra("modifyPersonalizado", true);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
             }
         });
     };
@@ -74,9 +70,9 @@ public class modificarPersonalizado extends ActionBarActivity {
         btn_modificarFPers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(modificarPersonalizado.this, addItv.class);
-                intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
-                startActivityForResult(intent, PETICION_ACTIVITY_ADDITV);
+            Intent intent = new Intent(modificarPersonalizado.this, addItv.class);
+            intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
+            startActivityForResult(intent, PETICION_ACTIVITY_ADDITV);
             }
         });
     }
@@ -104,16 +100,12 @@ public class modificarPersonalizado extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(modificarPersonalizado.this, settings.class);
@@ -140,7 +132,6 @@ public class modificarPersonalizado extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("requestCoderequestCode "+ requestCode);
         switch(requestCode) {
             case (PETICION_ACTIVITY_ADDITV) : {
                 if (resultCode == Activity.RESULT_OK) {

@@ -76,7 +76,6 @@ public class aceite extends ActionBarActivity {
                 String tipo_aceite = spinner.getSelectedItem().toString();
 
                 Cursor c = dbAceite.buscarTiposAceite(tipo_aceite);
-
                 int int_aceite = addLog.NO_ACEITE; // solo para inicializar
 
                 if (c.moveToFirst() == true) {
@@ -85,15 +84,12 @@ public class aceite extends ActionBarActivity {
 
                 TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_aceite);
                 String datetxt = txtTexto.getText().toString();
-
                 Date fecha = funciones.string_a_date(datetxt);
                 long long_fecha = funciones.string_a_long(datetxt);
-
                 tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
                 System.out.println("SE inserta aceite id : "+int_aceite);
                 tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
-
 
                 if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                     // Creamos el nuevo futuro log
@@ -111,9 +107,7 @@ public class aceite extends ActionBarActivity {
                     if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ACEITE)) == tipoSettings.ACTIVO)
                         procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_ACEITE, miCoche.getYear(miCoche)); // actualizamos fechas
                 }
-
                 setResult(Activity.RESULT_OK, intent);
-
                 finish();
             }
         });
@@ -133,7 +127,6 @@ public class aceite extends ActionBarActivity {
         Context contextNew = getApplicationContext();
         dbAceite managerAceite = new dbAceite(contextNew);
         dbLogs managerLog = new dbLogs(contextNew);
-
         RellenarTiposAceite(managerAceite);
         GuardarLog(managerLog, managerAceite);
     }
@@ -147,9 +140,6 @@ public class aceite extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(aceite.this, settings.class);
@@ -169,7 +159,5 @@ public class aceite extends ActionBarActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-
     }
-
 }

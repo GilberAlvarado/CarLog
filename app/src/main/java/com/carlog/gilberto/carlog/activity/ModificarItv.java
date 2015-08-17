@@ -30,7 +30,6 @@ import java.util.Date;
 public class modificarItv extends ActionBarActivity {
     private Toolbar toolbar;
 
-
     private void ModificarLog(final dbLogs managerLogs) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.btn_guardar_itv);
@@ -59,16 +58,13 @@ public class modificarItv extends ActionBarActivity {
                         String matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
                         dbc.ActualizarITVCocheActivo(matricula, funciones.string_a_long(txtTexto.getText().toString()));
                     }
-
                     /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
                     TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
                     procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
                     */
-
                     intent.putExtra("itv_string", txtTexto.getText().toString());
                     intent.putExtra("modifyItv", true);
                     setResult(Activity.RESULT_OK, intent);
-
                     finish();
                 }
             }
@@ -81,9 +77,9 @@ public class modificarItv extends ActionBarActivity {
         btn_modificarFItv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(modificarItv.this, addItv.class);
-                intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
-                startActivityForResult(intent, PETICION_ACTIVITY_ADDITV);
+            Intent intent = new Intent(modificarItv.this, addItv.class);
+            intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
+            startActivityForResult(intent, PETICION_ACTIVITY_ADDITV);
             }
         });
     }
@@ -111,16 +107,12 @@ public class modificarItv extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(modificarItv.this, settings.class);
@@ -147,12 +139,10 @@ public class modificarItv extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("requestCoderequestCode "+ requestCode);
         switch(requestCode) {
             case (PETICION_ACTIVITY_ADDITV) : {
                 if (resultCode == Activity.RESULT_OK) {
                     String itv_string = data.getExtras().getString("itv_string");
-                    System.out.println("itv stringgg1 "+itv_string);
                     TextView text=(TextView)findViewById(R.id.txt_fecha_itv);
                     text.setText(itv_string);
                 }

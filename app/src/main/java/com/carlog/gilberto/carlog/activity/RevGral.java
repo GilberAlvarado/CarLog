@@ -62,9 +62,7 @@ public class revGral extends ActionBarActivity {
         TextView text=(TextView)findViewById(R.id.txt_fecha_revgral);
         text.setText(txt_fecha);
 
-        //spinner1 = (Spinner) findViewById(R.id.cmb_tipos_aceite);
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_revgral);
-
         Cursor cursor = managerRevGral.buscarTiposRevGral();
         //Recorremos el cursor
         ArrayList<String> tipos = new ArrayList<String>();
@@ -72,7 +70,6 @@ public class revGral extends ActionBarActivity {
             String tipo_revgral = cursor.getString(cursor.getColumnIndex(managerRevGral.CN_TIPO));
             tipos.add(tipo_revgral);
         }
-
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adaptador);
@@ -85,49 +82,36 @@ public class revGral extends ActionBarActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_revgral);
-                String tipo_revgral = spinner.getSelectedItem().toString();
+            Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_revgral);
+            String tipo_revgral = spinner.getSelectedItem().toString();
+            Cursor c = dbRevGral.buscarTiposRevGral(tipo_revgral);
+            int int_revgral = addLog.NO_REVGRAL; // solo para inicializar
+            if (c.moveToFirst() == true) {
+                int_revgral = c.getInt(c.getColumnIndex(managerRevGral.CN_ID));
+            }
+            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_revgral);
+            String datetxt = txtTexto.getText().toString();
+            Date fecha = funciones.string_a_date(datetxt);
+            long long_fecha = funciones.string_a_long(datetxt);
+            tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
+            tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
 
-                Cursor c = dbRevGral.buscarTiposRevGral(tipo_revgral);
-
-                int int_revgral = addLog.NO_REVGRAL; // solo para inicializar
-
-                if (c.moveToFirst() == true) {
-                    int_revgral = c.getInt(c.getColumnIndex(managerRevGral.CN_ID));
-                }
-
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_revgral);
-                String datetxt = txtTexto.getText().toString();
-
-                Date fecha = funciones.string_a_date(datetxt);
-                long long_fecha = funciones.string_a_long(datetxt);
-
-                tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
-
-                System.out.println("SE inserta revgral id : "+int_revgral);
-                tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
-
-
-                if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
-                    // Creamos el nuevo futuro log
-                    // Se pone como REALIZADO!
-                    miTipoLog = new tipoLog(tipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
-                }
-
-                Intent intent = new Intent(revGral.this, addLog.class);
-
-                managerLogs.insertar(miTipoLog);
-                // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
-                dbSettings dbs = new dbSettings(revGral.this.getApplicationContext());
-                Cursor c_sett = dbs.getSettings();
-                if(c_sett.moveToFirst() == true) {
-                    if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_REVGEN)) == tipoSettings.ACTIVO)
-                        procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_REV_GENERAL, miCoche.getKms(miCoche)); // actualizamos fechas
-                }
-
-                setResult(Activity.RESULT_OK, intent);
-
-                finish();
+            if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
+                // Creamos el nuevo futuro log
+                // Se pone como REALIZADO!
+                miTipoLog = new tipoLog(tipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+            }
+            Intent intent = new Intent(revGral.this, addLog.class);
+            managerLogs.insertar(miTipoLog);
+            // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
+            dbSettings dbs = new dbSettings(revGral.this.getApplicationContext());
+            Cursor c_sett = dbs.getSettings();
+            if(c_sett.moveToFirst() == true) {
+                if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_REVGEN)) == tipoSettings.ACTIVO)
+                    procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_REV_GENERAL, miCoche.getKms(miCoche)); // actualizamos fechas
+            }
+            setResult(Activity.RESULT_OK, intent);
+            finish();
             }
         });
     };
@@ -154,16 +138,12 @@ public class revGral extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(revGral.this, settings.class);
@@ -183,7 +163,6 @@ public class revGral extends ActionBarActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-
     }
 }
 

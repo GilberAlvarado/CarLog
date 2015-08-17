@@ -43,7 +43,6 @@ public class login extends Activity {
     private EditText inputPassword;
     private TextView loginErrorMsg;
 
-
     public void openFacebookSession(final Activity activity, final Class goTo){
         // set the permissions in the third parameter of the call
         String[] perm = {"public_profile", "user_friends"};
@@ -51,44 +50,44 @@ public class login extends Activity {
         openActiveSessionFacebook(activity, true, permissions, new Session.StatusCallback() {
             @Override
             public void call(final Session session, SessionState state, Exception exception) {
-                if (exception != null) {
-                    Log.d("Facebook", exception.getMessage());
-                }
-                Log.d("Facebook", "Session State: " + session.getState());
-                // you can make request to the /me API or do other stuff like post, etc. here
-                if (state.equals(SessionState.OPENED)) {
-                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                    StrictMode.setThreadPolicy(policy);
-                    Request.newMeRequest(session, new Request.GraphUserCallback() {
+            if (exception != null) {
+                Log.d("Facebook", exception.getMessage());
+            }
+            Log.d("Facebook", "Session State: " + session.getState());
+            // you can make request to the /me API or do other stuff like post, etc. here
+            if (state.equals(SessionState.OPENED)) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                Request.newMeRequest(session, new Request.GraphUserCallback() {
 
-                        @Override
-                        public void onCompleted(GraphUser user, Response response) {
-                            if (session == Session.getActiveSession()) {
-                                if (user != null) {
-                                    // Display the parsed user info
-                                    try {
-                                        Intent intent = new Intent(activity, goTo);
-                                        // System.out.println("DATOS FB"+ user.getId()+ " "+ user.getName()+ " "+user.asMap().get("email").toString()); //user.getProperty("email")
-                                        saveParamsFacebook(activity, user.getId(), user.getName());
-                                        usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
-                                        usuario.login(login.this, user.getId(), "PASS_IGNORE_FB", true);
-                                        registerUsuarioFacebook(user.getName(), user.getId());
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        activity.startActivity(intent);
-                                        finish();
-                                    } catch (Exception e) {
-                                        e.getStackTrace();
-                                    }
-                                }
-
-                            } else {
-                                if (response.getError() != null) {
-                                    // Handle errors, will do so later.
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        if (session == Session.getActiveSession()) {
+                            if (user != null) {
+                                // Display the parsed user info
+                                try {
+                                    Intent intent = new Intent(activity, goTo);
+                                    // System.out.println("DATOS FB"+ user.getId()+ " "+ user.getName()+ " "+user.asMap().get("email").toString()); //user.getProperty("email")
+                                    saveParamsFacebook(activity, user.getId(), user.getName());
+                                    usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
+                                    usuario.login(login.this, user.getId(), "PASS_IGNORE_FB", true);
+                                    registerUsuarioFacebook(user.getName(), user.getId());
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    activity.startActivity(intent);
+                                    finish();
+                                } catch (Exception e) {
+                                    e.getStackTrace();
                                 }
                             }
+
+                        } else {
+                            if (response.getError() != null) {
+                                // Handle errors, will do so later.
+                            }
                         }
-                    }).executeAndWait();
-                }
+                    }
+                }).executeAndWait();
+            }
             }
         });
     }
@@ -111,18 +110,18 @@ public class login extends Activity {
         Thread thread = new Thread(new Runnable(){
             @Override
             public void run() {
-                try {
-                    URL imageURL = new URL("https://graph.facebook.com/" + idFacebook + "/picture?type=large");
-                    Bitmap imgProfile = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                    if (imgProfile != null){
-                        String imgProfileStr = utilities.ImageToBase64(imgProfile);
-                        if (imgProfileStr != null){
-                            sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_img_profile), imgProfileStr);
-                        }
+            try {
+                URL imageURL = new URL("https://graph.facebook.com/" + idFacebook + "/picture?type=large");
+                Bitmap imgProfile = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                if (imgProfile != null){
+                    String imgProfileStr = utilities.ImageToBase64(imgProfile);
+                    if (imgProfileStr != null){
+                        sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_img_profile), imgProfileStr);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             }
         });
         thread.start();
@@ -205,7 +204,6 @@ public class login extends Activity {
     }
 
     public static boolean checkLogin (final Activity activity){
-
         if (getIdFacebook(activity) != null){
             return true;
         }
@@ -216,11 +214,11 @@ public class login extends Activity {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals(activity.getString(R.string.login))) {
-                    goToLoginScreen(activity);
-                } else if (items[item].equals(activity.getString(R.string.cancel))) {
-                    dialog.dismiss();
-                }
+            if (items[item].equals(activity.getString(R.string.login))) {
+                goToLoginScreen(activity);
+            } else if (items[item].equals(activity.getString(R.string.cancel))) {
+                dialog.dismiss();
+            }
             }
         });
         builder.show();
@@ -229,14 +227,13 @@ public class login extends Activity {
 
 
     public void loginfacebook() {
-            ButtonRectangle loginBtn = (ButtonRectangle) findViewById(R.id.btnLoginFacebook);
-            loginBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openFacebookSession(login.this, myActivity.class);
-                }
-            });
-
+        ButtonRectangle loginBtn = (ButtonRectangle) findViewById(R.id.btnLoginFacebook);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFacebookSession(login.this, myActivity.class);
+            }
+        });
     }
 
     public void loginAnonimo() {
@@ -244,14 +241,14 @@ public class login extends Activity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveParamsAnonimo(login.this);
-                usuario u = new usuario();
-                u.login(login.this, "a@a.es", "PASS_IGNORE_FB", true);
-                Intent i = new Intent(login.this, myActivity.class);
-                i.putExtra("anonimo", true);
-                login.this.startActivity(i);
-                finish();
-                //registerUsuarioFacebook("Anonimo", "a@a.es");
+            saveParamsAnonimo(login.this);
+            usuario u = new usuario();
+            u.login(login.this, "a@a.es", "PASS_IGNORE_FB", true);
+            Intent i = new Intent(login.this, myActivity.class);
+            i.putExtra("anonimo", true);
+            login.this.startActivity(i);
+            finish();
+            //registerUsuarioFacebook("Anonimo", "a@a.es");
             }
         });
 
@@ -299,7 +296,6 @@ public class login extends Activity {
 
 
     public void registerUsuarioFacebook(String name , String id) {
-
         usuario u = new usuario();
         u.register(login.this, name, id, "PASS_IGNORE_FB", true);
         Intent itemintent = new Intent(login.this, myActivity.class);
@@ -317,7 +313,6 @@ public class login extends Activity {
         loginfacebook();
         loginAnonimo();
        // loginUsuario();
-
     }
 
 

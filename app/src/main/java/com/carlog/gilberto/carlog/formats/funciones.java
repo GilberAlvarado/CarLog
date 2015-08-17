@@ -1,16 +1,9 @@
 package com.carlog.gilberto.carlog.formats;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
@@ -21,14 +14,10 @@ public class funciones {
     public static Date string_a_date(String txt_fecha) {
         Date fecha_newlog = new Date();
         try {
-
             // aca realizamos el parse, para obtener objetos de tipo Date de las Strings
             SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
             formato.setTimeZone(TimeZone.getTimeZone("UTC")); // hay días mal en gmt+1
             fecha_newlog = formato.parse(txt_fecha);
-
-
-
         } catch (ParseException e) {
             // Log.e(TAG, "Funcion diferenciaFechas: Error Parse " + e);
         } catch (Exception e) {
@@ -40,7 +29,6 @@ public class funciones {
     public static long string_a_long(String txt_fecha) {
         Date fecha_newlog = new Date();
         try {
-
             // aca realizamos el parse, para obtener objetos de tipo Date de las Strings
             SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
             formato.setTimeZone(TimeZone.getTimeZone("UTC")); // hay días mal en gmt+1
@@ -60,8 +48,6 @@ public class funciones {
 
     public static String long_a_string(long fecha) {
         return new SimpleDateFormat("dd-MM-yyyy").format(new Date(fecha * 1000L));
-
-
     }
 
     public static Date long_a_date(long dato) {
@@ -72,21 +58,15 @@ public class funciones {
     public static long dias_entre_2_fechas(Date fecha1, Date fecha2) {
         final long MILLISECS_PER_DAY = 24 * 60 * 60 * 1000;
         long diferencia = ((fecha2).getTime() - (fecha1).getTime())/MILLISECS_PER_DAY;
-        System.out.println("DIAS ENTRE " + fecha2 + " y " + fecha1 + " = " + diferencia);
         return diferencia;
-
     }
 
     public static Date fecha_mas_dias(Date fecha, int dias) {
         Calendar hoy = Calendar.getInstance();
         hoy.setTime(fecha);
-        System.out.println("DIA " + hoy.getTime() + " + "  + dias + " días =  ");
         hoy.add(Calendar.DATE, dias);
         System.out.println(hoy.getTime());
         return(hoy.getTime());
     }
-
-
-
 
 }

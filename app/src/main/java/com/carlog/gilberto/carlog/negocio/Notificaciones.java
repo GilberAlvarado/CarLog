@@ -84,15 +84,15 @@ public class notificaciones extends IntentService {
         }
         contentText = contentText+l_texto.get(i).toString();*/
         Notification noti = new NotificationCompat.Builder(this)
-                .setContentIntent(pendingIntent)
-                .setTicker(ticker)
-                .setContentTitle(contentTitle)
-                .setContentText(contentText)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .addAction(R.drawable.ic_launcher, ticker, pendingIntent)
-                .setLights(Color.BLUE, 500, 500)
-                .setVibrate(new long[] {100, 250, 100, 500})
-                .build();
+            .setContentIntent(pendingIntent)
+            .setTicker(ticker)
+            .setContentTitle(contentTitle)
+            .setContentText(contentText)
+            .setSmallIcon(R.drawable.ic_launcher)
+            .addAction(R.drawable.ic_launcher, ticker, pendingIntent)
+            .setLights(Color.BLUE, 500, 500)
+            .setVibrate(new long[] {100, 250, 100, 500})
+            .build();
         noti.flags = Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_AUTO_CANCEL;
         //noti.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
         nm.notify(notificationID, noti);

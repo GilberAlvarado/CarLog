@@ -66,7 +66,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class listaLogs extends baseActivity implements ObservableScrollViewCallbacks  {
 
     private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
-   // private static final boolean TOOLBAR_IS_STICKY = true;
     private static final int INVALID_POINTER = -1;
 
     public static DrawerLayout Drawer;
@@ -80,15 +79,10 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
     private View mFab;
     private int mActionBarSize;
     private int mFlexibleSpaceShowFabOffset;
-  //  private int mFlexibleSpaceImageHeight;
-  //  private int mFabMargin;
-  //  private boolean mFabIsShown;
     private int mToolbarColor;
     private View mToolbar;
     private Toolbar toolbar;
     private FloatingActionMenu mFloatMenu;
-
-
 
     private TouchInterceptionFrameLayout mInterceptionLayout;
     private ViewPager mPager;
@@ -102,8 +96,6 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
     private int mFlexibleSpaceHeight;
     private int mTabHeight;
     private boolean mScrolled;
-
-
 
     private void imagenFB(final Activity activity) {
         String idFB = login.getIdFacebook(activity);
@@ -184,9 +176,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         mDrawerToggle.syncState();               // Finally we set the drawer toggle sync State
 
         setSupportActionBar(toolbar);
-
         imagenFB(activity);
-
 
         ViewCompat.setElevation(findViewById(R.id.header), getResources().getDimension(R.dimen.toolbar_elevation));
         mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
@@ -195,23 +185,17 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         mImageView = findViewById(R.id.image);
         mOverlayView = findViewById(R.id.overlay);
 
-
         // Padding for ViewPager must be set outside the ViewPager itself
         // because with padding, EdgeEffect of ViewPager become strange.
         mTabHeight = getResources().getDimensionPixelSize(R.dimen.tab_height);
-        //mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mFlexibleSpaceHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         findViewById(R.id.pager_wrapper).setPadding(0, mFlexibleSpaceHeight + mTabHeight, 0, 0);
-    //    mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
         mActionBarSize = getActionBarSize();
         mToolbarColor = getResources().getColor(R.color.ColorPrimary);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mToolbar = findViewById(R.id.tool_bar);
-     //   if (!TOOLBAR_IS_STICKY) {
-            mToolbar.setBackgroundColor(Color.TRANSPARENT);
-     //   }
-
+        mToolbar.setBackgroundColor(Color.TRANSPARENT);
 
         mImageView = findViewById(R.id.image);
         mImageViewOnClick = findViewById(R.id.imageonclick);
@@ -246,17 +230,9 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
             }
         });
 
-
-     //------------   tabHost.setPadding(0, mFlexibleSpaceImageHeight, 0, 0);
-       // mScrollView.addHeaderView(paddingView);
         mTitleView = (TextView) findViewById(R.id.title);
         setTitle(null);
         mFab = findViewById(R.id.fab);
-    //    mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
-    //    ViewHelper.setScaleX(mFab, 0);
-    //    ViewHelper.setScaleY(mFab, 0);
-
-
 
         LinearLayout difuminado = (LinearLayout) findViewById(R.id.difuminado_layout);
         difuminado.setBackgroundColor(ScrollUtils.getColorWithAlpha(0.4f, mToolbarColor));
@@ -322,15 +298,6 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 .build();
     }
 
- /*   protected int getActionBarSize() {
-        TypedValue typedValue = new TypedValue();
-        int[] textSizeAttr = new int[]{R.attr.actionBarSize};
-        int indexOfAttrTextSize = 0;
-        TypedArray a = obtainStyledAttributes(typedValue.data, textSizeAttr);
-        int actionBarSize = a.getDimensionPixelSize(indexOfAttrTextSize, -1);
-        a.recycle();
-        return actionBarSize;
-    }*/
 
 
     private void modificarFechasRevisiones(Context context) {
@@ -420,7 +387,6 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
 
     public void changeImgDrawerObservable() {
         View iv = (View) findViewById(R.id.imageonclick);
-
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -475,45 +441,22 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         Context context = this;
 
         ObservableScrollView(listaLogs.this);
-
         modificarFechasRevisiones(context);
-
-
-
         dbCar dbcar = new dbCar(context);
         Cursor c = dbcar.buscarCoches();
         cambiarCocheActivo.CambiarCocheActivo(dbcar, c, listaLogs.this, context);
-
         c = dbcar.buscarCocheActivo();
-
         changeImgDrawerObservable();
 
         int img_modelo_cambiada = dbCar.IMG_MODELO_NOCAMBIADA;
         String img_modelo_personalizada = "";
         String modelo = "";
         if (c.moveToFirst() == true) {
-            //String matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
-            //String marca = c.getString(c.getColumnIndex(dbCar.CN_MARCA));
             modelo = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
             img_modelo_cambiada = c.getInt(c.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
-            //int_year = c.getInt(c.getColumnIndex(dbCar.CN_YEAR));
-            //int_kms = c.getInt(c.getColumnIndex(dbCar.CN_KMS));
-            //int_itv = c.getInt(c.getColumnIndex(dbCar.CN_ITV));
-            //int_kms_ini = c.getInt(c.getColumnIndex(dbCar.CN_KMS_INI));
-            //int_fecha_ini = c.getInt(c.getColumnIndex(dbCar.CN_FECHA_INI));
             img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
         }
-
-        System.out.println("personalizada " + img_modelo_personalizada + " cambiada " + img_modelo_cambiada);
         cambiarCocheActivo.CambiarImgLogs(context, listaLogs.this, img_modelo_personalizada, modelo, img_modelo_cambiada);
-
-
-    /*    fragmentLogs fragment = new fragmentLogs();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.pager_wrapper, fragment)
-                .commit();
-
-        fragment.ConsultarLogs(context, listaLogs.this);*/
     }
 
     @Override
@@ -649,7 +592,6 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
     };
 
 
-
     private void updateLayout() {
         boolean needsUpdate = false;
         float translationY = 0;
@@ -719,9 +661,6 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         // Translate title text
         int maxTitleTranslationY = (int) (mFlexibleSpaceHeight - mTitleView.getHeight()  * scale);
         int titleTranslationY = maxTitleTranslationY + (int) translationY;
-      /*  if (TOOLBAR_IS_STICKY) {
-            titleTranslationY = Math.max(0, titleTranslationY);
-        }*/
 
         ViewHelper.setTranslationY(mTitleView, titleTranslationY);
         ViewHelper.setTranslationX(mTitleView, 90);
@@ -733,7 +672,6 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
     public Fragment getCurrentFragment() {
         return mPagerAdapter.getItemAt(mPager.getCurrentItem());
     }
-
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -749,24 +687,17 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
 
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
 
         int id = item.getItemId();
         if (id == R.id.action_settings) {

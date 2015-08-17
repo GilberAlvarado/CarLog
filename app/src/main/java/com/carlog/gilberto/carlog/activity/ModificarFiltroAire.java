@@ -39,7 +39,6 @@ public class modificarFiltroAire extends ActionBarActivity {
         TextView text=(TextView)findViewById(R.id.txt_fecha_faire);
         text.setText(txt_fecha);
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_faire);
-
         Cursor cursor = managerFiltroAire.buscarTiposFiltroAire();
         //Recorremos el cursor
         ArrayList<String> tipos = new ArrayList<String>();
@@ -47,13 +46,10 @@ public class modificarFiltroAire extends ActionBarActivity {
             String tipo_faire = cursor.getString(cursor.getColumnIndex(managerFiltroAire.CN_TIPO));
             tipos.add(tipo_faire);
         }
-
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adaptador);
-
         spinner1.setSelection(miTipo.getFaire(miTipo)-1);
-
     }
 
     private void ChangeFFiltroAire(final String txt_fecha) {
@@ -61,9 +57,9 @@ public class modificarFiltroAire extends ActionBarActivity {
         btn_modificarFFiltroAire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(modificarFiltroAire.this, addItv.class);
-                intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
-                startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_FAIRE);
+            Intent intent = new Intent(modificarFiltroAire.this, addItv.class);
+            intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
+            startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_FAIRE);
             }
         });
     }
@@ -74,52 +70,42 @@ public class modificarFiltroAire extends ActionBarActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_faire);
-                String tipo_faire = spinner.getSelectedItem().toString();
-
-                Cursor c = dbFiltroAire.buscarFiltroAire(tipo_faire);
-
-                int int_faire = addLog.NO_FAIRE; // solo para inicializar
-
-                if (c.moveToFirst() == true) {
-                    int_faire = c.getInt(c.getColumnIndex(managerFiltroAire.CN_ID));
+            Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_faire);
+            String tipo_faire = spinner.getSelectedItem().toString();
+            Cursor c = dbFiltroAire.buscarFiltroAire(tipo_faire);
+            int int_faire = addLog.NO_FAIRE; // solo para inicializar
+            if (c.moveToFirst() == true) {
+                int_faire = c.getInt(c.getColumnIndex(managerFiltroAire.CN_ID));
+            }
+            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_faire);
+            Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
+            Intent intent = new Intent(modificarFiltroAire.this, listaLogs.class);
+            Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
+            Boolean ok = true;
+            if(es_historico) {
+                if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
+                    Toast.makeText(modificarFiltroAire.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
+                    ok = false;
                 }
-
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_faire);
-
-                Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(modificarFiltroAire.this, listaLogs.class);
-                Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
-
-                Boolean ok = true;
-                if(es_historico) {
-                    if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
-                        Toast.makeText(modificarFiltroAire.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
-                        ok = false;
-                    }
+            }
+            if(ok) {
+                Cursor c_log = managerLogs.buscarLogID(idLog);
+                if (c_log.moveToFirst() == true) {
+                    long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
+                    String txt_fecha_log = funciones.long_a_string(fecha_log);
+                    if (txt_fecha_log.equals(txtTexto.getText().toString()))
+                        managerLogs.modificarTipoFiltroAireLog(idLog, int_faire);
+                    else
+                        managerLogs.modificarFechaFiltroAireLog(idLog, int_faire, funciones.string_a_long(txtTexto.getText().toString()));
                 }
-                if(ok) {
-                    Cursor c_log = managerLogs.buscarLogID(idLog);
-                    if (c_log.moveToFirst() == true) {
-                        long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
-                        String txt_fecha_log = funciones.long_a_string(fecha_log);
-                        System.out.println("Modificamos el Log con id " + idLog + " por filtro aire " + int_faire);
-                        if (txt_fecha_log.equals(txtTexto.getText().toString()))
-                            managerLogs.modificarTipoFiltroAireLog(idLog, int_faire);
-                        else
-                            managerLogs.modificarFechaFiltroAireLog(idLog, int_faire, funciones.string_a_long(txtTexto.getText().toString()));
-                    }
-
                 /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
                 TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
                 procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
                 */
-
-                    intent.putExtra("modifyFiltroAire", true);
-                    setResult(Activity.RESULT_OK, intent);
-
-                    finish();
-                }
+                intent.putExtra("modifyFiltroAire", true);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
             }
         });
     };
@@ -145,16 +131,12 @@ public class modificarFiltroAire extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(modificarFiltroAire.this, settings.class);
@@ -181,7 +163,6 @@ public class modificarFiltroAire extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("requestCoderequestCode "+ requestCode);
         switch(requestCode) {
             case (PETICION_ACTIVITY_MODIFY_FAIRE) : {
                 if (resultCode == Activity.RESULT_OK) {

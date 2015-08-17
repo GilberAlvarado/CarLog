@@ -58,15 +58,15 @@ public class utilities {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals(activity.getString(R.string.take_picture))) {
-                    selectImageCamera(activity);
-                } else if (items[item].equals(activity.getString(R.string.gallery_picture))) {
-                    selectImageGallery(activity);
-                } else if (items[item].equals(activity.getString(R.string.reset_picture))) {
-                    selectResetImage(activity);
-                } else if (items[item].equals(activity.getString(R.string.cancel))) {
-                    dialog.dismiss();
-                }
+            if (items[item].equals(activity.getString(R.string.take_picture))) {
+                selectImageCamera(activity);
+            } else if (items[item].equals(activity.getString(R.string.gallery_picture))) {
+                selectImageGallery(activity);
+            } else if (items[item].equals(activity.getString(R.string.reset_picture))) {
+                selectResetImage(activity);
+            } else if (items[item].equals(activity.getString(R.string.cancel))) {
+                dialog.dismiss();
+            }
             }
         });
         builder.show();

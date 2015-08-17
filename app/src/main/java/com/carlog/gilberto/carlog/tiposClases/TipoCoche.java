@@ -41,45 +41,32 @@ public class tipoCoche implements Serializable {
     public String getMarca(tipoCoche miCoche) {
         return(miCoche.marca);
     }
-
     public String getModelo(tipoCoche miCoche) {
         return(miCoche.modelo);
     }
-
     public int getImgModeloCambiada(tipoCoche miCoche) {
         return(miCoche.imgmodelocambiada);
     }
-
-    public String getImgModeloPersonalizada(tipoCoche miCoche) {
-        return(miCoche.imgmodelopersonalizada);
-    }
-
+    public String getImgModeloPersonalizada(tipoCoche miCoche) { return(miCoche.imgmodelopersonalizada); }
     public int getYear(tipoCoche miCoche) {
         return(miCoche.year);
     }
-
     public String getMatricula(tipoCoche miCoche) {
         return(miCoche.matricula);
     }
-
     public int getKms(tipoCoche miCoche) {
         return(miCoche.kms);
     }
-
     public long getItv(tipoCoche miCoche) {
         return(miCoche.itv);
     }
-
     public int getProfile(tipoCoche miCoche) {
         return(miCoche.profile);
     }
-
     public long getFechaIni(tipoCoche miCoche) {
         return(miCoche.fecha_ini);
     }
-
     public int getKmsIni(tipoCoche miCoche) {
         return(miCoche.kms_ini);
     }
-
 }

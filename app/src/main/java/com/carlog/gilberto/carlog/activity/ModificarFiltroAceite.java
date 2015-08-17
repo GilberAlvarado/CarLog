@@ -34,11 +34,7 @@ public class modificarFiltroAceite extends ActionBarActivity {
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_fil_aceite);
         text.setText(txt_fecha);
-
-        System.out.println("miTipo.getVecesFilAceite(miTipo)-1  " + miTipo.getVecesFilAceite(miTipo));
-
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_fil_aceite);
-
         Cursor cursor = managerFiltroAceite.buscarTiposFiltroAceite();
         //Recorremos el cursor
         ArrayList<String> tipos = new ArrayList<String>();
@@ -46,11 +42,9 @@ public class modificarFiltroAceite extends ActionBarActivity {
             String tipo_aceite = cursor.getString(cursor.getColumnIndex(managerFiltroAceite.CN_TIPO));
             tipos.add(tipo_aceite);
         }
-
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adaptador);
-
         spinner1.setSelection(miTipo.getVecesFilAceite(miTipo)-1);
     }
 
@@ -60,27 +54,19 @@ public class modificarFiltroAceite extends ActionBarActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fil_aceite);
-                String tipo_fil_aceite = spinner.getSelectedItem().toString();
-
-                System.out.println("TipoFiltroVeces " + tipo_fil_aceite);
-                Cursor c = dbFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
-
-                int int_veces = addLog.NO_ACEITE; // solo para inicializar
-
-                if (c.moveToFirst() == true) {
-                    int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
-                }
-
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fil_aceite);
-                String datetxt = txtTexto.getText().toString();
-
-                Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(modificarFiltroAceite.this, listaLogs.class);
-                System.out.println("Modificamos el Log con id " + idLog + " por filtro aceite " + int_veces);
-                managerLogs.modificarFechaFiltroAceite(idLog, int_veces);
-
-                finish();
+            Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fil_aceite);
+            String tipo_fil_aceite = spinner.getSelectedItem().toString();
+            Cursor c = dbFiltroAceite.buscarTiposFiltroAceite(tipo_fil_aceite);
+            int int_veces = addLog.NO_ACEITE; // solo para inicializar
+            if (c.moveToFirst() == true) {
+                int_veces = c.getInt(c.getColumnIndex(managerFiltroAceite.CN_VECES));
+            }
+            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fil_aceite);
+            String datetxt = txtTexto.getText().toString();
+            Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
+            Intent intent = new Intent(modificarFiltroAceite.this, listaLogs.class);
+            managerLogs.modificarFechaFiltroAceite(idLog, int_veces);
+            finish();
             }
         });
     };
@@ -106,16 +92,12 @@ public class modificarFiltroAceite extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(modificarFiltroAceite.this, settings.class);

@@ -29,9 +29,6 @@ public class tipoSettings implements Serializable {
     private int revgen;
     private int ruedas;
 
-
-
-
     public tipoSettings(int notificaciones, int aceite, int amortiguadores, int anticongelante, int bateria, int bombaagua, int bujias, int correa, int embrague
                         ,int filaceite, int filaire, int filgasolina, int frenos, int itv, int limpiaparabrisas, int liquidofrenos, int luces, int revgen, int ruedas) {
         this.notificaciones = notificaciones;
@@ -108,6 +105,4 @@ public class tipoSettings implements Serializable {
     public int getRuedas(tipoSettings miSettings) {
         return(miSettings.ruedas);
     }
-
-
 }

@@ -75,26 +75,26 @@ public class cambiarCocheActivo {
         mAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
-                String matricula_seleccionada = txtV_seleccionada.getText().toString();
-                String matricula_NoSeleccionada = "";
-                String modelo_Seleccionado = "";
-                int img_changed_seleccionado = dbCar.IMG_MODELO_NOCAMBIADA;
-                Cursor c = dbcar.buscarCocheActivo();
-                if (c.moveToFirst() == true) {
-                    matricula_NoSeleccionada = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
-                }
-                dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
-                dbcar.ActualizarCocheActivo(matricula_seleccionada);
-                c = dbcar.buscarCocheActivo();
-                String img_modelo_personalizada = "";
-                if(c.moveToFirst() == true) {
-                    modelo_Seleccionado = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
-                    img_changed_seleccionado = c.getInt(c.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
-                    img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
-                }
-                CambiarImgLogs(context, act, img_modelo_personalizada, modelo_Seleccionado, img_changed_seleccionado);
-                ActualizarCochesDrawer(dbcar, act, context);
+            TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
+            String matricula_seleccionada = txtV_seleccionada.getText().toString();
+            String matricula_NoSeleccionada = "";
+            String modelo_Seleccionado = "";
+            int img_changed_seleccionado = dbCar.IMG_MODELO_NOCAMBIADA;
+            Cursor c = dbcar.buscarCocheActivo();
+            if (c.moveToFirst() == true) {
+                matricula_NoSeleccionada = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
+            }
+            dbcar.ActualizarCocheNOActivo(matricula_NoSeleccionada);
+            dbcar.ActualizarCocheActivo(matricula_seleccionada);
+            c = dbcar.buscarCocheActivo();
+            String img_modelo_personalizada = "";
+            if(c.moveToFirst() == true) {
+                modelo_Seleccionado = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
+                img_changed_seleccionado = c.getInt(c.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
+                img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
+            }
+            CambiarImgLogs(context, act, img_modelo_personalizada, modelo_Seleccionado, img_changed_seleccionado);
+            ActualizarCochesDrawer(dbcar, act, context);
             }
         });
 
@@ -127,70 +127,70 @@ public class cambiarCocheActivo {
         mAdapter.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View v) {
-                TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
-                String matricula_seleccionada = txtV_seleccionada.getText().toString();
-                final MaterialDialog mMaterialDialog = new MaterialDialog(v.getContext());
-                mMaterialDialog.setTitle("Eliminar coche");
-                mMaterialDialog.setMessage("¿Está seguro de eliminar el coche con matrícula " + matricula_seleccionada + " y todos sus logs?");
-                mMaterialDialog.setPositiveButton("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View w) {
-                        mMaterialDialog.dismiss();
-                        TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
-                        String matricula_seleccionada = txtV_seleccionada.getText().toString();
-                        dbCar dbcar = new dbCar(v.getContext());
-                        Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
-                        int activo = 0;
-                        if (c.moveToFirst() == true) {
-                            activo = c.getInt(c.getColumnIndex(dbCar.CN_PROFILE));
-                        }
+            TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
+            String matricula_seleccionada = txtV_seleccionada.getText().toString();
+            final MaterialDialog mMaterialDialog = new MaterialDialog(v.getContext());
+            mMaterialDialog.setTitle("Eliminar coche");
+            mMaterialDialog.setMessage("¿Está seguro de eliminar el coche con matrícula " + matricula_seleccionada + " y todos sus logs?");
+            mMaterialDialog.setPositiveButton("OK", new View.OnClickListener() {
+                @Override
+                public void onClick(View w) {
+                    mMaterialDialog.dismiss();
+                    TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
+                    String matricula_seleccionada = txtV_seleccionada.getText().toString();
+                    dbCar dbcar = new dbCar(v.getContext());
+                    Cursor c = dbcar.buscarCoche(matricula_seleccionada); // Necesitamos saber si el coche que vamos a borrar es el activo
+                    int activo = 0;
+                    if (c.moveToFirst() == true) {
+                        activo = c.getInt(c.getColumnIndex(dbCar.CN_PROFILE));
+                    }
 
-                        dbLogs dbl = new dbLogs(context);
-                        Cursor c_logs = dbl.LogsTodosOrderByFechaString(matricula_seleccionada);
-                        dbcar.eliminarCoche(matricula_seleccionada);
-                        // se borran todos los logs del coche (se debería de hacer en cascada)
-                        for(c_logs.moveToFirst(); !c_logs.isAfterLast(); c_logs.moveToNext()) {
-                            int id_log = c_logs.getInt(c_logs.getColumnIndex(dbLogs.CN_ID));
-                            dbl.eliminar_por_id(id_log);
-                        }
+                    dbLogs dbl = new dbLogs(context);
+                    Cursor c_logs = dbl.LogsTodosOrderByFechaString(matricula_seleccionada);
+                    dbcar.eliminarCoche(matricula_seleccionada);
+                    // se borran todos los logs del coche (se debería de hacer en cascada)
+                    for(c_logs.moveToFirst(); !c_logs.isAfterLast(); c_logs.moveToNext()) {
+                        int id_log = c_logs.getInt(c_logs.getColumnIndex(dbLogs.CN_ID));
+                        dbl.eliminar_por_id(id_log);
+                    }
 
-                        // Si el borrado era el activo debemos poner activo otro (si hay más coches)
-                        if (activo == 1) {
-                            Cursor c_todos = dbcar.buscarCoches();
-                            if (c_todos.moveToFirst() == true) { // desde que haya un coche lo ponemos activo
-                                matricula_seleccionada = c_todos.getString(c_todos.getColumnIndex(dbCar.CN_MATRICULA));
-                                String img_modelo_personalizada = c_todos.getString(c_todos.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
-                                int img_modelo_cambiada = c_todos.getInt(c_todos.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
-                                String modelo = c_todos.getString(c_todos.getColumnIndex(dbCar.CN_MODELO));
-                                dbcar.ActualizarCocheActivo(matricula_seleccionada);
-                                CambiarImgLogs(context, act, img_modelo_personalizada, modelo, img_modelo_cambiada);
-                            } else {
-                                // Si no hay más coches no se puede poner ninguno a activo, debemos poner las etiquetas vacío y las imagenes por defecto en el drawer
-                                ImageView img_marca = (ImageView) mRecyclerView.findViewById(R.id.circleView);
-                                ImageView img_modelo = (ImageView) mRecyclerView.findViewById(R.id.background_modelo);
-                                img_modelo.setBackgroundResource(R.drawable.modelo_inicio);
-                                img_marca.setImageResource(R.drawable.logo_inicio);
-                                //Al no tener coches vamos a la actividad inicial a pedir insertar coche
-                                Intent intent = new Intent(context, myActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                context.startActivity(intent);
-                                act.finish();
-                            }
+                    // Si el borrado era el activo debemos poner activo otro (si hay más coches)
+                    if (activo == 1) {
+                        Cursor c_todos = dbcar.buscarCoches();
+                        if (c_todos.moveToFirst() == true) { // desde que haya un coche lo ponemos activo
+                            matricula_seleccionada = c_todos.getString(c_todos.getColumnIndex(dbCar.CN_MATRICULA));
+                            String img_modelo_personalizada = c_todos.getString(c_todos.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
+                            int img_modelo_cambiada = c_todos.getInt(c_todos.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
+                            String modelo = c_todos.getString(c_todos.getColumnIndex(dbCar.CN_MODELO));
+                            dbcar.ActualizarCocheActivo(matricula_seleccionada);
+                            CambiarImgLogs(context, act, img_modelo_personalizada, modelo, img_modelo_cambiada);
                         } else {
-                            // Si no era el activo da igual pq seguirá activo
+                            // Si no hay más coches no se puede poner ninguno a activo, debemos poner las etiquetas vacío y las imagenes por defecto en el drawer
+                            ImageView img_marca = (ImageView) mRecyclerView.findViewById(R.id.circleView);
+                            ImageView img_modelo = (ImageView) mRecyclerView.findViewById(R.id.background_modelo);
+                            img_modelo.setBackgroundResource(R.drawable.modelo_inicio);
+                            img_marca.setImageResource(R.drawable.logo_inicio);
+                            //Al no tener coches vamos a la actividad inicial a pedir insertar coche
+                            Intent intent = new Intent(context, myActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+                            act.finish();
                         }
-                        ActualizarCochesDrawer(dbcar, act, v.getContext());
+                    } else {
+                        // Si no era el activo da igual pq seguirá activo
                     }
-                });
-                mMaterialDialog.setNegativeButton("CANCEL", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mMaterialDialog.dismiss();
+                    ActualizarCochesDrawer(dbcar, act, v.getContext());
+                }
+            });
+            mMaterialDialog.setNegativeButton("CANCEL", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mMaterialDialog.dismiss();
 
-                    }
-                });
-                mMaterialDialog.show();
-                return true;
+                }
+            });
+            mMaterialDialog.show();
+            return true;
             }
         });
     }
@@ -234,7 +234,4 @@ public class cambiarCocheActivo {
             //   VaciarPantalla(); // Para quitar el coche anterior
         }
     }
-
-
-
 }

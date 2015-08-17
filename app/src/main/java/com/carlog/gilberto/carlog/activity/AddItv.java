@@ -35,17 +35,10 @@ public class addItv extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Date fechaITV = (Date)getIntent().getExtras().getSerializable("fechaITV");
-    /*    //vaciar
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-
-        DatePicker datePicker2 = (DatePicker) findViewById(R.id.date_itv);
-        datePicker2.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), null);*/
 
         if(funciones.date_a_long(fechaITV) < myActivity.FIRST_DATE) {
             fechaITV = new Date();
         }
-        //rellenar
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fechaITV);
 
@@ -88,7 +81,6 @@ public class addItv extends ActionBarActivity {
                 intent.putExtra("personalizado_string", itv_string);
                 intent.putExtra("addItv", true);
                 setResult(Activity.RESULT_OK, intent);
-
                 finish();
             }
         });
@@ -96,16 +88,12 @@ public class addItv extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(addItv.this, settings.class);
@@ -125,6 +113,5 @@ public class addItv extends ActionBarActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-
     }
 }

@@ -51,9 +51,7 @@ public class modificarEmbrague extends ActionBarActivity{
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adaptador);
-
         spinner1.setSelection(miTipo.getEmbrague(miTipo)-1);
-
     }
 
     private void ChangeFEmbrague(final String txt_fecha) {
@@ -61,9 +59,9 @@ public class modificarEmbrague extends ActionBarActivity{
         btn_modificarFEmbrague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(modificarEmbrague.this, addItv.class);
-                intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
-                startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_EMBRAGUE);
+            Intent intent = new Intent(modificarEmbrague.this, addItv.class);
+            intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
+            startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_EMBRAGUE);
             }
         });
     }
@@ -74,52 +72,42 @@ public class modificarEmbrague extends ActionBarActivity{
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_embrague);
-                String tipo_embrague = spinner.getSelectedItem().toString();
-
-                Cursor c = dbEmbrague.buscarTiposEmbrague(tipo_embrague);
-
-                int int_Embrague = addLog.NO_EMBRAGUE; // solo para inicializar
-
-                if (c.moveToFirst() == true) {
-                    int_Embrague = c.getInt(c.getColumnIndex(managerEmbrague.CN_ID));
+            Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_embrague);
+            String tipo_embrague = spinner.getSelectedItem().toString();
+            Cursor c = dbEmbrague.buscarTiposEmbrague(tipo_embrague);
+            int int_Embrague = addLog.NO_EMBRAGUE; // solo para inicializar
+            if (c.moveToFirst() == true) {
+                int_Embrague = c.getInt(c.getColumnIndex(managerEmbrague.CN_ID));
+            }
+            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_embrague);
+            Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
+            Intent intent = new Intent(modificarEmbrague.this, listaLogs.class);
+            Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
+            Boolean ok = true;
+            if(es_historico) {
+                if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
+                    Toast.makeText(modificarEmbrague.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
+                    ok = false;
                 }
-
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_embrague);
-
-                Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(modificarEmbrague.this, listaLogs.class);
-                Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
-
-                Boolean ok = true;
-                if(es_historico) {
-                    if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
-                        Toast.makeText(modificarEmbrague.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
-                        ok = false;
-                    }
+            }
+            if(ok) {
+                Cursor c_log = managerLogs.buscarLogID(idLog);
+                if (c_log.moveToFirst() == true) {
+                    long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
+                    String txt_fecha_log = funciones.long_a_string(fecha_log);
+                    if (txt_fecha_log.equals(txtTexto.getText().toString()))
+                        managerLogs.modificarTipoEmbragueLog(idLog, int_Embrague);
+                    else
+                        managerLogs.modificarFechaEmbragueLog(idLog, int_Embrague, funciones.string_a_long(txtTexto.getText().toString()));
                 }
-                if(ok) {
-                    Cursor c_log = managerLogs.buscarLogID(idLog);
-                    if (c_log.moveToFirst() == true) {
-                        long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
-                        String txt_fecha_log = funciones.long_a_string(fecha_log);
-                        System.out.println("Modificamos el Log con id " + idLog + " por embrague " + int_Embrague);
-                        if (txt_fecha_log.equals(txtTexto.getText().toString()))
-                            managerLogs.modificarTipoEmbragueLog(idLog, int_Embrague);
-                        else
-                            managerLogs.modificarFechaEmbragueLog(idLog, int_Embrague, funciones.string_a_long(txtTexto.getText().toString()));
-                    }
-
                 /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
                 TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
                 procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
                 */
-
-                    intent.putExtra("modifyEmbrague", true);
-                    setResult(Activity.RESULT_OK, intent);
-
-                    finish();
-                }
+                intent.putExtra("modifyEmbrague", true);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
             }
         });
     };
@@ -145,16 +133,12 @@ public class modificarEmbrague extends ActionBarActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(modificarEmbrague.this, settings.class);

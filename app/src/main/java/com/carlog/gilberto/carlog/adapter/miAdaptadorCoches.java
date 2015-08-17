@@ -132,8 +132,6 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
                     mUriImg = img_modelo_personalizada;
                 }
             }
-
-
         }
         else {
             img_modelo = R.drawable.modelo_inicio;
@@ -142,14 +140,8 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
 
         mNavMatriculas = array_matriculas;
         mIcons = array_iconos;
-
         //in adapter
-
-
-
     }
-
-
 
 
     //Below first we ovverride the method onCreateViewHolder which is called when the ViewHolder is
@@ -158,7 +150,6 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
     // and pass it to the view holder
     @Override
     public miAdaptadorCoches.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false); //Inflating the layout
 
@@ -166,14 +157,13 @@ public class miAdaptadorCoches extends RecyclerView.Adapter<miAdaptadorCoches.Vi
             v.setOnLongClickListener(this);
 
             ViewHolder vhItem = new ViewHolder(
-                    MaterialRippleLayout.on(v)
-                            .rippleOverlay(true)
-                            .rippleAlpha(0.2f)
-                            .rippleColor(0xFF585858)
-                            .rippleHover(true)
-                            .create()
-                    ,viewType);
-
+                MaterialRippleLayout.on(v)
+                        .rippleOverlay(true)
+                        .rippleAlpha(0.2f)
+                        .rippleColor(0xFF585858)
+                        .rippleHover(true)
+                        .create()
+                ,viewType);
 
             //ViewHolder vhItem = new ViewHolder(v,viewType); //Creating ViewHolder and passing the object of type view
 

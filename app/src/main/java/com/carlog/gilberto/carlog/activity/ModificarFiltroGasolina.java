@@ -39,7 +39,6 @@ public class modificarFiltroGasolina extends ActionBarActivity {
         TextView text=(TextView)findViewById(R.id.txt_fecha_fgasolina);
         text.setText(txt_fecha);
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_fgasolina);
-
         Cursor cursor = managerFiltroGasolina.buscarTiposFiltroGasolina();
         //Recorremos el cursor
         ArrayList<String> tipos = new ArrayList<String>();
@@ -47,13 +46,10 @@ public class modificarFiltroGasolina extends ActionBarActivity {
             String tipo_fgasolina = cursor.getString(cursor.getColumnIndex(managerFiltroGasolina.CN_TIPO));
             tipos.add(tipo_fgasolina);
         }
-
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adaptador);
-
         spinner1.setSelection(miTipo.getFgasolina(miTipo)-1);
-
     }
 
     private void ChangeFFiltroGasolina(final String txt_fecha) {
@@ -61,9 +57,9 @@ public class modificarFiltroGasolina extends ActionBarActivity {
         btn_modificarFFiltroGasolina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(modificarFiltroGasolina.this, addItv.class);
-                intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
-                startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_FGASOLINA);
+            Intent intent = new Intent(modificarFiltroGasolina.this, addItv.class);
+            intent.putExtra("fechaITV", funciones.string_a_date(txt_fecha));
+            startActivityForResult(intent, PETICION_ACTIVITY_MODIFY_FGASOLINA);
             }
         });
     }
@@ -74,52 +70,42 @@ public class modificarFiltroGasolina extends ActionBarActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fgasolina);
-                String tipo_fgasolina = spinner.getSelectedItem().toString();
-
-                Cursor c = dbFiltroGasolina.buscarFiltroGasolina(tipo_fgasolina);
-
-                int int_fgasolina = addLog.NO_FGASOLINA; // solo para inicializar
-
-                if (c.moveToFirst() == true) {
-                    int_fgasolina = c.getInt(c.getColumnIndex(managerFiltroGasolina.CN_ID));
+            Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_fgasolina);
+            String tipo_fgasolina = spinner.getSelectedItem().toString();
+            Cursor c = dbFiltroGasolina.buscarFiltroGasolina(tipo_fgasolina);
+            int int_fgasolina = addLog.NO_FGASOLINA; // solo para inicializar
+            if (c.moveToFirst() == true) {
+                int_fgasolina = c.getInt(c.getColumnIndex(managerFiltroGasolina.CN_ID));
+            }
+            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fgasolina);
+            Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
+            Intent intent = new Intent(modificarFiltroGasolina.this, listaLogs.class);
+            Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
+            Boolean ok = true;
+            if(es_historico) {
+                if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
+                    Toast.makeText(modificarFiltroGasolina.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
+                    ok = false;
                 }
-
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_fgasolina);
-
-                Integer idLog = (Integer) getIntent().getExtras().getSerializable("idLog");
-                Intent intent = new Intent(modificarFiltroGasolina.this, listaLogs.class);
-                Boolean es_historico = (Boolean) getIntent().getExtras().getSerializable("Historial");
-
-                Boolean ok = true;
-                if(es_historico) {
-                    if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
-                        Toast.makeText(modificarFiltroGasolina.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
-                        ok = false;
-                    }
+            }
+            if(ok) {
+                Cursor c_log = managerLogs.buscarLogID(idLog);
+                if (c_log.moveToFirst() == true) {
+                    long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
+                    String txt_fecha_log = funciones.long_a_string(fecha_log);
+                    if (txt_fecha_log.equals(txtTexto.getText().toString()))
+                        managerLogs.modificarTipoFiltroAireLog(idLog, int_fgasolina);
+                    else
+                        managerLogs.modificarFechaFiltroGasolinaLog(idLog, int_fgasolina, funciones.string_a_long(txtTexto.getText().toString()));
                 }
-                if(ok) {
-                    Cursor c_log = managerLogs.buscarLogID(idLog);
-                    if (c_log.moveToFirst() == true) {
-                        long fecha_log = c_log.getLong(c_log.getColumnIndex(managerLogs.CN_FECHA));
-                        String txt_fecha_log = funciones.long_a_string(fecha_log);
-                        System.out.println("Modificamos el Log con id " + idLog + " por filtro gasolina " + int_fgasolina);
-                        if (txt_fecha_log.equals(txtTexto.getText().toString()))
-                            managerLogs.modificarTipoFiltroAireLog(idLog, int_fgasolina);
-                        else
-                            managerLogs.modificarFechaFiltroGasolinaLog(idLog, int_fgasolina, funciones.string_a_long(txtTexto.getText().toString()));
-                    }
-
                 /* NO HACE FALTA RECALCULAR procesar_aceite porque al cambiar el tipo de aceite del futuro cambio no tendrá efecto hasta que se haga esa revisión futura y pase a ser log histórico
                 TipoCoche miCoche = (TipoCoche) getIntent().getExtras().getSerializable("miCoche");
                 procesarAceite.procesar_aceite(managerLogs, funciones.date_a_int(new Date()), getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche)); // actualizamos fechas
                 */
-
-                    intent.putExtra("modifyFiltroGasolina", true);
-                    setResult(Activity.RESULT_OK, intent);
-
-                    finish();
-                }
+                intent.putExtra("modifyFiltroGasolina", true);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
             }
         });
     };
@@ -145,16 +131,12 @@ public class modificarFiltroGasolina extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(modificarFiltroGasolina.this, settings.class);
@@ -181,7 +163,6 @@ public class modificarFiltroGasolina extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("requestCoderequestCode "+ requestCode);
         switch(requestCode) {
             case (PETICION_ACTIVITY_MODIFY_FGASOLINA) : {
                 if (resultCode == Activity.RESULT_OK) {
@@ -191,7 +172,6 @@ public class modificarFiltroGasolina extends ActionBarActivity {
                 }
                 break;
             }
-
         }
     }
 }

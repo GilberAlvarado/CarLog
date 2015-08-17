@@ -141,8 +141,6 @@ public class fragmentLogs extends baseFragment {
                 else { //personalizados
                     intent = new Intent(context, modificarPersonalizado.class);
                 }
-                //************************************************************************
-
 
                 String txt_fecha = cursor.getString(cursor.getColumnIndex("fecha_string"));
                 int aceite = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ACEITE));
@@ -156,7 +154,6 @@ public class fragmentLogs extends baseFragment {
                 String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
                 int kms = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_KMS));
                 int veces_filaceite = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_VECES_FIL_ACEITE));
-
 
                 tipoLog miTipo = new tipoLog(tipo, funciones.string_a_date(txt_fecha), txt_fecha, funciones.string_a_long(txt_fecha), aceite, veces_filaceite, addLog.NO_CONTADOR_FIL_ACEITE, revgral, correa, bombaagua, fgasolina, faire, bujias, embrague, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, kms);
                 intent.putExtra("miTipo", miTipo);
@@ -203,9 +200,6 @@ public class fragmentLogs extends baseFragment {
         else { //personalizados
             context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-
-
-
     }
 
     public static void realizadoLogpulsado(Cursor cursor, dbLogs manager, int posicion, boolean hoy, Context context, Activity act) {
@@ -357,7 +351,4 @@ public class fragmentLogs extends baseFragment {
         }
         return rootView;
     }
-
-
-
 }

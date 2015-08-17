@@ -39,30 +39,30 @@ public class register extends Activity {
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                String name = inputFullName.getText().toString();
-                String email = inputEmail.getText().toString();
-                String password = inputPassword.getText().toString();
-                usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
-                usuario.setOnRegisterUsuario(new com.carlog.gilberto.carlog.tiposClases.usuario.OnRegisterUsuario() {
-                    @Override
-                    public void onRegisterFinish(JSONObject json, String msg) {
-                        registerErrorMsg.setText("");
-                        Intent itemintent = new Intent(register.this, myActivity.class);
-                        register.this.startActivity(itemintent);
-                        finish();
-                    }
+            String name = inputFullName.getText().toString();
+            String email = inputEmail.getText().toString();
+            String password = inputPassword.getText().toString();
+            usuario usuario = new com.carlog.gilberto.carlog.tiposClases.usuario();
+            usuario.setOnRegisterUsuario(new com.carlog.gilberto.carlog.tiposClases.usuario.OnRegisterUsuario() {
+                @Override
+                public void onRegisterFinish(JSONObject json, String msg) {
+                    registerErrorMsg.setText("");
+                    Intent itemintent = new Intent(register.this, myActivity.class);
+                    register.this.startActivity(itemintent);
+                    finish();
+                }
 
-                    @Override
-                    public void onRegisterFail(String msg) {
-                        registerErrorMsg.setText(msg);
-                    }
+                @Override
+                public void onRegisterFail(String msg) {
+                    registerErrorMsg.setText(msg);
+                }
 
-                    @Override
-                    public void onRegisterException(Exception e, String msg) {
-                        registerErrorMsg.setText(msg);
-                    }
-                });
-                usuario.register(register.this, name, email, password, false);
+                @Override
+                public void onRegisterException(Exception e, String msg) {
+                    registerErrorMsg.setText(msg);
+                }
+            });
+            usuario.register(register.this, name, email, password, false);
             }
         });
 
@@ -70,8 +70,8 @@ public class register extends Activity {
         lblGotoLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent itemintent = new Intent(register.this, login.class);
-                register.this.startActivity(itemintent);
+            Intent itemintent = new Intent(register.this, login.class);
+            register.this.startActivity(itemintent);
             }
         });
 
