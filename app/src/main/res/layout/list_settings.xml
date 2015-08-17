@@ -41,15 +41,14 @@
                 android:orientation="vertical"
                 android:textSize="18sp" />
 
-            <com.gc.materialdesign.views.CheckBox
+            <CheckBox
                 android:id="@+id/chbx_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:background="@color/ColorPrimaryDark"/>
+                android:clickable="false"
+                android:layout_centerVertical="true"/>
 
 
         </RelativeLayout>

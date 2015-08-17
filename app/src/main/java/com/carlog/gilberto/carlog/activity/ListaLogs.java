@@ -159,7 +159,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         }*/
         else { //sesión iniciada en modo anónimo
             mTitleView = (TextView) findViewById(R.id.title);
-            mTitleView.setText("Anónimo");
+            mTitleView.setText("Anónimoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
         }
     }
 
@@ -722,13 +722,12 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
       /*  if (TOOLBAR_IS_STICKY) {
             titleTranslationY = Math.max(0, titleTranslationY);
         }*/
+
         ViewHelper.setTranslationY(mTitleView, titleTranslationY);
         ViewHelper.setTranslationX(mTitleView, 90);
         // Translate fb image
         ViewHelper.setTranslationY(profileImg, titleTranslationY);
         ViewHelper.setTranslationX(profileImg, 90);
-
-
     }
 
     public Fragment getCurrentFragment() {
@@ -787,7 +786,12 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 Intent intent = new Intent(listaLogs.this, login.class);
                 startActivity(intent);
             } else {
+                usuario u = new usuario();
+                u.logout(listaLogs.this);
+                login.deleteParamsAnonimo(listaLogs.this);
                 login.closeFacebookSession(this, login.class);
+                Intent intent = new Intent(listaLogs.this, login.class);
+                startActivity(intent);
             }
             finish();
         }

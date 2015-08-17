@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,7 +26,6 @@ import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.negocio.notificaciones;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
 import com.carlog.gilberto.carlog.tiposClases.tipoSettings;
-import com.gc.materialdesign.views.CheckBox;
 
 import java.util.Date;
 import java.util.List;
@@ -71,30 +71,30 @@ public class miAdaptadorSettings extends ArrayAdapter<String> {
 
         // Transfer the stock data from the data object
         // to the view objects
-        int resID = 0;
+        int resID;
 
         sqView.tipo_settings.setText(values[position]);
 
         if(sqView.tipo_settings.getText().toString().equals("Ayuda")) {
+            sqView.chbx_settings.setVisibility(View.GONE);
             resID = getContext().getResources().getIdentifier("ic_ayuda", "drawable", getContext().getPackageName());
         }
         else if(sqView.tipo_settings.getText().toString().equals("Notificaciones")) {
             resID = getContext().getResources().getIdentifier("ic_notificaciones", "drawable", getContext().getPackageName());
+            sqView.chbx_settings.setVisibility(View.VISIBLE);
         }
         else {
+            sqView.chbx_settings.setVisibility(View.VISIBLE);
             resID = getContext().getResources().getIdentifier("ic_revisiones_settings", "drawable", getContext().getPackageName());
         }
 
 
         sqView.img_settings.setImageResource(resID);
 
-        if(sqView.tipo_settings.getText().toString().equals("Ayuda")) sqView.chbx_settings.setVisibility(View.GONE);
-        else sqView.chbx_settings.setVisibility(View.VISIBLE);
 
         dbSettings manager = new dbSettings(getContext());
         Cursor c = manager.getSettings();
         int activo;
-System.out.println("sizeee "+c.getCount());
         if(c.moveToFirst() == true) {
             if(sqView.tipo_settings.getText().toString().equals("Notificaciones")) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_NOTIFICACIONES));
@@ -191,9 +191,6 @@ System.out.println("sizeee "+c.getCount());
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-else {
-System.out.println("????????????????????" + sqView.tipo_settings.getText().toString());
-}
         }
 
 

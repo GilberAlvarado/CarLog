@@ -130,7 +130,7 @@ public class login extends Activity {
 
     public static void saveParamsAnonimo (final Activity activity){
         sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_id), "a@a.es");
-        sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_name), "Anonimo");
+        sharedPreferencesUtils.addString(activity, activity.getString(R.string.sp_fb_name), "Anónimoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
     }
 
     public static void deleteParamsFacebook (Activity activity){

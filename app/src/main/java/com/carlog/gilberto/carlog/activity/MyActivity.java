@@ -823,7 +823,12 @@ public class myActivity extends ActionBarActivity {
                 Intent intent = new Intent(myActivity.this, login.class);
                 startActivity(intent);
             } else {
+                usuario u = new usuario();
+                u.logout(myActivity.this);
+                login.deleteParamsAnonimo(myActivity.this);
                 login.closeFacebookSession(this, login.class);
+                Intent intent = new Intent(myActivity.this, login.class);
+                startActivity(intent);
             }
             finish();
         }

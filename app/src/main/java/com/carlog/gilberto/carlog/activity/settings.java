@@ -46,13 +46,20 @@ public class settings extends ActionBarActivity {
                 , "Predecir " +  tipoLog.TIPO_FILTRO_AIRE, "Predecir " +  tipoLog.TIPO_FILTRO_GASOLINA, "Predecir " +  tipoLog.TIPO_FRENOS, "Predecir " +  tipoLog.TIPO_ITV, "Predecir " +  tipoLog.TIPO_LIMPIAPARABRISAS
                 , "Predecir " +  tipoLog.TIPO_LIQUIDO_FRENOS, "Predecir " +  tipoLog.TIPO_LUCES, "Predecir " +  tipoLog.TIPO_REV_GENERAL, "Predecir " +  tipoLog.TIPO_RUEDAS/*,"Perfil"*/};
 
+
+
         final miAdaptadorSettings adapter = new miAdaptadorSettings(settings.this, values);
         listview.setAdapter(adapter);
 
-        modificarSettingPulsando(settings.this, listview);
+        modificarSettingPulsando(settings.this, listview, adapter);
+
+
+
     }
 
-    public void modificarSettingPulsando(final Activity act, final ListView list) {
+
+
+    public void modificarSettingPulsando(final Activity act, final ListView list, final miAdaptadorSettings adapter) {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -65,20 +72,13 @@ public class settings extends ActionBarActivity {
                     if(i == 0) {
                         Intent intent = new Intent(settings.this, ayuda.class);
                         startActivity(intent);
+                        break;
                     }
-                    //View v = list.getChildAt(i+1);
-                   // CheckBox chbx_settings = (CheckBox)v.findViewById(R.id.chbx_settings);
-                    if(i == 1) {
+                    else if(i == 1) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_NOTIFICACIONES));
-                            if (activo == tipoSettings.ACTIVO) {
-                                activo = tipoSettings.INACTIVO;
-                             //   chbx_settings.setChecked(false);
-                            }
-                            else {
-                                activo = tipoSettings.ACTIVO;
-                              //  chbx_settings.setChecked(true);
-                            }
+                            if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
+                            else activo = tipoSettings.ACTIVO;
                         }
                         manager.actualizarNotificaciones(activo);
                         break;
@@ -92,7 +92,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarAceite(activo);
                         break;
                     }
-                    else if(i == 2) {
+                    else if(i == 3) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_AMORTIGUADORES));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -101,7 +101,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarAmortiguadores(activo);
                         break;
                     }
-                    else if(i == 3) {
+                    else if(i == 4) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_ANTICONGELANTE));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -110,7 +110,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarAnticongelante(activo);
                         break;
                     }
-                    else if(i == 4) {
+                    else if(i == 5) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_BATERIA));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -119,7 +119,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarBateria(activo);
                         break;
                     }
-                    else if(i == 5) {
+                    else if(i == 6) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_BOMBAAGUA));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -128,7 +128,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarBombaagua(activo);
                         break;
                     }
-                    else if(i == 6) {
+                    else if(i == 7) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_BUJIAS));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -137,7 +137,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarBujias(activo);
                         break;
                     }
-                    else if(i == 7) {
+                    else if(i == 8) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_CORREA));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -146,7 +146,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarCorrea(activo);
                         break;
                     }
-                    else if(i == 8) {
+                    else if(i == 9) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_EMBRAGUE));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -155,7 +155,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarEmbrague(activo);
                         break;
                     }
-                    else if(i == 9) {
+                    else if(i == 10) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILACEITE));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -164,7 +164,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarFilaceite(activo);
                         break;
                     }
-                    else if(i == 10) {
+                    else if(i == 11) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILAIRE));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -173,7 +173,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarFilaire(activo);
                         break;
                     }
-                    else if(i == 11) {
+                    else if(i == 12) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILGASOLINA));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -182,7 +182,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarFilgasolina(activo);
                         break;
                     }
-                    else if(i == 12) {
+                    else if(i == 13) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_FRENOS));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -191,7 +191,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarFrenos(activo);
                         break;
                     }
-                    else if(i == 13) {
+                    else if(i == 14) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_ITV));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -200,7 +200,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarItv(activo);
                         break;
                     }
-                    else if(i == 14) {
+                    else if(i == 15) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_LIMPIAPARABRISAS));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -209,7 +209,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarLimpiaparabrisas(activo);
                         break;
                     }
-                    else if(i == 15) {
+                    else if(i == 16) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_LIQFRENOS));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -218,7 +218,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarLiqfrenos(activo);
                         break;
                     }
-                    else if(i == 16) {
+                    else if(i == 17) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_LUCES));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -227,7 +227,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarLuces(activo);
                         break;
                     }
-                    else if(i == 17) {
+                    else if(i == 18) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_REVGEN));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -236,7 +236,7 @@ public class settings extends ActionBarActivity {
                         manager.actualizarRevgen(activo);
                         break;
                     }
-                    else if(i == 18) {
+                    else if(i == 19) {
                         if(c.moveToFirst() == true) {
                             activo = c.getInt(c.getColumnIndex(dbSettings.CN_RUEDAS));
                             if (activo == tipoSettings.ACTIVO) activo = tipoSettings.INACTIVO;
@@ -248,6 +248,8 @@ public class settings extends ActionBarActivity {
                     break;
                 }
             }
+                adapter.notifyDataSetChanged();
+
             }
         });
     }

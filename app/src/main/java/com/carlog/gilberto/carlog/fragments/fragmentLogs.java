@@ -323,7 +323,6 @@ public class fragmentLogs extends baseFragment {
 
         List<tipoLog> listaLogs = new ArrayList<tipoLog>();
         //Recorremos el cursor
-        int k = 0;
         cursor.moveToFirst();
 
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
@@ -332,8 +331,6 @@ public class fragmentLogs extends baseFragment {
                 , cursor.getInt(cursor.getColumnIndex(dbLogs.CN_CORREA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BOMBAAGUA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FGASOLINA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FAIRE)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_BUJIAS)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_EMBRAGUE)), cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR)),
                 cursor.getInt(cursor.getColumnIndex(dbLogs.CN_REALIZADO)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_FMODIFICADA)), cursor.getInt(cursor.getColumnIndex(dbLogs.CN_KMS)));
             listaLogs.add(miTipoLog);
-
-            k++;
         }
 
         miAdaptadorLog adapter = new miAdaptadorLog(act, listaLogs);
