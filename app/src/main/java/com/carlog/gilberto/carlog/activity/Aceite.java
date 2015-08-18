@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.dbSettings;
 import com.carlog.gilberto.carlog.tiposClases.tipoCoche;
@@ -25,8 +24,6 @@ import com.carlog.gilberto.carlog.negocio.procesarTipos;
 import com.carlog.gilberto.carlog.tiposClases.tipoSettings;
 import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.gc.materialdesign.views.ButtonRectangle;
-
-
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -34,12 +31,13 @@ import java.util.Date;
  * Created by Gilberto on 19/05/2015.
  */
 public class aceite extends ActionBarActivity {
-
     public final static String TIPO_7K5_KM = "7.500 kms - Minerales";
     public final static String TIPO_10M_KM = "10.000 kms - Semisintéticos";
-    public final static String TIPO_15K_KM = "15 mil kms - Sintéticos";
-    public final static String TIPO_20K_KM = "20 mil kms - Longlife";
-    public final static String TIPO_30K_KM = "30 mil kms - Longlife";
+    public final static String TIPO_15K_KM = "15.000 kms - Sintéticos";
+    public final static String TIPO_20K_KM = "20.000 kms - Longlife";
+    public final static String TIPO_30K_KM = "30.000 kms - Longlife";
+
+
 
     private Toolbar toolbar;
     private Spinner spinner1;
@@ -49,9 +47,7 @@ public class aceite extends ActionBarActivity {
         String txt_fecha = miTipo.getFechatxt(miTipo);
         TextView text=(TextView)findViewById(R.id.txt_fecha_aceite);
         text.setText(txt_fecha);
-
         spinner1 = (Spinner) this.findViewById(R.id.cmb_tipos_aceite);
-
         Cursor cursor = managerAceite.buscarTiposAceite();
         //Recorremos el cursor
         ArrayList<String> tipos = new ArrayList<String>();
@@ -59,7 +55,6 @@ public class aceite extends ActionBarActivity {
             String tipo_aceite = cursor.getString(cursor.getColumnIndex(managerAceite.CN_TIPO));
             tipos.add(tipo_aceite);
         }
-
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adaptador);
@@ -68,47 +63,43 @@ public class aceite extends ActionBarActivity {
     private void GuardarLog(final dbLogs managerLogs, final dbAceite managerAceite) {
         //Instanciamos el Boton
         ButtonRectangle btn1 = (ButtonRectangle) findViewById(R.id.guardar_aceite);
-
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_aceite);
-                String tipo_aceite = spinner.getSelectedItem().toString();
+            Spinner spinner = (Spinner)findViewById(R.id.cmb_tipos_aceite);
+            String tipo_aceite = spinner.getSelectedItem().toString();
 
-                Cursor c = dbAceite.buscarTiposAceite(tipo_aceite);
-                int int_aceite = addLog.NO_ACEITE; // solo para inicializar
+            Cursor c = dbAceite.buscarTiposAceite(tipo_aceite);
+            int int_aceite = addLog.NO_ACEITE; // solo para inicializar
 
-                if (c.moveToFirst() == true) {
-                    int_aceite = c.getInt(c.getColumnIndex(managerAceite.CN_ID));
-                }
+            if (c.moveToFirst() == true) {
+                int_aceite = c.getInt(c.getColumnIndex(managerAceite.CN_ID));
+            }
 
-                TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_aceite);
-                String datetxt = txtTexto.getText().toString();
-                Date fecha = funciones.string_a_date(datetxt);
-                long long_fecha = funciones.string_a_long(datetxt);
-                tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
+            TextView txtTexto = (TextView)findViewById(R.id.txt_fecha_aceite);
+            String datetxt = txtTexto.getText().toString();
+            Date fecha = funciones.string_a_date(datetxt);
+            long long_fecha = funciones.string_a_long(datetxt);
+            tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
-                System.out.println("SE inserta aceite id : "+int_aceite);
-                tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+            tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
 
-                if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
-                    // Creamos el nuevo futuro log
-                    // Se pone como REALIZADO!
-                    miTipoLog = new tipoLog(tipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
-                }
-
-                Intent intent = new Intent(aceite.this, addLog.class);
-
-                managerLogs.insertar(miTipoLog);
-                // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
-                dbSettings dbs = new dbSettings(aceite.this.getApplicationContext());
-                Cursor c_sett = dbs.getSettings();
-                if(c_sett.moveToFirst() == true) {
-                    if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ACEITE)) == tipoSettings.ACTIVO)
-                        procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_ACEITE, miCoche.getYear(miCoche)); // actualizamos fechas
-                }
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+            if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
+                // Creamos el nuevo futuro log
+                // Se pone como REALIZADO!
+                miTipoLog = new tipoLog(tipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+            }
+            Intent intent = new Intent(aceite.this, addLog.class);
+            managerLogs.insertar(miTipoLog);
+            // Nada más insertar el nuevo log se procesa automáticamente para estimar mejor que el usuario siempre que sea posible
+            dbSettings dbs = new dbSettings(aceite.this.getApplicationContext());
+            Cursor c_sett = dbs.getSettings();
+            if(c_sett.moveToFirst() == true) {
+                if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ACEITE)) == tipoSettings.ACTIVO)
+                    procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_ACEITE, miCoche.getYear(miCoche)); // actualizamos fechas
+            }
+            setResult(Activity.RESULT_OK, intent);
+            finish();
             }
         });
     };
@@ -133,7 +124,6 @@ public class aceite extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my, menu);
         return true;
     }

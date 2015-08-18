@@ -39,7 +39,7 @@
                 android:layout_marginLeft="45dp"
                 android:textStyle="normal"
                 android:orientation="vertical"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <CheckBox
                 android:id="@+id/chbx_settings"

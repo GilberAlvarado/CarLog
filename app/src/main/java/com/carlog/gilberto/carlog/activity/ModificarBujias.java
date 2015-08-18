@@ -86,7 +86,7 @@ public class modificarBujias extends ActionBarActivity{
             Boolean ok = true;
             if(es_historico) {
                 if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
-                    Toast.makeText(modificarBujias.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(modificarBujias.this, modificarBujias.this.getString(R.string.noHistFuturos), Toast.LENGTH_LONG).show();
                     ok = false;
                 }
             }

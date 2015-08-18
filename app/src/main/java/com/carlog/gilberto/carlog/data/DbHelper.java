@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.carlog.gilberto.carlog.activity.aceite;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
 import com.carlog.gilberto.carlog.tiposClases.tipoSettings;
 
@@ -275,7 +276,7 @@ public class dbHelper extends SQLiteOpenHelper {
 */
 
         /// Inicializamos la tabla de tipos de aceite
-  /*      String[] lista_aceite = {aceite.TIPO_7K5_KM, aceite.TIPO_10M_KM, aceite.TIPO_15K_KM, aceite.TIPO_20K_KM, aceite.TIPO_30K_KM};
+     /*   String[] lista_aceite = {aceite.TIPO_7K5_KM, aceite.TIPO_10M_KM, aceite.TIPO_15K_KM, aceite.TIPO_20K_KM, aceite.TIPO_30K_KM};
         int[] lista_kms2 =  {7500, 10000, 15000, 20000, 30000};
 
         sqLiteDatabase.beginTransaction();

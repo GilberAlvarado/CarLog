@@ -3,6 +3,7 @@ package com.carlog.gilberto.carlog.tiposClases;
 import android.app.Activity;
 import android.database.Cursor;
 
+import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.dbLogin;
 import com.carlog.gilberto.carlog.formats.httpClientManager;
 
@@ -30,7 +31,7 @@ public class usuario {
     private static String register_tag = "register";
     private Activity activity;
 
-    public void login(Activity activity, String email, String password, final boolean desdeFB){
+    public void login(final Activity activity, String email, String password, final boolean desdeFB){
         this.activity = activity;
         final httpClientManager httpclient = new httpClientManager(activity);
         httpclient.addNameValue("tag", login_tag);
@@ -45,19 +46,19 @@ public class usuario {
                     if (json.getString(KEY_SUCCESS) != null) {
                         if((Integer.parseInt(json.getString(KEY_SUCCESS)) == 1)){
                             if(usuario.this.saveLogin(usuario.this.activity, json)) {
-                                System.out.println("Login correcto");
-                                if (!desdeFB) ListenerLoginUsuario.onLoginCorrect(json, "Login correcto");
+                                System.out.println(activity.getString(R.string.loginok));
+                                if (!desdeFB) ListenerLoginUsuario.onLoginCorrect(json, activity.getString(R.string.loginok));
                             }
                             else
-                            if (!desdeFB) ListenerLoginUsuario.onLoginWrong("Login incorrecto");
+                            if (!desdeFB) ListenerLoginUsuario.onLoginWrong(activity.getString(R.string.loginNook));
                         } else {
-                            if (!desdeFB) ListenerLoginUsuario.onLoginWrong("Login incorrecto");
+                            if (!desdeFB) ListenerLoginUsuario.onLoginWrong(activity.getString(R.string.loginNook));
                         }
                     } else{
-                        if (!desdeFB) ListenerLoginUsuario.onLoginWrong("Login incorrecto");
+                        if (!desdeFB) ListenerLoginUsuario.onLoginWrong(activity.getString(R.string.loginok));
                     }
                 } catch (JSONException e) {
-                    if (!desdeFB) ListenerLoginUsuario.onLoginWrong("Login incorrecto");
+                    if (!desdeFB) ListenerLoginUsuario.onLoginWrong(activity.getString(R.string.loginNook));
                 }
             }
 
@@ -72,7 +73,7 @@ public class usuario {
 
 
 
-    public void register(Activity activity, String username, String email, String password, final boolean desdeFB){
+    public void register(final Activity activity, String username, String email, String password, final boolean desdeFB){
         this.activity = activity;
         httpClientManager httpclient = new httpClientManager(activity);
         httpclient.addNameValue("tag", register_tag);
@@ -88,16 +89,16 @@ public class usuario {
                     if (json.getString(KEY_SUCCESS) != null) {
                         if((Integer.parseInt(json.getString(KEY_SUCCESS)) == 1)){
                             if(usuario.this.saveLogin(usuario.this.activity, json))
-                                if (!desdeFB) ListenerRegisterUsuario.onRegisterFinish(json, "Registro correcto");
+                                if (!desdeFB) ListenerRegisterUsuario.onRegisterFinish(json, activity.getString(R.string.registroOk));
                             else
-                                if (!desdeFB) ListenerRegisterUsuario.onRegisterFail("Estás registrado pero no puedes loguearte ahora");
+                                if (!desdeFB) ListenerRegisterUsuario.onRegisterFail(activity.getString(R.string.registerButCantConnect));
                         }else
-                            if (!desdeFB)ListenerRegisterUsuario.onRegisterFail("Error durante el registro");
+                            if (!desdeFB)ListenerRegisterUsuario.onRegisterFail(activity.getString(R.string.errorOnRegister));
                     } else {
-                        if (!desdeFB)ListenerRegisterUsuario.onRegisterFail("Error durante el registro");
+                        if (!desdeFB)ListenerRegisterUsuario.onRegisterFail(activity.getString(R.string.errorOnRegister));
                     }
                 } catch (JSONException e) {
-                    if (!desdeFB)ListenerRegisterUsuario.onRegisterException(e, "Error durante el registro");
+                    if (!desdeFB)ListenerRegisterUsuario.onRegisterException(e, activity.getString(R.string.errorOnRegister));
                 }
             }
 

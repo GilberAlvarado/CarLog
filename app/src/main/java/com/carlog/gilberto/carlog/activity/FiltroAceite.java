@@ -34,9 +34,11 @@ import java.util.Date;
  */
 public class filtroAceite extends ActionBarActivity {
 
-    public final static String TIPO_1 = "Siempre que cambie el aceite (recomendada)";
+    public final static String TIPO_1 = "Siempre que cambie el aceite";
     public final static String TIPO_2 = "Cada 2 cambios de aceite";
     public final static String TIPO_3 = "Cada 3 cambios de aceite";
+
+
 
     private Toolbar toolbar;
     private Spinner spinner1;

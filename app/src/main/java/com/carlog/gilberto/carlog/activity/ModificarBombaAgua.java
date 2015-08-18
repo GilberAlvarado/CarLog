@@ -86,7 +86,7 @@ public class modificarBombaAgua extends ActionBarActivity {
             Boolean ok = true;
             if(es_historico) {
                 if (funciones.string_a_long(txtTexto.getText().toString()) > funciones.date_a_long(new Date())) {
-                    Toast.makeText(modificarBombaAgua.this, "No puede haber logs históricos con fecha posterior a la de hoy.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(modificarBombaAgua.this, modificarBombaAgua.this.getString(R.string.noHistFuturos), Toast.LENGTH_LONG).show();
                     ok = false;
                 }
             }
@@ -165,7 +165,6 @@ public class modificarBombaAgua extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("requestCoderequestCode "+ requestCode);
         switch(requestCode) {
             case (PETICION_ACTIVITY_MODIFY_BOMBAAGUA) : {
                 if (resultCode == Activity.RESULT_OK) {

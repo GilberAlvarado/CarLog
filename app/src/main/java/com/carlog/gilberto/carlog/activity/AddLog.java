@@ -59,7 +59,6 @@ public class addLog extends ActionBarActivity {
             String tipo = cursor.getString(cursor.getColumnIndex(managerTiposRevision.CN_TIPO));
             tipos.add(tipo);
         }
-
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipos);
         adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner1.setAdapter(adaptador);
@@ -99,7 +98,7 @@ public class addLog extends ActionBarActivity {
                         tv_nt.setVisibility(View.GONE);
                         edttxt.setText("");
                     }
-                    else Toast.makeText(getApplicationContext(), "El tipo ya existe", Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(getApplicationContext(), addLog.this.getString(R.string.tipoexiste), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -125,7 +124,7 @@ public class addLog extends ActionBarActivity {
                     RellenarTipos(managerTiposRevision);
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "No se pueden eliminar revisiones por defecto.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), addLog.this.getString(R.string.noEliminarTipoDefecto), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -192,7 +191,7 @@ public class addLog extends ActionBarActivity {
                     startActivity(intent);
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "No puede agregar revisión de filtro de aceite sin tener una revisión de aceite.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), addLog.this.getString(R.string.noAddFiltroSinAceite), Toast.LENGTH_SHORT).show();
                     seguir_rellenando = true;
                 }
             }
@@ -236,7 +235,7 @@ public class addLog extends ActionBarActivity {
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             }
-        } else Toast.makeText(getApplicationContext(), "Ya tiene pendiente una revisión de " + miTipoLog.getTipo(miTipoLog), Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(getApplicationContext(), addLog.this.getString(R.string.tipoDuplicado) + miTipoLog.getTipo(miTipoLog), Toast.LENGTH_SHORT).show();
     }
 
     private void GuardarLog(final dbLogs managerLogs) {
@@ -272,7 +271,6 @@ public class addLog extends ActionBarActivity {
                 if (long_fecha > funciones.date_a_long(new Date())) {
                     // con NO_REALIZADO
                     final tipoLog miTipoLog = new tipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, NO_CORREA, NO_BOMBAAGUA, NO_FGASOLINA, NO_FAIRE, NO_BUJIAS, NO_EMBRAGUE, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, int_kms);
-                    System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     addlog(miTipoLog, managerLogs);
                     if(tipo.equals(tipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
                         dbCar dbc = new dbCar(getApplicationContext());
@@ -285,16 +283,16 @@ public class addLog extends ActionBarActivity {
                     final tipoLog miTipoLog = new tipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, NO_CORREA, NO_BOMBAAGUA, NO_FGASOLINA, NO_FAIRE, NO_BUJIAS, NO_EMBRAGUE, matricula, dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, int_kms);
                     System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
                     AlertDialog.Builder builder = new AlertDialog.Builder(addLog.this);
-                    builder.setMessage("¿Quiere añadir la última revisión hecha de " + miTipoLog.getTipo(miTipoLog) + "?")
-                        .setTitle("Historial")
+                    builder.setMessage("" + addLog.this.getString(R.string.addLastRevision) + miTipoLog.getTipo(miTipoLog) + "?")
+                        .setTitle(addLog.this.getString(R.string.historial))
                         .setCancelable(false)
-                        .setNegativeButton("Cancelar",
+                        .setNegativeButton(addLog.this.getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id_dialog) {
                                     dialog.cancel();
                                 }
                             })
-                        .setPositiveButton("Continuar",
+                        .setPositiveButton(addLog.this.getString(R.string.continuar),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id_dialog) {
                                 // metodo que se debe implementar Sí

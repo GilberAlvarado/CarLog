@@ -130,8 +130,8 @@ public class cambiarCocheActivo {
             TextView txtV_seleccionada = (TextView) v.findViewById(R.id.rowText);
             String matricula_seleccionada = txtV_seleccionada.getText().toString();
             final MaterialDialog mMaterialDialog = new MaterialDialog(v.getContext());
-            mMaterialDialog.setTitle("Eliminar coche");
-            mMaterialDialog.setMessage("¿Está seguro de eliminar el coche con matrícula " + matricula_seleccionada + " y todos sus logs?");
+            mMaterialDialog.setTitle(act.getString(R.string.eliminarCoche));
+            mMaterialDialog.setMessage("" + act.getString(R.string.seguroEliminarCoche) + matricula_seleccionada + " " + act.getString(R.string.seguroEliminarCoche2));
             mMaterialDialog.setPositiveButton("OK", new View.OnClickListener() {
                 @Override
                 public void onClick(View w) {

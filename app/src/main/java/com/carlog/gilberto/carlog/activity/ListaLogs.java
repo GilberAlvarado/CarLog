@@ -34,7 +34,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.OverScroller;
 import android.widget.TextView;
-
 import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.dbCar;
 import com.carlog.gilberto.carlog.data.dbLogs;
@@ -55,8 +54,6 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import java.io.File;
 import com.github.ksoichiro.android.observablescrollview.Scrollable;
-
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -73,12 +70,10 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
     private View mImageView;
     private View mImageViewOnClick;
     private View mOverlayView;
-    private View mListBackgroundView;
     private TextView mTitleView;
     private CircleImageView profileImg;
     private View mFab;
     private int mActionBarSize;
-    private int mFlexibleSpaceShowFabOffset;
     private int mToolbarColor;
     private View mToolbar;
     private Toolbar toolbar;
@@ -396,9 +391,9 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
     }
 
 
-    private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
+    private class NavigationAdapter extends CacheFragmentStatePagerAdapter {
 
-        private static final String[] TITLES = new String[]{"Revisiones", "Historial"};
+        private final String[] TITLES = new String[]{listaLogs.this.getString(R.string.revisiones), listaLogs.this.getString(R.string.historial)};
 
         public NavigationAdapter(FragmentManager fm) {
             super(fm);
@@ -737,14 +732,14 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         super.onCreateContextMenu(menu, v, menuInfo);
         try {
             fragmentLogs fl = (fragmentLogs) getCurrentFragment();
-            menu.add(0, 0, 0, "Marcar como Realizado hoy");
-            menu.add(1, 1, 1, "Marcar como Realizado en su fecha");
-            menu.add(2, 2, 2, "Eliminar");
+            menu.add(0, 0, 0, listaLogs.this.getString(R.string.realizadohoy));
+            menu.add(1, 1, 1, listaLogs.this.getString(R.string.realizadofecha));
+            menu.add(2, 2, 2, listaLogs.this.getString(R.string.eliminar));
         }
         catch (Exception e) {
             try {
                 fragmentHistorial fh = (fragmentHistorial) getCurrentFragment();
-                menu.add(3, 3, 3, "Eliminar");
+                menu.add(3, 3, 3, listaLogs.this.getString(R.string.eliminar));
             }
             catch (Exception e2) {
 
@@ -831,7 +826,6 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 break;
             }
             case (utilities.GALLERY_INTENT) : {
-                System.out.println("desde galería");
                 if (data == null)
                     return;
                 Uri selectedPictureUri = data.getData();
@@ -859,7 +853,6 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 break;
             }
             case (utilities.CAMERA_INTENT) : {
-                System.out.println("desde cámara");
                 File f = new File(Environment.getExternalStorageDirectory().toString());
                 for (File temp : f.listFiles()) {
                     if (temp.getName().equals(listaLogs.this.getString(R.string.temp_picture))) {
@@ -900,9 +893,8 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
             else {
                 return super.onKeyDown(keyCode, event);
             }
-
         }
-//para las demas cosas, se reenvia el evento al listener habitual
+        //para las demas cosas, se reenvia el evento al listener habitual
         return super.onKeyDown(keyCode, event);
     }
 

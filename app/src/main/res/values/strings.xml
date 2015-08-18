@@ -61,7 +61,87 @@
     <string name="gallery_picture">Elegir de la Galería</string>
     <string name="reset_picture">Imagen predeterminada</string>
     <string name="cancel">Cancelar</string>
+    <string name="continuar">Continuar</string>
     <string name="login">Login</string>
     <string name="login_required">Login is required</string>
+
+
+    <string name="marca">Marca</string>
+    <string name="year">Año</string>
+    <string name="kms">Nº Kms</string>
+    <string name="matricula">Matrícula</string>
+    <string name="modelo">Modelo</string>
+    <string name="itv">Fecha ITV</string>
+
+
+
+    
+
+
+    <string name="tipoexiste">El tipo ya existe</string>
+    <string name="noEliminarTipoDefecto">No se pueden eliminar revisiones por defecto.</string>
+    <string name="noAddFiltroSinAceite">No puede agregar revisión de filtro de aceite sin tener una revisión de aceite.</string>
+    <string name="tipoDuplicado">Ya tiene pendiente una revisión de\u0020</string>
+    <string name="addLastRevision">¿Quiere añadir la última revisión hecha de\u0020</string>
+    <string name="historial">Historial</string>
+    <string name="revisiones">Revisiones</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="realizadohoy">Marcar como Realizado hoy</string>
+    <string name="realizadofecha">Marcar como Realizado en su fecha</string>
+    <string name="noHistFuturos">No puede haber logs históricos con fecha posterior a la de hoy.</string>
+    <string name="ayuda">Ayuda</string>
+    <string name="predecir">Predecir\u0020</string>
+    <string name="notificaciones">Notificaciones</string>
+    <string name="wait">Por favor espera</string>
+    <string name="conectando">Conectando...</string>
+    <string name="errorConectandoServer">Se ha producido un error al conectar con el servidor</string>
+    <string name="errorConectando">Se ha producido un error</string>
+    <string name="conexionNoPosible">No es posible realizar la conexión. Comprueba tu conexión de datos.</string>
+    <string name="deseaEliminar">¿Está seguro de querer eliminar?</string>
+    <string name="borrarDeLista">Borrar de la lista</string>
+    <string name="eliminarCoche">Eliminar coche</string>
+    <string name="seguroEliminarCoche">¿Está seguro de eliminar el coche con matrícula\u0020</string>
+    <string name="seguroEliminarCoche2">y todos sus logs?</string>
+    <string name="loginok">Login correcto</string>
+    <string name="loginNook">Login incorrecto</string>
+    <string name="registroOk">Registro correcto</string>
+    <string name="registerButCantConnect">Estás registrado pero no puedes loguearte ahora</string>
+    <string name="errorOnRegister">Error durante el registro</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="crear">Crear</string>
+    <string name="kmsMenor">Ha introducido un número de kms menor que el anterior. Se recomienda sólo en caso de equivocación. ¿Continuar?</string>
+    <string name="cambiarKms">Cambiar Nº kilómetros</string>
+    <string name="incorrectKms">Ha de introducir un nº de kilómetros correcto.</string>
+    <string name="positiveKms">El número de kilómetros debe ser mayor que 0.</string>
+    <string name="incorrectYear">Ha de introducir un año válido.</string>
+    <string name="emptyMatricula">Ha de introducir la matrícula.</string>
+    <string name="emptyMarca">Ha de introducir la marca.</string>
+    <string name="emptyModelo">Ha de introducir el modelo.</string>
+    <string name="emptyKms">Ha de introducir el nº de kilómetros.</string>
+
+
+
+    <string name="changeAceite">Debería cambiar el aceite cuanto antes.</string>
+    <string name="changeFiltroAceite">Debería cambiar el filtro de aceite cuanto antes.</string>
+    <string name="changeRevGen">Debería realizar una revisión general cuanto antes.</string>
+    <string name="changeCorrea">Debería cambiar la correa de distribución cuanto antes.</string>
+    <string name="changeBomba">Debería cambiar la bomba de agua cuanto antes.</string>
+    <string name="changeFilGasolina">Debería cambiar el filtro de gasolina cuanto antes.</string>
+    <string name="changeFilAire">Debería cambiar el filtro de aire cuanto antes.</string>
+    <string name="changeBujias">Debería cambiar las bujías cuanto antes.</string>
+    <string name="changeLimpia">Debería cambiar el limpiaparabrisas cuanto antes.</string>
+    <string name="changeLiqFrenos">Debería cambiar el líquido de frenos cuanto antes.</string>
+    <string name="changeRuedas">Debería hacer una revisión de ruedas cuanto antes.</string>
+    <string name="changeFrenos">Debería hacer una revisión de frenos cuanto antes.</string>
+    <string name="changeLuces">Debería hacer una revisión de luces cuanto antes.</string>
+    <string name="changeEmbrague">Debería cambiar el embrague cuanto antes.</string>
+    <string name="changeAnticongelante">Debería cambiar el líquido anticongelante cuanto antes.</string>
+    <string name="changeBateria">La batería puede comenzar a fallar en breve.</string>
+    <string name="changeAmortiguadores">Debería revisar los amortiguadores cuanto antes.</string>
+
+    <!-- notificaciones-->
+    <string name="tiene">Tiene\u0020</string>
+    <string name="revcercanas">revisiones cercanas</string>
+    <string name="revmas">revisiones más...</string>
 
 </resources>

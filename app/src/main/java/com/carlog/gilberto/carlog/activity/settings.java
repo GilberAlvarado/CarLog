@@ -36,10 +36,10 @@ public class settings extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         final ListView listview = (ListView) findViewById(R.id.listview_settings);
-        String[] values = new String[] { "Ayuda", "Notificaciones", "Predecir " +  tipoLog.TIPO_ACEITE, "Predecir " +  tipoLog.TIPO_AMORTIGUADORES, "Predecir " +  tipoLog.TIPO_ANTICONGELANTE, "Predecir " +  tipoLog.TIPO_BATERIA
-                , "Predecir " +  tipoLog.TIPO_BOMBA_AGUA, "Predecir " +  tipoLog.TIPO_BUJIAS, "Predecir " +  tipoLog.TIPO_CORREA, "Predecir " +  tipoLog.TIPO_EMBRAGUE, "Predecir " +  tipoLog.TIPO_FILTRO_ACEITE
-                , "Predecir " +  tipoLog.TIPO_FILTRO_AIRE, "Predecir " +  tipoLog.TIPO_FILTRO_GASOLINA, "Predecir " +  tipoLog.TIPO_FRENOS, "Predecir " +  tipoLog.TIPO_ITV, "Predecir " +  tipoLog.TIPO_LIMPIAPARABRISAS
-                , "Predecir " +  tipoLog.TIPO_LIQUIDO_FRENOS, "Predecir " +  tipoLog.TIPO_LUCES, "Predecir " +  tipoLog.TIPO_REV_GENERAL, "Predecir " +  tipoLog.TIPO_RUEDAS/*,"Perfil"*/};
+        String[] values = new String[] { settings.this.getString(R.string.ayuda), settings.this.getString(R.string.notificaciones), settings.this.getString(R.string.predecir) +  tipoLog.TIPO_ACEITE, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_AMORTIGUADORES, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_ANTICONGELANTE, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_BATERIA
+                , settings.this.getString(R.string.predecir) +  tipoLog.TIPO_BOMBA_AGUA, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_BUJIAS, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_CORREA, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_EMBRAGUE, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_FILTRO_ACEITE
+                , settings.this.getString(R.string.predecir) +  tipoLog.TIPO_FILTRO_AIRE, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_FILTRO_GASOLINA, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_FRENOS, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_ITV, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_LIMPIAPARABRISAS
+                , settings.this.getString(R.string.predecir) +  tipoLog.TIPO_LIQUIDO_FRENOS, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_LUCES, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_REV_GENERAL, settings.this.getString(R.string.predecir) +  tipoLog.TIPO_RUEDAS/*,"Perfil"*/};
 
         final miAdaptadorSettings adapter = new miAdaptadorSettings(settings.this, values);
         listview.setAdapter(adapter);

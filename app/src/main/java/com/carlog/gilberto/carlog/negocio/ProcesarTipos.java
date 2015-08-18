@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.widget.Toast;
 
+import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.activity.addLog;
 import com.carlog.gilberto.carlog.activity.myActivity;
 import com.carlog.gilberto.carlog.data.dbAceite;
@@ -228,55 +229,55 @@ public class procesarTipos {
 
     private static void avisoSobrepasadaRev(Context context, String tipo_rev) {
         if (tipo_rev.equals(tipoLog.TIPO_ACEITE)) {
-            Toast.makeText(context, "Debería cambiar el aceite cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeAceite), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
-            Toast.makeText(context, "Debería cambiar el filtro de aceite cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeFiltroAceite), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_REV_GENERAL)) {
-            Toast.makeText(context, "Debería realizar una revisión general cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeRevGen), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_CORREA)) {
-            Toast.makeText(context, "Debería cambiar la correa de distribución cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeCorrea), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_BOMBA_AGUA)) {
-            Toast.makeText(context, "Debería cambiar la bomba de agua cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeBomba), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
-            Toast.makeText(context, "Debería cambiar el filtro de gasolina cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeFilGasolina), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_FILTRO_AIRE)) {
-            Toast.makeText(context, "Debería cambiar el filtro de aire cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeFilAire), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_BUJIAS)) {
-            Toast.makeText(context, "Debería cambiar las bujías cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeBujias), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_LIMPIAPARABRISAS)) {
-            Toast.makeText(context, "Debería cambiar el limpiaparabrisas cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeLimpia), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_LIQUIDO_FRENOS)) {
-            Toast.makeText(context, "Debería cambiar el líquido de frenos cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeLiqFrenos), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_RUEDAS)) {
-            Toast.makeText(context, "Debería hacer una revisión de ruedas cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeRuedas), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_FRENOS)) {
-            Toast.makeText(context, "Debería hacer una revisión de frenos cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeFrenos), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_LUCES)) {
-            Toast.makeText(context, "Debería hacer una revisión de luces cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeLuces), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) {
-            Toast.makeText(context, "Debería cambiar el embrague cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeEmbrague), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_ANTICONGELANTE)) {
-            Toast.makeText(context, "Debería cambiar el líquido anticongelante cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeAnticongelante), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_BATERIA)) {
-            Toast.makeText(context, "La batería puede empezar a fallar.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeBateria), Toast.LENGTH_LONG).show();
         }
         if (tipo_rev.equals(tipoLog.TIPO_AMORTIGUADORES)) {
-            Toast.makeText(context, "Debería revisar los amortiguadores cuanto antes.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.changeAmortiguadores), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -295,7 +296,6 @@ public class procesarTipos {
                 Date car_year_date = calendar.getTime();
 
                 int dias_coche_todos = (int) funciones.dias_entre_2_fechas(car_year_date, new Date());
-
                 int_media = int_kms  / dias_coche_todos;
             }
             else {
@@ -343,10 +343,6 @@ public class procesarTipos {
 
                     int kms_que_faltan_x_hacer = kms_tipo_ultimo_log_hist - (int_kms - kms_ultimo_log_hist);
 
-                    System.out.println("int_media: " + int_media + " kms_ultimo_log_hist " + kms_ultimo_log_hist);
-                    System.out.println("kms_tipo_ultimo_log_hist DEVUELTO " + kms_tipo_ultimo_log_hist + " " + int_kms);
-                    System.out.println("kms_que_faltan_x_hacer " + kms_que_faltan_x_hacer);
-
                     Date fecha_log_futuro_recalculada = new Date();
                     if (!tipo_rev.equals(tipoLog.TIPO_ITV)) {
                         if ((int_kms - kms_ultimo_log_hist) <= kms_tipo_ultimo_log_hist) { // Actualizamos la fecha de la futura revisión de tipo
@@ -371,7 +367,6 @@ public class procesarTipos {
                                     ((!tipo_rev.equals(tipoLog.TIPO_RUEDAS)) && (!tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) && (!tipo_rev.equals(tipoLog.TIPO_LUCES))
                                     && (!tipo_rev.equals(tipoLog.TIPO_AMORTIGUADORES)) && (!tipo_rev.equals(tipoLog.TIPO_FRENOS)))) { // el cambio sería por fecha y no por kms (menos revisiones de solo por kms)
                                 long_fecha_log_futuro_recalculada = long_f_revision_por_fecha;
-                                System.out.println("EL cambio es por fecha: fecha calculada " + fecha_log_futuro_recalculada + " y por fecha " + f_revision_por_fecha);
                             }
                             if (c_logs_tipo.moveToFirst() == true) { // Si existen no se tienen que procesar pq se procesan unicamente al actualizar el nº de kms excepto los especiales aceite y filtro de aceite
                                 String txt_fecha_l = c_logs_tipo.getString(c_logs_tipo.getColumnIndex("fecha_string")); // recuperamos el último de los logs del tipo
@@ -505,6 +500,5 @@ public class procesarTipos {
                 }
             }
         }
-
     }
 }

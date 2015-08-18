@@ -6,6 +6,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.carlog.gilberto.carlog.R;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
@@ -32,11 +34,11 @@ public class httpClientManager {
 
     private String UrlService = "";
 
-    private String strMessageHeadLoading = "Por favor espera";
+    private String strMessageHeadLoading = activity.getString(R.string.wait);
     public String getStrMessageHeadLoading(){ return strMessageHeadLoading; }
     public void setStrMessageHeadLoading(String message){ strMessageHeadLoading = message; }
 
-    private String strMessageBodyLoading  = "Enviando información...";
+    private String strMessageBodyLoading  = activity.getString(R.string.conectando);
     public String getStrMessageBodyLoading(){ return strMessageBodyLoading; }
     public void setStrMessageBodyLoading(String message){ strMessageBodyLoading = message; }
 
@@ -93,12 +95,12 @@ public class httpClientManager {
 
                 activity.runOnUiThread(returnRes);
             }catch(HttpResponseException hre){
-                ListenerExecuteHttpPostAsync.onErrorHttpPostAsyncListener("Se ha producido un error al conectar con el servidor");
+                ListenerExecuteHttpPostAsync.onErrorHttpPostAsyncListener(activity.getString(R.string.errorConectandoServer));
             }catch(Exception e){
-                ListenerExecuteHttpPostAsync.onErrorHttpPostAsyncListener("Se ha producido un error");
+                ListenerExecuteHttpPostAsync.onErrorHttpPostAsyncListener(activity.getString(R.string.errorConectando));
             }
         } else{
-            ListenerExecuteHttpPostAsync.onErrorHttpPostAsyncListener("No es posible realizar la conexión. Comprueba tu conexión de datos.");
+            ListenerExecuteHttpPostAsync.onErrorHttpPostAsyncListener(activity.getString(R.string.conexionNoPosible));
         }
     }
 

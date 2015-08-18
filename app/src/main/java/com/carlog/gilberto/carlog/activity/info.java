@@ -1,22 +1,13 @@
 package com.carlog.gilberto.carlog.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.DatePicker;
-
 import com.carlog.gilberto.carlog.R;
-import com.carlog.gilberto.carlog.formats.funciones;
 import com.carlog.gilberto.carlog.tiposClases.usuario;
-import com.gc.materialdesign.views.ButtonRectangle;
-
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Gilberto on 11/08/2015.

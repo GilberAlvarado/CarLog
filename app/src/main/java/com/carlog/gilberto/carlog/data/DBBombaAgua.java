@@ -11,10 +11,10 @@ import android.database.sqlite.SQLiteDatabase;
 public class dbBombaAgua {
     public static final String TABLE_NAME = "bombaagua";
 
-    public final static String TIPO_80K_KM = "80 mil kms (recomendada)";
-    public final static String TIPO_60K_KM = "60 mil kms";
-    public final static String TIPO_100K_KM = "100 mil kms";
-    public final static String TIPO_120K_KM = "120 mil kms";
+    public final static String TIPO_80K_KM = "80.000 kms (recomendada)";
+    public final static String TIPO_60K_KM = "60.000 kms";
+    public final static String TIPO_100K_KM = "100.000 kms";
+    public final static String TIPO_120K_KM = "120.000 kms";
 
     public static final String CN_ID = "_id";
     public static final String CN_TIPO = "tipo";

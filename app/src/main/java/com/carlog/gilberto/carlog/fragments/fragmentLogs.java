@@ -53,16 +53,16 @@ public class fragmentLogs extends baseFragment {
 
     public static void borrarLogpulsado(final Cursor cursor, final dbLogs manager, final int posicion, final Context context, final Activity act) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(act);
-        builder.setMessage("¿Está seguro de querer eliminar?")
-            .setTitle("Borrar de la lista")
+        builder.setMessage(act.getString(R.string.deseaEliminar))
+            .setTitle(act.getString(R.string.borrarDeLista))
             .setCancelable(false)
-            .setNegativeButton("Cancelar",
+            .setNegativeButton(act.getString(R.string.cancel),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id_dialog) {
                         dialog.cancel();
                     }
                 })
-            .setPositiveButton("Continuar",
+            .setPositiveButton(act.getString(R.string.continuar),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id_dialog) {
                 // metodo que se debe implementar Sí

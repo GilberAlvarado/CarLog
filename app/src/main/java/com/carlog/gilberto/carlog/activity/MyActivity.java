@@ -44,21 +44,13 @@ import com.carlog.gilberto.carlog.view.simpleDataView;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
 
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
 public class myActivity extends ActionBarActivity {
 
-    public final static String INICIAL_MARCA = "Marca";
-    public final static String INICIAL_YEAR = "Año";
-    public final static String INICIAL_KMS = "Nº Kms";
-    public final static String INICIAL_MATRICULA = "Matrícula";
-    public final static String INICIAL_MODELO = "Modelo";
-    public final static String INICIAL_ITV = "Fecha ITV";
     public final static int FIRST_DATE = 157766400; // para comparar si es antes del 01/01/1975 da igual que haya fechas antes pq solo podemos hacer itv de hoy en adelante
 
 
@@ -102,7 +94,7 @@ public class myActivity extends ActionBarActivity {
             spinner_marcas.setSelection(spinnerPostion);
 
             simpleDataView sdv = (simpleDataView) findViewById(R.id.marca_view);
-            sdv.setTitle("Marca");
+            sdv.setTitle(myActivity.this.getString(R.string.marca));
             sdv.setValue(adaptador.getItem(spinnerPostion));
             sdv.setEditInvisible();
             sdv.setImage(getResources().getDrawable(R.drawable.ic_marca));
@@ -121,8 +113,6 @@ public class myActivity extends ActionBarActivity {
                 dbMarcas dbmarcas = new dbMarcas(getApplicationContext());
                 Cursor c_marcas = dbmarcas.buscarMarcas(marca_seleccionada);
 
-                System.out.println("marca_seleccionada "+marca_seleccionada);
-
                 int id_marca = 0;
                 for (c_marcas.moveToFirst(); !c_marcas.isAfterLast(); c_marcas.moveToNext()) {
                     id_marca = c_marcas.getInt(c_marcas.getColumnIndex(dbMarcas.CN_ID));
@@ -132,7 +122,7 @@ public class myActivity extends ActionBarActivity {
                     dbModelos dbmodelos = new dbModelos(getApplicationContext());
                     Cursor cursor = dbmodelos.buscarModelosDeMarca(id_marca);
 
-                    lista_modelos.add(INICIAL_MODELO);
+                    lista_modelos.add(myActivity.this.getString(R.string.modelo));
                     if (id_marca > 0) { // No es inicial_marca
                         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                             String modelo = cursor.getString(cursor.getColumnIndex(dbModelos.CN_MODELO));
@@ -167,14 +157,14 @@ public class myActivity extends ActionBarActivity {
             id_marca = c_marcas.getInt(c_marcas.getColumnIndex(dbMarcas.CN_ID));
         }
 
-        if(marca_seleccionada.equals(INICIAL_MARCA) || marca_seleccionada.isEmpty()) {
-            lista_modelos.add(INICIAL_MODELO);
+        if(marca_seleccionada.equals(myActivity.this.getString(R.string.marca)) || marca_seleccionada.isEmpty()) {
+            lista_modelos.add(myActivity.this.getString(R.string.modelo));
         }
         else {
             dbModelos dbmodelos = new dbModelos(getApplicationContext());
             Cursor cursor = dbmodelos.buscarModelosDeMarca(id_marca);
 
-            lista_modelos.add(INICIAL_MODELO);
+            lista_modelos.add(myActivity.this.getString(R.string.modelo));
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 String modelo = cursor.getString(cursor.getColumnIndex(dbModelos.CN_MODELO));
                 lista_modelos.add(modelo);
@@ -191,7 +181,7 @@ public class myActivity extends ActionBarActivity {
             spinner_modelos.setSelection(spinnerPostion);
 
             simpleDataView sdv = (simpleDataView) findViewById(R.id.modelo_view);
-            sdv.setTitle("Modelo");
+            sdv.setTitle(myActivity.this.getString(R.string.modelo));
             sdv.setValue(adaptador.getItem(spinnerPostion));
             sdv.setImage(getResources().getDrawable(R.drawable.ic_modelo));
             sdv.setEditInvisible();
@@ -203,7 +193,7 @@ public class myActivity extends ActionBarActivity {
         //spinner_marcas = (Spinner) findViewById(R.id.cmb_marcas);
         lista_years = new ArrayList<String>();
         spinner_years = (Spinner) findViewById(R.id.cmb_years);
-        lista_years.add(INICIAL_YEAR);
+        lista_years.add(myActivity.this.getString(R.string.year));
         Calendar calen = Calendar.getInstance();
         Integer hoy = calen.get(Calendar.YEAR);
         for(int i = hoy; i >= 1900; i--) {
@@ -220,7 +210,7 @@ public class myActivity extends ActionBarActivity {
 
             simpleDataView sdv = (simpleDataView) findViewById(R.id.year_view);
             if(c.getInt(c.getColumnIndex(dbCar.CN_YEAR)) != myActivity.NO_YEARS) {
-                sdv.setTitle("Año");
+                sdv.setTitle(myActivity.this.getString(R.string.year));
                 sdv.setValue(adaptador.getItem(spinnerPostion));
                 sdv.setImage(getResources().getDrawable(R.drawable.ic_year));
                 sdv.setEditInvisible();
@@ -253,14 +243,14 @@ public class myActivity extends ActionBarActivity {
         }
 
         simpleDataView sdv = (simpleDataView) findViewById(R.id.matricula_view);
-        sdv.setTitle("Matrícula");
+        sdv.setTitle(myActivity.this.getString(R.string.matricula));
         sdv.setValue(matricula);
         sdv.setEdit(matricula);
         sdv.setEditVisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_matricula));
 
         sdv = (simpleDataView) findViewById(R.id.kms_view);
-        sdv.setTitle("Nº kms");
+        sdv.setTitle(myActivity.this.getString(R.string.kms));
         sdv.setValue(kms);
         sdv.setEdit(kms);
         sdv.setEditVisible();
@@ -268,7 +258,7 @@ public class myActivity extends ActionBarActivity {
 
         fechaITV = funciones.string_a_date(itv);
         sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
-        sdv.setTitle("Fecha ITV");
+        sdv.setTitle(myActivity.this.getString(R.string.itv));
         sdv.setValue(itv);
         FloatingActionButton button_addItv = (FloatingActionButton) findViewById(R.id.button_additv);
         if(long_itv > FIRST_DATE) {
@@ -408,9 +398,9 @@ public class myActivity extends ActionBarActivity {
     private void Siguiente(final Context context, final boolean EditarCoche) {
         ButtonRectangle btn_siguiente = (ButtonRectangle) findViewById(R.id.button_siguiente);
         if(EditarCoche)
-            btn_siguiente.setText("Actualizar");
+            btn_siguiente.setText(myActivity.this.getString(R.string.actualizar));
         if(!EditarCoche)
-            btn_siguiente.setText("Crear");
+            btn_siguiente.setText(myActivity.this.getString(R.string.crear));
 
         btn_siguiente.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -422,16 +412,16 @@ public class myActivity extends ActionBarActivity {
                         if (mykms < int_kms_anterior) {
                             Toast.makeText(myActivity.this, "", Toast.LENGTH_LONG).show();
                             AlertDialog.Builder builder = new AlertDialog.Builder(myActivity.this);
-                            builder.setMessage("Ha introducido un número de kms menor que el anterior. Se recomienda sólo en caso de equivocación. ¿Continuar?")
-                                .setTitle("Cambiar Nº kilómetros")
+                            builder.setMessage(myActivity.this.getString(R.string.kmsMenor))
+                                .setTitle(myActivity.this.getString(R.string.cambiarKms))
                                 .setCancelable(false)
-                                .setNegativeButton("Cancelar",
+                                .setNegativeButton(myActivity.this.getString(R.string.cancel),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id_dialog) {
                                             dialog.cancel();
                                         }
                                     })
-                                .setPositiveButton("Continuar",
+                                .setPositiveButton(myActivity.this.getString(R.string.continuar),
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id_dialog) {
                                             // metodo que se debe implementar Sí
@@ -445,7 +435,7 @@ public class myActivity extends ActionBarActivity {
                             procesando(context, EditarCoche);
                         }
                     } catch (NumberFormatException nfe) {
-                        Toast.makeText(myActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(myActivity.this, myActivity.this.getString(R.string.incorrectKms), Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
@@ -460,18 +450,18 @@ public class myActivity extends ActionBarActivity {
         cocheEsNuevo.getInstance().coche_es_nuevo = 1;
 
         simpleDataView sdv = (simpleDataView) findViewById(R.id.matricula_view);
-        sdv.setTitle(myActivity.INICIAL_MATRICULA);
+        sdv.setTitle(myActivity.this.getString(R.string.marca));
         sdv.setValue("");
         sdv.setEdit("");
-        sdv.setEditHint(myActivity.INICIAL_MATRICULA);
+        sdv.setEditHint(myActivity.this.getString(R.string.matricula));
         sdv.setEditVisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_matricula));
 
         sdv = (simpleDataView) findViewById(R.id.kms_view);
-        sdv.setTitle(myActivity.INICIAL_KMS);
+        sdv.setTitle(myActivity.this.getString(R.string.kms));
         sdv.setValue("");
         sdv.setEdit("");
-        sdv.setEditHint(myActivity.INICIAL_KMS);
+        sdv.setEditHint(myActivity.this.getString(R.string.kms));
         sdv.setEditVisible();
         sdv.setImage(getResources().getDrawable(R.drawable.ic_kms));
 
@@ -485,7 +475,7 @@ public class myActivity extends ActionBarActivity {
         sdv.setVisibility(View.GONE);
 
         sdv = (simpleDataView) findViewById(R.id.fechaitv_view);
-        sdv.setTitle(myActivity.INICIAL_ITV);
+        sdv.setTitle(myActivity.this.getString(R.string.itv));
         sdv.setValue("");
         sdv.setEdit("");
         sdv.setLos2Invisible();
@@ -493,11 +483,11 @@ public class myActivity extends ActionBarActivity {
         FloatingActionButton button_addItv = (FloatingActionButton) findViewById(R.id.button_additv);
         button_addItv.setVisibility(View.VISIBLE);
 
-        marca = INICIAL_MARCA;
-        modelo = INICIAL_MODELO;
-        kms = INICIAL_KMS;
-        year = INICIAL_YEAR;
-        matricula = INICIAL_MATRICULA;
+        marca = myActivity.this.getString(R.string.marca);
+        modelo = myActivity.this.getString(R.string.modelo);
+        kms = myActivity.this.getString(R.string.kms);
+        year = myActivity.this.getString(R.string.year);
+        matricula = myActivity.this.getString(R.string.matricula);
 
         spinner_years.setSelection(0);
         spinner_modelos.setSelection(0);
@@ -522,18 +512,18 @@ public class myActivity extends ActionBarActivity {
         Spinner spinner_year = (Spinner)findViewById(R.id.cmb_years);
         year = spinner_year.getSelectedItem().toString();
         System.out.println(year);
-        if(year.equals(INICIAL_YEAR)) int_year = NO_YEARS;
+        if(year.equals(myActivity.this.getString(R.string.year))) int_year = NO_YEARS;
         else int_year = Integer.parseInt(year);
 
         sdv = (simpleDataView) findViewById(R.id.kms_view);
         et = sdv.getTextEditLeerPantalla();
         kms = et.getText().toString();
-        if(kms.isEmpty() || kms.equals(INICIAL_KMS)) int_kms = NO_KMS;
+        if(kms.isEmpty() || kms.equals(myActivity.this.getString(R.string.kms))) int_kms = NO_KMS;
         else {
             try {
                 int_kms = Integer.parseInt(kms);
             } catch(NumberFormatException nfe) {
-                Toast.makeText(myActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, myActivity.this.getString(R.string.incorrectKms), Toast.LENGTH_LONG).show();
                 ok = false;
                 return ok;
             }
@@ -584,24 +574,24 @@ public class myActivity extends ActionBarActivity {
         try {
             Integer mykms = Integer.parseInt(kms);
             if (mykms < 0) {
-                Toast.makeText(myActivity.this, "El número de kilómetros debe ser mayor que 0.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, myActivity.this.getString(R.string.positiveKms), Toast.LENGTH_LONG).show();
                 ok = false;
             }
         } catch (NumberFormatException nfe) {
-            Toast.makeText(myActivity.this, "Ha de introducir un nº de kilómetros correcto.", Toast.LENGTH_LONG).show();
+            Toast.makeText(myActivity.this, myActivity.this.getString(R.string.incorrectKms), Toast.LENGTH_LONG).show();
         }
 
-        if (!TextUtils.isEmpty(year) && !year.equals(INICIAL_YEAR)) { // el año no es obligatorio
+        if (!TextUtils.isEmpty(year) && !year.equals(myActivity.this.getString(R.string.year))) { // el año no es obligatorio
             try {
                 Integer myyear = Integer.parseInt(year);
                 Calendar calen = Calendar.getInstance();
                 Integer hoy = calen.get(Calendar.YEAR);
                 if (myyear < 1900 || (myyear > hoy)) {
-                    Toast.makeText(myActivity.this, "Ha de introducir un año válido.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(myActivity.this, myActivity.this.getString(R.string.incorrectYear), Toast.LENGTH_LONG).show();
                     ok = false;
                 }
             } catch (NumberFormatException nfe) {
-                Toast.makeText(myActivity.this, "Ha de introducir un año válido.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, myActivity.this.getString(R.string.incorrectYear), Toast.LENGTH_LONG).show();
                 ok = false;
             }
         }
@@ -609,14 +599,14 @@ public class myActivity extends ActionBarActivity {
 
         if(ok) {
             // Los campos marca, modelo y nº de kilometros deben de ser obligatorios
-            if (TextUtils.isEmpty(matricula) || matricula.equals(INICIAL_MATRICULA)) {
-                Toast.makeText(myActivity.this, "Ha de introducir la matrícula.", Toast.LENGTH_LONG).show();
-            } else if (TextUtils.isEmpty(marca) || marca.equals(INICIAL_MARCA)) {
-                Toast.makeText(myActivity.this, "Ha de introducir la marca.", Toast.LENGTH_LONG).show();
-            } else if (TextUtils.isEmpty(modelo) || modelo.equals(INICIAL_MODELO)) {
-                Toast.makeText(myActivity.this, "Ha de introducir el modelo.", Toast.LENGTH_LONG).show();
+            if (TextUtils.isEmpty(matricula) || matricula.equals(myActivity.this.getString(R.string.matricula))) {
+                Toast.makeText(myActivity.this, myActivity.this.getString(R.string.emptyMatricula), Toast.LENGTH_LONG).show();
+            } else if (TextUtils.isEmpty(marca) || marca.equals(myActivity.this.getString(R.string.marca))) {
+                Toast.makeText(myActivity.this, myActivity.this.getString(R.string.emptyMarca), Toast.LENGTH_LONG).show();
+            } else if (TextUtils.isEmpty(modelo) || modelo.equals(myActivity.this.getString(R.string.modelo))) {
+                Toast.makeText(myActivity.this, myActivity.this.getString(R.string.emptyModelo), Toast.LENGTH_LONG).show();
             } else if (TextUtils.isEmpty(kms)) {
-                Toast.makeText(myActivity.this, "Ha de introducir el nº de kilómetros.", Toast.LENGTH_LONG).show();
+                Toast.makeText(myActivity.this, myActivity.this.getString(R.string.emptyKms), Toast.LENGTH_LONG).show();
             } else {
                 return true;
             }
