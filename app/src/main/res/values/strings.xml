@@ -166,4 +166,9 @@
     <string name="revcercanas">revisiones cercanas</string>
     <string name="revmas">revisiones más...</string>
 
+    <string name="mineralesList">* Minerales: 15W40, 20W50</string>
+    <string name="semisinteticosList">* Semisintéticos: 10W40</string>
+    <string name="sinteticosList">* Sintéticos: 5W30, 5W40, 0W40, 5W50, 10W60</string>
+    <string name="longlifeList">* Longlife: 0W30, 5W30LL</string>
+
 </resources>
