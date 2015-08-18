@@ -286,7 +286,7 @@ public class procesarTipos {
     private static int calcular_media(long long_fecha_ini, int int_kms, int int_kms_ini, int car_year) {
         int dias_coche_app = (int) funciones.dias_entre_2_fechas(funciones.long_a_date(long_fecha_ini), new Date());
         int int_media = 0;
-        if(dias_coche_app == 0) { // se creó hoy el coche (la media es la completa del coche)
+        if(dias_coche_app == 0) { // se creó hoy el coche (la media es la completa del coche) (se estima a mediados de año)
             if(car_year != myActivity.NO_KMS) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.clear();

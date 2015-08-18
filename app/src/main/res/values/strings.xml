@@ -28,6 +28,26 @@
     <string name="title_activity_additv">Fecha de revisión</string>
     <string name="title_activity_actualizarcoche">Actualizar Coche</string>
     <string name="txt_itv">Introduzca Fecha:</string>
+    <string name="guardar">Guardar</string>
+    <string name="introduzcatipo">Introduzca tipo:</string>
+    <string name="addTipo">Añadir nuevo tipo:</string>
+    <string name="nuevoTipo">Agregar tipo</string>
+    <string name="elimTipo">Eliminar tipo</string>
+    <string name="txtDate">Fecha:</string>
+    <string name="cuantosAceites">¿Cada cuántos cambios de aceite cambiar el filtro?</string>
+    <string name="needHelp">¿Necesita ayuda para comenzar? :)</string>
+    <string name="helpAddRev">Una vez haya añadido los datos de su coche, podrá agregar todas las revisiones que desee pulsando el siguiente icono.</string>
+    <string name="helpUnicaRevTipo">Se podrá añadir únicamente una revisión de cada tipo (salvo las personalizadas o de tipo taller) y el resto lo haremos por usted :)</string>
+    <string name="helpModifyRev">Despreocúpese de cambiar las fechas de las revisiones. Únicamente es necesario cuando se acerque la fecha y decida coger cita para realizarla. (Si mofifica la fecha de una revisión deja de recalcularse automáticamente).</string>
+    <string name="helpImportant">Lo realmente importante...</string>
+    <string name="helpUpdateKms">No necesita cambiar datos ni hacer cálculos innecesarios. Nosotros lo hacemos todo por usted (siempre es personalizable). Sólo debe actualizar el número de kilómetros de su coche cuando lo desee aunque de no hacerlo se predecirán de manera inteligente. Para tener el número de kilómetros al día deberá pulsar el siguiente boton y cambiarlo.</string>
+    <string name="helpVariosCoches">¿Desea llevar el mantenimiento de varios coches? :)</string>
+    <string name="helpVariosCoches2">Podrá agregar todos los coches que desee y llevar el mantenimiento de coches de familiares y amigos pulsando el botón de arriba. Luego podrá cambiar de coche mediante la barra de navegación.</string>
+    <string name="loginFb">Iniciar sesión con Facebook</string>
+    <string name="loginAnonimo">Entrar en modo Anónimo</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="enviar">Enviar</string>
+    <string name="haveAccount">Ya tienes cuenta? Accede!</string>
 
     <string name="facebook_app_id">663858277047070</string>
 
@@ -75,7 +95,7 @@
 
 
 
-    
+
 
 
     <string name="tipoexiste">El tipo ya existe</string>
@@ -92,21 +112,23 @@
     <string name="ayuda">Ayuda</string>
     <string name="predecir">Predecir\u0020</string>
     <string name="notificaciones">Notificaciones</string>
-    <string name="wait">Por favor espera</string>
-    <string name="conectando">Conectando...</string>
-    <string name="errorConectandoServer">Se ha producido un error al conectar con el servidor</string>
-    <string name="errorConectando">Se ha producido un error</string>
-    <string name="conexionNoPosible">No es posible realizar la conexión. Comprueba tu conexión de datos.</string>
     <string name="deseaEliminar">¿Está seguro de querer eliminar?</string>
     <string name="borrarDeLista">Borrar de la lista</string>
     <string name="eliminarCoche">Eliminar coche</string>
     <string name="seguroEliminarCoche">¿Está seguro de eliminar el coche con matrícula\u0020</string>
     <string name="seguroEliminarCoche2">y todos sus logs?</string>
+
+    <string name="wait">Por favor espera</string>
+    <string name="conectando">Conectando...</string>
+    <string name="errorConectandoServer">Se ha producido un error al conectar con el servidor</string>
+    <string name="errorConectando">Se ha producido un error</string>
+    <string name="conexionNoPosible">No es posible realizar la conexión. Comprueba tu conexión de datos.</string>
     <string name="loginok">Login correcto</string>
     <string name="loginNook">Login incorrecto</string>
     <string name="registroOk">Registro correcto</string>
     <string name="registerButCantConnect">Estás registrado pero no puedes loguearte ahora</string>
     <string name="errorOnRegister">Error durante el registro</string>
+
     <string name="actualizar">Actualizar</string>
     <string name="crear">Crear</string>
     <string name="kmsMenor">Ha introducido un número de kms menor que el anterior. Se recomienda sólo en caso de equivocación. ¿Continuar?</string>

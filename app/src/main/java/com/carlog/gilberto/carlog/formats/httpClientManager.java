@@ -34,11 +34,11 @@ public class httpClientManager {
 
     private String UrlService = "";
 
-    private String strMessageHeadLoading = activity.getString(R.string.wait);
+    private String strMessageHeadLoading = "Por favor espera";
     public String getStrMessageHeadLoading(){ return strMessageHeadLoading; }
     public void setStrMessageHeadLoading(String message){ strMessageHeadLoading = message; }
 
-    private String strMessageBodyLoading  = activity.getString(R.string.conectando);
+    private String strMessageBodyLoading  = "Conectando...";
     public String getStrMessageBodyLoading(){ return strMessageBodyLoading; }
     public void setStrMessageBodyLoading(String message){ strMessageBodyLoading = message; }
 

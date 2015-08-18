@@ -40,7 +40,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/matricula_view"
-                            custom:mytitle="Matrícula"
+                            custom:mytitle="@string/matricula"
                             custom:myvalue=""
                             custom:image="@drawable/ic_matricula"
                             android:padding="4sp"
@@ -50,7 +50,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/kms_view"
-                            custom:mytitle="Nº Kms"
+                            custom:mytitle="@string/kms"
                             custom:myvalue=""
                             custom:image="@drawable/ic_kms"
                             android:padding="4sp"
@@ -72,7 +72,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/marca_view"
-                            custom:mytitle="Marca"
+                            custom:mytitle="@string/marca"
                             custom:myvalue=""
                             custom:image="@drawable/ic_marca"
                             android:padding="4sp"
@@ -82,7 +82,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/modelo_view"
-                            custom:mytitle="Modelo"
+                            custom:mytitle="@string/modelo"
                             custom:myvalue=""
                             custom:image="@drawable/ic_modelo"
                             android:padding="4sp"
@@ -185,7 +185,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/year_view"
-                            custom:mytitle="Año"
+                            custom:mytitle="@string/year"
                             custom:myvalue=""
                             custom:image="@drawable/ic_year"
                             android:padding="4sp"
@@ -195,7 +195,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/fechaitv_view"
-                            custom:mytitle="Fecha ITV"
+                            custom:mytitle="@string/itv"
                             custom:myvalue=""
                             custom:image="@drawable/ic_fecha"
                             android:padding="4sp"
@@ -228,7 +228,7 @@
                         android:layout_marginRight="10dp"
                         android:background="#1E88E5"
                         android:elevation="3dp"
-                        android:text="Siguiente" />
+                        android:text="@string/siguiente" />
 
 
                 </LinearLayout>

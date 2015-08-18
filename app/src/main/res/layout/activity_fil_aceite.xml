@@ -23,7 +23,7 @@
         tools:context="com.carlog.gilberto.carlog.activity.filtroAceite">
 
         <TextView
-            android:text="¿Cada cuántos cambios de aceite cambiar el filtro?"
+            android:text="@string/cuantosAceites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
@@ -50,7 +50,7 @@
         <com.gc.materialdesign.views.ButtonRectangle
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Guardar"
+            android:text="@string/txtDate"
             android:id="@+id/guardar_fil_aceite"
             android:background="#1E88E5"
             android:layout_marginLeft="10dp"

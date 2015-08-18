@@ -37,6 +37,6 @@
         android:layout_marginRight="10dp"
         android:background="#1E88E5"
         android:elevation="3dp"
-        android:text="Guardar" />
+        android:text="@string/guardar" />
 
 </LinearLayout>

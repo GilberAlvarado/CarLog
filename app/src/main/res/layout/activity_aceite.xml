@@ -40,7 +40,7 @@
 
 
         <TextView
-            android:text="Fecha:"
+            android:text="@string/txtDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="140dp"
@@ -75,7 +75,7 @@
         <com.gc.materialdesign.views.ButtonRectangle
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Guardar"
+            android:text="@string/guardar"
             android:id="@+id/guardar_aceite"
             android:background="#1E88E5"
             android:layout_marginLeft="10dp"

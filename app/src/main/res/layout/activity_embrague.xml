@@ -24,7 +24,7 @@
         tools:context="com.carlog.gilberto.carlog.activity.modificarEmbrague">
 
         <TextView
-            android:text="Introduzca tipo:"
+            android:text="@string/introduzcatipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
@@ -40,7 +40,7 @@
 
 
         <TextView
-            android:text="Fecha:"
+            android:text="@string/txtDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="140dp"

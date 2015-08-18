@@ -28,7 +28,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="#1E88E5"
-            android:text="Enviar"
+            android:text="@string/enviar"
             android:layout_gravity="center_horizontal" />
 
         <TextView android:id="@+id/link_to_login"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
             android:layout_marginBottom="40dip"
-            android:text="Ya tienes cuenta? Accede!"
+            android:text="@string/haveAccount"
             android:gravity="center"
             android:textSize="20dip"
             android:textColor="#0b84aa"/>

@@ -24,7 +24,7 @@
         tools:context="com.carlog.gilberto.carlog.activity.modificarBujias">
 
         <TextView
-            android:text="Introduzca tipo:"
+            android:text="@string/introduzcatipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
@@ -40,7 +40,7 @@
 
 
         <TextView
-            android:text="Fecha:"
+            android:text="@string/txtDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="140dp"
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#1E88E5"
-            android:text="Guardar"
+            android:text="@string/guardar"
             android:id="@+id/guardar_bujias"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"

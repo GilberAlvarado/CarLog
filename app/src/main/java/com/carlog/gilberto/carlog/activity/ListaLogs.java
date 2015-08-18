@@ -100,7 +100,6 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
                 mTitleView = (TextView) findViewById(R.id.title);
                 //mTitleView.setText("Próximas revisiones");
                 mTitleView.setText(login.getNameFacebook(activity));
-                System.out.println("profileImg "+profileImg);
                 if (login.getImgProfileFacebook(activity) != null) {
                     profileImg.setImageBitmap(login.getImgProfileFacebook(activity));
                 }
@@ -146,7 +145,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         }*/
         else { //sesión iniciada en modo anónimo
             mTitleView = (TextView) findViewById(R.id.title);
-            mTitleView.setText("Anónimoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+            mTitleView.setText("Anónimo");
         }
     }
 
@@ -212,16 +211,16 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         ScrollUtils.addOnGlobalLayoutListener(mInterceptionLayout, new Runnable() {
             @Override
             public void run() {
-                // Extra space is required to move mInterceptionLayout when it's scrolled.
-                // It's better to adjust its height when it's laid out
-                // than to adjust the height when scroll events (onMoveMotionEvent) occur
-                // because it causes lagging.
-                // See #87: https://github.com/ksoichiro/Android-ObservableScrollView/issues/87
-                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
-                lp.height = getScreenHeight() + mFlexibleSpaceHeight - mTabHeight;
-                mInterceptionLayout.requestLayout();
+            // Extra space is required to move mInterceptionLayout when it's scrolled.
+            // It's better to adjust its height when it's laid out
+            // than to adjust the height when scroll events (onMoveMotionEvent) occur
+            // because it causes lagging.
+            // See #87: https://github.com/ksoichiro/Android-ObservableScrollView/issues/87
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
+            lp.height = getScreenHeight() + mFlexibleSpaceHeight - mTabHeight;
+            mInterceptionLayout.requestLayout();
 
-                updateFlexibleSpace();
+            updateFlexibleSpace();
             }
         });
 
@@ -247,10 +246,10 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         edytCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(listaLogs.this, myActivity.class);
-                intent.putExtra("EditarCoche", true);
-                startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
-                mFloatMenu.close(true);
+            Intent intent = new Intent(listaLogs.this, myActivity.class);
+            intent.putExtra("EditarCoche", true);
+            startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
+            mFloatMenu.close(true);
             }
         });
 
@@ -262,12 +261,12 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         addCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(listaLogs.this, myActivity.class);
-                intent.putExtra("CocheNuevo", true);
-                startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
-                mFloatMenu.close(true);
-                // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
-                // Si no queremos agregar nuevo coche y pulsamos hacia atras regresamos a la lista de logs anterior
+            Intent intent = new Intent(listaLogs.this, myActivity.class);
+            intent.putExtra("CocheNuevo", true);
+            startActivityForResult(intent, PETICION_ACTIVITY_DONT_BACK_IF_ADDCAR);
+            mFloatMenu.close(true);
+            // Si agregamos un nuevo coche y volvemos hacia atras se sale de la app pero desde la pantalla de logs puesto que ya hemos agregado un coche y por lo tanto no se queda el drawer sin el coche nuevo al volver atras
+            // Si no queremos agregar nuevo coche y pulsamos hacia atras regresamos a la lista de logs anterior
             }
         });
 
@@ -279,18 +278,18 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         addLogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(listaLogs.this, addLog.class);
-                startActivityForResult(intent, PETICION_ACTIVITY_ADD_LOG);
-                mFloatMenu.close(true);
+            Intent intent = new Intent(listaLogs.this, addLog.class);
+            startActivityForResult(intent, PETICION_ACTIVITY_ADD_LOG);
+            mFloatMenu.close(true);
             }
         });
 
         mFloatMenu = new FloatingActionMenu.Builder(this)
-                .addSubActionView(edytCarButton)
-                .addSubActionView(addCarButton)
-                .addSubActionView(addLogButton)
-                .attachTo(mFab)
-                .build();
+            .addSubActionView(edytCarButton)
+            .addSubActionView(addCarButton)
+            .addSubActionView(addLogButton)
+            .attachTo(mFab)
+            .build();
     }
 
 
@@ -655,10 +654,11 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
 
         // Translate title text
         int maxTitleTranslationY = (int) (mFlexibleSpaceHeight - mTitleView.getHeight()  * scale);
-        int titleTranslationY = maxTitleTranslationY + (int) translationY;
+        int titleTranslationY = maxTitleTranslationY + (int) translationY - 10; // el -10 es solo para ajustar bien tambien en horizontal
 
         ViewHelper.setTranslationY(mTitleView, titleTranslationY);
         ViewHelper.setTranslationX(mTitleView, 90);
+
         // Translate fb image
         ViewHelper.setTranslationY(profileImg, titleTranslationY);
         ViewHelper.setTranslationX(profileImg, 90);

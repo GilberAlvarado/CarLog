@@ -24,7 +24,7 @@
             <TextView
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
-                android:text="Introduzca tipo:"
+                android:text="@string/introduzcatipo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_tipo" />
@@ -32,15 +32,17 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/cmb_tipos"
                 android:layout_below="@+id/txt_tipo"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
             <TextView
-                android:text="Añadir nuevo tipo:"
+                android:text="@string/addTipo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/nuevoTipo"
                 android:layout_below="@+id/cmb_tipos"
                 android:layout_alignParentLeft="true"
@@ -51,6 +53,8 @@
                 android:id="@+id/txt_nuevoTipo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:ems="10"
                 android:visibility="gone"
                 android:layout_below="@+id/nuevoTipo"
@@ -73,13 +77,13 @@
                     android:layout_marginLeft="10dp"
                     android:padding="10sp"
                     android:layout_weight="2"
-                    android:text="Agregar tipo" />
+                    android:text="@string/nuevoTipo" />
 
                 <com.gc.materialdesign.views.ButtonRectangle
                     android:id="@+id/btm_elimTipo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Eliminar tipo"
+                    android:text="@string/elimTipo"
                     android:background="#1E88E5"
                     android:layout_marginRight="10dp"
                     android:padding="10sp"
@@ -90,7 +94,7 @@
 
             <TextView
                 android:layout_marginLeft="10dp"
-                android:text="Introduzca fecha:"
+                android:text="@string/txt_itv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_fecha"
@@ -113,7 +117,7 @@
             <com.gc.materialdesign.views.ButtonRectangle
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Guardar"
+                android:text="@string/guardar"
                 android:id="@+id/guardar"
                 android:background="#1E88E5"
                 android:layout_below="@+id/txt_fecha"

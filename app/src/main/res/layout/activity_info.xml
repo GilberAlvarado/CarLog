@@ -32,7 +32,7 @@
                 discrollve:discrollve_alpha="true"
                 discrollve:discrollve_threshold="0.3"
                 android:fontFamily="serif"
-                android:text="¿Necesita ayuda para comenzar? :)" />
+                android:text="@string/needHelp" />
 
           <!--  <View
                 android:layout_width="match_parent"
@@ -68,7 +68,7 @@
             android:padding="20dp"
             android:fontFamily="serif"
             android:gravity="center"
-            android:text="Una vez haya añadido los datos de su coche, podrá agregar todas las revisiones que desee pulsando el siguiente icono."
+            android:text="@string/helpAddRev"
             android:textSize="18sp"
             discrollve:discrollve_alpha="true"
             discrollve:discrollve_translation="fromBottom" />
@@ -86,7 +86,7 @@
                 android:padding="20dp"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="Se podrá añadir únicamente una revisión de cada tipo (salvo las personalizadas o de tipo taller) y el resto lo haremos por usted :)"
+                android:text="@string/helpUnicaRevTipo"
                 android:textSize="18sp"
                 discrollve:discrollve_alpha="true"
                 discrollve:discrollve_translation="fromBottom" />
@@ -119,7 +119,7 @@
                 android:padding="20dp"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="Despreocúpese de cambiar las fechas de las revisiones. Únicamente es necesario cuando se acerque la fecha y decida coger cita para realizarla. (Si mofifica la fecha de una revisión deja de recalcularse automáticamente)."
+                android:text="@string/helpModifyRev"
                 android:textSize="18sp"
                 discrollve:discrollve_alpha="true"
                 discrollve:discrollve_translation="fromBottom" />
@@ -154,7 +154,7 @@
                 android:textSize="45sp"
                 android:gravity="center"
                 android:fontFamily="serif"
-                android:text="Lo realmente importante..." />
+                android:text="@string/helpImportant" />
 
 
             <TextView
@@ -163,7 +163,7 @@
                 android:padding="20dp"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="No necesita cambiar datos ni hacer cálculos innecesarios. Nosotros lo hacemos todo por usted (siempre es personalizable). Sólo debe actualizar el número de kilómetros de su coche cuando lo desee aunque de no hacerlo se predecirán de manera inteligente. Para tener el número de kilómetros al día deberá pulsar el siguiente boton y cambiarlo."
+                android:text="@string/helpUpdateKms"
                 android:textSize="18sp"
                 discrollve:discrollve_alpha="true"
                 discrollve:discrollve_translation="fromBottom" />
@@ -206,9 +206,7 @@
                 android:textSize="35sp"
                 android:gravity="center"
                 android:fontFamily="serif"
-                android:text="¿Desea llevar el mantenimiento de varios coches? :)" />
-
-
+                android:text="@string/helpVariosCoches" />
 
 
 
@@ -225,7 +223,7 @@
                 android:padding="20dp"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="Podrá agregar todos los coches que desee y llevar el mantenimiento de coches de familiares y amigos pulsando el botón de arriba. Luego podrá cambiar de coche mediante la barra de navegación."
+                android:text="@string/helpVariosCoches2"
                 android:textSize="18sp"
                 discrollve:discrollve_alpha="true"
                 discrollve:discrollve_translation="fromBottom" />
