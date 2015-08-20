@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 
@@ -72,6 +73,16 @@ public class utilities {
         builder.show();
     }
 
+    public static Uri getImageUri(Activity act, Bitmap bm) throws IOException {
+        FileOutputStream Os = act.getApplicationContext().openFileOutput("Img" + act.getString(R.string.temp_picture) + ".jpg", Context.MODE_WORLD_READABLE);
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, Os);
+        Os.close();
+
+        File F = act.getApplicationContext().getFileStreamPath("Img" + act.getString(R.string.temp_picture) + ".jpg");
+        Uri U = Uri.fromFile(F);
+        return U;
+    }
+
     public static void selectResetImage (Activity activity){
         dbCar dbc = new dbCar(activity.getApplicationContext());
         Cursor c_act = dbc.buscarCocheActivo();
@@ -79,15 +90,7 @@ public class utilities {
             String matricula = c_act.getString(c_act.getColumnIndex(dbCar.CN_MATRICULA));
             String modelo = c_act.getString(c_act.getColumnIndex(dbCar.CN_MODELO));
             dbc.ActualizarCambiadaModelo(matricula);
-            dbModelos dbm = new dbModelos(activity.getApplicationContext());
-            Cursor c = dbm.buscarModelos(modelo);
-            if (c.moveToFirst() == true) {
-                String mDrawableImg = c.getString(c.getColumnIndex(dbModelos.CN_IMG));
-                int resID = activity.getApplicationContext().getResources().getIdentifier(mDrawableImg, "drawable", activity.getApplicationContext().getPackageName());
-                ImageView img_listalogs = (ImageView) activity.findViewById(R.id.image);
-                img_listalogs.setImageResource(resID);
-            }
-            cambiarCocheActivo.ActualizarCochesDrawer(dbc, activity, activity.getApplicationContext());
+            cambiarCocheActivo.CambiarImgLogs(activity.getApplicationContext(), activity, matricula, "", modelo, dbCar.IMG_MODELO_NOCAMBIADA);
         }
     }
 

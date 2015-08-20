@@ -43,6 +43,8 @@ import com.carlog.gilberto.carlog.tiposClases.usuario;
 import com.carlog.gilberto.carlog.view.simpleDataView;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.melnykov.fab.FloatingActionButton;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -734,6 +736,11 @@ public class myActivity extends ActionBarActivity {
         if(usuario.isUserLoggedIn(this) || (getIdFacebook != null) || es_anonimo()) {
             usuario.readUser(this);
             // aqui tenemos toda la info del usuario
+
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                    .build();
+            ImageLoader.getInstance().init(config);
+
             addCarOrShowLogs();
             dbSettings dbs = new dbSettings(myActivity.this.getApplicationContext());
             Cursor c_sett = dbs.getSettings();

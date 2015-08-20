@@ -445,12 +445,14 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         int img_modelo_cambiada = dbCar.IMG_MODELO_NOCAMBIADA;
         String img_modelo_personalizada = "";
         String modelo = "";
+        String matricula = "";
         if (c.moveToFirst() == true) {
+            matricula = c.getString(c.getColumnIndex(dbCar.CN_MATRICULA));
             modelo = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
             img_modelo_cambiada = c.getInt(c.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
             img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
         }
-        cambiarCocheActivo.CambiarImgLogs(context, listaLogs.this, img_modelo_personalizada, modelo, img_modelo_cambiada);
+        cambiarCocheActivo.CambiarImgLogs(context, listaLogs.this, matricula, img_modelo_personalizada, modelo, img_modelo_cambiada);
     }
 
     @Override
