@@ -111,7 +111,7 @@
     <string name="eliminar">Delete</string>
     <string name="realizadohoy">Mark as Carried out today</string>
     <string name="realizadofecha">Mark as Carried ou in time</string>
-    <string name="noHistFuturos">There can't be history logs with post-dated today.</string>
+    <string name="noHistFuturos">There can\'t be history logs with post-dated today.</string>
     <string name="ayuda">Help</string>
     <string name="predecir">Predict\u0020</string>
 
