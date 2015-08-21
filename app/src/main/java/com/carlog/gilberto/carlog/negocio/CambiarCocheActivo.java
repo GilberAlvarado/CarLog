@@ -55,12 +55,10 @@ public class cambiarCocheActivo {
     public static void CambiarImgLogs(final Context context, final Activity act, final String matricula, String img_modelo_personalizada, String modelo, int img_modelo_cambiada) {
         final ImageView img_listalogs = (ImageView) act.findViewById(R.id.image);
         if(img_modelo_cambiada == dbCar.IMG_MODELO_NOCAMBIADA) {
-
-
             dbModelos dbm = new dbModelos(context);
             Cursor c = dbm.buscarModelos(modelo);
             if (c.moveToFirst() == true) {
-                String txt_modelo = c.getString(c.getColumnIndex(dbModelos.CN_IMG));
+                final String txt_modelo = c.getString(c.getColumnIndex(dbModelos.CN_IMG));
                 System.out.println("Buscando imagen de modelo " + txt_modelo);
                 final String descargar = "http://gilberdesign.com/Carlogserver/bbddmodelos/" + txt_modelo + ".jpg";
 
@@ -72,7 +70,7 @@ public class cambiarCocheActivo {
                                                   Bitmap loadedImage) {
                         super.onLoadingComplete(imageUri, view, loadedImage);
                         try {
-                            Uri  selectedPictureUri = utilities.getImageUri(act, loadedImage);
+                            Uri  selectedPictureUri = utilities.getImageUri(act, loadedImage, txt_modelo);
                             String uriEncoded = Uri.encode(documentHelper.getPath(act.getApplicationContext(), selectedPictureUri), "UTF-8");
                             dbCar dbc = new dbCar(context);
                             dbc.ActualizarImgModelo(matricula, uriEncoded);
@@ -123,6 +121,7 @@ public class cambiarCocheActivo {
                 modelo_Seleccionado = c.getString(c.getColumnIndex(dbCar.CN_MODELO));
                 img_changed_seleccionado = c.getInt(c.getColumnIndex(dbCar.CN_IMG_MODELO_CAMBIADA));
                 img_modelo_personalizada = c.getString(c.getColumnIndex(dbCar.CN_IMG_MODELO_PERSONALIZADA));
+System.out.println("lolololo "+img_changed_seleccionado + " "+img_modelo_personalizada+ " " + matricula_seleccionada);
             }
             CambiarImgLogs(context, act, matricula_seleccionada, img_modelo_personalizada, modelo_Seleccionado, img_changed_seleccionado);
             ActualizarCochesDrawer(dbcar, act, context);
@@ -236,8 +235,6 @@ public class cambiarCocheActivo {
             // pero también hay que actualizar las variables globales al coche activo
             if (c_coche_activo.moveToFirst() == true) {
                 // RellenarPantalla();
-
-
                 listaLogs ll = (listaLogs) act;
                 List<Fragment> list_frag = ll.getCurrentFragment().getFragmentManager().getFragments();
                 for(int i = 0; i < list_frag.size(); i++) {

@@ -73,12 +73,12 @@ public class utilities {
         builder.show();
     }
 
-    public static Uri getImageUri(Activity act, Bitmap bm) throws IOException {
-        FileOutputStream Os = act.getApplicationContext().openFileOutput("Img" + act.getString(R.string.temp_picture) + ".jpg", Context.MODE_WORLD_READABLE);
+    public static Uri getImageUri(Activity act, Bitmap bm, String txt_modelo) throws IOException {
+        FileOutputStream Os = act.getApplicationContext().openFileOutput("Img" + txt_modelo + ".jpg", Context.MODE_WORLD_READABLE);
         bm.compress(Bitmap.CompressFormat.JPEG, 100, Os);
         Os.close();
 
-        File F = act.getApplicationContext().getFileStreamPath("Img" + act.getString(R.string.temp_picture) + ".jpg");
+        File F = act.getApplicationContext().getFileStreamPath("Img" + txt_modelo + ".jpg");
         Uri U = Uri.fromFile(F);
         return U;
     }

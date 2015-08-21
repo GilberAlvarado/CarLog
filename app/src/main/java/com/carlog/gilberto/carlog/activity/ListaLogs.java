@@ -569,7 +569,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         @Override
         public void onUpOrCancelMotionEvent(MotionEvent ev) {
             mScrolled = false;
-            mVelocityTracker.computeCurrentVelocity(2000, mMaximumVelocity);
+            mVelocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
             int velocityY = (int) mVelocityTracker.getYVelocity(mActivePointerId);
             mActivePointerId = INVALID_POINTER;
             mScroller.forceFinished(true);
