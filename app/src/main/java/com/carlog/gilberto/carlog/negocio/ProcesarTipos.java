@@ -296,7 +296,11 @@ public class procesarTipos {
                 Date car_year_date = calendar.getTime();
 
                 int dias_coche_todos = (int) funciones.dias_entre_2_fechas(car_year_date, new Date());
-                int_media = int_kms  / dias_coche_todos;
+                if (dias_coche_todos <= 0) {	// Caso de que el coche sea nuevo de este año y sea antes del mes 06
+                    int_media = 0;
+                }
+                else
+                    int_media = int_kms  / dias_coche_todos;
             }
             else {
                 int_media = 0;

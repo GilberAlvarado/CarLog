@@ -76,9 +76,11 @@ public class notificaciones extends IntentService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
-        CharSequence ticker ="" + getApplicationContext().getString(R.string.tiene) + (contador) + " " + getApplicationContext().getString(R.string.revcercanas);
+        CharSequence ticker = getApplicationContext().getString(R.string.tiene) + (contador) + getApplicationContext().getString(R.string.revcercanas);
         CharSequence contentTitle = "" + matricula + " " + tipo_rev + " -> " + fecha;
-        CharSequence contentText = "Y " + (contador - 1) + " " + getApplicationContext().getString(R.string.revmas);
+        CharSequence contentText = "";
+        if(contador == 1) contentText = getApplicationContext().getString(R.string.enMenosDe) + " " + DIAS_SEMANA + getApplicationContext().getString(R.string.dias);
+        else contentText = getApplicationContext().getString(R.string.and) + " " + (contador - 1) + getApplicationContext().getString(R.string.revmas);
        /* for (int i = 0; i < l_texto.size(); i++) {
             contentText = contentText+l_texto.get(i).toString();
         }

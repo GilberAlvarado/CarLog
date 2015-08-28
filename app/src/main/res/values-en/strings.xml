@@ -169,8 +169,11 @@
 
     <!-- notificaciones-->
     <string name="tiene">You have\u0020</string>
-    <string name="revcercanas">near services</string>
+    <string name="revcercanas">\u0020near services</string>
     <string name="revmas">services more...</string>
+    <string name="and">And\u0020</string>
+    <string name="enMenosDe">In only</string>
+    <string name="dias">days.</string>
 
     <string name="mineralesList">* Minerals: 15W40, 20W50</string>
     <string name="semisinteticosList">* Semisynthetics: 10W40</string>

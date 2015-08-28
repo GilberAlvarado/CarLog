@@ -163,8 +163,11 @@
 
     <!-- notificaciones-->
     <string name="tiene">Tiene\u0020</string>
-    <string name="revcercanas">revisiones cercanas</string>
-    <string name="revmas">revisiones más...</string>
+    <string name="revcercanas">\u0020revisiones cercanas</string>
+    <string name="revmas">\u0020revisiones más...</string>
+    <string name="and">Y\u0020</string>
+    <string name="enMenosDe">En menos de</string>
+    <string name="dias">días.</string>
 
     <string name="mineralesList">* Minerales: 15W40, 20W50</string>
     <string name="semisinteticosList">* Semisintéticos: 10W40</string>

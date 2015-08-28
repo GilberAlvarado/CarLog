@@ -8,12 +8,16 @@ android {
         applicationId "com.carlog.gilberto.carlog"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.0"
     }
     buildTypes {
+        debug {
+            debuggable false
+        }
         release {
             runProguard false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -23,31 +27,23 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.github.navasmdc:MaterialDesign:1.+@aar'
     compile 'com.nineoldandroids:library:2.4.0'
-
-    compile "com.android.support:appcompat-v7:21.0.3"
-
+    compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.android.support:recyclerview-v7:+'
-
     compile 'me.drakeet.materialdialog:library:1.2.2'
     compile 'com.afollestad:material-dialogs:0.7.5.1'
-
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.0'
     compile 'com.melnykov:floatingactionbutton:1.0.7'
-
     compile 'com.balysv:material-ripple:1.0.2'
-
     compile 'com.wrapp.floatlabelededittext:library:0.0.6'
     compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
-
     //compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.facebook.android:facebook-android-sdk:3.21.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-
-    compile 'com.github.flavienlaurent.discrollview:library:0.0.2@aar'
+    compile project(':discrollview')
+    //compile 'com.github.flavienlaurent.discrollview:library:0.0.2@aar'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
 }

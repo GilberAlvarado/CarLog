@@ -569,6 +569,9 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         @Override
         public void onUpOrCancelMotionEvent(MotionEvent ev) {
             mScrolled = false;
+            if (mVelocityTracker == null) { // If we do not have velocity tracker
+                mVelocityTracker = VelocityTracker.obtain(); // then get one
+            }
             mVelocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
             int velocityY = (int) mVelocityTracker.getYVelocity(mActivePointerId);
             mActivePointerId = INVALID_POINTER;
