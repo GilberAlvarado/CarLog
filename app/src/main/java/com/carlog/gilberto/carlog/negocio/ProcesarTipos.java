@@ -59,7 +59,7 @@ public class procesarTipos {
     private static int procesarPorKms(Context context, String tipo_rev, int id_aceite_ultimo_log_hist, int id_revgral_ultimo_log_hist, int id_correa_ultimo_log_hist, int id_bombaagua_ultimo_log_hist, int id_fgasolina_ultimo_log_hist, int id_faire_ultimo_log_hist, int id_bujias_ultimo_log_hist, int id_embrague_ultimo_log_hist, String matricula, Cursor c_historico_tipo) {
         int kms_tipo_ultimo_log_hist = 0;
         ///////ACEITE tiene id pq tiene su propia tabla
-        if(tipo_rev.equals(tipoLog.TIPO_ACEITE)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoAceite))) {
             dbAceite dbaceite = new dbAceite(context);
             Cursor c_aceite = dbaceite.buscarTiposAceite(id_aceite_ultimo_log_hist);
 
@@ -68,7 +68,7 @@ public class procesarTipos {
             }
         }
         ///////REV GRAL tiene id pq tiene su propia tabla
-        if(tipo_rev.equals(tipoLog.TIPO_REV_GENERAL)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoRevGen))) {
             dbRevGral dbRevGral = new com.carlog.gilberto.carlog.data.dbRevGral(context);
             Cursor c_revgral = dbRevGral.buscarTiposRevGral(id_revgral_ultimo_log_hist);
 
@@ -77,7 +77,7 @@ public class procesarTipos {
             }
         }
         ///////CORREA tiene id pq tiene su propia tabla
-        if(tipo_rev.equals(tipoLog.TIPO_CORREA)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoCorrea))) {
             dbCorrea dbCorrea = new com.carlog.gilberto.carlog.data.dbCorrea(context);
             if(id_correa_ultimo_log_hist == 0) id_correa_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_correa = dbCorrea.buscarTiposCorrea(id_correa_ultimo_log_hist);
@@ -87,7 +87,7 @@ public class procesarTipos {
             }
         }
         ///////Bomba Agua tiene id pq tiene su propia tabla
-        if(tipo_rev.equals(tipoLog.TIPO_BOMBA_AGUA)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoBomba))) {
             dbBombaAgua dbBombaagua = new dbBombaAgua(context);
             if(id_bombaagua_ultimo_log_hist == 0) id_bombaagua_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_bombaagua = dbBombaagua.buscarTiposBombaAgua(id_bombaagua_ultimo_log_hist);
@@ -96,7 +96,7 @@ public class procesarTipos {
             }
         }
         ///////Filtro Gasolina tiene id pq tiene su propia tabla
-        if(tipo_rev.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoFiltroGasolina))) {
             dbFiltroGasolina dbFG = new dbFiltroGasolina(context);
             if(id_fgasolina_ultimo_log_hist == 0) id_fgasolina_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_fg = dbFG.buscarTiposFiltroGasolina(id_fgasolina_ultimo_log_hist);
@@ -106,7 +106,7 @@ public class procesarTipos {
             }
         }
         ///////Filtro Aire tiene id pq tiene su propia tabla
-        if(tipo_rev.equals(tipoLog.TIPO_FILTRO_AIRE)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoFiltroAire))) {
             dbFiltroAire dbFa = new dbFiltroAire(context);
             if(id_faire_ultimo_log_hist == 0) id_faire_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_fa = dbFa.buscarTiposFiltroAire(id_faire_ultimo_log_hist);
@@ -116,7 +116,7 @@ public class procesarTipos {
             }
         }
         ///////Bujias tiene id pq tiene su propia tabla
-        if(tipo_rev.equals(tipoLog.TIPO_BUJIAS)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoBujias))) {
             dbBujias dbBujias = new com.carlog.gilberto.carlog.data.dbBujias(context);
             if(id_bujias_ultimo_log_hist == 0) id_bujias_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_bujias = dbBujias.buscarTiposBujias(id_bujias_ultimo_log_hist);
@@ -126,7 +126,7 @@ public class procesarTipos {
             }
         }
         ///////Embrague tiene id pq tiene su propia tabla
-        if(tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoEmbrague))) {
             dbEmbrague dbEmbrague = new com.carlog.gilberto.carlog.data.dbEmbrague(context);
             if(id_embrague_ultimo_log_hist == 0) id_embrague_ultimo_log_hist++; // pq es un tipo de revisión que se inicia automaticamente a la recomendada sin su pantalla que añada el id de bomba clave ajena a logs (y el valor 1 es la recomendada)
             Cursor c_embrague = dbEmbrague.buscarTiposEmbrague(id_bombaagua_ultimo_log_hist);
@@ -136,30 +136,30 @@ public class procesarTipos {
             }
         }
         // ruedas no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-        if(tipo_rev.equals(tipoLog.TIPO_RUEDAS)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoEmbrague))) {
             kms_tipo_ultimo_log_hist = KMS_RUEDAS;
         }
         // luces no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-        if(tipo_rev.equals(tipoLog.TIPO_LUCES)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoLuces))) {
             kms_tipo_ultimo_log_hist = KMS_LUCES;
         }
         // liquido frenos no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-        if(tipo_rev.equals(tipoLog.TIPO_LIQUIDO_FRENOS)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoLiqFrenos))) {
             kms_tipo_ultimo_log_hist = KMS_LIQUIDO_FRENOS;
         }
         // frenos no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-        if(tipo_rev.equals(tipoLog.TIPO_FRENOS)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoFrenos))) {
             kms_tipo_ultimo_log_hist = KMS_FRENOS;
         }
         // amortiguadores no tiene id pq no tiene tabla pq el valor de kms o años no va a ser editable
-        if(tipo_rev.equals(tipoLog.TIPO_AMORTIGUADORES)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoAmortiguadores))) {
             kms_tipo_ultimo_log_hist = KMS_AMORTIGUADORES;
         }
         // filtro aceite
-        if(tipo_rev.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
+        if(tipo_rev.equals(context.getString(R.string.tipoFiltroAceite))) {
             int int_veces = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(dbLogs.CN_VECES_FIL_ACEITE));
             dbLogs dbl = new dbLogs(context);
-            Cursor c_log_ac_hist = dbl.LogsHistoricoTipoOrderByFechaString(matricula, tipoLog.TIPO_ACEITE); // en tipofiltro aceite cogemos el tipo aceite
+            Cursor c_log_ac_hist = dbl.LogsHistoricoTipoOrderByFechaString(matricula, context.getString(R.string.tipoAceite)); // en tipofiltro aceite cogemos el tipo aceite
             if (c_log_ac_hist.moveToFirst() == true) {
                 int id_aceite_hist = c_log_ac_hist.getInt(c_log_ac_hist.getColumnIndex(dbLogs.CN_ACEITE));
                 dbAceite dba = new dbAceite(context);
@@ -182,42 +182,42 @@ public class procesarTipos {
 
 
 
-    private static Date procesarPorFecha(String tipo_rev, Date fecha_ultimo_log_hist) {
+    private static Date procesarPorFecha(Context context, String tipo_rev, Date fecha_ultimo_log_hist) {
         Date f_revision_por_fecha = new Date();
-        if (tipo_rev.equals(tipoLog.TIPO_ACEITE)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoAceite))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_REV_ACEITE);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_FILTRO_ACEITE)) { // si pasa 1 año cambiamos a la misma fecha maxima que el aceite
+        if (tipo_rev.equals(context.getString(R.string.tipoFiltroAceite))) { // si pasa 1 año cambiamos a la misma fecha maxima que el aceite
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_REV_ACEITE);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_REV_GENERAL)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoRevGen))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_REV_REVGRAL);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_CORREA)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoCorrea))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_CORREA);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_BOMBA_AGUA)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoBomba))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_BOMBA_AGUA);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_FILTRO_AIRE)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoFiltroAire))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_FIL_AIRE);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoFiltroGasolina))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_FIL_GASOLINA);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_BUJIAS)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoBujias))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_BUJIAS);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_LIMPIAPARABRISAS)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoLimpiaparabrisas))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_LIMPIAPARABRISAS);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_LIQUIDO_FRENOS)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoLiqFrenos))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_LIQUIDO_FRENOS);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_ANTICONGELANTE)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoAnticongelante))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_ANTICONGELANTE);
         }
-        if (tipo_rev.equals(tipoLog.TIPO_BATERIA)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoBateria))) {
             f_revision_por_fecha = funciones.fecha_mas_dias(fecha_ultimo_log_hist, F_MAX_BATERIA);
         }
         // la itv solo se procesa al marcar el log como realizado pq no depende de los kms ni de fecha sino cuando la realice
@@ -228,55 +228,55 @@ public class procesarTipos {
 
 
     private static void avisoSobrepasadaRev(Context context, String tipo_rev) {
-        if (tipo_rev.equals(tipoLog.TIPO_ACEITE)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoAceite))) {
             Toast.makeText(context, context.getString(R.string.changeAceite), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoFiltroAceite))) {
             Toast.makeText(context, context.getString(R.string.changeFiltroAceite), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_REV_GENERAL)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoRevGen))) {
             Toast.makeText(context, context.getString(R.string.changeRevGen), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_CORREA)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoCorrea))) {
             Toast.makeText(context, context.getString(R.string.changeCorrea), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_BOMBA_AGUA)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoBomba))) {
             Toast.makeText(context, context.getString(R.string.changeBomba), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoFiltroGasolina))) {
             Toast.makeText(context, context.getString(R.string.changeFilGasolina), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_FILTRO_AIRE)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoFiltroAire))) {
             Toast.makeText(context, context.getString(R.string.changeFilAire), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_BUJIAS)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoBujias))) {
             Toast.makeText(context, context.getString(R.string.changeBujias), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_LIMPIAPARABRISAS)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoLimpiaparabrisas))) {
             Toast.makeText(context, context.getString(R.string.changeLimpia), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_LIQUIDO_FRENOS)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoLiqFrenos))) {
             Toast.makeText(context, context.getString(R.string.changeLiqFrenos), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_RUEDAS)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoRuedas))) {
             Toast.makeText(context, context.getString(R.string.changeRuedas), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_FRENOS)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoFrenos))) {
             Toast.makeText(context, context.getString(R.string.changeFrenos), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_LUCES)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoLuces))) {
             Toast.makeText(context, context.getString(R.string.changeLuces), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoEmbrague))) {
             Toast.makeText(context, context.getString(R.string.changeEmbrague), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_ANTICONGELANTE)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoAnticongelante))) {
             Toast.makeText(context, context.getString(R.string.changeAnticongelante), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_BATERIA)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoBateria))) {
             Toast.makeText(context, context.getString(R.string.changeBateria), Toast.LENGTH_LONG).show();
         }
-        if (tipo_rev.equals(tipoLog.TIPO_AMORTIGUADORES)) {
+        if (tipo_rev.equals(context.getString(R.string.tipoAmortiguadores))) {
             Toast.makeText(context, context.getString(R.string.changeAmortiguadores), Toast.LENGTH_LONG).show();
         }
     }
@@ -335,9 +335,9 @@ public class procesarTipos {
                 int id_revgral_ultimo_log_hist = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(com.carlog.gilberto.carlog.data.dbLogs.CN_REVGRAL));
 
                 // Los tipo de revisión que se procesan unicamente por fecha y no por kms
-                if ((tipo_rev.equals(tipoLog.TIPO_LIMPIAPARABRISAS)) || (tipo_rev.equals(tipoLog.TIPO_ANTICONGELANTE)) || (tipo_rev.equals(tipoLog.TIPO_BATERIA))) {
+                if ((tipo_rev.equals(context.getString(R.string.tipoLimpiaparabrisas))) || (tipo_rev.equals(context.getString(R.string.tipoAnticongelante))) || (tipo_rev.equals(context.getString(R.string.tipoBateria)))) {
                     if (c_logs_tipo.moveToFirst() == false) { // Si existen no se tienen que procesar pq se procesan unicamente al actualizar el nº de kms excepto los especiales aceite y filtro de aceite
-                        Date f_revision_por_fecha = procesarPorFecha(tipo_rev, fecha_ultimo_log_hist);
+                        Date f_revision_por_fecha = procesarPorFecha(context, tipo_rev, fecha_ultimo_log_hist);
                         long long_f_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
                         tipoLog miTipoLog = new tipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_f_revision_por_fecha), long_f_revision_por_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, com.carlog.gilberto.carlog.data.dbLogs.NO_REALIZADO, com.carlog.gilberto.carlog.data.dbLogs.NO_FMODIFICADA, myActivity.NO_KMS);
                         dbLogs.insertar(miTipoLog);
@@ -348,7 +348,7 @@ public class procesarTipos {
                     int kms_que_faltan_x_hacer = kms_tipo_ultimo_log_hist - (int_kms - kms_ultimo_log_hist);
 
                     Date fecha_log_futuro_recalculada = new Date();
-                    if (!tipo_rev.equals(tipoLog.TIPO_ITV)) {
+                    if (!tipo_rev.equals(context.getString(R.string.tipoItv))) {
                         if ((int_kms - kms_ultimo_log_hist) <= kms_tipo_ultimo_log_hist) { // Actualizamos la fecha de la futura revisión de tipo
                             int dias_en_hacer_kms_x_hacer = 0;
                             if (int_media != 0)
@@ -363,13 +363,13 @@ public class procesarTipos {
                             }
                             long long_fecha_log_futuro_recalculada = funciones.date_a_long(fecha_log_futuro_recalculada);
 
-                            Date f_revision_por_fecha = procesarPorFecha(tipo_rev, fecha_ultimo_log_hist);
+                            Date f_revision_por_fecha = procesarPorFecha(context, tipo_rev, fecha_ultimo_log_hist);
 
                             long long_f_revision_por_fecha = funciones.date_a_long(f_revision_por_fecha);
 
                             if ((long_fecha_log_futuro_recalculada > long_f_revision_por_fecha) &&
-                                    ((!tipo_rev.equals(tipoLog.TIPO_RUEDAS)) && (!tipo_rev.equals(tipoLog.TIPO_EMBRAGUE)) && (!tipo_rev.equals(tipoLog.TIPO_LUCES))
-                                    && (!tipo_rev.equals(tipoLog.TIPO_AMORTIGUADORES)) && (!tipo_rev.equals(tipoLog.TIPO_FRENOS)))) { // el cambio sería por fecha y no por kms (menos revisiones de solo por kms)
+                                    ((!tipo_rev.equals(context.getString(R.string.tipoRuedas))) && (!tipo_rev.equals(context.getString(R.string.tipoEmbrague))) && (!tipo_rev.equals(context.getString(R.string.tipoLuces)))
+                                    && (!tipo_rev.equals(context.getString(R.string.tipoAmortiguadores))) && (!tipo_rev.equals(context.getString(R.string.tipoFrenos))))) { // el cambio sería por fecha y no por kms (menos revisiones de solo por kms)
                                 long_fecha_log_futuro_recalculada = long_f_revision_por_fecha;
                             }
                             if (c_logs_tipo.moveToFirst() == true) { // Si existen no se tienen que procesar pq se procesan unicamente al actualizar el nº de kms excepto los especiales aceite y filtro de aceite
@@ -381,7 +381,7 @@ public class procesarTipos {
 
                                 // El caso de filtro de aceite y aceite es especial y se debe de tener en cuenta que existan pq se comparan de 2 en 2 y no siempre están los 2 eliminados
                                 // por eso se debe de actualizar el log si existe
-                                if (tipo_rev.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
+                                if (tipo_rev.equals(context.getString(R.string.tipoFiltroAceite))) {
                                 /*if (c_historico_tipo.moveToFirst() == true) {
                                     int int_veces = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
                                     TipoLog miTipoLog = new TipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_tipo);
@@ -389,8 +389,8 @@ public class procesarTipos {
                                 }*/
                                     // prefiero hacerlo en vez de precalculando poner siempre en la feha xx/xx/xx hasta que toque cambiar el aceite y copiar la fecha de aceite (as´´i siempre coincidirán)
                                     int int_veces = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(com.carlog.gilberto.carlog.data.dbLogs.CN_VECES_FIL_ACEITE));
-                                    Cursor c_contador_aceite_hist = dbLogs.LogsHistoricoTipoOrderByFechaString(matricula, tipoLog.TIPO_ACEITE);
-                                    Cursor c_copiar_fecha_aceite_futuro = dbLogs.LogsTipoOrderByFechaString(matricula, tipoLog.TIPO_ACEITE);
+                                    Cursor c_contador_aceite_hist = dbLogs.LogsHistoricoTipoOrderByFechaString(matricula, context.getString(R.string.tipoAceite));
+                                    Cursor c_copiar_fecha_aceite_futuro = dbLogs.LogsTipoOrderByFechaString(matricula, context.getString(R.string.tipoAceite));
                                     if (c_contador_aceite_hist.moveToFirst() == true) {
                                         int contador = c_contador_aceite_hist.getInt(c_contador_aceite_hist.getColumnIndex(com.carlog.gilberto.carlog.data.dbLogs.CN_CONTADOR_FIL_ACEITE));
                                         if (c_copiar_fecha_aceite_futuro.moveToFirst() == true) {
@@ -414,7 +414,7 @@ public class procesarTipos {
                                             dbLogs.insertar(miTipoLog);
                                         }
                                     }
-                                } else if (tipo_rev.equals(tipoLog.TIPO_ACEITE)) {
+                                } else if (tipo_rev.equals(context.getString(R.string.tipoAceite))) {
                                     if (c_historico_tipo.moveToFirst() == true) {
                                         int int_contador = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(com.carlog.gilberto.carlog.data.dbLogs.CN_CONTADOR_FIL_ACEITE));
                                         tipoLog miTipoLog = new tipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, addLog.NO_VECES_FIL_ACEITE, int_contador + 1, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, com.carlog.gilberto.carlog.data.dbLogs.NO_REALIZADO, com.carlog.gilberto.carlog.data.dbLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
@@ -435,7 +435,7 @@ public class procesarTipos {
                                 // Se pone por defecto el tipo de aceite del ultimo log historico, si se desea poner otro se deberá editar el log y cambiarlo de forma manual
                                 // Se pone por defecto el kms_supuestos_hasta_fecha_fut_aceite, se deberá actualizar el nº de kms reales al volver a hacer la revisión de aceite futura
                                 int kms_supuestos_hasta_fecha_fut_tipo = (int) funciones.dias_entre_2_fechas(fecha_ultimo_log_hist, fecha_log_futuro_recalculada) * int_media;
-                                if (tipo_rev.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
+                                if (tipo_rev.equals(context.getString(R.string.tipoFiltroAceite))) {
                                 /*if (c_historico_tipo.moveToFirst() == true) {
                                     int int_veces = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(DBLogs.CN_VECES_FIL_ACEITE));
                                     TipoLog miTipoLog = new TipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, int_veces, AddLog.NO_CONTADOR_FIL_ACEITE, id_revgral_ultimo_log_hist, txt_matricula_ultimo_log_hist, DBLogs.NO_REALIZADO, kms_supuestos_hasta_fecha_fut_tipo);
@@ -443,8 +443,8 @@ public class procesarTipos {
                                 }*/
                                     // prefiero hacerlo en vez de precalculando poner siempre en la feha xx/xx/xx hasta que toque cambiar el aceite y copiar la fecha de aceite (as´´i siempre coincidirán)
                                     int int_veces = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(com.carlog.gilberto.carlog.data.dbLogs.CN_VECES_FIL_ACEITE));
-                                    Cursor c_contador_aceite_hist = dbLogs.LogsHistoricoTipoOrderByFechaString(matricula, tipoLog.TIPO_ACEITE);
-                                    Cursor c_copiar_fecha_aceite_futuro = dbLogs.LogsTipoOrderByFechaString(matricula, tipoLog.TIPO_ACEITE);
+                                    Cursor c_contador_aceite_hist = dbLogs.LogsHistoricoTipoOrderByFechaString(matricula, context.getString(R.string.tipoAceite));
+                                    Cursor c_copiar_fecha_aceite_futuro = dbLogs.LogsTipoOrderByFechaString(matricula, context.getString(R.string.tipoAceite));
                                     if (c_contador_aceite_hist.moveToFirst() == true) {
                                         int contador = c_contador_aceite_hist.getInt(c_contador_aceite_hist.getColumnIndex(com.carlog.gilberto.carlog.data.dbLogs.CN_CONTADOR_FIL_ACEITE));
                                         if (c_copiar_fecha_aceite_futuro.moveToFirst() == true) {
@@ -460,7 +460,7 @@ public class procesarTipos {
                                             }
                                         }
                                     }
-                                } else if (tipo_rev.equals(tipoLog.TIPO_ACEITE)) {
+                                } else if (tipo_rev.equals(context.getString(R.string.tipoAceite))) {
                                     if (c_historico_tipo.moveToFirst() == true) {
                                         int int_contador = c_historico_tipo.getInt(c_historico_tipo.getColumnIndex(com.carlog.gilberto.carlog.data.dbLogs.CN_CONTADOR_FIL_ACEITE));
                                         tipoLog miTipoLog = new tipoLog(tipo_rev, fecha_log_futuro_recalculada, funciones.long_a_string(long_fecha_log_futuro_recalculada), long_fecha_log_futuro_recalculada, id_aceite_ultimo_log_hist, addLog.NO_VECES_FIL_ACEITE, int_contador + 1, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, txt_matricula_ultimo_log_hist, com.carlog.gilberto.carlog.data.dbLogs.NO_REALIZADO, com.carlog.gilberto.carlog.data.dbLogs.NO_FMODIFICADA, kms_supuestos_hasta_fecha_fut_tipo);
@@ -490,7 +490,7 @@ public class procesarTipos {
                 // en el resto de casos se creará a partir del histórico siempre el futuro
 
                 // en caso de itv sí se añade solo si hemos rellenado el campo itv al crear el coche
-                if (tipo_rev.equals(tipoLog.TIPO_ITV)) {
+                if (tipo_rev.equals(context.getString(R.string.tipoItv))) {
                     dbCar dbc = new dbCar(context);
                     Cursor c_itv = dbc.buscarCoche(matricula);
                     if ((c_itv.moveToFirst() == true) && (!c_logs_tipo.moveToFirst())) { // Si no hay logs futuros de itv pq sino agregaría 1 cada vez q entramos

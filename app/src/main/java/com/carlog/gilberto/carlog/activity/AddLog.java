@@ -153,37 +153,37 @@ public class addLog extends ActionBarActivity {
         boolean seguir_rellenando = false; // si insertamos un filtro de aceite sin tener aceite tenemos q poder seguir añadiendo
         // Antes de hacer nada miramos si ya existe algun tipo igual pues no debemos tener más de uno
         Cursor c = managerLogs.buscarTipo(miTipoLog.getTipo(miTipoLog), miCoche.getMatricula(miCoche));
-        if ((c.moveToFirst() == false) || (tipoLog.es_tipo_personalizado(miTipoLog.getTipo(miTipoLog))) || (miTipoLog.getTipo(miTipoLog).equals(miTipoLog.TIPO_TALLER))) { // Si no hay logs (ni futuros ni históricos)
+        if ((c.moveToFirst() == false) || (tipoLog.es_tipo_personalizado(miTipoLog.getTipo(miTipoLog), addLog.this)) || (miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoTaller)))) { // Si no hay logs (ni futuros ni históricos)
             if(miTipoLog.getFechalong(miTipoLog) >= ahora) {
                // Toast.makeText(getApplicationContext(), "Se recomienda insertar la última revisión de " + miTipoLog.getTipo(miTipoLog) + " hecha.", Toast.LENGTH_SHORT).show();
             }
-            if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_ACEITE)) {
+            if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoAceite))) {
                 intent = new Intent(addLog.this, aceite.class);
                 intent.putExtra("miTipoLog", miTipoLog);
                 intent.putExtra("miCoche", miCoche);
                 startActivity(intent);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_REV_GENERAL)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoRevGen))) {
                 intent = new Intent(addLog.this, revGral.class);
                 intent.putExtra("miTipoLog", miTipoLog);
                 intent.putExtra("miCoche", miCoche);
                 startActivity(intent);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_ITV)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoItv))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_CORREA)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoCorrea))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_BOMBA_AGUA)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoBomba))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_FILTRO_ACEITE)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoFiltroAceite))) {
                 // Solo podemos agregar cambio de filtro de aceite si tenemos añadido el aceite
-                Cursor c_ac = managerLogs.buscarTipo(tipoLog.TIPO_ACEITE, matricula);
+                Cursor c_ac = managerLogs.buscarTipo(addLog.this.getString(R.string.tipoAceite), matricula);
                 if (c_ac.moveToFirst() == true) {
                     intent = new Intent(addLog.this, filtroAceite.class);
                     intent.putExtra("miTipoLog", miTipoLog);
@@ -195,35 +195,35 @@ public class addLog extends ActionBarActivity {
                     seguir_rellenando = true;
                 }
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoFiltroGasolina))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_FILTRO_AIRE)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoFiltroAire))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_BUJIAS)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoBujias))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_FRENOS)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoFrenos))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_LIQUIDO_FRENOS)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoLiqFrenos))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_LIMPIAPARABRISAS)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoLimpiaparabrisas))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_LUCES)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoLuces))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
-            else if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_RUEDAS)) {
+            else if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoRuedas))) {
                 intent = new Intent(addLog.this, listaLogs.class);
                 managerLogs.insertar(miTipoLog);
             }
@@ -272,7 +272,7 @@ public class addLog extends ActionBarActivity {
                     // con NO_REALIZADO
                     final tipoLog miTipoLog = new tipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, NO_CORREA, NO_BOMBAAGUA, NO_FGASOLINA, NO_FAIRE, NO_BUJIAS, NO_EMBRAGUE, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, int_kms);
                     addlog(miTipoLog, managerLogs);
-                    if(tipo.equals(tipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
+                    if(tipo.equals(addLog.this.getString(R.string.tipoItv))) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
                         dbCar dbc = new dbCar(getApplicationContext());
                         dbc.ActualizarITVCocheActivo(matricula, long_fecha);
 
@@ -297,7 +297,7 @@ public class addLog extends ActionBarActivity {
                                 public void onClick(DialogInterface dialog, int id_dialog) {
                                 // metodo que se debe implementar Sí
                                 addlog(miTipoLog, managerLogs);
-                                if(miTipoLog.getTipo(miTipoLog).equals(tipoLog.TIPO_ITV)) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
+                                if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoItv))) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
                                     dbCar dbc = new dbCar(getApplicationContext());
                                     dbc.ActualizarITVCocheActivo(miTipoLog.getCoche(miTipoLog), miTipoLog.getFechalong(miTipoLog));
                                 }

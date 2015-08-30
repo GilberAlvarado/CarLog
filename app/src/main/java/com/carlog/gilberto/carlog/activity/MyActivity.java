@@ -280,41 +280,41 @@ public class myActivity extends ActionBarActivity {
         Cursor c_sett = dbs.getSettings();
         if(c_sett.moveToFirst() == true) {
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ACEITE)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ACEITE, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoAceite), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FILACEITE)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_ACEITE, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoFiltroAceite), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_REVGEN)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_REV_GENERAL, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoRevGen), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_CORREA)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_CORREA, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoCorrea), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_BOMBAAGUA)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BOMBA_AGUA, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoBomba), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ITV)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ITV, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoItv), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FILGASOLINA)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_GASOLINA, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoFiltroGasolina), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FILAIRE)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FILTRO_AIRE, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoFiltroAire), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_BUJIAS)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BUJIAS, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoBujias), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_LIMPIAPARABRISAS)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIMPIAPARABRISAS, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoLimpiaparabrisas), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_LIQFRENOS)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LIQUIDO_FRENOS, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoLiqFrenos), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FRENOS)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_FRENOS, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoFrenos), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_RUEDAS)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_RUEDAS, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoRuedas), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_LUCES)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_LUCES, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoLuces), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_EMBRAGUE)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_EMBRAGUE, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoEmbrague), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_AMORTIGUADORES)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_AMORTIGUADORES, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoAmortiguadores), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ANTICONGELANTE)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_ANTICONGELANTE, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoAnticongelante), int_year);
             if(c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_BATERIA)) == tipoSettings.ACTIVO)
-                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, tipoLog.TIPO_BATERIA, int_year);
+                procesarTipos.procesar(dbLogs, context, int_kms, int_fecha_ini, int_kms_ini, matricula, myActivity.this.getString(R.string.tipoBateria), int_year);
         }
         // Las tipo personalizadas no se procesan,  sólo se avisa en su fecha
 

@@ -86,92 +86,92 @@ public class miAdaptadorSettings extends ArrayAdapter<String> {
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_ACEITE)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoAceite))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_ACEITE));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_ANTICONGELANTE)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoAnticongelante))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_ANTICONGELANTE));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_AMORTIGUADORES)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoAmortiguadores))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_AMORTIGUADORES));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_BATERIA)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoBateria))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_BATERIA));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_BOMBA_AGUA)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoBomba))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_BOMBAAGUA));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_BUJIAS)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoBujias))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_BUJIAS));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_CORREA)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoCorrea))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_CORREA));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_EMBRAGUE)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoEmbrague))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_EMBRAGUE));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_FRENOS)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoFrenos))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_FRENOS));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_FILTRO_AIRE)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoFiltroAire))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILAIRE));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_FILTRO_ACEITE)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoFiltroAceite))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILACEITE));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_FILTRO_GASOLINA)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoFiltroGasolina))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_FILGASOLINA));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_LUCES)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoLuces))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_LUCES));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_LIQUIDO_FRENOS)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoLiqFrenos))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_LIQFRENOS));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_LIMPIAPARABRISAS)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoLimpiaparabrisas))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_LIMPIAPARABRISAS));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_RUEDAS)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoRuedas))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_RUEDAS));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_REV_GENERAL)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoRevGen))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_REVGEN));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);
             }
-            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  tipoLog.TIPO_ITV)) {
+            else if(sqView.tipo_settings.getText().toString().equals(activity.getString(R.string.predecir) +  activity.getString(R.string.tipoItv))) {
                 activo = c.getInt(c.getColumnIndex(dbSettings.CN_ITV));
                 if (activo == tipoSettings.ACTIVO) sqView.chbx_settings.setChecked(true);
                 else sqView.chbx_settings.setChecked(false);

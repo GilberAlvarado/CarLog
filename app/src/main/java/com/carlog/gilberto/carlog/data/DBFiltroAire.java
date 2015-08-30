@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class dbFiltroAire {
     public static final String TABLE_NAME = "faire";
 
-    public final static String TIPO_30K_KM = "30.000 kms (recomendada)";
+    public final static String TIPO_30K_KM = "30.000 kms";
     public final static String TIPO_40K_KM = "40.000 kms";
     public final static String TIPO_50K_KM = "50.000 kms";
     public final static String TIPO_60K_KM = "60.000 kms";

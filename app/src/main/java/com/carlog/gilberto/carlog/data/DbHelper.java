@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.activity.aceite;
 import com.carlog.gilberto.carlog.activity.filtroAceite;
 import com.carlog.gilberto.carlog.activity.revGral;
@@ -19,10 +20,13 @@ public class dbHelper extends SQLiteOpenHelper {
     private static final String db_NAME = "carlog.sqlite";
     private static final int db_SCHEME_VERSION = 98;
     public static final int MAX_TIPOS_REV = 18; // 19 pq cuenta el 0
+    private Context contexto;
 
     public dbHelper(Context context) {
         super(context, db_NAME, null, db_SCHEME_VERSION);
+        contexto = context;
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -201,13 +205,12 @@ public class dbHelper extends SQLiteOpenHelper {
 
 
 
-
         /// Inicializamos la tabla de tipos de revisión
         ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV  para poder borrar los personalizados*************************//////
-        String[] lista_tipo = {tipoLog.TIPO_ACEITE, tipoLog.TIPO_AMORTIGUADORES, tipoLog.TIPO_ANTICONGELANTE, tipoLog.TIPO_BATERIA, tipoLog.TIPO_BOMBA_AGUA, tipoLog.TIPO_BUJIAS, tipoLog.TIPO_CORREA, tipoLog.TIPO_EMBRAGUE,
-                tipoLog.TIPO_FILTRO_ACEITE, tipoLog.TIPO_FILTRO_AIRE,
-                tipoLog.TIPO_FILTRO_GASOLINA, tipoLog.TIPO_FRENOS, tipoLog.TIPO_ITV, tipoLog.TIPO_LIMPIAPARABRISAS, tipoLog.TIPO_LIQUIDO_FRENOS,
-                tipoLog.TIPO_LUCES, tipoLog.TIPO_REV_GENERAL, tipoLog.TIPO_RUEDAS, tipoLog.TIPO_TALLER};
+        String[] lista_tipo = {contexto.getString(R.string.tipoAceite), contexto.getString(R.string.tipoAmortiguadores), contexto.getString(R.string.tipoAnticongelante), contexto.getString(R.string.tipoBateria), contexto.getString(R.string.tipoBomba), contexto.getString(R.string.tipoBujias), contexto.getString(R.string.tipoCorrea), contexto.getString(R.string.tipoEmbrague),
+                contexto.getString(R.string.tipoFiltroAceite), contexto.getString(R.string.tipoFiltroAire),
+                contexto.getString(R.string.tipoFiltroGasolina), contexto.getString(R.string.tipoFrenos), contexto.getString(R.string.tipoItv), contexto.getString(R.string.tipoLimpiaparabrisas), contexto.getString(R.string.tipoFrenos),
+                contexto.getString(R.string.tipoLuces), contexto.getString(R.string.tipoRevGen), contexto.getString(R.string.tipoRuedas), contexto.getString(R.string.tipoTaller)};
         String[] lista_img = {"ic_aceite", "ic_amortiguadores", "ic_anticongelante", "ic_bateria", "ic_bomba_agua", "ic_bujias", "ic_correa", "ic_embrague", "ic_fil_aceite", "ic_fil_aire", "ic_fil_gasolina", "ic_frenos", "ic_itv_rev",
                 "ic_limpiaparabrisas", "ic_liquido_frenos", "ic_luces", "ic_revgen", "ic_ruedas", "ic_taller"};
         ////******************SI AÑADIMOS NUEVOS TIPOS O QUITAMOS DEBEMOS ACTUALIZAR LA CONSTANTE MAX_TIPOS_REV para poder borrar los personalizados *************************//////
@@ -228,7 +231,7 @@ public class dbHelper extends SQLiteOpenHelper {
 
 
         /// Inicializamos la tabla de tipos de revision general
-        String[] lista_revgral = {revGral.TIPO_30K_KM, revGral.TIPO_5K_KM, revGral.TIPO_10K_KM, revGral.TIPO_15K_KM, revGral.TIPO_20K_KM, revGral.TIPO_25K_KM,
+        String[] lista_revgral = {revGral.TIPO_30K_KM + " " + contexto.getString(R.string.recomendada), revGral.TIPO_5K_KM, revGral.TIPO_10K_KM, revGral.TIPO_15K_KM, revGral.TIPO_20K_KM, revGral.TIPO_25K_KM,
                 revGral.TIPO_35K_KM, revGral.TIPO_40K_KM, revGral.TIPO_45K_KM, revGral.TIPO_50K_KM, revGral.TIPO_60K_KM, revGral.TIPO_80K_KM, revGral.TIPO_100K_KM, revGral.TIPO_120K_KM};
         int[] lista_kms =  {30000, 5000, 10000, 15000, 20000, 25000, 35000, 40000, 45000, 50000, 60000, 80000, 100000, 120000};
 
@@ -247,8 +250,8 @@ public class dbHelper extends SQLiteOpenHelper {
         }
 
 
-        /// Inicializamos la tabla de tipos de revision general
-        String[] lista_correa = {dbCorrea.TIPO_60K_KM, dbCorrea.TIPO_80K_KM, dbCorrea.TIPO_100K_KM, dbCorrea.TIPO_120K_KM};
+        /// Inicializamos la tabla de tipos de correa
+        String[] lista_correa = {dbCorrea.TIPO_60K_KM + " " + contexto.getString(R.string.recomendada), dbCorrea.TIPO_80K_KM, dbCorrea.TIPO_100K_KM, dbCorrea.TIPO_120K_KM};
         int[] lista_kms_correa =  {60000, 80000, 100000, 120000};
 
         sqLiteDatabase.beginTransaction();
@@ -266,7 +269,7 @@ public class dbHelper extends SQLiteOpenHelper {
         }
 
         /// Inicializamos la tabla de tipos de bomba de agua
-        String[] lista_bombaagua = {dbBombaAgua.TIPO_80K_KM, dbBombaAgua.TIPO_60K_KM, dbBombaAgua.TIPO_100K_KM, dbBombaAgua.TIPO_120K_KM};
+        String[] lista_bombaagua = {dbBombaAgua.TIPO_80K_KM + " " + contexto.getString(R.string.recomendada), dbBombaAgua.TIPO_60K_KM, dbBombaAgua.TIPO_100K_KM, dbBombaAgua.TIPO_120K_KM};
         int[] lista_kms_bombaagua =  {80000, 60000, 100000, 120000};
 
         sqLiteDatabase.beginTransaction();
@@ -285,7 +288,7 @@ public class dbHelper extends SQLiteOpenHelper {
 
 
         /// Inicializamos la tabla de tipos de filtro de gasolina
-        String[] lista_fgasolina = {dbFiltroGasolina.TIPO_30K_KM, dbFiltroGasolina.TIPO_40K_KM, dbFiltroGasolina.TIPO_50K_KM, dbFiltroGasolina.TIPO_60K_KM, dbFiltroGasolina.TIPO_80K_KM};
+        String[] lista_fgasolina = {dbFiltroGasolina.TIPO_30K_KM + " " + contexto.getString(R.string.recomendada), dbFiltroGasolina.TIPO_40K_KM, dbFiltroGasolina.TIPO_50K_KM, dbFiltroGasolina.TIPO_60K_KM, dbFiltroGasolina.TIPO_80K_KM};
         int[] lista_kms_fgasolina =  {30000, 40000, 500000, 60000, 80000};
 
         sqLiteDatabase.beginTransaction();
@@ -303,7 +306,7 @@ public class dbHelper extends SQLiteOpenHelper {
         }
 
         /// Inicializamos la tabla de tipos de filtro de aire
-        String[] lista_faire = {dbFiltroAire.TIPO_30K_KM, dbFiltroAire.TIPO_40K_KM, dbFiltroAire.TIPO_50K_KM, dbFiltroAire.TIPO_60K_KM, dbFiltroAire.TIPO_80K_KM};
+        String[] lista_faire = {dbFiltroAire.TIPO_30K_KM + " " + contexto.getString(R.string.recomendada), dbFiltroAire.TIPO_40K_KM, dbFiltroAire.TIPO_50K_KM, dbFiltroAire.TIPO_60K_KM, dbFiltroAire.TIPO_80K_KM};
         int[] lista_kms_faire =  {30000, 40000, 50000, 60000, 80000};
 
         sqLiteDatabase.beginTransaction();
@@ -320,8 +323,8 @@ public class dbHelper extends SQLiteOpenHelper {
             sqLiteDatabase.endTransaction();
         }
 
-        /// Inicializamos la tabla de tipos de filtro de bujjias
-        String[] lista_bujias = {dbBujias.TIPO_60K_KM, dbBujias.TIPO_50K_KM, dbBujias.TIPO_55K_KM, dbBujias.TIPO_65K_KM, dbBujias.TIPO_80K_KM};
+        /// Inicializamos la tabla de tipos de bujjias
+        String[] lista_bujias = {dbBujias.TIPO_60K_KM + " " + contexto.getString(R.string.recomendada), dbBujias.TIPO_50K_KM, dbBujias.TIPO_55K_KM, dbBujias.TIPO_65K_KM, dbBujias.TIPO_80K_KM};
         int[] lista_kms_bujias =  {60000, 50000, 55000, 65000, 80000};
 
         sqLiteDatabase.beginTransaction();
@@ -339,7 +342,7 @@ public class dbHelper extends SQLiteOpenHelper {
         }
 
         /// Inicializamos la tabla de tipos de filtro de embrague
-        String[] lista_embrague = {dbEmbrague.TIPO_60K_KM, dbEmbrague.TIPO_70K_KM, dbEmbrague.TIPO_80K_KM, dbEmbrague.TIPO_100K_KM, dbEmbrague.TIPO_120K_KM};
+        String[] lista_embrague = {dbEmbrague.TIPO_60K_KM + " " + contexto.getString(R.string.recomendada), dbEmbrague.TIPO_70K_KM, dbEmbrague.TIPO_80K_KM, dbEmbrague.TIPO_100K_KM, dbEmbrague.TIPO_120K_KM};
         int[] lista_kms_embrague =  {30000, 40000, 500000, 60000, 80000};
 
         sqLiteDatabase.beginTransaction();
@@ -358,7 +361,7 @@ public class dbHelper extends SQLiteOpenHelper {
 
 
         /// Inicializamos la tabla de tipos de aceite
-        String[] lista_aceite = {aceite.TIPO_7K5_KM, aceite.TIPO_10M_KM, aceite.TIPO_15K_KM, aceite.TIPO_20K_KM, aceite.TIPO_30K_KM};
+        String[] lista_aceite = {contexto.getString(R.string.minerales), contexto.getString(R.string.semisinteticos), contexto.getString(R.string.sinteticos), contexto.getString(R.string.longlife), contexto.getString(R.string.longlife2)};
         int[] lista_kms2 =  {7500, 10000, 15000, 20000, 30000};
 
         sqLiteDatabase.beginTransaction();

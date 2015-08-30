@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class dbCorrea {
     public static final String TABLE_NAME = "correa";
 
-    public final static String TIPO_80K_KM = "80.000 kms (recomendada)";
+    public final static String TIPO_80K_KM = "80.000 kms";
     public final static String TIPO_60K_KM = "60.000 kms";
     public final static String TIPO_100K_KM = "100.000 kms";
     public final static String TIPO_120K_KM = "120.000 kms";

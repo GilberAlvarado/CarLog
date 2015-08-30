@@ -1,5 +1,9 @@
 package com.carlog.gilberto.carlog.tiposClases;
 
+import android.app.Activity;
+
+import com.carlog.gilberto.carlog.R;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,28 +11,6 @@ import java.util.Date;
  * Created by Gilberto on 22/11/2014.
  */
 public class tipoLog implements Serializable {
-
-    public final static String TIPO_ACEITE = "Aceite";
-    public final static String TIPO_REV_GENERAL = "Revisión general";
-    public final static String TIPO_CORREA = "Correa de distribución";
-    public final static String TIPO_BOMBA_AGUA = "Bomba de agua";
-    public final static String TIPO_FILTRO_ACEITE = "Filtro de aceite";
-    public final static String TIPO_FILTRO_GASOLINA = "Filtro de gasolina";
-    public final static String TIPO_ITV = "I.T.V.";
-    public final static String TIPO_BUJIAS = "Bujías";
-    public final static String TIPO_FILTRO_AIRE = "Filtro de aire";
-    public final static String TIPO_FRENOS = "Discos y pastillas de freno";
-    public final static String TIPO_LIQUIDO_FRENOS = "Líquido de frenos";
-    public final static String TIPO_LIMPIAPARABRISAS = "Limpiaparabrisas";
-    public final static String TIPO_LUCES = "Luces";
-    public final static String TIPO_RUEDAS = "Ruedas";
-    public final static String TIPO_EMBRAGUE = "Embrague";
-    public final static String TIPO_ANTICONGELANTE = "Anticongelante";
-    public final static String TIPO_BATERIA = "Batería";
-    public final static String TIPO_AMORTIGUADORES = "Amortiguadores";
-    public final static String TIPO_TALLER = "Taller";
-
-
     private String tipo;
     private Date fecha;
     private String datetxt;
@@ -49,11 +31,12 @@ public class tipoLog implements Serializable {
     private int kms;
 
 
-    public static Boolean es_tipo_personalizado(String tipo) {
-        if((!tipo.equals(TIPO_ACEITE)) && (!tipo.equals(TIPO_REV_GENERAL)) && (!tipo.equals(TIPO_CORREA)) && (!tipo.equals(TIPO_BOMBA_AGUA)) &&
-                (!tipo.equals(TIPO_FILTRO_ACEITE)) && (!tipo.equals(TIPO_FILTRO_GASOLINA)) && (!tipo.equals(TIPO_ITV)) && (!tipo.equals(TIPO_BUJIAS)) &&
-                (!tipo.equals(TIPO_FILTRO_AIRE)) && (!tipo.equals(TIPO_FRENOS)) && (!tipo.equals(TIPO_LIQUIDO_FRENOS)) && (!tipo.equals(TIPO_LIMPIAPARABRISAS)) &&
-                (!tipo.equals(TIPO_LUCES)) && (!tipo.equals(TIPO_RUEDAS)) && (!tipo.equals(TIPO_EMBRAGUE)) && (!tipo.equals(TIPO_TALLER))) {
+    public static Boolean es_tipo_personalizado(String tipo, Activity act) {
+
+        if((!tipo.equals(act.getString(R.string.tipoAceite))) && (!tipo.equals(act.getString(R.string.tipoRevGen))) && (!tipo.equals(act.getString(R.string.tipoCorrea))) && (!tipo.equals(act.getString(R.string.tipoBomba))) &&
+                (!tipo.equals(act.getString(R.string.tipoFiltroAceite))) && (!tipo.equals(act.getString(R.string.tipoFiltroGasolina))) && (!tipo.equals(act.getString(R.string.tipoItv))) && (!tipo.equals(act.getString(R.string.tipoBujias))) &&
+                (!tipo.equals(act.getString(R.string.tipoFiltroAire))) && (!tipo.equals(act.getString(R.string.tipoFrenos))) && (!tipo.equals(act.getString(R.string.tipoLiqFrenos))) && (!tipo.equals(act.getString(R.string.tipoLimpiaparabrisas))) &&
+                (!tipo.equals(act.getString(R.string.tipoLuces))) && (!tipo.equals(act.getString(R.string.tipoRuedas))) && (!tipo.equals(act.getString(R.string.tipoEmbrague))) && (!tipo.equals(act.getString(R.string.tipoTaller)))) {
             return true;
         }
         else return false;

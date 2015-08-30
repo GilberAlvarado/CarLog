@@ -38,7 +38,7 @@ import java.util.Date;
  */
 public class revGral extends ActionBarActivity {
 
-    public final static String TIPO_30K_KM = "30.000 kms (Recomendada)";
+    public final static String TIPO_30K_KM = "30.000 kms";
     public final static String TIPO_5K_KM = "5.000 kms";
     public final static String TIPO_10K_KM = "10.000 kms";
     public final static String TIPO_15K_KM = "15.000 kms";
@@ -94,12 +94,12 @@ public class revGral extends ActionBarActivity {
             Date fecha = funciones.string_a_date(datetxt);
             long long_fecha = funciones.string_a_long(datetxt);
             tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
-            tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+            tipoLog miTipoLog = new tipoLog(revGral.this.getString(R.string.tipoRevGen), fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
 
             if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                 // Creamos el nuevo futuro log
                 // Se pone como REALIZADO!
-                miTipoLog = new tipoLog(tipoLog.TIPO_REV_GENERAL, fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+                miTipoLog = new tipoLog(revGral.this.getString(R.string.tipoRevGen), fecha, datetxt, long_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, int_revgral, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
             }
             Intent intent = new Intent(revGral.this, addLog.class);
             managerLogs.insertar(miTipoLog);
@@ -108,7 +108,7 @@ public class revGral extends ActionBarActivity {
             Cursor c_sett = dbs.getSettings();
             if(c_sett.moveToFirst() == true) {
                 if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_REVGEN)) == tipoSettings.ACTIVO)
-                    procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_REV_GENERAL, miCoche.getKms(miCoche)); // actualizamos fechas
+                    procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), revGral.this.getString(R.string.tipoRevGen), miCoche.getKms(miCoche)); // actualizamos fechas
             }
             setResult(Activity.RESULT_OK, intent);
             finish();

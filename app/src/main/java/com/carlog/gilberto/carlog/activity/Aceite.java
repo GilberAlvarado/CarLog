@@ -31,14 +31,6 @@ import java.util.Date;
  * Created by Gilberto on 19/05/2015.
  */
 public class aceite extends ActionBarActivity {
-    public final static String TIPO_7K5_KM = "7.500 kms - Minerales";
-    public final static String TIPO_10M_KM = "10.000 kms - Semisintéticos";
-    public final static String TIPO_15K_KM = "15.000 kms - Sintéticos";
-    public final static String TIPO_20K_KM = "20.000 kms - Longlife";
-    public final static String TIPO_30K_KM = "30.000 kms - Longlife";
-
-
-
     private Toolbar toolbar;
     private Spinner spinner1;
 
@@ -82,12 +74,12 @@ public class aceite extends ActionBarActivity {
             long long_fecha = funciones.string_a_long(datetxt);
             tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
 
-            tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+            tipoLog miTipoLog = new tipoLog(aceite.this.getString(R.string.tipoAceite), fecha, datetxt, long_fecha, int_aceite, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
 
             if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                 // Creamos el nuevo futuro log
                 // Se pone como REALIZADO!
-                miTipoLog = new tipoLog(tipoLog.TIPO_ACEITE, fecha, datetxt, long_fecha, int_aceite, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+                miTipoLog = new tipoLog(aceite.this.getString(R.string.tipoAceite), fecha, datetxt, long_fecha, int_aceite, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
             }
             Intent intent = new Intent(aceite.this, addLog.class);
             managerLogs.insertar(miTipoLog);
@@ -96,7 +88,7 @@ public class aceite extends ActionBarActivity {
             Cursor c_sett = dbs.getSettings();
             if(c_sett.moveToFirst() == true) {
                 if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_ACEITE)) == tipoSettings.ACTIVO)
-                    procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_ACEITE, miCoche.getYear(miCoche)); // actualizamos fechas
+                    procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), aceite.this.getString(R.string.tipoAceite), miCoche.getYear(miCoche)); // actualizamos fechas
             }
             setResult(Activity.RESULT_OK, intent);
             finish();

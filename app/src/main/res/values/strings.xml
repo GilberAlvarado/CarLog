@@ -1,66 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">CarLog</string>
     <string name="adios">Adios</string>
-    <string name="action_settings">Configuración</string>
-    <string name="action_logout">Cerrar sesión</string>
-    <string name="btn1">Siguiente</string>
-    <string name="title_activity_add_log">Añadir Revisión</string>
-    <string name="title_activity_settings">Configuración</string>
-    <string name="title_activity_ayuda">Ayuda</string>
-    <string name="title_activity_info">Información</string>
-    <string name="title_activity_aceite">Aceite</string>
-    <string name="title_activity_fil_aceite">Filtro de aceite</string>
-    <string name="title_activity_revgral">Revisión General</string>
-    <string name="title_activity_modificaraceite">Modificar Aceite</string>
-    <string name="title_activity_modificarrevgral">Modificar RevGral</string>
-    <string name="title_activity_modificaritv">Modificar I.T.V.</string>
-    <string name="title_activity_modificartaller">Modificar Taller</string>
-    <string name="title_activity_modificarpersonalizada">Modificar Revisión</string>
-    <string name="title_activity_modificarcorrea">Modificar Correa</string>
-    <string name="title_activity_modificarbombaagua">Modificar Bomba de agua</string>
-    <string name="title_activity_modificarfgasolina">Modificar Filtro de Gasolina</string>
-    <string name="title_activity_modificarfaire">Modificar Filtro de Aire</string>
-    <string name="title_activity_modificarbujias">Modificar Bujias</string>
-    <string name="title_activity_modificarEmbrague">Modificar Embrague</string>
-    <string name="title_activity_modificarFiltroAceite">Modificar Filtro de Aceite</string>
-    <string name="title_activity_additv">Fecha de revisión</string>
-    <string name="title_activity_actualizarcoche">Actualizar Coche</string>
-    <string name="txt_itv">Introduzca Fecha:</string>
-    <string name="guardar">Guardar</string>
-    <string name="introduzcatipo">Introduzca tipo:</string>
-    <string name="addTipo">Añadir nuevo tipo:</string>
-    <string name="nuevoTipo">Agregar tipo</string>
-    <string name="elimTipo">Eliminar tipo</string>
-    <string name="txtDate">Fecha:</string>
-    <string name="cuantosAceites">¿Cada cuántos cambios de aceite cambiar el filtro?</string>
-    <string name="needHelp">¿Necesita ayuda para comenzar? :)</string>
-    <string name="helpAddRev">Una vez haya añadido los datos de su coche, podrá agregar todas las revisiones que desee pulsando el siguiente icono.</string>
-    <string name="helpUnicaRevTipo">Se podrá añadir únicamente una revisión de cada tipo (salvo las personalizadas o de tipo taller) y el resto lo haremos por usted :)</string>
-    <string name="helpModifyRev">Despreocúpese de cambiar las fechas de las revisiones. Únicamente es necesario cuando se acerque la fecha y decida coger cita para realizarla. (Si modifica la fecha de una revisión deja de recalcularse automáticamente).</string>
-    <string name="helpImportant">Lo realmente importante...</string>
-    <string name="helpUpdateKms">No necesita cambiar datos ni hacer cálculos innecesarios. Nosotros lo hacemos todo por usted (siempre es personalizable). Sólo debe actualizar el número de kilómetros de su coche cuando lo desee aunque de no hacerlo se predecirán de manera inteligente. Para tener el número de kilómetros al día deberá pulsar el siguiente botón y cambiarlo.</string>
-    <string name="helpVariosCoches">¿Desea llevar el mantenimiento de varios coches? :)</string>
-    <string name="helpVariosCoches2">Podrá agregar todos los coches que desee y llevar el mantenimiento de coches de familiares y amigos pulsando el botón de arriba. Luego podrá cambiar de coche mediante la barra de navegación.</string>
-    <string name="loginFb">Iniciar sesión con Facebook</string>
-    <string name="loginAnonimo">Entrar en modo Anónimo</string>
-    <string name="siguiente">Siguiente</string>
-    <string name="enviar">Enviar</string>
-    <string name="haveAccount">¿Ya tienes cuenta? Accede!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Close session</string>
+    <string name="btn1">Next</string>
+    <string name="title_activity_add_log">Add Service</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_ayuda">Help</string>
+    <string name="title_activity_info">Information</string>
+    <string name="title_activity_aceite">Oil</string>
+    <string name="title_activity_fil_aceite">Oil Filter</string>
+    <string name="title_activity_revgral">General Service</string>
+    <string name="title_activity_modificaraceite">Modify Oil</string>
+    <string name="title_activity_modificarrevgral">Modify GralServ</string>
+    <string name="title_activity_modificaritv">Modify M.O.T.</string>
+    <string name="title_activity_modificartaller">Modify Garage</string>
+    <string name="title_activity_modificarpersonalizada">Modify Service</string>
+    <string name="title_activity_modificarcorrea">Modify Belt</string>
+    <string name="title_activity_modificarbombaagua">Modify Water Pump</string>
+    <string name="title_activity_modificarfgasolina">Modify Petrol Filter</string>
+    <string name="title_activity_modificarfaire">Modify Air Filter</string>
+    <string name="title_activity_modificarbujias">Modify Sparking plug</string>
+    <string name="title_activity_modificarEmbrague">Modify Clutch</string>
+    <string name="title_activity_modificarFiltroAceite">Modify Oil Filter</string>
+    <string name="title_activity_additv">Date of service</string>
+    <string name="title_activity_actualizarcoche">Update Car</string>
+    <string name="txt_itv">Input Date:</string>
+    <string name="guardar">Save</string>
+    <string name="introduzcatipo">Input type:</string>
+
+    <string name="addTipo">Add new type:</string>
+
+    <string name="nuevoTipo">Add type</string>
+
+    <string name="elimTipo">Delete type</string>
+
+    <string name="txtDate">Date:</string>
+    <string name="cuantosAceites">How many oil changes do you need to change filter?</string>
+    <string name="needHelp">Do you need help to start? :)</string>
+    <string name="helpAddRev">Once you have added your car data, you can add all the services you want by pressing the icon below.</string>
+
+    <string name="helpUnicaRevTipo">You may add only a revision of each type (except the custom ones or the garage type), we will do the rest for you :)</string>
+    <string name="helpModifyRev">Forget about changing the dates of your services. This is only necessary when the date is approaching and you decide to make an appointment for it. (If a service date is modified, this will no longer be recalculated).</string>
+
+    <string name="helpImportant">The really important thing is...</string>
+    <string name="helpUpdateKms">You don’t need to change data or make unnecessary calculations. We’ll do everything for you (you can always customize). You should only update the mileage of your car whenever you want but, if failure doing so, it will be worked out intelligently. To know the mileage a day you should click the Next button where you can also change it.</string>
+
+    <string name="helpVariosCoches">Do you want to carry out the maintenance of several cars? :)</string>
+    <string name="helpVariosCoches2">You can add all the cars you want and carry out the maintenance of family and friends’ cars by clicking on the button above. Then you can change of car on the navigation bar.</string>
+    <string name="loginFb">Log into Facebook</string>
+    <string name="loginAnonimo">Anonymous mode</string>
+    <string name="siguiente">Next</string>
+    <string name="enviar">Send</string>
+    <string name="haveAccount">Do you have an account yet? Sign in!</string>
+
+    <string name="tipoAceite">Oil</string>
+    <string name="tipoRevGen">General Review</string>
+    <string name="tipoCorrea">CTiming belt</string>
+    <string name="tipoBomba">Water Pump</string>
+    <string name="tipoFiltroAceite">Oil Filter</string>
+    <string name="tipoFiltroGasolina">Petrol Filter</string>
+    <string name="tipoItv">M.O.T.</string>
+    <string name="tipoBujias">Sparking plug</string>
+    <string name="tipoFiltroAire">Air Filter</string>
+    <string name="tipoFrenos">Brake discs and pads</string>
+    <string name="tipoLiqFrenos">Brake fluid</string>
+    <string name="tipoLimpiaparabrisas">Wiper</string>
+    <string name="tipoLuces">Lights</string>
+    <string name="tipoRuedas">Wheel</string>
+    <string name="tipoEmbrague">Clutch</string>
+    <string name="tipoAnticongelante">Antifreeze</string>
+    <string name="tipoBateria">Battery</string>
+    <string name="tipoAmortiguadores">Cushions</string>
+    <string name="tipoTaller">Garage</string>
+
+    <string name="recomendada">(Recommended)</string>
 
     <string name="facebook_app_id">663858277047070</string>
 
-    <string name="menu_Opc_modificar_log">Modificar</string>
-    <string name="menu_Opc_eliminar_log">Eliminar</string>
-    <string name="menu_Opc_realizado_log_hoy">Marcar como Realizado hoy</string>
-    <string name="menu_Opc_realizado_log_fecha">Marcar como Realizado en fecha</string>
+    <string name="menu_Opc_modificar_log">Modify</string>
+    <string name="menu_Opc_eliminar_log">Delete</string>
+    <string name="menu_Opc_realizado_log_hoy">Mark as Carried out today</string>
+    <string name="menu_Opc_realizado_log_fecha">Mark as Carried out in time</string>
 
-    <string name="menu_Opc_seleccionar_car">Seleccionar</string>
-    <string name="menu_Opc_eliminar_car">Eliminar</string>
+    <string name="menu_Opc_seleccionar_car">Highlight</string>
+    <string name="menu_Opc_eliminar_car">Delete</string>
 
-    <string name="open_drawer">Drawer abierto</string>
-    <string name="close_drawer">Drawer cerrado</string>
+    <string name="open_drawer">Drawer opened</string>
+    <string name="close_drawer">Drawer closed</string>
 
     <!-- Name Shared Preferences -->
     <string name="sp_sharedpreferences">sp_carlog</string>
@@ -73,105 +101,110 @@
     <string name="temp_picture">tempPLP.jpg</string>
 
     <!-- Messages -->
-    <string name="anonymous">Incognito</string>
-    <string name="select_picture">Selecciona una Imagen</string>
-    <string name="upload_picture">Subiendo imagen</string>
-    <string name="procesando">Procesando...</string>
-    <string name="take_picture">Sacar Foto</string>
-    <string name="gallery_picture">Elegir de la Galería</string>
-    <string name="reset_picture">Imagen predeterminada</string>
-    <string name="cancel">Cancelar</string>
-    <string name="continuar">Continuar</string>
+    <string name="anonymous">Anonymous</string>
+    <string name="select_picture">Highlight an Imagen</string>
+    <string name="upload_picture">Uploading image</string>
+    <string name="procesando">Processing...</string>
+    <string name="take_picture">Take a photo</string>
+    <string name="gallery_picture">Choose from the Gallery</string>
+    <string name="reset_picture">Predetermined Image</string>
+    <string name="cancel">Cancel</string>
+    <string name="continuar">Continue</string>
     <string name="login">Login</string>
     <string name="login_required">Login is required</string>
 
 
-    <string name="marca">Marca</string>
-    <string name="year">Año</string>
+    <string name="marca">Make</string>
+    <string name="year">Year</string>
     <string name="kms">Nº Kms</string>
-    <string name="matricula">Matrícula</string>
-    <string name="modelo">Modelo</string>
-    <string name="itv">Fecha ITV</string>
+    <string name="matricula">Registration number</string>
+    <string name="modelo">Model</string>
+    <string name="itv">Date of MOT</string>
+
+    <string name="tipoexiste">This type already exists</string>
+
+    <string name="noEliminarTipoDefecto">You can’t delete default services.</string>
+    <string name="noAddFiltroSinAceite">You can’t add revision of oil filter without a revision of oil.</string>
+    <string name="tipoDuplicado">You already have an outstanding service\u0020</string>
+    <string name="addLastRevision">Do you want to add the last service, made in\u0020</string>
+
+    <string name="historial">History</string>
+    <string name="revisiones">Services</string>
+    <string name="eliminar">Delete</string>
+    <string name="realizadohoy">Mark as Carried out today</string>
+    <string name="realizadofecha">Mark as Carried ou in time</string>
+    <string name="noHistFuturos">There can\'t be history logs with post-dated today.</string>
+    <string name="ayuda">Help</string>
+    <string name="predecir">Predict\u0020</string>
+
+    <string name="notificaciones">Notifications</string>
+    <string name="deseaEliminar">Are you sure you want to delete?</string>
+    <string name="borrarDeLista">Delete from the list</string>
+    <string name="eliminarCoche">Delete car</string>
+    <string name="seguroEliminarCoche">Are you sure you want to delete the car with registration number\u0020</string>
+    <string name="seguroEliminarCoche2">and all its logs?</string>
+
+    <string name="wait">Please, wait.</string>
+    <string name="conectando">Connecting...</string>
+    <string name="errorConectandoServer">There has been an error when connecting to the server</string>
+    <string name="errorConectando">There has been an error</string>
+    <string name="conexionNoPosible">Unable to connect. Check your data connection.</string>
+    <string name="loginok">Correct Login</string>
+    <string name="loginNook">Incorrect Login</string>
+    <string name="registroOk">Correct Registration</string>
+    <string name="registerButCantConnect">You are registered but can not log in now.</string>
+
+    <string name="errorOnRegister">Error during registration.</string>
 
 
+    <string name="actualizar">Update</string>
+    <string name="crear">Create</string>
+
+    <string name="kmsMenor">You have entered a number of kilometers smaller than the previous one. This is recommended only in case of mistake. Continue?</string>
+    <string name="cambiarKms">Change Nº of kilometres</string>
+    <string name="incorrectKms">You should enter a correct nº of kilometres.</string>
+    <string name="positiveKms">The number of kilometres should be higher than 0.</string>
+    <string name="incorrectYear">You should enter a valid year.</string>
+    <string name="emptyMatricula">You should enter the registration number.</string>
+    <string name="emptyMarca">You should enter the make.</string>
+    <string name="emptyModelo">You should enter the model.</string>
+    <string name="emptyKms">You should enter the nº of kilometres.</string>
 
 
-
-
-    <string name="tipoexiste">El tipo ya existe</string>
-    <string name="noEliminarTipoDefecto">No se pueden eliminar revisiones por defecto.</string>
-    <string name="noAddFiltroSinAceite">No puede agregar revisión de filtro de aceite sin tener una revisión de aceite.</string>
-    <string name="tipoDuplicado">Ya tiene pendiente una revisión de\u0020</string>
-    <string name="addLastRevision">¿Quiere añadir la última revisión hecha de\u0020</string>
-    <string name="historial">Historial</string>
-    <string name="revisiones">Revisiones</string>
-    <string name="eliminar">Eliminar</string>
-    <string name="realizadohoy">Marcar como Realizado hoy</string>
-    <string name="realizadofecha">Marcar como Realizado en su fecha</string>
-    <string name="noHistFuturos">No puede haber logs históricos con fecha posterior a la de hoy.</string>
-    <string name="ayuda">Ayuda</string>
-    <string name="predecir">Predecir\u0020</string>
-    <string name="notificaciones">Notificaciones</string>
-    <string name="deseaEliminar">¿Está seguro de querer eliminar?</string>
-    <string name="borrarDeLista">Borrar de la lista</string>
-    <string name="eliminarCoche">Eliminar coche</string>
-    <string name="seguroEliminarCoche">¿Está seguro de eliminar el coche con matrícula\u0020</string>
-    <string name="seguroEliminarCoche2">y todos sus logs?</string>
-
-    <string name="wait">Por favor espera</string>
-    <string name="conectando">Conectando...</string>
-    <string name="errorConectandoServer">Se ha producido un error al conectar con el servidor</string>
-    <string name="errorConectando">Se ha producido un error</string>
-    <string name="conexionNoPosible">No es posible realizar la conexión. Comprueba tu conexión de datos.</string>
-    <string name="loginok">Login correcto</string>
-    <string name="loginNook">Login incorrecto</string>
-    <string name="registroOk">Registro correcto</string>
-    <string name="registerButCantConnect">Estás registrado pero no puedes loguearte ahora</string>
-    <string name="errorOnRegister">Error durante el registro</string>
-
-    <string name="actualizar">Actualizar</string>
-    <string name="crear">Crear</string>
-    <string name="kmsMenor">Ha introducido un número de kms menor que el anterior. Se recomienda sólo en caso de equivocación. ¿Continuar?</string>
-    <string name="cambiarKms">Cambiar Nº kilómetros</string>
-    <string name="incorrectKms">Ha de introducir un nº de kilómetros correcto.</string>
-    <string name="positiveKms">El número de kilómetros debe ser mayor que 0.</string>
-    <string name="incorrectYear">Ha de introducir un año válido.</string>
-    <string name="emptyMatricula">Ha de introducir la matrícula.</string>
-    <string name="emptyMarca">Ha de introducir la marca.</string>
-    <string name="emptyModelo">Ha de introducir el modelo.</string>
-    <string name="emptyKms">Ha de introducir el nº de kilómetros.</string>
-
-
-
-    <string name="changeAceite">Debería cambiar el aceite cuanto antes.</string>
-    <string name="changeFiltroAceite">Debería cambiar el filtro de aceite cuanto antes.</string>
-    <string name="changeRevGen">Debería realizar una revisión general cuanto antes.</string>
-    <string name="changeCorrea">Debería cambiar la correa de distribución cuanto antes.</string>
-    <string name="changeBomba">Debería cambiar la bomba de agua cuanto antes.</string>
-    <string name="changeFilGasolina">Debería cambiar el filtro de gasolina cuanto antes.</string>
-    <string name="changeFilAire">Debería cambiar el filtro de aire cuanto antes.</string>
-    <string name="changeBujias">Debería cambiar las bujías cuanto antes.</string>
-    <string name="changeLimpia">Debería cambiar el limpiaparabrisas cuanto antes.</string>
-    <string name="changeLiqFrenos">Debería cambiar el líquido de frenos cuanto antes.</string>
-    <string name="changeRuedas">Debería hacer una revisión de ruedas cuanto antes.</string>
-    <string name="changeFrenos">Debería hacer una revisión de frenos cuanto antes.</string>
-    <string name="changeLuces">Debería hacer una revisión de luces cuanto antes.</string>
-    <string name="changeEmbrague">Debería cambiar el embrague cuanto antes.</string>
-    <string name="changeAnticongelante">Debería cambiar el líquido anticongelante cuanto antes.</string>
-    <string name="changeBateria">La batería puede comenzar a fallar en breve.</string>
-    <string name="changeAmortiguadores">Debería revisar los amortiguadores cuanto antes.</string>
+    <string name="changeAceite">You should change the oil as soon as possible.</string>
+    <string name="changeFiltroAceite">You should change the oil filter as soon as possible.</string>
+    <string name="changeRevGen">You should carry out a general service as soon as possible.</string>
+    <string name="changeCorrea">You should change the timing belt as soon as possible.</string>
+    <string name="changeBomba">You should change the water pump as soon as possible.</string>
+    <string name="changeFilGasolina">You should change the petrol filter as soon as possible.</string>
+    <string name="changeFilAire">You should change the air filter as soon as possible.</string>
+    <string name="changeBujias">You should change the sparking plugs as soon as possible.</string>
+    <string name="changeLimpia">You should change the windscreen wiper as soon as possible.</string>
+    <string name="changeLiqFrenos">You should change the brake liquid as soon as possible.</string>
+    <string name="changeRuedas">You should check the tyres as soon as possible.</string>
+    <string name="changeFrenos">You should check the brakes as soon as possible.</string>
+    <string name="changeLuces">You should check the lights as soon as possible.</string>
+    <string name="changeEmbrague">You should change the clutch as soon as possible.</string>
+    <string name="changeAnticongelante">You should change the anticongelante liquid as soon as possible.</string>
+    <string name="changeBateria">The battery could start failing shortly.</string>
+    <string name="changeAmortiguadores">You should chek the shock absorbers as soon as possible.</string>
 
     <!-- notificaciones-->
-    <string name="tiene">Tiene\u0020</string>
-    <string name="revcercanas">\u0020revisiones cercanas</string>
-    <string name="revmas">\u0020revisiones más...</string>
-    <string name="and">Y\u0020</string>
-    <string name="enMenosDe">En menos de</string>
-    <string name="dias">días.</string>
+    <string name="tiene">You have\u0020</string>
+    <string name="revcercanas">\u0020near services</string>
+    <string name="revmas">services more...</string>
+    <string name="and">And\u0020</string>
+    <string name="enMenosDe">In only</string>
+    <string name="dias">days.</string>
 
-    <string name="mineralesList">* Minerales: 15W40, 20W50</string>
-    <string name="semisinteticosList">* Semisintéticos: 10W40</string>
-    <string name="sinteticosList">* Sintéticos: 5W30, 5W40, 0W40, 5W50, 10W60</string>
+    <string name="mineralesList">* Minerals: 15W40, 20W50</string>
+    <string name="semisinteticosList">* Semisynthetics: 10W40</string>
+    <string name="sinteticosList">* Synthetics: 5W30, 5W40, 0W40, 5W50, 10W60</string>
     <string name="longlifeList">* Longlife: 0W30, 5W30LL</string>
 
+    <string name="minerales">7.500 kms - Minerals</string>
+    <string name="semisinteticos">10.000 kms - Semisynthetics</string>
+    <string name="sinteticos">15.000 kms - Synthetics</string>
+    <string name="longlife">20.000 kms - Longlife</string>
+    <string name="longlife2">30.000 kms - Longlife</string>
 </resources>

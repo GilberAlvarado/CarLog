@@ -82,7 +82,7 @@ public class fragmentHistorial extends baseFragment {
     }
 
 
-    private void modificarLogpulsado(final Cursor cursor, int posicion, Activity context) {
+    private void modificarLogpulsado(final Cursor cursor, int posicion, Activity act) {
         //Recorremos el cursor
         int i = 0;
         String tipo = "";
@@ -91,41 +91,41 @@ public class fragmentHistorial extends baseFragment {
             if (i == posicion) { // la posicion del cursor coincide con la del que pulsamos en la lista
                 int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
                 tipo = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
-                if(tipo.equals(tipoLog.TIPO_ACEITE)) {
-                    intent = new Intent(context, modificarAceite.class);
+                if(tipo.equals(act.getString(R.string.tipoAceite))) {
+                    intent = new Intent(act, modificarAceite.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
-                    intent = new Intent(context, modificarRevGral.class);
+                else if(tipo.equals(act.getString(R.string.tipoRevGen))) {
+                    intent = new Intent(act, modificarRevGral.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_CORREA)) {
-                    intent = new Intent(context, modificarCorrea.class);
+                else if(tipo.equals(act.getString(R.string.tipoCorrea))) {
+                    intent = new Intent(act, modificarCorrea.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
-                    intent = new Intent(context, modificarBombaAgua.class);
+                else if(tipo.equals(act.getString(R.string.tipoBomba))) {
+                    intent = new Intent(act, modificarBombaAgua.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
-                    intent = new Intent(context, modificarFiltroGasolina.class);
+                else if(tipo.equals(act.getString(R.string.tipoFiltroGasolina))) {
+                    intent = new Intent(act, modificarFiltroGasolina.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
-                    intent = new Intent(context, modificarFiltroAire.class);
+                else if(tipo.equals(act.getString(R.string.tipoFiltroAire))) {
+                    intent = new Intent(act, modificarFiltroAire.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
-                    intent = new Intent(context, modificarBujias.class);
+                else if(tipo.equals(act.getString(R.string.tipoBujias))) {
+                    intent = new Intent(act, modificarBujias.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
-                    intent = new Intent(context, modificarEmbrague.class);
+                else if(tipo.equals(act.getString(R.string.tipoEmbrague))) {
+                    intent = new Intent(act, modificarEmbrague.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_ITV)) {
-                    intent = new Intent(context, modificarItv.class);
+                else if(tipo.equals(act.getString(R.string.tipoItv))) {
+                    intent = new Intent(act, modificarItv.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
-                    intent = new Intent(context, modificarFiltroAceite.class);
+                else if(tipo.equals(act.getString(R.string.tipoFiltroAceite))) {
+                    intent = new Intent(act, modificarFiltroAceite.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_TALLER)) {
-                    intent = new Intent(context, modificarTaller.class);
+                else if(tipo.equals(act.getString(R.string.tipoTaller))) {
+                    intent = new Intent(act, modificarTaller.class);
                 }
                 else { //personalizados
-                    intent = new Intent(context, modificarPersonalizado.class);
+                    intent = new Intent(act, modificarPersonalizado.class);
                 }
 
                 String txt_fecha = cursor.getString(cursor.getColumnIndex("fecha_string"));
@@ -150,41 +150,41 @@ public class fragmentHistorial extends baseFragment {
             i++;
         }
 
-        if(tipo.equals(tipoLog.TIPO_ACEITE)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        if(tipo.equals(act.getString(R.string.tipoAceite))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoRevGen))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_ITV)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoItv))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_CORREA)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoCorrea))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoBomba))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoFiltroGasolina))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoFiltroAire))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoEmbrague))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoBujias))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
-            context.startActivity(intent); // No cambia la fecha solo cada cuantos cambios de aceite se hará
+        else if(tipo.equals(act.getString(R.string.tipoFiltroAceite))) {
+            act.startActivity(intent); // No cambia la fecha solo cada cuantos cambios de aceite se hará
         }
-        else if(tipo.equals(tipoLog.TIPO_TALLER)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoTaller))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
         else { //personalizados
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
     }
 

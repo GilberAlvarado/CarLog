@@ -73,7 +73,7 @@ public class fragmentLogs extends baseFragment {
                         int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
                         String matricula = cursor.getString(cursor.getColumnIndex(dbLogs.CN_CAR));
                         String tipo_rev = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
-                        if(tipo_rev.equals(tipoLog.TIPO_ITV)) {
+                        if(tipo_rev.equals(act.getString(R.string.tipoItv))) {
                             Cursor c_hist_itv = manager.LogsHistoricoTipoOrderByFechaString(matricula, tipo_rev);
                             if(c_hist_itv.moveToFirst() == false) {
                                 dbCar dbc = new dbCar(context);
@@ -95,7 +95,7 @@ public class fragmentLogs extends baseFragment {
     }
 
 
-    private void modificarLogpulsado(final Cursor cursor, int posicion, Activity context) {
+    private void modificarLogpulsado(final Cursor cursor, int posicion, Activity act) {
         //Recorremos el cursor
         int i = 0;
         String tipo = "";
@@ -105,41 +105,41 @@ public class fragmentLogs extends baseFragment {
                 System.out.println("pos " + (posicion) + " i "+ i);
                 int id = cursor.getInt(cursor.getColumnIndex(dbLogs.CN_ID));
                 tipo = cursor.getString(cursor.getColumnIndex(dbLogs.CN_TIPO));
-                if(tipo.equals(tipoLog.TIPO_ACEITE)) {
-                    intent = new Intent(context, modificarAceite.class);
+                if(tipo.equals(act.getString(R.string.tipoAceite))) {
+                    intent = new Intent(act, modificarAceite.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
-                    intent = new Intent(context, modificarRevGral.class);
+                else if(tipo.equals(act.getString(R.string.tipoRevGen))) {
+                    intent = new Intent(act, modificarRevGral.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_CORREA)) {
-                    intent = new Intent(context, modificarCorrea.class);
+                else if(tipo.equals(act.getString(R.string.tipoCorrea))) {
+                    intent = new Intent(act, modificarCorrea.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
-                    intent = new Intent(context, modificarBombaAgua.class);
+                else if(tipo.equals(act.getString(R.string.tipoBomba))) {
+                    intent = new Intent(act, modificarBombaAgua.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
-                    intent = new Intent(context, modificarFiltroGasolina.class);
+                else if(tipo.equals(act.getString(R.string.tipoFiltroGasolina))) {
+                    intent = new Intent(act, modificarFiltroGasolina.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
-                    intent = new Intent(context, modificarFiltroAire.class);
+                else if(tipo.equals(act.getString(R.string.tipoFiltroAire))) {
+                    intent = new Intent(act, modificarFiltroAire.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
-                    intent = new Intent(context, modificarBujias.class);
+                else if(tipo.equals(act.getString(R.string.tipoBujias))) {
+                    intent = new Intent(act, modificarBujias.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
-                    intent = new Intent(context, modificarEmbrague.class);
+                else if(tipo.equals(act.getString(R.string.tipoEmbrague))) {
+                    intent = new Intent(act, modificarEmbrague.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_ITV)) {
-                    intent = new Intent(context, modificarItv.class);
+                else if(tipo.equals(act.getString(R.string.tipoItv))) {
+                    intent = new Intent(act, modificarItv.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
-                    intent = new Intent(context, modificarFiltroAceite.class);
+                else if(tipo.equals(act.getString(R.string.tipoFiltroAceite))) {
+                    intent = new Intent(act, modificarFiltroAceite.class);
                 }
-                else if(tipo.equals(tipoLog.TIPO_TALLER)) {
-                    intent = new Intent(context, modificarTaller.class);
+                else if(tipo.equals(act.getString(R.string.tipoTaller))) {
+                    intent = new Intent(act, modificarTaller.class);
                 }
                 else { //personalizados
-                    intent = new Intent(context, modificarPersonalizado.class);
+                    intent = new Intent(act, modificarPersonalizado.class);
                 }
 
                 String txt_fecha = cursor.getString(cursor.getColumnIndex("fecha_string"));
@@ -164,41 +164,41 @@ public class fragmentLogs extends baseFragment {
             i++;
         }
 
-        if(tipo.equals(tipoLog.TIPO_ACEITE)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        if(tipo.equals(act.getString(R.string.tipoAceite))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_REV_GENERAL)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoRevGen))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_ITV)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoItv))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_CORREA)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoCorrea))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_BOMBA_AGUA)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoBomba))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_FILTRO_GASOLINA)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoFiltroGasolina))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_FILTRO_AIRE)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoFiltroAire))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_EMBRAGUE)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoEmbrague))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_BUJIAS)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoBujias))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
-        else if(tipo.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
-            context.startActivity(intent); // No cambia la fecha solo cada cuantos cambios de aceite se hará
+        else if(tipo.equals(act.getString(R.string.tipoFiltroAceite))) {
+            act.startActivity(intent); // No cambia la fecha solo cada cuantos cambios de aceite se hará
         }
-        else if(tipo.equals(tipoLog.TIPO_TALLER)) {
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+        else if(tipo.equals(act.getString(R.string.tipoTaller))) {
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
         else { //personalizados
-            context.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
+            act.startActivityForResult(intent, listaLogs.PETICION_ACTIVITY_MODIFYITV);
         }
     }
 
@@ -222,7 +222,7 @@ public class fragmentLogs extends baseFragment {
                     int_kms = c_car.getInt(c_car.getColumnIndex(dbCar.CN_KMS));
                 }
 
-                if(tipo_rev.equals(tipoLog.TIPO_ITV)) {
+                if(tipo_rev.equals(act.getString(R.string.tipoItv))) {
                     if(hoy) f_revision_por_fecha = funciones.fecha_mas_dias(f_hoy, procesarTipos.F_MAX_ITV);
                     else f_revision_por_fecha = funciones.fecha_mas_dias(f_rev, procesarTipos.F_MAX_ITV);
                     dbCar dbc = new dbCar(context);
@@ -231,14 +231,14 @@ public class fragmentLogs extends baseFragment {
                     tipoLog miTipoLog = new tipoLog(tipo_rev, f_revision_por_fecha, funciones.long_a_string(long_revision_por_fecha), long_revision_por_fecha, addLog.NO_ACEITE, addLog.NO_VECES_FIL_ACEITE, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, matricula, dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, myActivity.NO_KMS); // no depende de los kms sino de la fecha de realizado
                     manager.insertar(miTipoLog);
                 }
-                if(tipo_rev.equals(tipoLog.TIPO_ACEITE)) {
+                if(tipo_rev.equals(act.getString(R.string.tipoAceite))) {
                     // Si tiene revisiones de filtro de aceite tenemos que leer cada cuantos cambios de aceite se cambia el filtro
-                    Cursor c_fil = manager.LogsTipoOrderByFechaString(matricula, tipoLog.TIPO_FILTRO_ACEITE);
+                    Cursor c_fil = manager.LogsTipoOrderByFechaString(matricula, act.getString(R.string.tipoFiltroAceite));
                     if (c_fil.moveToFirst() == true) {
                         int id_log_fil = c_fil.getInt(c_fil.getColumnIndex(dbLogs.CN_ID));
                         int int_veces = c_fil.getInt(c_fil.getColumnIndex(dbLogs.CN_VECES_FIL_ACEITE));
                         // tenemos que ver como va el contador y compararlo con los cambios defiltro que se han realizado
-                        Cursor c_ac_hist = manager.LogsHistoricoTipoOrderByFechaString(matricula, tipoLog.TIPO_ACEITE);
+                        Cursor c_ac_hist = manager.LogsHistoricoTipoOrderByFechaString(matricula, act.getString(R.string.tipoAceite));
                         if (c_ac_hist.moveToFirst() == true) {
                             int int_contador = c_ac_hist.getInt(c_ac_hist.getColumnIndex(dbLogs.CN_CONTADOR_FIL_ACEITE));
                             if (int_contador < int_veces) { // + 1 pq empieza en 0
@@ -260,9 +260,9 @@ public class fragmentLogs extends baseFragment {
                         }
                     }
                 }
-                if(tipo_rev.equals(tipoLog.TIPO_FILTRO_ACEITE)) {
+                if(tipo_rev.equals(act.getString(R.string.tipoFiltroAceite))) {
                     // Marcamos como realizado tambien el futuro de aceite y reseteamos el contador pq acabamos de hacer un cambio de filtro
-                    Cursor c_ac = manager.LogsTipoOrderByFechaString(matricula, tipoLog.TIPO_ACEITE);
+                    Cursor c_ac = manager.LogsTipoOrderByFechaString(matricula, act.getString(R.string.tipoAceite));
                     if (c_ac.moveToFirst() == true) {
                         int id_log_ac = c_ac.getInt(c_ac.getColumnIndex(dbLogs.CN_ID));
                         if(hoy) manager.marcarRealizadoLog(id_log_ac, funciones.date_a_long(f_hoy), int_kms); //hoy

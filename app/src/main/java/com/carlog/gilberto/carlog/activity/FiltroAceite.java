@@ -84,12 +84,12 @@ public class filtroAceite extends ActionBarActivity {
                 Date fecha = funciones.fecha_mas_dias(new Date(), procesarTipos.F_MAX_REV_ACEITE); // da igual la fecha siempre va a poner un año y cuando toque el contador la misma fecha del aceite
                 long long_fecha = funciones.date_a_long(fecha);
                 tipoCoche miCoche = (tipoCoche)getIntent().getExtras().getSerializable("miCoche");
-                tipoLog miTipoLog = new tipoLog(tipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, addLog.NO_ACEITE, int_veces, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+                tipoLog miTipoLog = new tipoLog(filtroAceite.this.getString(R.string.tipoFiltroAceite), fecha, datetxt, long_fecha, addLog.NO_ACEITE, int_veces, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.NO_REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
 
                 if(miTipoLog.getFechalong(miTipoLog) < funciones.date_a_long(new Date())){ // si se ha creado es porque no existía ningún log ni futuro ni histórico
                     // Creamos el nuevo futuro log
                     // Se pone como REALIZADO!
-                    miTipoLog = new tipoLog(tipoLog.TIPO_FILTRO_ACEITE, fecha, datetxt, long_fecha, addLog.NO_ACEITE, int_veces, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
+                    miTipoLog = new tipoLog(filtroAceite.this.getString(R.string.tipoFiltroAceite), fecha, datetxt, long_fecha, addLog.NO_ACEITE, int_veces, addLog.NO_CONTADOR_FIL_ACEITE, addLog.NO_REVGRAL, addLog.NO_CORREA, addLog.NO_BOMBAAGUA, addLog.NO_FGASOLINA, addLog.NO_FAIRE, addLog.NO_BUJIAS, addLog.NO_EMBRAGUE, miCoche.getMatricula(miCoche), dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, miCoche.getKms(miCoche));
                 }
 
                 Intent intent = new Intent(filtroAceite.this, addLog.class);
@@ -99,7 +99,7 @@ public class filtroAceite extends ActionBarActivity {
                 Cursor c_sett = dbs.getSettings();
                 if(c_sett.moveToFirst() == true) {
                     if (c_sett.getInt(c_sett.getColumnIndex(dbSettings.CN_FILACEITE)) == tipoSettings.ACTIVO)
-                        procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), tipoLog.TIPO_ACEITE, miCoche.getYear(miCoche)); // actualizamos fechas
+                        procesarTipos.procesar(managerLogs, getApplicationContext(), miCoche.getKms(miCoche), miCoche.getFechaIni(miCoche), miCoche.getKmsIni(miCoche), miCoche.getMatricula(miCoche), filtroAceite.this.getString(R.string.tipoAceite), miCoche.getYear(miCoche)); // actualizamos fechas
                 }
                 setResult(Activity.RESULT_OK, intent);
                 finish();
