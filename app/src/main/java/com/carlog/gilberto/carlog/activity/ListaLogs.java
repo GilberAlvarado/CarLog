@@ -53,6 +53,8 @@ import com.nineoldandroids.view.ViewHelper;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import java.io.File;
+import java.util.List;
+
 import com.github.ksoichiro.android.observablescrollview.Scrollable;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -145,7 +147,7 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         }*/
         else { //sesión iniciada en modo anónimo
             mTitleView = (TextView) findViewById(R.id.title);
-            mTitleView.setText("Anónimo");
+            mTitleView.setText(listaLogs.this.getString(R.string.anonimo));
         }
     }
 
@@ -804,8 +806,21 @@ public class listaLogs extends baseActivity implements ObservableScrollViewCallb
         switch(requestCode) {
             case (PETICION_ACTIVITY_ADD_LOG) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    fragmentLogs fl = (fragmentLogs) getCurrentFragment();
-                    fl.ConsultarLogs(this, listaLogs.this);
+                    List<Fragment> list_frag = listaLogs.this.getCurrentFragment().getFragmentManager().getFragments();
+                    for(int i = 0; i < list_frag.size(); i++) {
+                        try{
+                            fragmentLogs fl = (fragmentLogs)list_frag.get(i);
+                            fl.ConsultarLogs(getApplicationContext(), listaLogs.this);
+                        }
+                        catch (ClassCastException e) {
+                            try {
+                                fragmentHistorial fh = (fragmentHistorial) list_frag.get(i);
+                                fh.ConsultarLogsHistoricos(getApplicationContext(), listaLogs.this);
+                            } catch (ClassCastException e2) {
+
+                            }
+                        }
+                    }
 
                 }
                 break;

@@ -19,7 +19,7 @@ public class dbHelper extends SQLiteOpenHelper {
 
     private static final String db_NAME = "carlog.sqlite";
     private static final int db_SCHEME_VERSION = 98;
-    public static final int MAX_TIPOS_REV = 18; // 19 pq cuenta el 0
+    public static final int MAX_TIPOS_REV = 17; // 18 pq cuenta el 0
     private Context contexto;
 
     public dbHelper(Context context) {

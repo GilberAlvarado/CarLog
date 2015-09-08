@@ -120,6 +120,7 @@ public class tipoLog implements Serializable {
         return(miTipo.fmodificada);
     }
     public void setAceite(tipoLog miTipo, int aceite) {  miTipo.aceite = aceite;    }
+    public void setKms(tipoLog miTipo, int kms) {  miTipo.kms = kms;    }
     public void setVecesFiAceite(tipoLog miTipo, int veces_fil_aceite) {  miTipo.veces_fil_aceite = veces_fil_aceite;    }
     public void setContadorFiAceite(tipoLog miTipo, int contador_fil_aceite) {  miTipo.contador_fil_aceite = contador_fil_aceite;    }
     public void setRevgral(tipoLog miTipo, int revgral) {  miTipo.revgral = revgral;    }

@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,8 @@ import com.carlog.gilberto.carlog.R;
 import com.carlog.gilberto.carlog.data.dbCar;
 import com.carlog.gilberto.carlog.data.dbHelper;
 import com.carlog.gilberto.carlog.data.dbLogs;
+import com.carlog.gilberto.carlog.fragments.fragmentHistorial;
+import com.carlog.gilberto.carlog.fragments.fragmentLogs;
 import com.carlog.gilberto.carlog.tiposClases.tipoCoche;
 import com.carlog.gilberto.carlog.tiposClases.tipoLog;
 import com.carlog.gilberto.carlog.data.dbTiposRevision;
@@ -32,6 +36,7 @@ import com.gc.materialdesign.views.ButtonRectangle;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class addLog extends ActionBarActivity {
@@ -281,8 +286,12 @@ public class addLog extends ActionBarActivity {
                 else {
                     // con REALIZADO
                     final tipoLog miTipoLog = new tipoLog(tipo, fecha_newlog, txt_date_newlog, long_fecha, NO_ACEITE, NO_VECES_FIL_ACEITE, NO_CONTADOR_FIL_ACEITE, NO_REVGRAL, NO_CORREA, NO_BOMBAAGUA, NO_FGASOLINA, NO_FAIRE, NO_BUJIAS, NO_EMBRAGUE, matricula, dbLogs.REALIZADO, dbLogs.NO_FMODIFICADA, int_kms);
-                    System.out.println("LOG " + tipo + " " + fecha_newlog + " " + txt_date_newlog + "INT FECHA! " + long_fecha);
+
+                    LayoutInflater layoutInflater = LayoutInflater.from(addLog.this);
+                    View promptView = layoutInflater.inflate(R.layout.input_kms_last_rev, null);
                     AlertDialog.Builder builder = new AlertDialog.Builder(addLog.this);
+                    builder.setView(promptView);
+                    final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
                     builder.setMessage("" + addLog.this.getString(R.string.addLastRevision) + miTipoLog.getTipo(miTipoLog) + "?")
                         .setTitle(addLog.this.getString(R.string.historial))
                         .setCancelable(false)
@@ -296,10 +305,22 @@ public class addLog extends ActionBarActivity {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id_dialog) {
                                 // metodo que se debe implementar Sí
-                                addlog(miTipoLog, managerLogs);
-                                if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoItv))) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
-                                    dbCar dbc = new dbCar(getApplicationContext());
-                                    dbc.ActualizarITVCocheActivo(miTipoLog.getCoche(miTipoLog), miTipoLog.getFechalong(miTipoLog));
+                                try {
+                                    System.out.println("KMS ULTIMO LOG" + editText.getText().toString());
+                                    Integer mykms = Integer.parseInt(editText.getText().toString());
+                                    if (mykms < 0) {
+                                        Toast.makeText(addLog.this, addLog.this.getString(R.string.positiveKms), Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        miTipoLog.setKms(miTipoLog, mykms);
+                                        addlog(miTipoLog, managerLogs);
+                                        if(miTipoLog.getTipo(miTipoLog).equals(addLog.this.getString(R.string.tipoItv))) { // Solo para el caso de que no se haya introducido la fecha de ITV al crear el coche y se meta el itv por aquí y no rellenando su campo
+                                            dbCar dbc = new dbCar(getApplicationContext());
+                                            dbc.ActualizarITVCocheActivo(miTipoLog.getCoche(miTipoLog), miTipoLog.getFechalong(miTipoLog));
+                                        }
+                                    }
+                                } catch (NumberFormatException nfe) {
+                                    Toast.makeText(addLog.this, addLog.this.getString(R.string.incorrectKms), Toast.LENGTH_LONG).show();
                                 }
                                 }
                             });

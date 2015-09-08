@@ -452,7 +452,7 @@ public class myActivity extends ActionBarActivity {
         cocheEsNuevo.getInstance().coche_es_nuevo = 1;
 
         simpleDataView sdv = (simpleDataView) findViewById(R.id.matricula_view);
-        sdv.setTitle(myActivity.this.getString(R.string.marca));
+        sdv.setTitle(myActivity.this.getString(R.string.matricula));
         sdv.setValue("");
         sdv.setEdit("");
         sdv.setEditHint(myActivity.this.getString(R.string.matricula));

@@ -28,6 +28,7 @@
     <string name="title_activity_actualizarcoche">Update Car</string>
     <string name="txt_itv">Input Date:</string>
     <string name="guardar">Save</string>
+    <string name="infoAddLog">* You can add a future revision or the last review in the past and we ask you for kms nº when service was made.</string>
     <string name="introduzcatipo">Input type:</string>
 
     <string name="addTipo">Add new type:</string>
@@ -54,6 +55,9 @@
     <string name="siguiente">Next</string>
     <string name="enviar">Send</string>
     <string name="haveAccount">Do you have an account yet? Sign in!</string>
+    <string name="anonimo">Anonymous</string>
+    <string name="insertInputKmshere">Insert nº kms here...</string>
+    <string name="numKmsLastRev">Nº kms on last service</string>
 
     <string name="tipoAceite">Oil</string>
     <string name="tipoRevGen">General Review</string>

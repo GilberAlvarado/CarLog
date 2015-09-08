@@ -29,6 +29,7 @@
     <string name="title_activity_actualizarcoche">Actualizar Coche</string>
     <string name="txt_itv">Introduzca Fecha:</string>
     <string name="guardar">Guardar</string>
+    <string name="infoAddLog">* Puede añadir una revisión futura (si la va a realizar) o la última revisión realizada y le pediremos el nº de kms de cuando se hizo.</string>
     <string name="introduzcatipo">Introduzca tipo:</string>
     <string name="addTipo">Añadir nuevo tipo:</string>
     <string name="nuevoTipo">Agregar tipo</string>
@@ -48,6 +49,9 @@
     <string name="siguiente">Siguiente</string>
     <string name="enviar">Enviar</string>
     <string name="haveAccount">¿Ya tienes cuenta? Accede!</string>
+    <string name="anonimo">Anónimo</string>
+    <string name="insertInputKmshere">Inserta nº kms aquí...</string>
+    <string name="numKmsLastRev">Nº kms en última revisión</string>
 
     <string name="tipoAceite">Aceite</string>
     <string name="tipoRevGen">Revisión general</string>

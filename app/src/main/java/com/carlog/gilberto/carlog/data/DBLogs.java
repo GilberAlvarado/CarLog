@@ -35,7 +35,7 @@ public class dbLogs {
     public static final String CN_CAR = "matricula";
     public static final String CN_REALIZADO = "realizado";
     public static final String CN_FMODIFICADA = "f_modificada"; // se ha modificado la fecha procesada y se ha puesto una revisión antes a mano (ignorar la procesada)
-    public static final String CN_KMS = "kms";  // kms que tenía el coche cuando se añadió el log
+    public static final String CN_KMS = "kms";  // kms que tenía el coche cuando se realizó el log
 
     public static final String CREATE_TABLE = "create table " +TABLE_NAME + " ("
             + CN_ID + " integer primary key autoincrement,"
